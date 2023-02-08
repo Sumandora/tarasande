@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.comb
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventRotation
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -26,7 +26,7 @@ class ModuleQuakeAura : Module("Quake aura", "Aimbot for Quake-like game modes",
     private var rotated = false
 
     init {
-        registerEvent(EventPollEvents::class.java) { event ->
+        registerEvent(EventRotation::class.java) { event ->
             rotated = false
             if (!mc.options.useKey.isPressed && !autoFire.value)
                 return@registerEvent

@@ -11,7 +11,7 @@ import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventRotation
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -52,7 +52,7 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
     }
 
     init {
-        registerEvent(EventPollEvents::class.java) { event ->
+        registerEvent(EventRotation::class.java) { event ->
             focusedBlock = null
 
             if (!timeUtil.hasReached(delay.value.toLong()))

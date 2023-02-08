@@ -10,10 +10,9 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.si
 class ScreenExtensionSidebarMultiplayerScreen : ScreenExtensionSidebar<MultiplayerScreen>(MultiplayerScreen::class.java) {
 
     init {
-        sidebar.insert(SidebarEntryAccountManager(), 0)
-        sidebar.insert(SidebarEntryProxy(), 1)
-
         sidebar.add(
+            SidebarEntryAccountManager(),
+            SidebarEntryProxy(),
             SidebarEntryToggleableClientBrandSpoofer(),
             SidebarEntryToggleableResourcePackSpoofer()
         )

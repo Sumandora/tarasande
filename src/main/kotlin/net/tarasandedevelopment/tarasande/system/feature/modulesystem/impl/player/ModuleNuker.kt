@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventHandleBlockBreaking
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventRotation
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -68,7 +68,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
     }
 
     init {
-        registerEvent(EventPollEvents::class.java) { event ->
+        registerEvent(EventRotation::class.java) { event ->
             val rad = ceil(radius.value).toInt()
 
             list.clear()

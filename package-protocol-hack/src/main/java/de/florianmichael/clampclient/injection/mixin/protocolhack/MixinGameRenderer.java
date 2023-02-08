@@ -7,8 +7,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.tarasandedevelopment.tarasande.event.EventUpdateTargetedEntity;
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations;
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,7 +33,7 @@ public class MixinGameRenderer {
         final Entity entity2 = this.client.getCameraEntity();
         if (entity2 == null) return;
 
-        final Rotation fakeRotation = RotationUtil.INSTANCE.getFakeRotation();
+        final Rotation fakeRotation = Rotations.INSTANCE.getFakeRotation();
 
         float prevYaw = entity2.prevYaw;
         float prevPitch = entity2.prevPitch;

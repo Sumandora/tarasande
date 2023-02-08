@@ -48,6 +48,7 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
 
         registerEvent(EventInput::class.java, 10000) { event ->
             if (event.input == mc.player?.input) {
+                // TODO only when walking towards the enemies
                 if (changeBinds) {
                     when {
                         mode.isSelected(0) -> {

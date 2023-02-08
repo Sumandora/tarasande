@@ -15,10 +15,10 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.evaluateNewRotation
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 
@@ -94,7 +94,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
             event.camera.setRotation(rotation?.yaw!!, rotation?.pitch!!)
         }
 
-        registerEvent(EventPollEvents::class.java, 1) { event ->
+        registerEvent(EventRotation::class.java, 1) { event ->
             if (beginRotation == null)
                 onEnable()
 
@@ -174,7 +174,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
 
         registerEvent(EventPacket::class.java) { event ->
             if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket) {
-                beginRotation = RotationUtil.evaluateNewRotation(event.packet)
+                beginRotation = event.packet.evaluateNewRotation()
             }
         }
     }

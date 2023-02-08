@@ -4,7 +4,7 @@ import net.minecraft.item.Items
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventRotation
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
@@ -41,7 +41,7 @@ class ModuleZoot : Module("Zoot", "Removes fire status", ModuleCategory.GHOST) {
     }
 
     init {
-        registerEvent(EventPollEvents::class.java, 1002) { event ->
+        registerEvent(EventRotation::class.java, 1002) { event ->
             if (mc.player?.isOnFire != true) {
                 onEnable(false)
                 return@registerEvent

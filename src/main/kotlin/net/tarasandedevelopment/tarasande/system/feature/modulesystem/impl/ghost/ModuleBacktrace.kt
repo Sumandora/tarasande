@@ -6,6 +6,7 @@ import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -18,7 +19,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.math.MathUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
@@ -33,7 +33,7 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
     private val boundingBoxes = HashMap<Entity, ArrayList<Box>>()
 
     private fun computeSelectedBox(entity: Entity): Box? {
-        val playerRotation = RotationUtil.fakeRotation ?: Rotation(mc.player!!)
+        val playerRotation = Rotations.fakeRotation ?: Rotation(mc.player!!)
         val playerEye = mc.player?.eyePos!!
         val rotationVec = playerEye + playerRotation.forwardVector((mc.gameRenderer as IGameRenderer).tarasande_getReach())
         return boundingBoxes[entity]?.filter { it.raycast(playerEye, rotationVec).isPresent }?.minByOrNull { playerEye.distanceTo(MathUtil.closestPointToBox(playerEye, it)) }

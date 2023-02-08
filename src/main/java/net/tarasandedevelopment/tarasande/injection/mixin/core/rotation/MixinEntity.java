@@ -5,8 +5,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations;
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity;
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
+import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,9 +26,10 @@ public abstract class MixinEntity {
 
     @Inject(method = "getRotationVec", at = @At("HEAD"), cancellable = true)
     public void injectFakeRotation(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
+        Rotation fakeRotation = Rotations.INSTANCE.getFakeRotation();
         //noinspection ConstantValue
-        if ((Object) this == MinecraftClient.getInstance().player && RotationUtil.INSTANCE.getFakeRotation() != null) {
-            cir.setReturnValue(this.getRotationVector(RotationUtil.INSTANCE.getFakeRotation().getPitch(), RotationUtil.INSTANCE.getFakeRotation().getYaw()));
+        if ((Object) this == MinecraftClient.getInstance().player && fakeRotation != null) {
+            cir.setReturnValue(this.getRotationVector(fakeRotation.getPitch(), fakeRotation.getYaw()));
         }
     }
 

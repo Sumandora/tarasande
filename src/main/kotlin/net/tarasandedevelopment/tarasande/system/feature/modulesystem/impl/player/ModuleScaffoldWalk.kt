@@ -7,6 +7,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.UseAction
 import net.minecraft.util.math.*
 import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
@@ -173,13 +174,13 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     }
 
     init {
-        registerEvent(EventPollEvents::class.java, 1001) { event ->
+        registerEvent(EventRotation::class.java, 1001) { event ->
             if (rotation != null && headRoll.value) {
                 rotation = Rotation(mc.player?.yaw!!, rotation?.pitch!!)
             }
 
             val below = mc.player?.blockPos?.add(0, -1, 0)!!
-            val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
+            val currentRot = Rotations.fakeRotation ?: Rotation(mc.player!!)
             if (mc.world?.isAir(below)!!) {
                 val prevTarget = target
                 target = getAdjacentBlock(below)
@@ -337,7 +338,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         }
 
         registerEvent(EventAttack::class.java, 1001) { event ->
-            if (target == null || RotationUtil.fakeRotation == null || event.dirty) {
+            if (target == null || Rotations.fakeRotation == null || event.dirty) {
                 clickSpeedUtil.reset()
                 return@registerEvent
             }
@@ -347,7 +348,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
             if (airBelow || alwaysClick.value) {
                 val newEdgeDist = getNewEdgeDist()
                 val clicks = clickSpeedUtil.getClicks()
-                val rotationVector = RotationUtil.fakeRotation?.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)!!
+                val rotationVector = Rotations.fakeRotation?.forwardVector(mc.interactionManager?.reachDistance?.toDouble()!!)!!
                 val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector)
                 if (hitResult.isSame(target?.second!!, target?.first!!)) {
                     if (airBelow && (((Vec3d.ofCenter(target?.first) - mc.player?.pos!!) * Vec3d.of(target?.second?.vector)).horizontalLengthSquared() >= newEdgeDist * newEdgeDist || target?.first?.y!! < (mc.player?.blockPos?.y!! - 1))) {

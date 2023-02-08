@@ -3,6 +3,7 @@ package net.tarasandedevelopment.tarasande.util.math.rotation
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
@@ -64,7 +65,7 @@ class Rotation {
         }
     }
 
-    fun correctSensitivity(prevRotation: Rotation = RotationUtil.fakeRotation ?: Rotation(mc.player!!), preference: ((Rotation) -> Boolean)? = null): Rotation {
+    fun correctSensitivity(prevRotation: Rotation = Rotations.fakeRotation ?: Rotation(mc.player!!), preference: ((Rotation) -> Boolean)? = null): Rotation {
         val deltaRotation = closestDelta(prevRotation)
         val cursorDeltas = approximateCursorDeltas(deltaRotation)
         val newRotations = cursorDeltas.map { calculateNewRotation(prevRotation, it) }

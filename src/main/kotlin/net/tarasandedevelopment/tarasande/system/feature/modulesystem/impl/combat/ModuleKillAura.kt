@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
@@ -170,7 +171,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         teleportPath = null
     }
 
-    private fun fovRotation() = if (fakeRotationFov.value && RotationUtil.fakeRotation != null) RotationUtil.fakeRotation!! else Rotation(mc.player!!)
+    private fun fovRotation() = if (fakeRotationFov.value && Rotations.fakeRotation != null) Rotations.fakeRotation!! else Rotation(mc.player!!)
 
     private fun hasShield(entity: Entity): Boolean {
         if (entity is PlayerEntity) {
@@ -184,10 +185,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     init {
-        registerEvent(EventPollEvents::class.java) { event ->
+        registerEvent(EventRotation::class.java) { event ->
             val prevTargets = ArrayList(targets)
             targets.clear()
-            val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
+            val currentRot = Rotations.fakeRotation ?: Rotation(mc.player!!)
             for (entity in mc.world?.entities!!) {
                 if (!PlayerUtil.isAttackable(entity)) continue
 
@@ -278,7 +279,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 val distance = aimPoint.squaredDistanceTo(mc.player?.eyePos!!)
 
                 if (rayTrace.value) {
-                    if (RotationUtil.fakeRotation == null) {
+                    if (Rotations.fakeRotation == null) {
                         return@forEach
                     } else {
                         val hitResult = PlayerUtil.getTargetedEntity(
@@ -287,7 +288,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                                 if (simulateMouseDelay.value)
                                     Rotation(mc.player!!.lastYaw, mc.player!!.lastPitch)
                                 else
-                                    RotationUtil.fakeRotation!!
+                                    Rotations.fakeRotation!!
                             else
                                 RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint),
                             throughWalls.isSelected(2))
@@ -347,7 +348,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                             break
                     }
                     if (!attacked && swingInAir.value) {
-                        if (PlayerUtil.getTargetedEntity(reach.minValue, RotationUtil.fakeRotation ?: Rotation(mc.player!!), false)?.isMissHitResult() == true) {
+                        if (PlayerUtil.getTargetedEntity(reach.minValue, Rotations.fakeRotation ?: Rotation(mc.player!!), false)?.isMissHitResult() == true) {
                             attack(null, clicks)
                             event.dirty = true
                         }
@@ -407,7 +408,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
 
         registerEvent(EventRender3D::class.java) { event ->
-            if (RotationUtil.fakeRotation != null)
+            if (Rotations.fakeRotation != null)
                 if (mc.crosshairTarget != null && mc.crosshairTarget?.isEntityHitResult() == true)
                     if (mc.crosshairTarget is EntityHitResult && targets.any { it.first == (mc.crosshairTarget as EntityHitResult).entity }) {
                         RenderUtil.blockOutline(event.matrices, Box.from(mc.crosshairTarget?.pos).offset(-0.5, -0.5, -0.5).expand(-0.45), aimTargetColor.getColor().rgb)
@@ -484,7 +485,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             aimPoint -= diff * 0.5
 
             // Humans can't move their mouse in a straight line
-            val aimDelta = (RotationUtil.fakeRotation ?: Rotation(mc.player!!)).fov(RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint)) / Rotation.MAXIMUM_DELTA
+            val aimDelta = (Rotations.fakeRotation ?: Rotation(mc.player!!)).fov(RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint)) / Rotation.MAXIMUM_DELTA
             aimPoint = aimPoint.add(0.0, -aimDelta * box.yLength, 0.0)
 
             // Don't aim through walls

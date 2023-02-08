@@ -18,6 +18,7 @@ import net.minecraft.world.RaycastContext.ShapeType
 import net.tarasandedevelopment.tarasande.event.EventInput
 import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.injection.accessor.IChatScreen
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.mc
@@ -81,8 +82,8 @@ object PlayerUtil {
         mc.player!!.yaw = rotation.yaw
         mc.player!!.pitch = rotation.pitch
 
-        val prevFakeRotation = RotationUtil.fakeRotation
-        RotationUtil.fakeRotation = null // prevent rotationvec override by mixin
+        val prevFakeRotation = Rotations.fakeRotation
+        Rotations.fakeRotation = null // prevent rotationvec override by mixin
 
         val prevTickDelta = renderTickCounter.tickDelta
         renderTickCounter.tickDelta = 1.0F
@@ -92,7 +93,7 @@ object PlayerUtil {
 
         renderTickCounter.tickDelta = prevTickDelta
 
-        RotationUtil.fakeRotation = prevFakeRotation
+        Rotations.fakeRotation = prevFakeRotation
 
         mc.player?.yaw = prevYaw
         mc.player?.pitch = prevPitch

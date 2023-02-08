@@ -56,9 +56,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
     }
 
     init {
-        registerEvent(EventPollEvents::class.java) { event ->
-            if (event.fake) return@registerEvent
-
+        registerEvent(EventPollEvents::class.java) {
             if (timeUtil.hasReached(delay.value.toLong())) {
                 if (priorityMessages.isNotEmpty()) {
                     PlayerUtil.sendChatMessage(priorityMessages.removeFirst(), true)

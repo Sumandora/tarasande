@@ -7,8 +7,9 @@ import net.minecraft.item.BowItem
 import net.minecraft.item.CrossbowItem
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.Box
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
 import net.tarasandedevelopment.tarasande.event.EventRender3D
+import net.tarasandedevelopment.tarasande.event.EventRotation
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
@@ -62,7 +63,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
     }
 
     init {
-        registerEvent(EventPollEvents::class.java) { event ->
+        registerEvent(EventRotation::class.java) { event ->
             predictedBox = null
             val stack = mc.player?.getStackInHand(mc.player?.activeHand) ?: return@registerEvent
             if ((stack.item !is BowItem || !mc.player?.isUsingItem!!) && !(stack.item is CrossbowItem && CrossbowItem.getProjectiles(stack).any { it.item is ArrowItem })) return@registerEvent
@@ -90,7 +91,7 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
             rotation = Rotation(yaw.toFloat(), solution.toFloat())
             // DEAD RECKONING
 
-            val currentRot = if (RotationUtil.fakeRotation != null) Rotation(RotationUtil.fakeRotation!!) else Rotation(mc.player!!)
+            val currentRot = Rotations.fakeRotation ?: Rotation(mc.player!!)
             val smoothedRot = currentRot.smoothedTurn(rotation, aimSpeed)
 
             predictedBox = box

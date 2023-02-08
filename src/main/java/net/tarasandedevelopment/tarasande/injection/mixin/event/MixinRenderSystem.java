@@ -1,11 +1,7 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.tarasandedevelopment.tarasande.event.EventFogColor;
-import net.tarasandedevelopment.tarasande.event.EventFogEnd;
-import net.tarasandedevelopment.tarasande.event.EventFogStart;
-import net.tarasandedevelopment.tarasande.event.EventScreenInput;
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
+import net.tarasandedevelopment.tarasande.event.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -53,9 +49,9 @@ public class MixinRenderSystem {
 
     @Inject(method = "flipFrame", at = @At("HEAD"))
     private static void hookEventScreenInputAndPollEvents(long window, CallbackInfo ci) {
-        EventDispatcher.INSTANCE.call(new EventScreenInput(false));
+        EventDispatcher.INSTANCE.call(new EventScreenInput(false)); // This one has to track the `doneInput` variable, so we can't merge them :c
 
-        RotationUtil.INSTANCE.updateFakeRotation(false);
+        EventDispatcher.INSTANCE.call(new EventPollEvents());
     }
 
 }

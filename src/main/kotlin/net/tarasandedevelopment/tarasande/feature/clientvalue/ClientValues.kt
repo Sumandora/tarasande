@@ -4,9 +4,13 @@ import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.*
 import net.tarasandedevelopment.tarasande.feature.clientvalue.panel.PanelElementsClientValues
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.*
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
@@ -37,7 +41,7 @@ object ClientValues {
         ValueButtonOwnerValues(this, "Targeting values", TargetingValues)
         ValueButtonOwnerValues(this, "Debug values", DebugValues)
         ValueButtonOwnerValues(this, "Blur values", ManagerBlur)
-        ValueButtonOwnerValues(this, "Rotation values", RotationValues)
+        ValueButtonOwnerValues(this, "Rotation values", Rotations)
         ValueButtonOwnerValues(this, "Command values", ManagerCommand)
     }
 

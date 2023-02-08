@@ -12,6 +12,7 @@ import net.minecraft.sound.SoundEvent
 import net.minecraft.stat.StatHandler
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.IParticleManager
 import net.tarasandedevelopment.tarasande.injection.accessor.prediction.ISoundSystem
@@ -19,7 +20,6 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.util.dummy.ClientPlayNetworkHandlerDummy
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.copy
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 
 object PredictionEngine {
 
@@ -94,9 +94,11 @@ object PredictionEngine {
         playerEntity.copyPositionAndRotation(baseEntity)
         playerEntity.copyFrom(baseEntity)
 
-        if (playerEntity == mc.player && RotationUtil.fakeRotation != null) {
-            playerEntity.yaw = RotationUtil.fakeRotation?.yaw!!
-            playerEntity.pitch = RotationUtil.fakeRotation?.pitch!!
+        if (playerEntity == mc.player) {
+            Rotations.fakeRotation?.also {
+                playerEntity.yaw = it.yaw
+                playerEntity.pitch = it.pitch
+            }
         }
 
         playerEntity.isOnGround = baseEntity.isOnGround // scary

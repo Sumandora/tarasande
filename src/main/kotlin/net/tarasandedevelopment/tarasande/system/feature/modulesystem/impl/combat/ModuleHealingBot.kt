@@ -8,7 +8,7 @@ import net.minecraft.potion.PotionUtil
 import net.tarasandedevelopment.tarasande.event.EventAttack
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventRotation
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -61,7 +61,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
     }
 
     init {
-        registerEvent(EventPollEvents::class.java, 9999) { event ->
+        registerEvent(EventRotation::class.java, 9999) { event ->
             if (event.dirty) {
                 onEnable()
                 return@registerEvent

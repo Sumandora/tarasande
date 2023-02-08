@@ -4,7 +4,9 @@ import net.minecraft.client.input.Input
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import su.mandora.event.Event
 
-class EventPollEvents : Event {
+class EventPollEvents : Event(false)
+
+class EventRotation : Event {
     var dirty = false
         private set
     var rotation: Rotation
@@ -12,12 +14,10 @@ class EventPollEvents : Event {
             field = value
             dirty = true
         }
-    val fake: Boolean
 
-    constructor(rotation: Rotation, fake: Boolean) : super(false) {
+    constructor(rotation: Rotation) : super(false) {
         this.rotation = rotation
         this.dirty = false
-        this.fake = fake
     }
 }
 

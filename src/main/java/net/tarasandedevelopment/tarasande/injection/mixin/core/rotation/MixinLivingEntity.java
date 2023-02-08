@@ -8,9 +8,9 @@ import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations;
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity;
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -66,11 +66,11 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Shadow protected int headTrackingIncrements;
 
     @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;bodyTrackingIncrements:I"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateTrackedPosition(DDD)V"), to = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;serverX:D")))
-    public void preventRotationLeak(CallbackInfo ci) {
-        Rotation rotation = RotationUtil.INSTANCE.getFakeRotation();
+    public void leakRotations(CallbackInfo ci) {
+        Rotation rotation = Rotations.INSTANCE.getFakeRotation();
         //noinspection ConstantValue
         if (this.bodyTrackingIncrements > 0 && (Object) this == MinecraftClient.getInstance().player && rotation != null) {
-            RotationUtil.INSTANCE.setFakeRotation(new Rotation(
+            Rotations.INSTANCE.setFakeRotation(new Rotation(
                     (rotation.getYaw() + (float) MathHelper.wrapDegrees(this.serverYaw - (double) rotation.getYaw()) / (float) this.bodyTrackingIncrements) % 360.0F,
                     (rotation.getPitch() + (float) (this.serverPitch - (double) rotation.getPitch()) / (float) this.bodyTrackingIncrements) % 360.0F
             ));
@@ -79,7 +79,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getYaw()F"), slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;prevStepBobbingAmount:F"), to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;turnHead(FF)F")))
     public float replaceYaw_tick(LivingEntity instance) {
-        Rotation rotation = RotationUtil.INSTANCE.getFakeRotation();
+        Rotation rotation = Rotations.INSTANCE.getFakeRotation();
         //noinspection ConstantValue
         if((Object) this == MinecraftClient.getInstance().player && rotation != null) {
             return rotation.getYaw();
@@ -89,7 +89,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Redirect(method = "turnHead", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getYaw()F"))
     public float replaceYaw_turnHead(LivingEntity instance) {
-        Rotation rotation = RotationUtil.INSTANCE.getFakeRotation();
+        Rotation rotation = Rotations.INSTANCE.getFakeRotation();
         //noinspection ConstantValue
         if((Object) this == MinecraftClient.getInstance().player && rotation != null) {
             return rotation.getYaw();

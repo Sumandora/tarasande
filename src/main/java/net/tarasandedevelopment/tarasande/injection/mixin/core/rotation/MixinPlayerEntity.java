@@ -5,9 +5,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations;
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity;
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,7 +22,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 
     @Inject(method = "tickNewAi", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;headYaw:F"))
     public void updateHeadRotation(CallbackInfo ci) {
-        Rotation rotation = RotationUtil.INSTANCE.getFakeRotation();
+        Rotation rotation = Rotations.INSTANCE.getFakeRotation();
         float yaw = getYaw();
         float pitch = getPitch();
         //noinspection ConstantValue

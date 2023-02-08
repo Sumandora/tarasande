@@ -6,11 +6,11 @@ import net.minecraft.world.dimension.DimensionType
 import net.minecraft.world.dimension.DimensionTypes
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import su.mandora.event.EventDispatcher
 
@@ -105,7 +105,7 @@ class InformationFakeRotation : Information("Player", "Fake Rotation") {
     private val wrapYaw = ValueBoolean(this, "Wrap yaw", true)
 
     override fun getMessage(): String? {
-        return RotationUtil.fakeRotation?.let {
+        return Rotations.fakeRotation?.let {
             val yaw = if(wrapYaw.value) MathHelper.wrapDegrees(it.yaw) else it.yaw
             StringUtil.round(yaw.toDouble(), this.decimalPlacesYaw.value.toInt()) + " " + StringUtil.round(it.pitch.toDouble(), this.decimalPlacesPitch.value.toInt())
         }

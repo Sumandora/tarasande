@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos
 import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -16,7 +17,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.player.prediction.projectile.ProjectileUtil
 import kotlin.math.abs
@@ -62,7 +62,7 @@ class ModuleAutoFish : Module("Auto fish", "Automates fishing", ModuleCategory.P
                     if (mc.player?.mainHandStack?.item is FishingRodItem ||
                         mc.player?.offHandStack?.item is FishingRodItem)
                         if (mc.player?.fishHook == null) {
-                            val lastPos = ProjectileUtil.predict(ItemStack(Items.FISHING_ROD), RotationUtil.fakeRotation ?: Rotation(mc.player!!), false).lastOrNull() ?: return@registerEvent
+                            val lastPos = ProjectileUtil.predict(ItemStack(Items.FISHING_ROD), Rotations.fakeRotation ?: Rotation(mc.player!!), false).lastOrNull() ?: return@registerEvent
                             if (mc.world?.getBlockState(BlockPos(lastPos))?.fluidState?.isEmpty == false)
                                 event.pressed = true
                         } else if (when {

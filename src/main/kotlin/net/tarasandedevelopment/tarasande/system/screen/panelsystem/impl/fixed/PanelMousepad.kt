@@ -4,10 +4,10 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import su.mandora.event.EventDispatcher
 import kotlin.math.abs
@@ -21,9 +21,9 @@ class PanelMousepad : Panel("Mousepad", 100.0, 50.0, true) {
     init {
         EventDispatcher.add(EventUpdate::class.java) {
             if (it.state == EventUpdate.State.POST) {
-                val rotation = if (RotationUtil.fakeRotation != null) RotationUtil.fakeRotation else Rotation(mc.player!!)
+                val rotation = Rotations.fakeRotation ?: Rotation(mc.player!!)
                 if (lastRotation != null)
-                    rotations.add(rotation!! - lastRotation!!)
+                    rotations.add(rotation - lastRotation!!)
                 lastRotation = rotation
                 while (rotations.size > 20)
                     rotations.removeAt(0)

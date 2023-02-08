@@ -10,8 +10,6 @@ class GraphTickableFPS : GraphTickable("Game", "FPS", 200, true) {
 
     init {
         EventDispatcher.add(EventPollEvents::class.java) {
-            if (it.fake)
-                return@add
             data.removeIf { time -> System.currentTimeMillis() - time > 1000L }
             data.add(System.currentTimeMillis())
         }

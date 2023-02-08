@@ -1,9 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc
 
-import net.tarasandedevelopment.tarasande.event.EventGoalMovement
-import net.tarasandedevelopment.tarasande.event.EventInput
-import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
@@ -21,7 +19,7 @@ class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of othe
     private var move = false
 
     init {
-        registerEvent(EventPollEvents::class.java) { event ->
+        registerEvent(EventRotation::class.java) { event ->
             val target = mc.world?.players?.filter { PlayerUtil.isAttackable(it) }?.minByOrNull { mc.player?.squaredDistanceTo(it)!! } ?: return@registerEvent
 
             val targetEye = target.eyePos + Rotation(target).forwardVector(extension.value)
@@ -34,8 +32,12 @@ class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of othe
             event.rotation = rotation.correctSensitivity()
         }
 
-        registerEvent(EventGoalMovement::class.java) { event ->
-            event.yaw = RotationUtil.fakeRotation?.yaw ?: return@registerEvent
+        registerEvent(EventJump::class.java, 1) { event ->
+            if (event.state != EventJump.State.PRE) return@registerEvent
+            event.yaw = Rotations.fakeRotation?.yaw ?: return@registerEvent
+        }
+        registerEvent(EventVelocityYaw::class.java, 1) { event ->
+            event.yaw = Rotations.fakeRotation?.yaw ?: return@registerEvent
         }
 
         registerEvent(EventInput::class.java) { event ->

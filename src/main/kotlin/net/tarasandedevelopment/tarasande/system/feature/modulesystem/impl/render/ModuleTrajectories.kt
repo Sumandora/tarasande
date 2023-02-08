@@ -3,11 +3,11 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.rend
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Hand
 import net.tarasandedevelopment.tarasande.event.EventRender3D
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.prediction.projectile.ProjectileUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 
@@ -26,7 +26,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
         }
 
             if (stack != null) {
-                RenderUtil.renderPath(event.matrices, ProjectileUtil.predict(stack!!, RotationUtil.fakeRotation, predictVelocity.value).also { if (it.size >= 1) it.removeFirst() }, -1)
+                RenderUtil.renderPath(event.matrices, ProjectileUtil.predict(stack!!, Rotations.fakeRotation, predictVelocity.value).also { if (it.size >= 1) it.removeFirst() }, -1)
             }
         }
     }

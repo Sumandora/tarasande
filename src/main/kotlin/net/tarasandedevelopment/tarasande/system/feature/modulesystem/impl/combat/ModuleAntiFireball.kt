@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.comb
 import net.minecraft.entity.projectile.FireballEntity
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventAttack
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventRotation
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -32,7 +32,7 @@ class ModuleAntiFireball : Module("Anti fireball", "Hits fireballs to turn them"
     }
 
     init {
-        registerEvent(EventPollEvents::class.java) { event ->
+        registerEvent(EventRotation::class.java) { event ->
             for (entity in mc.world?.entities?.filterIsInstance<FireballEntity>() ?: return@registerEvent) {
                 val aimPoint = MathUtil.getBestAimPoint(entity.boundingBox.expand(entity.targetingMargin.toDouble()))
                 if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.value * reach.value)

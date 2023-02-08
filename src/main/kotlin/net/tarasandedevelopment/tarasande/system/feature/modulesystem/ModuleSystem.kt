@@ -50,7 +50,6 @@ object ManagerModule : Manager<Module>() {
             ModuleInventoryMove(),
             ModuleFlight(),
             ModuleKeepSprint(),
-            ModuleMovementRecorder(),
             ModuleNoRotate(),
             ModuleParkour(),
             ModuleNoCramming(),
