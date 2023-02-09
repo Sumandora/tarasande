@@ -29,4 +29,5 @@ include 'package-custom-minecraft'
 include 'package-crasher'
 include 'package-nbt-edit'
 include 'package-creative-features'
+include 'package-discord-rpc'
 
