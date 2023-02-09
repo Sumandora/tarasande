@@ -12,6 +12,7 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.panel.ClickableWidgetPanelSidebar
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
+import net.tarasandedevelopment.tarasande.util.screen.ScreenUtil
 import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
@@ -52,6 +53,7 @@ open class SidebarEntry(val name: String, val category: String) {
     fun openValues() {
         if (ManagerValue.getValues(this).isNotEmpty()) {
             mc.setScreen(ScreenBetterOwnerValues(name, mc.currentScreen!!, this))
+            ScreenUtil.playClickSound()
         }
     }
 
@@ -63,6 +65,7 @@ open class SidebarEntry(val name: String, val category: String) {
             override fun onClick(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     this@SidebarEntry.onClick(mouseButton)
+                    ScreenUtil.playClickSound()
                 } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openValues()
                 }
@@ -83,6 +86,7 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
                 override fun onClick(mouseButton: Int) {
                     if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                         onClick(it)
+                        ScreenUtil.playClickSound()
                     } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                         openValues()
                     }
@@ -111,6 +115,7 @@ open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     enabled.value = !enabled.value
                     onClick(enabled.value)
+                    ScreenUtil.playClickSound()
                 } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openValues()
                 }

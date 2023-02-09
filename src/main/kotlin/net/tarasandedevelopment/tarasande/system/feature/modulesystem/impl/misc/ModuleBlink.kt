@@ -54,12 +54,6 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private val reach = object : ValueNumber(this, "Reach", 0.1, 3.0, 6.0, 0.1) {
         override fun isEnabled() = mode.isSelected(3)
     }
-    private val automaticMode = object : ValueMode(this, "Automatic mode", true, "Maximize Reach", "Counter quick movement") {
-        override fun isEnabled() = mode.isSelected(3)
-    }
-    private val quickMovementThreshold = object : ValueNumber(this, "Quick movement threshold", 0.0, 0.5, 1.0, 0.05) {
-        override fun isEnabled() = mode.isSelected(3) && automaticMode.isSelected(1)
-    }
     private val cancelKey = object : ValueBind(this, "Cancel key", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
         override fun isEnabled() = mode.isSelected(0) && affectedPackets.isSelected(0)
     }
@@ -125,16 +119,9 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
             val dimensions = it.getDimensions(it.pose)
 
             val actualDist = mc.player?.eyePos?.distanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, dimensions.getBoxAt(newPosition).expand(it.targetingMargin.toDouble())))!!
-            // To work around the issue that anticipateBoundingBox poses, we force the same bounding box here (this is probably the most rofl "solution", there is and there are still ways it could fail)
             val oldDist = mc.player?.eyePos?.distanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, dimensions.getBoxAt(lastPosition).expand(it.targetingMargin.toDouble())))!!
 
-            if(automaticMode.isSelected(0) && oldDist < actualDist)
-                return true
-
-            if(automaticMode.isSelected(1) && oldDist > actualDist && oldDist - actualDist > quickMovementThreshold.value)
-                return true
-
-            return false
+            return oldDist < actualDist
         }
     }
 

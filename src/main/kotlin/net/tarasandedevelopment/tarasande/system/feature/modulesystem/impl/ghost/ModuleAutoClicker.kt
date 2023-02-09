@@ -7,7 +7,6 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.isBlockHitResult
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you", ModuleCategory.GHOST) {
@@ -41,7 +40,7 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
                     if (clicks > 0) {
                         when (entry.key) {
                             mc.options.attackKey ->
-                                if(mc.crosshairTarget?.isBlockHitResult() == true)
+                                if(mc.interactionManager?.isBreakingBlock == true)
                                     return@registerEvent
                             mc.options.useKey ->
                                 if (mc.player?.isUsingItem == true || PlayerUtil.getUsedHand() != null)
