@@ -72,7 +72,6 @@ class TarasandeProtocolHack {
     companion object {
         // Connection data
         var viaConnection: UserConnection? = null
-        var connectedAddress: InetSocketAddress? = null
 
         // Item splitter
         var displayItems: MutableList<Item> = ArrayList()
