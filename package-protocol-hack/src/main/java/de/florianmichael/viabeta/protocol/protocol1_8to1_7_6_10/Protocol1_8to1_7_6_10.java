@@ -18,6 +18,7 @@ import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.protocol.remapper.ValueTransformer;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.version.Types1_8;
+import com.viaversion.viaversion.libs.gson.JsonElement;
 import com.viaversion.viaversion.libs.gson.JsonObject;
 import com.viaversion.viaversion.protocols.base.ClientboundLoginPackets;
 import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
@@ -47,6 +48,7 @@ import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.type.impl.Chunk_
 import de.florianmichael.viabeta.protocol.protocol1_8to1_7_6_10.util.Particle_1_7_6_10;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.lenni0451.mcstructs.text.serializer.TextComponentSerializer;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -1347,8 +1349,14 @@ public class Protocol1_8to1_7_6_10 extends AbstractProtocol<ClientboundPackets1_
             @Override
             public void registerMap() {
                 map(Type.POSITION, Type1_7_6_10.POSITION_SHORT); // position
-                // TODO: Wait for mcstructs to have a json to legacy string method
-                handler(PacketWrapper::cancel);
+                handler(wrapper -> {
+                    for (int i = 0; i < 4; i++) {
+                        final JsonElement component = wrapper.read(Type.COMPONENT); // line
+                        String text = TextComponentSerializer.V1_8.deserialize(component.toString()).asLegacyFormatString();
+                        if (text.length() > 15) text = text.substring(0, 15);
+                        wrapper.write(Type.STRING, text);
+                    }
+                });
             }
         });
         this.registerServerbound(ServerboundPackets1_8.TAB_COMPLETE, new PacketRemapper() {

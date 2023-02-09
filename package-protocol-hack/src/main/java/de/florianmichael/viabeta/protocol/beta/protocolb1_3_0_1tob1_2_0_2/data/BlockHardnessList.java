@@ -95,14 +95,10 @@ public class BlockHardnessList {
     }
 
     public static boolean canBeBrokenInstantly(final int blockID) {
-        if (!HARDNESS_TABLE.containsKey(blockID)) {
-            return true;
-        }
-        return HARDNESS_TABLE.get(blockID) == 0;
+        return HARDNESS_TABLE.getOrDefault(blockID, 0F) == 0F;
     }
 
     public static boolean canBeBrokenInstantly(final IdAndData block) {
         return canBeBrokenInstantly(block.id);
     }
-
 }
