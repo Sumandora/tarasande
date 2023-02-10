@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.s
 
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.AccessibilityValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -53,7 +54,7 @@ open class SidebarEntry(val name: String, val category: String) {
     fun openValues() {
         if (ManagerValue.getValues(this).isNotEmpty()) {
             mc.setScreen(ScreenBetterOwnerValues(name, mc.currentScreen!!, this))
-            ScreenUtil.playClickSound()
+            if (AccessibilityValues.playSoundWhenClickingInSidebar.value) ScreenUtil.playClickSound()
         }
     }
 
@@ -65,7 +66,7 @@ open class SidebarEntry(val name: String, val category: String) {
             override fun onClick(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     this@SidebarEntry.onClick(mouseButton)
-                    ScreenUtil.playClickSound()
+                    if (AccessibilityValues.playSoundWhenClickingInSidebar.value) ScreenUtil.playClickSound()
                 } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openValues()
                 }
@@ -86,7 +87,7 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
                 override fun onClick(mouseButton: Int) {
                     if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                         onClick(it)
-                        ScreenUtil.playClickSound()
+                        if (AccessibilityValues.playSoundWhenClickingInSidebar.value) ScreenUtil.playClickSound()
                     } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                         openValues()
                     }
@@ -115,7 +116,7 @@ open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     enabled.value = !enabled.value
                     onClick(enabled.value)
-                    ScreenUtil.playClickSound()
+                    if (AccessibilityValues.playSoundWhenClickingInSidebar.value) ScreenUtil.playClickSound()
                 } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openValues()
                 }
