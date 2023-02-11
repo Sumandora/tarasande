@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-//This was originally for the LiveOverflow event Server -> 176.9.20.205
+// This was originally for the LiveOverflow event Server -> 176.9.20.205
 class ModuleRoundedMovement : Module("Rounded movement", "Rounds the movement packets", ModuleCategory.MOVEMENT) {
 
     private val digits = ValueNumber(this, "Digits", 0.0, 2.0, 10.0, 1.0)

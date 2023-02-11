@@ -6,9 +6,9 @@ import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import de.florianmichael.tarasande_rejected_features.module.ModuleAutoRescuePlatform
-import de.florianmichael.tarasande_rejected_features.module.ModuleDeadByDaylightEscape
-import de.florianmichael.tarasande_rejected_features.module.ModuleFurnaceProgress
 import de.florianmichael.tarasande_rejected_features.module.ModuleRoundedMovement
+import de.florianmichael.tarasande_rejected_features.screenextension.ScreenExtensionHandledScreen
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import su.mandora.event.EventDispatcher
 
 class TarasandeRejectedFeatures : ClientModInitializer {
@@ -16,9 +16,7 @@ class TarasandeRejectedFeatures : ClientModInitializer {
     override fun onInitializeClient() {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
             ManagerModule.add(
-                ModuleDeadByDaylightEscape(),
                 ModuleRoundedMovement(),
-                ModuleFurnaceProgress(),
                 ModuleAutoRescuePlatform()
             )
 
@@ -35,6 +33,10 @@ class TarasandeRejectedFeatures : ClientModInitializer {
 
                 // KeyBinds
                 InformationKeyBinds()
+            )
+
+            ManagerScreenExtension.add(
+                ScreenExtensionHandledScreen()
             )
         }
     }

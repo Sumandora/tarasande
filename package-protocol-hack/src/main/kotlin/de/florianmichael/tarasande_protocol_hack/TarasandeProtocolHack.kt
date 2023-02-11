@@ -69,19 +69,14 @@ import su.mandora.event.EventDispatcher
 class TarasandeProtocolHack {
 
     companion object {
-        // Connection data
         var viaConnection: UserConnection? = null
-
-        // Item splitter
         var displayItems: MutableList<Item> = ArrayList()
 
         fun update(protocol: ProtocolVersion, reloadProtocolHackValues: Boolean) {
-            // Only reload if needed
             val comparable = InternalProtocolList.fromProtocolVersion(protocol)
 
             if (ViaLoadingBase.getTargetVersion() != protocol) {
-                displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, comparable) }
-                    .toMutableList()
+                displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, comparable) }.toMutableList()
                 EntityDimensionsDefinition.reload(comparable)
 
                 if (comparable.isOlderThan(BetaProtocols.a1_0_15)) {
@@ -160,13 +155,11 @@ class TarasandeProtocolHack {
             .subPlatform(subPlatformViaSnapshot).subPlatform(subPlatformViaBeta)
             .build()
 
-        // Definition setup
         PackFormatsDefinition.checkOutdated(SharedConstants.getProtocolVersion())
         EntityDimensionsDefinition
 
         EventDispatcher.apply {
             add(EventSuccessfulLoad::class.java) {
-                // Custom information list
                 ManagerInformation.apply {
                     add(
                         // Via Version
@@ -183,17 +176,12 @@ class TarasandeProtocolHack {
                     )
                 }
 
-                // Protocol based module modifications
                 modifyModuleInventoryMove()
                 modifyModuleNoWeb()
                 modifyModuleTickBaseManipulation()
-
-                // Protocol based modules
                 ManagerModule.add(ModuleEveryItemOnArmor())
 
-                // Sidebar modifications
                 ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.insert(SidebarEntrySelectionProtocolHack(), 2)
-
                 ValueButtonOwnerValues(ClientValues, "Protocol hack values", ProtocolHackValues)
 
                 ClassicItemSelectionScreen.create(InternalProtocolList.fromProtocolVersion(BetaProtocols.c0_28toc0_30))
@@ -215,7 +203,6 @@ class TarasandeProtocolHack {
                 }
             }
 
-            // Custom progress bars implemented by ViaBeta
             add(EventScreenRender::class.java) {
                 if (viaConnection != null && (it.screen is DownloadingTerrainScreen || it.screen is ConnectScreen)) {
                     var levelProgress: String? = null

@@ -1,31 +1,28 @@
-package de.florianmichael.tarasande_rejected_features.module
+package de.florianmichael.tarasande_rejected_features.screenextension
 
+import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.screen.AbstractFurnaceScreenHandler
-import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueSpacer
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtension
 
-class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress in the furnace", ModuleCategory.RENDER) {
+class ScreenExtensionHandledScreen : ScreenExtension<HandledScreen<*>>(HandledScreen::class.java) {
 
-    init {
-        registerEvent(EventChildren::class.java) { event ->
-            if (event.screen !is HandledScreen<*>) return@registerEvent
-            if ((event.screen as HandledScreen<*>).screenHandler !is AbstractFurnaceScreenHandler) return@registerEvent
+    override fun createElements(screen: HandledScreen<*>): MutableList<Element> {
+        if (screen.screenHandler is AbstractFurnaceScreenHandler) {
+            val screenHandler = screen.screenHandler as AbstractFurnaceScreenHandler
 
-            val screenHandler = (event.screen as HandledScreen<*>).screenHandler as AbstractFurnaceScreenHandler
-
-            event.elements.add(ClickableWidgetPanel(object : PanelElements<ElementWidthValueComponent<*>>("Furnace progress", 100.0, 0.0) {
+            return mutableListOf(ClickableWidgetPanel(object : PanelElements<ElementWidthValueComponent<*>>("Furnace progress", 100.0, 0.0) {
                 private fun addText(input: String) = elementList.add(ValueSpacer(this, input, manage = false).createValueComponent())
 
                 override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
                     elementList.clear()
+                    x = 3.0
                     y = mc.window.scaledHeight / 2f - panelHeight / 2f
 
                     if (screenHandler.isBurning) {
@@ -39,5 +36,6 @@ class ModuleFurnaceProgress : Module("Furnace progress", "Indicates the progress
                 }
             }))
         }
+        return mutableListOf()
     }
 }
