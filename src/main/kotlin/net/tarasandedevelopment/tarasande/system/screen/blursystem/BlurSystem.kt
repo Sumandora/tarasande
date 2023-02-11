@@ -13,7 +13,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumb
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurBox
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurGaussian
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.impl.BlurKawase
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.panelscreen.ScreenPanel
 import net.tarasandedevelopment.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import net.tarasandedevelopment.tarasande.util.render.shader.Program
 import net.tarasandedevelopment.tarasande.util.render.shader.Shader
@@ -42,7 +42,7 @@ object ManagerBlur : Manager<Blur>() {
 
         EventDispatcher.apply {
             add(EventScreenRender::class.java, 1) {
-                if (it.screen !is ScreenCheatMenu)
+                if (it.screen !is ScreenPanel)
                     blurScene(shapesBuffer = screenShapesFramebuffer)
             }
             add(EventRender2D::class.java, 999) {

@@ -28,7 +28,7 @@
 1. Base
 2. Account Management (with encrypted files) 
    - Proxy System
-3. ClickGUI (cheat menu)
+3. ClickGUI (panel screen)
    - Basic combat modules
    - Basic movement modules
    - Basic render modules

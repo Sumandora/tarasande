@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu
+package net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.panelscreen
 
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
@@ -17,7 +17,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.particle.Particle
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.panelscreen.particle.Particle
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
@@ -25,7 +25,7 @@ import su.mandora.event.EventDispatcher
 import kotlin.math.floor
 import kotlin.math.round
 
-class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("Cheat Menu")) {
+class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel screen")) {
 
     // Values
     private val hotkey = object : ValueBind(this, "Hotkey", Type.KEY, GLFW.GLFW_KEY_RIGHT_SHIFT) {
@@ -50,7 +50,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
         passEvents = false
         EventDispatcher.apply {
             add(EventChangeScreen::class.java) { event ->
-                if (client?.currentScreen is ScreenCheatMenu && event.newScreen == null) {
+                if (client?.currentScreen is ScreenPanel && event.newScreen == null) {
                     panelSystem.list.forEach { it.onClose() }
                     wasClosed = true // Sad, but true. this cancels our smooth animation, but we can't afford to leave a screen open :c
                 }
@@ -58,7 +58,7 @@ class ScreenCheatMenu(private val panelSystem: ManagerPanel) : Screen(Text.of("C
             add(EventUpdate::class.java) { event ->
                 if (event.state == EventUpdate.State.PRE)
                     if (hotkey.wasPressed().let { it > 0 && it % 2 != 0 })
-                        mc.setScreen(this@ScreenCheatMenu)
+                        mc.setScreen(this@ScreenPanel)
             }
         }
     }

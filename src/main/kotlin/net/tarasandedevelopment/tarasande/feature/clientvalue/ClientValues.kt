@@ -35,7 +35,7 @@ object ClientValues {
 
     init {
         ValueButtonOwnerValues(this, "Privacy values", PrivacyValues)
-        ValueButtonOwnerValues(this, "Cheat menu values", ManagerPanel.screenCheatMenu)
+        ValueButtonOwnerValues(this, "Panels values", ManagerPanel.screenPanel)
         ValueButtonOwnerValues(this, "Accessibility values", AccessibilityValues)
         ValueButtonOwnerValues(this, "Network values", NetworkValues)
         ValueButtonOwnerValues(this, "Targeting values", TargetingValues)

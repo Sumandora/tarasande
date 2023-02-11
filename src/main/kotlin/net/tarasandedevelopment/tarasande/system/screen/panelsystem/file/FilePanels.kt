@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import kotlin.math.max
 import kotlin.math.min
 
-class FileCheatMenu(private val panelSystem: ManagerPanel) : File("CheatMenu") {
+class FilePanels(private val panelSystem: ManagerPanel) : File("Panels") {
 
     override fun save(): JsonElement {
         val jsonObject = JsonObject()

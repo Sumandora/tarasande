@@ -14,10 +14,10 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.file.FileCheatMenu
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.file.FilePanels
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.fixed.*
-import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.cheatmenu.ScreenCheatMenu
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
+import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.panelscreen.ScreenPanel
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -33,7 +33,7 @@ import kotlin.math.round
 
 object ManagerPanel : Manager<Panel>() {
 
-    val screenCheatMenu: ScreenCheatMenu
+    val screenPanel: ScreenPanel
     private var panelInsertY = 5.0
 
     init {
@@ -46,9 +46,9 @@ object ManagerPanel : Manager<Panel>() {
             PanelWatermark()
         )
 
-        screenCheatMenu = ScreenCheatMenu(this)
+        screenPanel = ScreenPanel(this)
         EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
-            ManagerFile.add(FileCheatMenu(this))
+            ManagerFile.add(FilePanels(this))
         }
     }
 
@@ -111,7 +111,7 @@ open class Panel(
             EventDispatcher.apply {
                 add(EventRender2D::class.java) {
                     if (isVisible() && opened)
-                        if (mc.currentScreen != ManagerPanel.screenCheatMenu) {
+                        if (mc.currentScreen != ManagerPanel.screenPanel) {
                             it.matrices.push()
                             render(it.matrices, -1, -1, mc.tickDelta)
                             it.matrices.pop()
@@ -120,7 +120,7 @@ open class Panel(
 
                 add(EventTick::class.java) {
                     if (it.state == EventTick.State.PRE)
-                        if (mc.currentScreen != ManagerPanel.screenCheatMenu)
+                        if (mc.currentScreen != ManagerPanel.screenPanel)
                             tick()
                 }
             }
