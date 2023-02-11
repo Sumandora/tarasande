@@ -23,6 +23,7 @@ object Rotations {
         override fun isEnabled() = updateRotationsWhenTickSkipping.value
     }
     private val rotateToOriginSpeed = ValueNumberRange(this, "Rotate to origin speed", 0.0, 1.0, 1.0, 1.0, 0.1)
+    private val visualizeFakeRotation = ValueBoolean(this, "Visualize fake rotation", false)
 
     private var rotated = false
     init {
@@ -85,6 +86,14 @@ object Rotations {
                     fakeRotation = rotation
                 }
             }
+
+            if(visualizeFakeRotation.value)
+                fakeRotation?.also {
+                    mc.player!!.apply {
+                        yaw = it.yaw
+                        pitch = it.pitch
+                    }
+                }
         }
     }
 

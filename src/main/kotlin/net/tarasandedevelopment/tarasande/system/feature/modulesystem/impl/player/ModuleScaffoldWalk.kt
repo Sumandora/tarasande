@@ -58,7 +58,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val aimHeight = ValueNumberRange(this, "Aim height", 0.0, 0.4, 0.6, 1.0, 0.05)
     private val speculativeWaiting = ValueBoolean(this, "Speculative waiting", false)
     private val silent = ValueMode(this, "Silent", false, "Disabled", "Invisible", "Visible")
-    private val lockView = ValueBoolean(this, "Lock view", false)
     private val headRoll = ValueBoolean(this, "Head roll", false)
     private val autoJump = ValueBoolean(this, "Auto jump", false)
     private val forbiddenItems = object : ValueRegistry<Item>(this, "Forbidden items", Registries.ITEM, true) {
@@ -175,8 +174,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 
     init {
         registerEvent(EventRotation::class.java, 1001) { event ->
-            if (rotation != null && headRoll.value) {
-                rotation = Rotation(mc.player?.yaw!!, rotation?.pitch!!)
+            if (headRoll.value) {
+                rotation = rotation?.withYaw(PlayerUtil.getMoveDirection().toFloat())
             }
 
             val below = mc.player?.blockPos?.add(0, -1, 0)!!
@@ -329,11 +328,6 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, mc.player?.eyePos!! + rotationVector)
                 hitResult.isSame(target?.second!!, target?.first!!)
             })
-
-            if (lockView.value) {
-                mc.player?.yaw = event.rotation.yaw
-                mc.player?.pitch = event.rotation.pitch
-            }
         }
 
         registerEvent(EventAttack::class.java, 1001) { event ->

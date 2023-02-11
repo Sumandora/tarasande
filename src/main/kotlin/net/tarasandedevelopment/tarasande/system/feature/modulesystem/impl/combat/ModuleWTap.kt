@@ -61,10 +61,12 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                     when {
                         mode.isSelected(0) -> {
                             event.movementForward = 0.0F
+                            event.movementSideways = 0.0F
                         }
 
                         mode.isSelected(1) -> {
                             event.movementForward *= -1.0F
+                            event.movementSideways *= -1.0F
                         }
                     }
                 }

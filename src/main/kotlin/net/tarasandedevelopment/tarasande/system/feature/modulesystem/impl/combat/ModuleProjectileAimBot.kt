@@ -32,7 +32,6 @@ import kotlin.math.sqrt
 class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims at targets with (cross-)bow", ModuleCategory.COMBAT) {
 
     private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.1, 1.0, 1.0, 1.0, 0.1)
-    private val lockView = ValueBoolean(this, "Lock view", false)
     private val maxPrediction = ValueNumber(this, "Max prediction", 0.0, 40.0, 100.0, 1.0)
     private val throughWalls = ValueBoolean(this, "Through walls", false)
     private val predictionColor = ValueColor(this, "Prediction color", 0.0, 1.0, 1.0, 1.0)
@@ -96,11 +95,6 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
 
             predictedBox = box
             event.rotation = smoothedRot.correctSensitivity()
-
-            if (lockView.value) {
-                mc.player?.yaw = event.rotation.yaw
-                mc.player?.pitch = event.rotation.pitch
-            }
         }
 
         registerEvent(EventRender3D::class.java) { event ->

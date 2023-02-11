@@ -21,7 +21,6 @@ class ModuleQuakeAura : Module("Quake aura", "Aimbot for Quake-like game modes",
     private val predict = ValueNumber(this, "Predict", 0.0, 4.0, 10.0, 1.0)
     private val aimLower = ValueNumber(this, "Aim lower", 0.0, 0.0, 2.0, 0.1)
     private val autoFire = ValueBoolean(this, "Auto fire", false)
-    private val lockView = ValueBoolean(this, "Lock view", true)
 
     private var rotated = false
 
@@ -39,10 +38,6 @@ class ModuleQuakeAura : Module("Quake aura", "Aimbot for Quake-like game modes",
             val extrapolatedPosition = enemy.eyePos + enemyVelocity.withAxis(Direction.Axis.Y, 0.0) * predict.value
 
             event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, extrapolatedPosition.subtract(0.0, aimLower.value, 0.0)).correctSensitivity()
-            if (lockView.value) {
-                mc.player?.yaw = event.rotation.yaw
-                mc.player?.pitch = event.rotation.pitch
-            }
             rotated = true
         }
 

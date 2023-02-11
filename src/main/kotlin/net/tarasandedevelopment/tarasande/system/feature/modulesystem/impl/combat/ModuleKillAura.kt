@@ -87,7 +87,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val precision = object : ValueNumber(this, "Precision", 0.0, 0.01, 1.0, 0.01) {
         override fun isEnabled() = rotations.anySelected()
     }
-    private val lockView = ValueBoolean(this, "Lock view", false)
     private val flex = ValueBoolean(this, "Flex", false)
     private val flexTurn = object : ValueNumber(this, "Flex turn", 1.0, 90.0, 180.0, 1.0) {
         override fun isEnabled() = flex.value
@@ -252,11 +251,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             event.rotation = finalRot.correctSensitivity(preference = {
                 PlayerUtil.getTargetedEntity(reach.minValue, it, throughWalls.isSelected(2))?.isEntityHitResult() == true
             })
-
-            if (lockView.value) {
-                mc.player?.yaw = event.rotation.yaw
-                mc.player?.pitch = event.rotation.pitch
-            }
         }
 
         registerEvent(EventTick::class.java) { event ->
