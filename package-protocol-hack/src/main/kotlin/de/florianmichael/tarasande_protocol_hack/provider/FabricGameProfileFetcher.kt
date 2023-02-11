@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_hack.provider.viabeta
+package de.florianmichael.tarasande_protocol_hack.provider
 
 import com.mojang.authlib.Agent
 import com.mojang.authlib.HttpAuthenticationService

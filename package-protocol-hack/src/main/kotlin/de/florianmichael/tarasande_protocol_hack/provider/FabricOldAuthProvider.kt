@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_hack.provider.viabeta
+package de.florianmichael.tarasande_protocol_hack.provider
 
 import com.viaversion.viaversion.api.connection.UserConnection
 import de.florianmichael.viabeta.protocol.protocol1_3_1_2to1_2_4_5.provider.OldAuthProvider

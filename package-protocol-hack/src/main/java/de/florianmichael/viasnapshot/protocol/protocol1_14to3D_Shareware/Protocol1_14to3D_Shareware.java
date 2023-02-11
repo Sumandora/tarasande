@@ -6,7 +6,6 @@ import com.viaversion.viabackwards.api.rewriters.SoundRewriter;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.remapper.PacketHandler;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_14to1_13_2.ClientboundPackets1_14;
@@ -37,7 +36,7 @@ public class Protocol1_14to3D_Shareware extends BackwardsProtocol<ClientboundPac
         blockItemPackets = new BlockItemPackets3D_Shareware(this);
         blockItemPackets.register();
         new EntityPackets3D_Shareware(this).registerPackets();
-        final SoundRewriter soundRewriter = new SoundRewriter(this);
+        final SoundRewriter<ClientboundPackets3D_Shareware> soundRewriter = new SoundRewriter<>(this);
         soundRewriter.registerSound(ClientboundPackets3D_Shareware.SOUND);
         soundRewriter.registerSound(ClientboundPackets3D_Shareware.ENTITY_SOUND);
         soundRewriter.registerNamedSound(ClientboundPackets3D_Shareware.NAMED_SOUND);
@@ -46,13 +45,13 @@ public class Protocol1_14to3D_Shareware extends BackwardsProtocol<ClientboundPac
         this.registerClientbound(ClientboundPackets3D_Shareware.CHUNK_DATA, new PacketRemapper() {
             @Override
             public void registerMap() {
-                handler(packetWrapper -> {
-                    final Chunk chunk = packetWrapper.passthrough(new Chunk1_14Type());
-                    ChunkCenterTracker3D_Shareware entityTracker = packetWrapper.user().get(ChunkCenterTracker3D_Shareware.class);
+                handler(wrapper -> {
+                    final Chunk chunk = wrapper.passthrough(new Chunk1_14Type());
+                    ChunkCenterTracker3D_Shareware entityTracker = wrapper.user().get(ChunkCenterTracker3D_Shareware.class);
                     final int diffX = Math.abs(entityTracker.getChunkCenterX() - chunk.getX());
                     final int diffZ = Math.abs(entityTracker.getChunkCenterZ() - chunk.getZ());
                     if (entityTracker.isForceSendCenterChunk() || diffX >= SERVERSIDE_VIEW_DISTANCE || diffZ >= SERVERSIDE_VIEW_DISTANCE) {
-                        final PacketWrapper fakePosLook = packetWrapper.create(ClientboundPackets1_14.UPDATE_VIEW_POSITION); // Set center chunk
+                        final PacketWrapper fakePosLook = wrapper.create(ClientboundPackets1_14.UPDATE_VIEW_POSITION); // Set center chunk
                         fakePosLook.write(Type.VAR_INT, chunk.getX());
                         fakePosLook.write(Type.VAR_INT, chunk.getZ());
                         fakePosLook.send(Protocol1_14to3D_Shareware.class);
@@ -65,13 +64,10 @@ public class Protocol1_14to3D_Shareware extends BackwardsProtocol<ClientboundPac
         this.registerClientbound(ClientboundPackets3D_Shareware.RESPAWN, new PacketRemapper() {
             @Override
             public void registerMap() {
-                handler(new PacketHandler() {
-                    @Override
-                    public void handle(PacketWrapper packetWrapper) throws Exception {
-                        ChunkCenterTracker3D_Shareware entityTracker = packetWrapper.user().get(ChunkCenterTracker3D_Shareware.class);
-                        // The client may reset the center chunk if dimension is changed
-                        entityTracker.setForceSendCenterChunk(true);
-                    }
+                handler(wrapper -> {
+                    ChunkCenterTracker3D_Shareware entityTracker = wrapper.user().get(ChunkCenterTracker3D_Shareware.class);
+                    // The client may reset the center chunk if dimension is changed
+                    entityTracker.setForceSendCenterChunk(true);
                 });
             }
         });

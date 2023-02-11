@@ -7,7 +7,7 @@ import com.viaversion.viaversion.protocols.protocol1_14to1_13_2.ServerboundPacke
 import de.florianmichael.viasnapshot.protocol.protocol1_14to3D_Shareware.ClientboundPackets3D_Shareware;
 import de.florianmichael.viasnapshot.protocol.protocol1_14to3D_Shareware.Protocol1_14to3D_Shareware;
 
-public class BlockItemPackets3D_Shareware extends ItemRewriter<Protocol1_14to3D_Shareware> {
+public class BlockItemPackets3D_Shareware extends ItemRewriter<ClientboundPackets3D_Shareware, ServerboundPackets1_14, Protocol1_14to3D_Shareware> {
 
     public BlockItemPackets3D_Shareware(Protocol1_14to3D_Shareware protocol) {
         super(protocol);

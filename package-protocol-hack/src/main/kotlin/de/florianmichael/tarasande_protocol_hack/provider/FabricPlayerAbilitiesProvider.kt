@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_hack.provider.viasnapshot
+package de.florianmichael.tarasande_protocol_hack.provider
 
 import net.tarasandedevelopment.tarasande.mc
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues

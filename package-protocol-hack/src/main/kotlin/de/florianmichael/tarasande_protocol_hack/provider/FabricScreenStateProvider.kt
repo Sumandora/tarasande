@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_hack.provider.viabeta
+package de.florianmichael.tarasande_protocol_hack.provider
 
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.provider.ScreenStateProvider
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen

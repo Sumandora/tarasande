@@ -14,11 +14,11 @@ import de.florianmichael.tarasande_protocol_hack.definition.PackFormatsDefinitio
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.EntityDimensionsDefinition
 import de.florianmichael.tarasande_protocol_hack.platform.ViaBetaPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.ViaSnapshotPlatformImpl
-import de.florianmichael.tarasande_protocol_hack.provider.clamp.FabricCommandArgumentsProvider
-import de.florianmichael.tarasande_protocol_hack.provider.viabeta.*
-import de.florianmichael.tarasande_protocol_hack.provider.viasnapshot.FabricPlayerAbilitiesProvider
-import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider
-import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricMovementTransmitterProvider
+import de.florianmichael.tarasande_protocol_hack.provider.*
+import de.florianmichael.tarasande_protocol_hack.provider.FabricCommandArgumentsProvider
+import de.florianmichael.tarasande_protocol_hack.provider.FabricPlayerAbilitiesProvider
+import de.florianmichael.tarasande_protocol_hack.provider.FabricHandItemProvider
+import de.florianmichael.tarasande_protocol_hack.provider.FabricMovementTransmitterProvider
 import de.florianmichael.tarasande_protocol_hack.tarasande.information.*
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleEveryItemOnArmor
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleInventoryMove
@@ -65,7 +65,6 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.Ma
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import su.mandora.event.EventDispatcher
-import java.net.InetSocketAddress
 
 class TarasandeProtocolHack {
 
@@ -144,10 +143,11 @@ class TarasandeProtocolHack {
 
                 return@dumpCreator platformSpecific
             }.viaProviderCreator {
-                // Clamp
+                it.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
+                it.use(HandItemProvider::class.java, FabricHandItemProvider())
+
                 it.use(CommandArgumentsProvider::class.java, FabricCommandArgumentsProvider())
 
-                // Via Beta
                 it.use(GameProfileFetcher::class.java, FabricGameProfileFetcher())
                 it.use(EncryptionProvider::class.java, FabricEncryptionProvider())
                 it.use(ClassicWorldHeightProvider::class.java, FabricClassicWorldHeightProvider())
@@ -155,12 +155,7 @@ class TarasandeProtocolHack {
                 it.use(ClassicMPPassProvider::class.java, FabricClassicMPPassProvider())
                 it.use(ScreenStateProvider::class.java, FabricScreenStateProvider())
 
-                // Via Snapshot
                 it.use(PlayerAbilitiesProvider::class.java, FabricPlayerAbilitiesProvider())
-
-                // Via Version
-                it.use(MovementTransmitterProvider::class.java, FabricMovementTransmitterProvider())
-                it.use(HandItemProvider::class.java, FabricHandItemProvider())
             }.viaManagerBuilderCreator { it.commandHandler(ViaCommandHandlerTarasandeCommandHandler()) }
             .subPlatform(subPlatformViaSnapshot).subPlatform(subPlatformViaBeta)
             .build()
@@ -206,7 +201,6 @@ class TarasandeProtocolHack {
 
             // First-time load
             add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
-                println(ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntrySelectionProtocolHack::class.java).version.value.toInt())
                 update(InternalProtocolList.fromProtocolId(ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntrySelectionProtocolHack::class.java).version.value.toInt()), false)
             }
 

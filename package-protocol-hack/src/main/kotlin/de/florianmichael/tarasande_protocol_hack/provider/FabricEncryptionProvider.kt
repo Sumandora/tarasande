@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_hack.provider.viabeta
+package de.florianmichael.tarasande_protocol_hack.provider
 
 import com.viaversion.viaversion.api.connection.UserConnection
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol

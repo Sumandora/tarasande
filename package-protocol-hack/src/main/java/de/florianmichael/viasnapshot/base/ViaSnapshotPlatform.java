@@ -9,6 +9,7 @@ import de.florianmichael.viasnapshot.api.SnapshotProtocols;
 import de.florianmichael.viasnapshot.protocol.protocol1_14to3D_Shareware.Protocol1_14to3D_Shareware;
 import de.florianmichael.viasnapshot.protocol.protocol1_16_2toCombatTest8c.Protocol1_16_2toCombatTest8c;
 import de.florianmichael.viasnapshot.protocol.protocol1_16to20w14infinite.Protocol1_16to20w14infinite;
+import de.florianmichael.viasnapshot.protocol.protocol3D_Sharewareto1_14.Protocol3D_Sharewareto1_14;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +22,7 @@ public interface ViaSnapshotPlatform {
         getLogger().log(Level.SEVERE, "no good? no, this man is definitely up to evil.");
 
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_14to3D_Shareware(), ProtocolVersion.v1_14, SnapshotProtocols.s3d_shareware);
+        Via.getManager().getProtocolManager().registerProtocol(new Protocol3D_Sharewareto1_14(), SnapshotProtocols.s3d_shareware, ProtocolVersion.v1_14);
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_16to20w14infinite(), ProtocolVersion.v1_16, SnapshotProtocols.s20w14infinite);
         Via.getManager().getProtocolManager().registerProtocol(new Protocol1_16_2toCombatTest8c(), ProtocolVersion.v1_16_2, SnapshotProtocols.sCombatTest8C);
 

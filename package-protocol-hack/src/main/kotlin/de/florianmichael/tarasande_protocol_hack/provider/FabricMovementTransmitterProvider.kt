@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_hack.provider.viaversion
+package de.florianmichael.tarasande_protocol_hack.provider
 
 import com.viaversion.viaversion.api.connection.UserConnection
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTransmitterProvider

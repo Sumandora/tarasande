@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_hack.provider.viabeta
+package de.florianmichael.tarasande_protocol_hack.provider
 
 import com.google.common.hash.Hashing
 import com.google.common.io.Resources

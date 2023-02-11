@@ -31,7 +31,7 @@ public class Protocol1_16to20w14infinite extends BackwardsProtocol<ClientboundPa
     private static final UUID ZERO_UUID = new UUID(0, 0);
 
     private BlockItemPackets20w14infinite blockItemPackets;
-    private TagRewriter tagRewriter;
+    private TagRewriter<ClientboundPackets20w14infinite> tagRewriter;
     private MetadataRewriter1_16to20w14infinite metadataRewriter;
 
     public Protocol1_16to20w14infinite() {
@@ -42,7 +42,7 @@ public class Protocol1_16to20w14infinite extends BackwardsProtocol<ClientboundPa
     protected void registerPackets() {
         this.metadataRewriter = new MetadataRewriter1_16to20w14infinite(this);
         metadataRewriter.register();
-        tagRewriter = new TagRewriter(this);
+        tagRewriter = new TagRewriter<>(this);
 
         this.executeAsyncAfterLoaded(Protocol1_16To1_15_2.class, () -> {
             MAPPINGS.load();
@@ -50,16 +50,16 @@ public class Protocol1_16to20w14infinite extends BackwardsProtocol<ClientboundPa
         });
 
         tagRewriter.register(ClientboundPackets20w14infinite.TAGS, RegistryType.ENTITY);
-        new StatisticsRewriter(this).register(ClientboundPackets20w14infinite.STATISTICS);
+        new StatisticsRewriter<>(this).register(ClientboundPackets20w14infinite.STATISTICS);
         this.blockItemPackets = new BlockItemPackets20w14infinite(this);
         this.blockItemPackets.register();
         EntityPackets20w14infinite.register(this);
-        final SoundRewriter soundRewriter = new SoundRewriter(this);
+        final SoundRewriter<ClientboundPackets20w14infinite> soundRewriter = new SoundRewriter<>(this);
         soundRewriter.registerSound(ClientboundPackets20w14infinite.SOUND);
         soundRewriter.registerSound(ClientboundPackets20w14infinite.ENTITY_SOUND);
         soundRewriter.registerNamedSound(ClientboundPackets20w14infinite.NAMED_SOUND);
         soundRewriter.registerStopSound(ClientboundPackets20w14infinite.STOP_SOUND);
-        new RecipeRewriter1_14(this).registerDefaultHandler(ClientboundPackets20w14infinite.DECLARE_RECIPES);
+        new RecipeRewriter1_14<>(this).registerDefaultHandler(ClientboundPackets20w14infinite.DECLARE_RECIPES);
 
         this.registerClientbound(ClientboundPackets20w14infinite.CHAT_MESSAGE, new PacketRemapper() {
             @Override

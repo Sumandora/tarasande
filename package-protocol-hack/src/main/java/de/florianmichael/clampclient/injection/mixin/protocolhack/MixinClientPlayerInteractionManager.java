@@ -43,7 +43,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack;
-import de.florianmichael.tarasande_protocol_hack.provider.viaversion.FabricHandItemProvider;
+import de.florianmichael.tarasande_protocol_hack.provider.FabricHandItemProvider;
 import de.florianmichael.tarasande_protocol_hack.util.inventory.MinecraftViaItemRewriter;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

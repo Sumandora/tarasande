@@ -3,6 +3,8 @@ package de.florianmichael.viasnapshot.protocol.protocol1_16to20w14infinite.packe
 import com.viaversion.viabackwards.api.rewriters.ItemRewriter;
 import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
 import com.viaversion.viaversion.api.minecraft.chunks.ChunkSection;
+import com.viaversion.viaversion.api.minecraft.chunks.DataPalette;
+import com.viaversion.viaversion.api.minecraft.chunks.PaletteType;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
@@ -19,7 +21,7 @@ import de.florianmichael.viasnapshot.protocol.protocol1_16to20w14infinite.data.B
 
 import java.util.Map;
 
-public class BlockItemPackets20w14infinite extends ItemRewriter<Protocol1_16to20w14infinite> {
+public class BlockItemPackets20w14infinite extends ItemRewriter<ClientboundPackets20w14infinite, ServerboundPackets1_16, Protocol1_16to20w14infinite> {
 
     public BlockItemPackets20w14infinite(Protocol1_16to20w14infinite protocol) {
         super(protocol);
@@ -35,7 +37,7 @@ public class BlockItemPackets20w14infinite extends ItemRewriter<Protocol1_16to20
         this.registerSpawnParticle(ClientboundPackets20w14infinite.SPAWN_PARTICLE, Type.FLAT_VAR_INT_ITEM, Type.DOUBLE);
         this.registerClickWindow(ServerboundPackets1_16.CLICK_WINDOW, Type.FLAT_VAR_INT_ITEM);
         this.registerCreativeInvAction(ServerboundPackets1_16.CREATIVE_INVENTORY_ACTION, Type.FLAT_VAR_INT_ITEM);
-        final BlockRewriter blockRewriter = new BlockRewriter(this.protocol, Type.POSITION1_14);
+        final BlockRewriter<ClientboundPackets20w14infinite> blockRewriter = new BlockRewriter(this.protocol, Type.POSITION1_14);
         blockRewriter.registerBlockAction(ClientboundPackets20w14infinite.BLOCK_ACTION);
         blockRewriter.registerBlockChange(ClientboundPackets20w14infinite.BLOCK_CHANGE);
         blockRewriter.registerMultiBlockChange(ClientboundPackets20w14infinite.MULTI_BLOCK_CHANGE);
@@ -62,9 +64,10 @@ public class BlockItemPackets20w14infinite extends ItemRewriter<Protocol1_16to20
                     for (int s = 0; s < chunk.getSections().length; s++) {
                         ChunkSection section = chunk.getSections()[s];
                         if (section == null) continue;
-                        for (int i = 0; i < section.getPaletteSize(); i++) {
-                            int old = section.getPaletteEntry(i);
-                            section.setPaletteEntry(i, protocol.getMappingData().getNewBlockStateId(old));
+                        final DataPalette blockPalette = section.palette(PaletteType.BLOCKS);
+                        for (int i = 0; i < blockPalette.size(); i++) {
+                            int old = blockPalette.idByIndex(i);
+                            blockPalette.setIdByIndex(i, protocol.getMappingData().getNewBlockStateId(old));
                         }
                     }
 
