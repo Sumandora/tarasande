@@ -1,8 +1,6 @@
 package de.florianmichael.tarasande_crasher
 
-import de.florianmichael.tarasande_crasher.module.ModuleBoatCrasher
-import de.florianmichael.tarasande_crasher.module.ModuleOffHandCrasher
-import de.florianmichael.tarasande_crasher.module.ModuleZeroSmasher
+import de.florianmichael.tarasande_crasher.module.*
 import net.fabricmc.api.ClientModInitializer
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
@@ -21,7 +19,9 @@ class TarasandeCrasher : ClientModInitializer {
             ManagerModule.add(
                 ModuleBoatCrasher(),
                 ModuleOffHandCrasher(),
-                ModuleZeroSmasher()
+                ModuleZeroSmasher(),
+                ModuleSinglePacketCrasher(),
+                ModuleFlyCrasher()
             )
         }
     }

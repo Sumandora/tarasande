@@ -4,7 +4,7 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.minecraft.entities.Entity1_16Types;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketHandler;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.version.Types1_14;
 import com.viaversion.viaversion.protocols.protocol1_16to1_15_2.ClientboundPackets1_16;
@@ -47,9 +47,9 @@ public class EntityPackets20w14infinite {
         metadataRewriter.registerRemoveEntities(ClientboundPackets20w14infinite.DESTROY_ENTITIES);
 
         // Spawn lightning -> Spawn entity
-        protocol.registerClientbound(ClientboundPackets20w14infinite.SPAWN_GLOBAL_ENTITY, ClientboundPackets1_16.SPAWN_ENTITY, new PacketRemapper() {
+        protocol.registerClientbound(ClientboundPackets20w14infinite.SPAWN_GLOBAL_ENTITY, ClientboundPackets1_16.SPAWN_ENTITY, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(new PacketHandler() {
                     @Override
                     public void handle(PacketWrapper packetWrapper) throws Exception {
@@ -74,9 +74,9 @@ public class EntityPackets20w14infinite {
                 });
             }
         });
-        protocol.registerClientbound(ClientboundPackets20w14infinite.RESPAWN, new PacketRemapper() {
+        protocol.registerClientbound(ClientboundPackets20w14infinite.RESPAWN, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(DIMENSION_HANDLER);
                 map(Type.LONG); // Seed
                 map(Type.UNSIGNED_BYTE); // Gamemode
@@ -90,9 +90,9 @@ public class EntityPackets20w14infinite {
                 });
             }
         });
-        protocol.registerClientbound(ClientboundPackets20w14infinite.JOIN_GAME, new PacketRemapper() {
+        protocol.registerClientbound(ClientboundPackets20w14infinite.JOIN_GAME, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // Entity ID
                 map(Type.UNSIGNED_BYTE); //  Gamemode
                 handler(wrapper -> {
@@ -116,9 +116,9 @@ public class EntityPackets20w14infinite {
                 });
             }
         });
-        protocol.registerClientbound(ClientboundPackets20w14infinite.ENTITY_PROPERTIES, new PacketRemapper() {
+        protocol.registerClientbound(ClientboundPackets20w14infinite.ENTITY_PROPERTIES, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     wrapper.passthrough(Type.VAR_INT);
                     int size = wrapper.passthrough(Type.INT);

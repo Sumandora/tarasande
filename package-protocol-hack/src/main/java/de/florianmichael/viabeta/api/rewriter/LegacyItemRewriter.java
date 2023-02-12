@@ -4,7 +4,7 @@ import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.protocol.Protocol;
 import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
 import com.viaversion.viaversion.api.protocol.remapper.PacketHandler;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.rewriter.ItemRewriter;
 import com.viaversion.viaversion.api.rewriter.RewriterBase;
 import com.viaversion.viaversion.api.type.Type;
@@ -63,9 +63,9 @@ public abstract class LegacyItemRewriter<P extends Protocol> extends RewriterBas
     }
 
     public void registerCreativeInventoryAction(final ServerboundPacketType packetType, final Type<Item> type) {
-        this.protocol.registerServerbound(packetType, new PacketRemapper() {
+        this.protocol.registerServerbound(packetType, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.SHORT); // slot
                 map(type); // item
                 handler(itemToServerHandler(type));

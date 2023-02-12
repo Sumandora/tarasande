@@ -6,7 +6,7 @@ import com.viaversion.viaversion.api.platform.providers.ViaProviders;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.ByteTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
@@ -32,16 +32,16 @@ public class Protocol1_7_6_10to1_7_2_5 extends AbstractProtocol<ClientboundPacke
 
     @Override
     protected void registerPackets() {
-        this.registerClientbound(State.LOGIN, ClientboundLoginPackets.GAME_PROFILE.getId(), ClientboundLoginPackets.GAME_PROFILE.getId(), new PacketRemapper() {
+        this.registerClientbound(State.LOGIN, ClientboundLoginPackets.GAME_PROFILE.getId(), ClientboundLoginPackets.GAME_PROFILE.getId(), new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.STRING, Type.STRING, BaseProtocol1_7::addDashes); // uuid
                 map(Type.STRING); // name
             }
         });
-        this.registerClientbound(ClientboundPackets1_7_2.SPAWN_PLAYER, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_7_2.SPAWN_PLAYER, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.VAR_INT); // entity id
                 map(Type.STRING, Type.STRING, BaseProtocol1_7::addDashes); // uuid
                 map(Type.STRING); // name
@@ -55,15 +55,15 @@ public class Protocol1_7_6_10to1_7_2_5 extends AbstractProtocol<ClientboundPacke
                 map(Type1_7_6_10.METADATA_LIST); // metadata
             }
         });
-        this.registerClientbound(ClientboundPackets1_7_2.CHAT_MESSAGE, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_7_2.CHAT_MESSAGE, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.STRING, Type.STRING, TranslationRewriter::toClient); // message
             }
         });
-        this.registerClientbound(ClientboundPackets1_7_2.BLOCK_ENTITY_DATA, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_7_2.BLOCK_ENTITY_DATA, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type1_7_6_10.POSITION_SHORT); // position
                 map(Type.UNSIGNED_BYTE); // type
                 map(Type1_7_6_10.COMPRESSED_NBT); // data

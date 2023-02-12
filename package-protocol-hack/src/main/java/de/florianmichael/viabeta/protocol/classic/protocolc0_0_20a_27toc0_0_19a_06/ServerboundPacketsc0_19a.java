@@ -7,33 +7,19 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.function.BiConsumer;
 
-import static de.florianmichael.viabeta.pre_netty.type.PreNettyTypes.readString64;
-
 public enum ServerboundPacketsc0_19a implements ServerboundPacketType, PreNettyPacketType {
 
     LOGIN(0, (user, buf) -> {
-        buf.readByte();
-        readString64(buf);
-        readString64(buf);
+        buf.skipBytes(129);
     }),
     PLAYER_BLOCK_PLACEMENT(5, (user, buf) -> {
-        buf.readShort();
-        buf.readShort();
-        buf.readShort();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(8);
     }),
     PLAYER_POSITION_AND_ROTATION(8, (user, buf) -> {
-        buf.readByte();
-        buf.readShort();
-        buf.readShort();
-        buf.readShort();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(9);
     }),
     CHAT_MESSAGE(13, (user, buf) -> {
-        buf.readByte();
-        readString64(buf);
+        buf.skipBytes(65);
     });
 
     private static final ServerboundPacketsc0_19a[] REGISTRY = new ServerboundPacketsc0_19a[256];

@@ -8,7 +8,7 @@ import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.platform.providers.ViaProviders;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.*;
 import de.florianmichael.viabeta.ViaBeta;
@@ -48,9 +48,9 @@ public class Protocolb1_0_1_1_1toa1_2_3_5_1_2_6 extends AbstractProtocol<Clientb
 
     @Override
     protected void registerPackets() {
-        this.registerClientbound(ClientboundPacketsa1_2_6.PLAYER_INVENTORY, ClientboundPacketsb1_1.WINDOW_ITEMS, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsa1_2_6.PLAYER_INVENTORY, ClientboundPacketsb1_1.WINDOW_ITEMS, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final InventoryStorage inventoryStorage = wrapper.user().get(InventoryStorage.class);
                     final AlphaInventoryTracker inventoryTracker = wrapper.user().get(AlphaInventoryTracker.class);
@@ -87,15 +87,15 @@ public class Protocolb1_0_1_1_1toa1_2_3_5_1_2_6 extends AbstractProtocol<Clientb
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsa1_2_6.UPDATE_HEALTH, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsa1_2_6.UPDATE_HEALTH, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.BYTE, Type.SHORT); // health
             }
         });
-        this.registerClientbound(ClientboundPacketsa1_2_6.RESPAWN, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsa1_2_6.RESPAWN, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     wrapper.user().get(InventoryStorage.class).resetPlayerInventory();
 
@@ -104,9 +104,9 @@ public class Protocolb1_0_1_1_1toa1_2_3_5_1_2_6 extends AbstractProtocol<Clientb
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsa1_2_6.HELD_ITEM_CHANGE, ClientboundPacketsb1_1.ENTITY_EQUIPMENT, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsa1_2_6.HELD_ITEM_CHANGE, ClientboundPacketsb1_1.ENTITY_EQUIPMENT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // entity id
                 create(Type.SHORT, (short) 0); // slot (hand)
                 map(Type.SHORT); // item id
@@ -117,9 +117,9 @@ public class Protocolb1_0_1_1_1toa1_2_3_5_1_2_6 extends AbstractProtocol<Clientb
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsa1_2_6.ADD_TO_INVENTORY, null, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsa1_2_6.ADD_TO_INVENTORY, null, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     wrapper.cancel();
                     final Item item = wrapper.read(Type1_3_1_2.NBTLESS_ITEM); // item
@@ -127,9 +127,9 @@ public class Protocolb1_0_1_1_1toa1_2_3_5_1_2_6 extends AbstractProtocol<Clientb
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsa1_2_6.PRE_CHUNK, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsa1_2_6.PRE_CHUNK, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // chunkX
                 map(Type.INT); // chunkZ
                 map(Type.UNSIGNED_BYTE); // mode
@@ -137,9 +137,9 @@ public class Protocolb1_0_1_1_1toa1_2_3_5_1_2_6 extends AbstractProtocol<Clientb
                 handler(wrapper -> wrapper.user().get(InventoryStorage.class).unload(wrapper.get(Type.INT, 0), wrapper.get(Type.INT, 1)));
             }
         });
-        this.registerClientbound(ClientboundPacketsa1_2_6.COMPLEX_ENTITY, null, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsa1_2_6.COMPLEX_ENTITY, null, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     wrapper.cancel();
                     final InventoryStorage tracker = wrapper.user().get(InventoryStorage.class);
@@ -193,9 +193,9 @@ public class Protocolb1_0_1_1_1toa1_2_3_5_1_2_6 extends AbstractProtocol<Clientb
             }
         });
 
-        this.registerServerbound(ServerboundPacketsb1_1.PLAYER_DIGGING, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsb1_1.PLAYER_DIGGING, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.UNSIGNED_BYTE); // status
                 map(Type1_7_6_10.POSITION_UBYTE); // position
                 map(Type.UNSIGNED_BYTE); // direction
@@ -218,9 +218,9 @@ public class Protocolb1_0_1_1_1toa1_2_3_5_1_2_6 extends AbstractProtocol<Clientb
                 });
             }
         });
-        this.registerServerbound(ServerboundPacketsb1_1.PLAYER_BLOCK_PLACEMENT, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsb1_1.PLAYER_BLOCK_PLACEMENT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final InventoryStorage tracker = wrapper.user().get(InventoryStorage.class);
                     final AlphaInventoryTracker inventoryTracker = wrapper.user().get(AlphaInventoryTracker.class);
@@ -282,9 +282,9 @@ public class Protocolb1_0_1_1_1toa1_2_3_5_1_2_6 extends AbstractProtocol<Clientb
                 });
             }
         });
-        this.registerServerbound(ServerboundPacketsb1_1.HELD_ITEM_CHANGE, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsb1_1.HELD_ITEM_CHANGE, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final InventoryStorage inventoryStorage = wrapper.user().get(InventoryStorage.class);
                     short slot = wrapper.read(Type.SHORT); // slot
@@ -302,9 +302,9 @@ public class Protocolb1_0_1_1_1toa1_2_3_5_1_2_6 extends AbstractProtocol<Clientb
                 });
             }
         });
-        this.registerServerbound(ServerboundPacketsb1_1.CLOSE_WINDOW, null, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsb1_1.CLOSE_WINDOW, null, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     wrapper.cancel();
                     wrapper.user().get(InventoryStorage.class).openContainerPos = null;
@@ -314,9 +314,9 @@ public class Protocolb1_0_1_1_1toa1_2_3_5_1_2_6 extends AbstractProtocol<Clientb
                 });
             }
         });
-        this.registerServerbound(ServerboundPacketsb1_1.CLICK_WINDOW, ServerboundPacketsa1_2_6.COMPLEX_ENTITY, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsb1_1.CLICK_WINDOW, ServerboundPacketsa1_2_6.COMPLEX_ENTITY, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final InventoryStorage tracker = wrapper.user().get(InventoryStorage.class);
                     final AlphaInventoryTracker inventoryTracker = wrapper.user().get(AlphaInventoryTracker.class);
@@ -353,9 +353,9 @@ public class Protocolb1_0_1_1_1toa1_2_3_5_1_2_6 extends AbstractProtocol<Clientb
                 });
             }
         });
-        this.registerServerbound(ServerboundPacketsb1_1.UPDATE_SIGN, ServerboundPacketsa1_2_6.COMPLEX_ENTITY, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsb1_1.UPDATE_SIGN, ServerboundPacketsa1_2_6.COMPLEX_ENTITY, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final Position pos = wrapper.passthrough(Type1_7_6_10.POSITION_SHORT); // position
 

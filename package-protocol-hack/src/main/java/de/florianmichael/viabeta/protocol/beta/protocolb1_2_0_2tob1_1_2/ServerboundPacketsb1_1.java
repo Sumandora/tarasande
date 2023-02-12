@@ -15,11 +15,10 @@ public enum ServerboundPacketsb1_1 implements ServerboundPacketType, PreNettyPac
     KEEP_ALIVE(0, (user, buf) -> {
     }),
     LOGIN(1, (user, buf) -> {
-        buf.readInt();
+        buf.skipBytes(4);
         readUTF(buf);
         readUTF(buf);
-        buf.readLong();
-        buf.readByte();
+        buf.skipBytes(9);
     }),
     HANDSHAKE(2, (user, buf) -> {
         readUTF(buf);
@@ -28,76 +27,47 @@ public enum ServerboundPacketsb1_1 implements ServerboundPacketType, PreNettyPac
         readUTF(buf);
     }),
     INTERACT_ENTITY(7, (user, buf) -> {
-        buf.readInt();
-        buf.readInt();
-        buf.readByte();
+        buf.skipBytes(9);
     }),
     RESPAWN(9, (user, buf) -> {
     }),
     PLAYER_MOVEMENT(10, (user, buf) -> {
-        buf.readUnsignedByte();
+        buf.skipBytes(1);
     }),
     PLAYER_POSITION(11, (user, buf) -> {
-        buf.readDouble();
-        buf.readDouble();
-        buf.readDouble();
-        buf.readDouble();
-        buf.readUnsignedByte();
+        buf.skipBytes(33);
     }),
     PLAYER_ROTATION(12, (user, buf) -> {
-        buf.readFloat();
-        buf.readFloat();
-        buf.readUnsignedByte();
+        buf.skipBytes(9);
     }),
     PLAYER_POSITION_AND_ROTATION(13, (user, buf) -> {
-        buf.readDouble();
-        buf.readDouble();
-        buf.readDouble();
-        buf.readDouble();
-        buf.readFloat();
-        buf.readFloat();
-        buf.readUnsignedByte();
+        buf.skipBytes(41);
     }),
     PLAYER_DIGGING(14, (user, buf) -> {
-        buf.readUnsignedByte();
-        buf.readInt();
-        buf.readUnsignedByte();
-        buf.readInt();
-        buf.readUnsignedByte();
+        buf.skipBytes(11);
     }),
     PLAYER_BLOCK_PLACEMENT(15, (user, buf) -> {
-        buf.readInt();
-        buf.readUnsignedByte();
-        buf.readInt();
-        buf.readUnsignedByte();
+        buf.skipBytes(10);
         readItemStackb1_1(buf);
     }),
     HELD_ITEM_CHANGE(16, (user, buf) -> {
-        buf.readShort();
+        buf.skipBytes(2);
     }),
     ANIMATION(18, (user, buf) -> {
-        buf.readInt();
-        buf.readByte();
+        buf.skipBytes(5);
     }),
     CLOSE_WINDOW(101, (user, buf) -> {
-        buf.readByte();
+        buf.skipBytes(1);
     }),
     CLICK_WINDOW(102, (user, buf) -> {
-        buf.readByte();
-        buf.readShort();
-        buf.readByte();
-        buf.readShort();
+        buf.skipBytes(6);
         readItemStackb1_1(buf);
     }),
     WINDOW_CONFIRMATION(106, (user, buf) -> {
-        buf.readByte();
-        buf.readShort();
-        buf.readByte();
+        buf.skipBytes(4);
     }),
     UPDATE_SIGN(130, (user, buf) -> {
-        buf.readInt();
-        buf.readShort();
-        buf.readInt();
+        buf.skipBytes(10);
         readUTF(buf);
         readUTF(buf);
         readUTF(buf);

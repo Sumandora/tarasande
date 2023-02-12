@@ -9,7 +9,7 @@ import com.viaversion.viaversion.api.platform.providers.ViaProviders;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
 import de.florianmichael.viabeta.ViaBeta;
@@ -50,16 +50,16 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
 
     @Override
     protected void registerPackets() {
-        this.registerClientbound(State.LOGIN, ClientboundPacketsc0_28.DISCONNECT.getId(), ClientboundPacketsa1_0_15.DISCONNECT.getId(), new PacketRemapper() {
+        this.registerClientbound(State.LOGIN, ClientboundPacketsc0_28.DISCONNECT.getId(), ClientboundPacketsa1_0_15.DISCONNECT.getId(), new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Typec0_30.STRING, Typeb1_7_0_3.STRING, s -> s.replace("&", "§")); // reason
             }
         });
 
-        this.registerClientbound(ClientboundPacketsc0_28.JOIN_GAME, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.JOIN_GAME, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 read(Type.BYTE); // protocol id
                 handler(wrapper -> {
                     final String title = wrapper.read(Typec0_30.STRING).replace("&", "§"); // title
@@ -90,9 +90,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.LEVEL_INIT, null, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.LEVEL_INIT, null, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     wrapper.cancel();
 
@@ -123,9 +123,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.LEVEL_DATA, null, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.LEVEL_DATA, null, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     wrapper.cancel();
                     final short partSize = wrapper.read(Type.SHORT); // part size
@@ -141,9 +141,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.LEVEL_FINALIZE, null, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.LEVEL_FINALIZE, null, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     wrapper.cancel();
                     final short sizeX = wrapper.read(Type.SHORT);
@@ -184,9 +184,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.BLOCK_CHANGE, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.BLOCK_CHANGE, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Typec0_30.POSITION, Type1_7_6_10.POSITION_UBYTE); // position
                 handler(wrapper -> {
                     final ClassicLevelStorage levelStorage = wrapper.user().get(ClassicLevelStorage.class);
@@ -208,9 +208,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.SPAWN_PLAYER, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.SPAWN_PLAYER, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.BYTE, Type.INT); // entity id
                 map(Typec0_30.STRING, Typeb1_7_0_3.STRING, n -> n.replace("&", "§")); // username
                 map(Type.SHORT, Type.INT); // x
@@ -262,9 +262,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.ENTITY_TELEPORT, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.ENTITY_TELEPORT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.BYTE, Type.INT); // entity id
                 map(Type.SHORT, Type.INT); // x
                 map(Type.SHORT, Type.INT); // y
@@ -281,9 +281,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.ENTITY_POSITION_AND_ROTATION, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.ENTITY_POSITION_AND_ROTATION, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.BYTE, Type.INT); // entity id
                 map(Type.BYTE); // x
                 map(Type.BYTE); // y
@@ -292,32 +292,32 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 map(Type.BYTE); // pitch
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.ENTITY_POSITION, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.ENTITY_POSITION, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.BYTE, Type.INT); // entity id
                 map(Type.BYTE); // x
                 map(Type.BYTE); // y
                 map(Type.BYTE); // z
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.ENTITY_ROTATION, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.ENTITY_ROTATION, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.BYTE, Type.INT); // entity id
                 map(Type.BYTE, Type.BYTE, yaw -> (byte) (yaw + 128)); // yaw
                 map(Type.BYTE); // pitch
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.DESTROY_ENTITIES, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.DESTROY_ENTITIES, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.BYTE, Type.INT); // entity id
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.CHAT_MESSAGE, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.CHAT_MESSAGE, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(packetWrapper -> {
                     final byte senderId = packetWrapper.read(Type.BYTE); // sender id
                     String message = packetWrapper.read(Typec0_30.STRING).replace("&", "§"); // message
@@ -328,15 +328,15 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.DISCONNECT, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.DISCONNECT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Typec0_30.STRING, Typeb1_7_0_3.STRING, s -> s.replace("&", "§")); // reason
             }
         });
-        this.registerClientbound(ClientboundPacketsc0_28.OP_LEVEL_UPDATE, null, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsc0_28.OP_LEVEL_UPDATE, null, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     wrapper.cancel();
                     final byte opLevel = wrapper.read(Type.BYTE); // op level
@@ -345,9 +345,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
             }
         });
 
-        this.registerServerbound(State.LOGIN, ServerboundPacketsc0_28.LOGIN.getId(), ServerboundPacketsa1_0_15.LOGIN.getId(), new PacketRemapper() {
+        this.registerServerbound(State.LOGIN, ServerboundPacketsc0_28.LOGIN.getId(), ServerboundPacketsa1_0_15.LOGIN.getId(), new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT, Type.BYTE); // protocol id
                 map(Typeb1_7_0_3.STRING, Typec0_30.STRING); // username
                 read(Typeb1_7_0_3.STRING); // password
@@ -361,9 +361,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerServerbound(ServerboundPacketsa1_0_15.CHAT_MESSAGE, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsa1_0_15.CHAT_MESSAGE, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final String message = wrapper.read(Typeb1_7_0_3.STRING); // message
                     wrapper.write(Type.BYTE, (byte) 0); // sender id
@@ -371,9 +371,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerServerbound(ServerboundPacketsa1_0_15.PLAYER_MOVEMENT, ServerboundPacketsc0_28.PLAYER_POSITION_AND_ROTATION, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsa1_0_15.PLAYER_MOVEMENT, ServerboundPacketsc0_28.PLAYER_POSITION_AND_ROTATION, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 read(Type.BOOLEAN); // onGround
                 handler(wrapper -> {
                     final ClassicPositionTracker positionTracker = wrapper.user().get(ClassicPositionTracker.class);
@@ -383,9 +383,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerServerbound(ServerboundPacketsa1_0_15.PLAYER_POSITION, ServerboundPacketsc0_28.PLAYER_POSITION_AND_ROTATION, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsa1_0_15.PLAYER_POSITION, ServerboundPacketsc0_28.PLAYER_POSITION_AND_ROTATION, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final ClassicPositionTracker positionTracker = wrapper.user().get(ClassicPositionTracker.class);
                     final ClassicLevelStorage levelStorage = wrapper.user().get(ClassicLevelStorage.class);
@@ -400,9 +400,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerServerbound(ServerboundPacketsa1_0_15.PLAYER_ROTATION, ServerboundPacketsc0_28.PLAYER_POSITION_AND_ROTATION, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsa1_0_15.PLAYER_ROTATION, ServerboundPacketsc0_28.PLAYER_POSITION_AND_ROTATION, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final ClassicPositionTracker positionTracker = wrapper.user().get(ClassicPositionTracker.class);
                     final ClassicLevelStorage levelStorage = wrapper.user().get(ClassicLevelStorage.class);
@@ -415,9 +415,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerServerbound(ServerboundPacketsa1_0_15.PLAYER_POSITION_AND_ROTATION, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsa1_0_15.PLAYER_POSITION_AND_ROTATION, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final ClassicPositionTracker positionTracker = wrapper.user().get(ClassicPositionTracker.class);
                     final ClassicLevelStorage levelStorage = wrapper.user().get(ClassicLevelStorage.class);
@@ -434,9 +434,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerServerbound(ServerboundPacketsa1_0_15.PLAYER_DIGGING, ServerboundPacketsc0_28.PLAYER_BLOCK_PLACEMENT, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsa1_0_15.PLAYER_DIGGING, ServerboundPacketsc0_28.PLAYER_BLOCK_PLACEMENT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     wrapper.user().getStoredObjects().remove(BlockDigStorage.class);
                     final ClassicLevel level = wrapper.user().get(ClassicLevelStorage.class).getClassicLevel();
@@ -470,9 +470,9 @@ public class Protocola1_0_15toc0_30 extends AbstractProtocol<ClientboundPacketsc
                 });
             }
         });
-        this.registerServerbound(ServerboundPacketsa1_0_15.PLAYER_BLOCK_PLACEMENT, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsa1_0_15.PLAYER_BLOCK_PLACEMENT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final ClassicLevel level = wrapper.user().get(ClassicLevelStorage.class).getClassicLevel();
                     final ClassicBlockRemapper remapper = wrapper.user().get(ClassicBlockRemapper.class);

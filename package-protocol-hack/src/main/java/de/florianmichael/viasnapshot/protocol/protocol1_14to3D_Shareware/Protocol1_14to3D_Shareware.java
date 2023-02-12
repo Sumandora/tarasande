@@ -6,7 +6,7 @@ import com.viaversion.viabackwards.api.rewriters.SoundRewriter;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_14to1_13_2.ClientboundPackets1_14;
 import com.viaversion.viaversion.protocols.protocol1_14to1_13_2.Protocol1_14To1_13_2;
@@ -42,9 +42,9 @@ public class Protocol1_14to3D_Shareware extends BackwardsProtocol<ClientboundPac
         soundRewriter.registerNamedSound(ClientboundPackets3D_Shareware.NAMED_SOUND);
         soundRewriter.registerStopSound(ClientboundPackets3D_Shareware.STOP_SOUND);
 
-        this.registerClientbound(ClientboundPackets3D_Shareware.CHUNK_DATA, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets3D_Shareware.CHUNK_DATA, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final Chunk chunk = wrapper.passthrough(new Chunk1_14Type());
                     ChunkCenterTracker3D_Shareware entityTracker = wrapper.user().get(ChunkCenterTracker3D_Shareware.class);
@@ -61,9 +61,9 @@ public class Protocol1_14to3D_Shareware extends BackwardsProtocol<ClientboundPac
                 });
             }
         });
-        this.registerClientbound(ClientboundPackets3D_Shareware.RESPAWN, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets3D_Shareware.RESPAWN, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     ChunkCenterTracker3D_Shareware entityTracker = wrapper.user().get(ChunkCenterTracker3D_Shareware.class);
                     // The client may reset the center chunk if dimension is changed

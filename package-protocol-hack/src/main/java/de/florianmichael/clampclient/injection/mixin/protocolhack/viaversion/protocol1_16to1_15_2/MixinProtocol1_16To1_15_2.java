@@ -22,7 +22,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.viaversion.protocol1_16to1_15_2;
 
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_14to1_13_2.ServerboundPackets1_14;
 import com.viaversion.viaversion.protocols.protocol1_15to1_14_4.ClientboundPackets1_15;
@@ -41,8 +41,8 @@ public class MixinProtocol1_16To1_15_2 extends AbstractProtocol<ClientboundPacke
 
     @Inject(method = "registerPackets", at = @At("RETURN"), remap = false)
     public void injectRegisterPackets(CallbackInfo ci) {
-        this.registerServerbound(ServerboundPackets1_16.PLAYER_ABILITIES, ServerboundPackets1_14.PLAYER_ABILITIES, new PacketRemapper() {
-            public void registerMap() {
+        this.registerServerbound(ServerboundPackets1_16.PLAYER_ABILITIES, ServerboundPackets1_14.PLAYER_ABILITIES, new PacketHandlers() {
+            public void register() {
                 this.handler((wrapper) -> {
                     wrapper.passthrough(Type.BYTE);
                     final PlayerAbilities abilities = MinecraftClient.getInstance().player.getAbilities();

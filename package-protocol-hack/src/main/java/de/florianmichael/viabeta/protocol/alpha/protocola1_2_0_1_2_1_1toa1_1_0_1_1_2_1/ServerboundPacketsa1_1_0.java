@@ -12,10 +12,11 @@ import static de.florianmichael.viabeta.pre_netty.type.PreNettyTypes.readUTF;
 
 public enum ServerboundPacketsa1_1_0 implements ServerboundPacketType, PreNettyPacketType {
 
+
     KEEP_ALIVE(0, (user, buf) -> {
     }),
     LOGIN(1, (user, buf) -> {
-        buf.readInt();
+        buf.skipBytes(4);
         readUTF(buf);
         readUTF(buf);
     }),
@@ -26,71 +27,39 @@ public enum ServerboundPacketsa1_1_0 implements ServerboundPacketType, PreNettyP
         readUTF(buf);
     }),
     PLAYER_INVENTORY(5, (user, buf) -> {
-        buf.readInt();
+        buf.skipBytes(4);
         int x = buf.readShort();
         for (int i = 0; i < x; i++) readItemStackb1_2(buf);
     }),
     PLAYER_MOVEMENT(10, (user, buf) -> {
-        buf.readUnsignedByte();
+        buf.skipBytes(1);
     }),
     PLAYER_POSITION(11, (user, buf) -> {
-        buf.readDouble();
-        buf.readDouble();
-        buf.readDouble();
-        buf.readDouble();
-        buf.readUnsignedByte();
+        buf.skipBytes(33);
     }),
     PLAYER_ROTATION(12, (user, buf) -> {
-        buf.readFloat();
-        buf.readFloat();
-        buf.readUnsignedByte();
+        buf.skipBytes(9);
     }),
     PLAYER_POSITION_AND_ROTATION(13, (user, buf) -> {
-        buf.readDouble();
-        buf.readDouble();
-        buf.readDouble();
-        buf.readDouble();
-        buf.readFloat();
-        buf.readFloat();
-        buf.readUnsignedByte();
+        buf.skipBytes(41);
     }),
     PLAYER_DIGGING(14, (user, buf) -> {
-        buf.readUnsignedByte();
-        buf.readInt();
-        buf.readUnsignedByte();
-        buf.readInt();
-        buf.readUnsignedByte();
+        buf.skipBytes(11);
     }),
     PLAYER_BLOCK_PLACEMENT(15, (user, buf) -> {
-        buf.readShort();
-        buf.readInt();
-        buf.readUnsignedByte();
-        buf.readInt();
-        buf.readUnsignedByte();
+        buf.skipBytes(12);
     }),
     HELD_ITEM_CHANGE(16, (user, buf) -> {
-        buf.readInt();
-        buf.readShort();
+        buf.skipBytes(6);
     }),
     ANIMATION(18, (user, buf) -> {
-        buf.readInt();
-        buf.readByte();
+        buf.skipBytes(5);
     }),
     SPAWN_ITEM(21, (user, buf) -> {
-        buf.readInt();
-        buf.readShort();
-        buf.readByte();
-        buf.readInt();
-        buf.readInt();
-        buf.readInt();
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(22);
     }),
     COMPLEX_ENTITY(59, (user, buf) -> {
-        buf.readInt();
-        buf.readShort();
-        buf.readInt();
+        buf.skipBytes(10);
         int x = buf.readUnsignedShort();
         for (int i = 0; i < x; i++) buf.readByte();
     }),

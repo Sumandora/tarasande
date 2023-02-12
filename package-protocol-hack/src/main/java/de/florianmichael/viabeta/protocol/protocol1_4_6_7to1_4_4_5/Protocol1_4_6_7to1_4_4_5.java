@@ -7,7 +7,7 @@ import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.storage.ClientWorld;
 import de.florianmichael.viabeta.api.rewriter.LegacyItemRewriter;
@@ -35,9 +35,9 @@ public class Protocol1_4_6_7to1_4_4_5 extends AbstractProtocol<ClientboundPacket
         super.registerPackets();
         this.itemRewriter.register();
 
-        this.registerClientbound(ClientboundPackets1_4_4.JOIN_GAME, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_4_4.JOIN_GAME, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // entity id
                 map(Type1_6_4.STRING); // level type
                 map(Type.BYTE); // game mode
@@ -48,9 +48,9 @@ public class Protocol1_4_6_7to1_4_4_5 extends AbstractProtocol<ClientboundPacket
                 handler(wrapper -> wrapper.user().get(ClientWorld.class).setEnvironment(wrapper.get(Type.BYTE, 1)));
             }
         });
-        this.registerClientbound(ClientboundPackets1_4_4.RESPAWN, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_4_4.RESPAWN, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // dimension id
                 map(Type.BYTE); // difficulty
                 map(Type.BYTE); // game mode
@@ -59,9 +59,9 @@ public class Protocol1_4_6_7to1_4_4_5 extends AbstractProtocol<ClientboundPacket
                 handler(wrapper -> wrapper.user().get(ClientWorld.class).setEnvironment(wrapper.get(Type.INT, 0)));
             }
         });
-        this.registerClientbound(ClientboundPackets1_4_4.SPAWN_ITEM, ClientboundPackets1_4_6.SPAWN_ENTITY, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_4_4.SPAWN_ITEM, ClientboundPackets1_4_6.SPAWN_ENTITY, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final int entityId = wrapper.read(Type.INT); // entity id
                     final Item item = wrapper.read(Type1_7_6_10.COMPRESSED_ITEM); // item
@@ -94,9 +94,9 @@ public class Protocol1_4_6_7to1_4_4_5 extends AbstractProtocol<ClientboundPacket
                 });
             }
         });
-        this.registerClientbound(ClientboundPackets1_4_4.SPAWN_ENTITY, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_4_4.SPAWN_ENTITY, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // entity id
                 map(Type.BYTE); // type id
                 map(Type.INT); // x
@@ -108,9 +108,9 @@ public class Protocol1_4_6_7to1_4_4_5 extends AbstractProtocol<ClientboundPacket
                 // more conditional data
             }
         });
-        this.registerClientbound(ClientboundPackets1_4_4.MAP_BULK_CHUNK, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_4_4.MAP_BULK_CHUNK, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final ClientWorld clientWorld = wrapper.user().get(ClientWorld.class);
                     wrapper.write(new ChunkBulk_1_7_6_10Type(clientWorld), wrapper.read(new ChunkBulk_1_4_4_5Type(clientWorld)));
@@ -118,9 +118,9 @@ public class Protocol1_4_6_7to1_4_4_5 extends AbstractProtocol<ClientboundPacket
             }
         });
 
-        this.registerServerbound(ServerboundPackets1_5_2.PLAYER_DIGGING, new PacketRemapper() {
+        this.registerServerbound(ServerboundPackets1_5_2.PLAYER_DIGGING, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.UNSIGNED_BYTE); // status
                 handler(wrapper -> {
                     final short status = wrapper.get(Type.UNSIGNED_BYTE, 0);

@@ -3,7 +3,7 @@ package de.florianmichael.viabeta.api.rewriter;
 import com.viaversion.viaversion.api.protocol.Protocol;
 import com.viaversion.viaversion.api.protocol.packet.ClientboundPacketType;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.rewriter.Rewriter;
 import com.viaversion.viaversion.api.rewriter.RewriterBase;
 import com.viaversion.viaversion.api.type.Type;
@@ -29,9 +29,9 @@ public abstract class LegacySoundRewriter<P extends Protocol> extends RewriterBa
     }
 
     public void registerNamedSound(final ClientboundPacketType packetType) {
-        protocol.registerClientbound(packetType, new PacketRemapper() {
+        protocol.registerClientbound(packetType, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final String newSound = handleSoundRewrite(wrapper, wrapper.read(Type1_6_4.STRING));
                     if (newSound != null) {
@@ -49,9 +49,9 @@ public abstract class LegacySoundRewriter<P extends Protocol> extends RewriterBa
 
 
     public void registerNamedSound_1_6_4(final ClientboundPacketType packetType) {
-        protocol.registerClientbound(packetType, new PacketRemapper() {
+        protocol.registerClientbound(packetType, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final String newSound = handleSoundRewrite(wrapper, wrapper.read(Type1_6_4.STRING));
                     if (newSound != null) {

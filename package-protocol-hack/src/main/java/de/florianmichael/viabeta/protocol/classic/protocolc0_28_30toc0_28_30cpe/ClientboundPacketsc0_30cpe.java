@@ -7,128 +7,77 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.function.BiConsumer;
 
-import static de.florianmichael.viabeta.pre_netty.type.PreNettyTypes.readByteArray1024;
-import static de.florianmichael.viabeta.pre_netty.type.PreNettyTypes.readString64;
-
 public enum ClientboundPacketsc0_30cpe implements ClientboundPacketType, PreNettyPacketType {
 
     JOIN_GAME(0, (user, buf) -> {
-        buf.readByte();
-        readString64(buf);
-        readString64(buf);
-        buf.readByte();
+        buf.skipBytes(130);
     }),
     KEEP_ALIVE(1, (user, buf) -> {
     }),
     LEVEL_INIT(2, (user, buf) -> {
     }),
     LEVEL_DATA(3, (user, buf) -> {
-        buf.readShort();
-        readByteArray1024(buf);
-        buf.readByte();
+        buf.skipBytes(1027);
     }),
     LEVEL_FINALIZE(4, (user, buf) -> {
-        buf.readShort();
-        buf.readShort();
-        buf.readShort();
+        buf.skipBytes(6);
     }),
     BLOCK_CHANGE(6, (user, buf) -> {
-        buf.readShort();
-        buf.readShort();
-        buf.readShort();
-        buf.readByte();
+        buf.skipBytes(7);
     }),
     SPAWN_PLAYER(7, (user, buf) -> {
-        buf.readByte();
-        readString64(buf);
-        buf.readShort();
-        buf.readShort();
-        buf.readShort();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(73);
     }),
     ENTITY_TELEPORT(8, (user, buf) -> {
-        buf.readByte();
-        buf.readShort();
-        buf.readShort();
-        buf.readShort();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(9);
     }),
     ENTITY_POSITION_AND_ROTATION(9, (user, buf) -> {
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(6);
     }),
     ENTITY_POSITION(10, (user, buf) -> {
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(4);
     }),
     ENTITY_ROTATION(11, (user, buf) -> {
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(3);
     }),
     DESTROY_ENTITIES(12, (user, buf) -> {
-        buf.readByte();
+        buf.skipBytes(1);
     }),
     CHAT_MESSAGE(13, (user, buf) -> {
-        buf.readByte();
-        readString64(buf);
+        buf.skipBytes(65);
     }),
     DISCONNECT(14, (user, buf) -> {
-        readString64(buf);
+        buf.skipBytes(64);
     }),
     OP_LEVEL_UPDATE(15, (user, buf) -> {
-        buf.readByte();
+        buf.skipBytes(1);
     }),
     EXTENSION_PROTOCOL_INFO(16, (user, buf) -> {
-        readString64(buf);
-        buf.readShort();
+        buf.skipBytes(66);
     }),
     EXTENSION_PROTOCOL_ENTRY(17, (user, buf) -> {
-        readString64(buf);
-        buf.readInt();
+        buf.skipBytes(68);
     }),
     EXT_CUSTOM_BLOCKS_SUPPORT_LEVEL(19, (user, buf) -> {
-        buf.readByte();
+        buf.skipBytes(1);
     }),
     EXT_SET_BLOCK_PERMISSION(28, (user, buf) -> {
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(3);
     }),
     EXT_HACK_CONTROL(32, (user, buf) -> {
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
-        buf.readShort();
+        buf.skipBytes(7);
     }),
     EXT_BULK_BLOCK_UPDATE(38, (user, buf) -> {
-        buf.readUnsignedByte();
-        buf.skipBytes(1024);
-        buf.skipBytes(256);
+        buf.skipBytes(1281);
     }),
     EXT_TWO_WAY_PING(43, (user, buf) -> {
-        buf.readByte();
-        buf.readShort();
+        buf.skipBytes(3);
     }),
     EXT_WEATHER_TYPE(31, (user, buf) -> {
         buf.readByte();
     }),
     EXT_SET_SPAWN_POINT(46, (user, buf) -> {
-        buf.readShort();
-        buf.readShort();
-        buf.readShort();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(8);
     });
 
     private static final ClientboundPacketsc0_30cpe[] REGISTRY = new ClientboundPacketsc0_30cpe[256];

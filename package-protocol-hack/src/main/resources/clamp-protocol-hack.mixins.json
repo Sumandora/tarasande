@@ -107,7 +107,7 @@
     "viaversion.protocol1_13to1_12_2.MixinAbstractFenceConnectionHandler",
     "viaversion.protocol1_13to1_12_2.MixinGlassConnectionHandler",
     "viaversion.protocol1_13to1_12_2.MixinWorldPackets1_13",
-    "viaversion.protocol1_14to1_13_2.MixinInventoryPackets_3_1",
+    "viaversion.protocol1_14to1_13_2.MixinInventoryPackets_2",
     "viaversion.protocol1_15to1_14_4.MixinMetadataRewriter1_15To1_14_4",
     "viaversion.protocol1_15to1_14_4.MixinProtocol1_15To1_14_4",
     "viaversion.protocol1_16_2to1_16_1.MixinWorldPackets_2",

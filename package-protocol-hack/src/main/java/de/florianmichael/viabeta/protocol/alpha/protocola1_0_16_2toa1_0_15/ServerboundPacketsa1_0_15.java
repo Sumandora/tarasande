@@ -13,7 +13,7 @@ public enum ServerboundPacketsa1_0_15 implements ServerboundPacketType, PreNetty
     KEEP_ALIVE(0, (user, buf) -> {
     }),
     LOGIN(1, (user, buf) -> {
-        buf.readInt();
+        buf.skipBytes(4);
         PreNettyTypes.readUTF(buf);
         PreNettyTypes.readUTF(buf);
     }),
@@ -21,61 +21,31 @@ public enum ServerboundPacketsa1_0_15 implements ServerboundPacketType, PreNetty
         PreNettyTypes.readUTF(buf);
     }),
     PLAYER_MOVEMENT(10, (user, buf) -> {
-        buf.readUnsignedByte();
+        buf.skipBytes(1);
     }),
     PLAYER_POSITION(11, (user, buf) -> {
-        buf.readDouble();
-        buf.readDouble();
-        buf.readDouble();
-        buf.readDouble();
-        buf.readUnsignedByte();
+        buf.skipBytes(33);
     }),
     PLAYER_ROTATION(12, (user, buf) -> {
-        buf.readFloat();
-        buf.readFloat();
-        buf.readUnsignedByte();
+        buf.skipBytes(9);
     }),
     PLAYER_POSITION_AND_ROTATION(13, (user, buf) -> {
-        buf.readDouble();
-        buf.readDouble();
-        buf.readDouble();
-        buf.readDouble();
-        buf.readFloat();
-        buf.readFloat();
-        buf.readUnsignedByte();
+        buf.skipBytes(41);
     }),
     PLAYER_DIGGING(14, (user, buf) -> {
-        buf.readUnsignedByte();
-        buf.readInt();
-        buf.readUnsignedByte();
-        buf.readInt();
-        buf.readUnsignedByte();
+        buf.skipBytes(11);
     }),
     PLAYER_BLOCK_PLACEMENT(15, (user, buf) -> {
-        buf.readShort();
-        buf.readInt();
-        buf.readUnsignedByte();
-        buf.readInt();
-        buf.readUnsignedByte();
+        buf.skipBytes(12);
     }),
     HELD_ITEM_CHANGE(16, (user, buf) -> {
-        buf.readInt();
-        buf.readShort();
+        buf.skipBytes(6);
     }),
     ANIMATION(18, (user, buf) -> {
-        buf.readInt();
-        buf.readByte();
+        buf.skipBytes(5);
     }),
     SPAWN_ITEM(21, (user, buf) -> {
-        buf.readInt();
-        buf.readShort();
-        buf.readByte();
-        buf.readInt();
-        buf.readInt();
-        buf.readInt();
-        buf.readByte();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(22);
     }),
     DISCONNECT(255, (user, buf) -> {
         PreNettyTypes.readUTF(buf);

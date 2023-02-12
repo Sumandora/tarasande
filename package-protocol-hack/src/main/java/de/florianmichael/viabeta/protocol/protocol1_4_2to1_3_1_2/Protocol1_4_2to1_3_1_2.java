@@ -7,7 +7,7 @@ import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.viabeta.api.data.ItemList1_6;
 import de.florianmichael.viabeta.api.rewriter.LegacyItemRewriter;
@@ -42,18 +42,18 @@ public class Protocol1_4_2to1_3_1_2 extends AbstractProtocol<ClientboundPackets1
         this.itemRewriter.register();
         this.soundRewriter.register();
 
-        this.registerClientbound(ClientboundPackets1_3_1.TIME_UPDATE, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_3_1.TIME_UPDATE, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     final long time = wrapper.passthrough(Type.LONG); // time
                     wrapper.write(Type.LONG, time % 24_000); // time of day
                 });
             }
         });
-        this.registerClientbound(ClientboundPackets1_3_1.RESPAWN, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_3_1.RESPAWN, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // dimension id
                 map(Type.BYTE); // difficulty
                 map(Type.BYTE); // game mode
@@ -71,9 +71,9 @@ public class Protocol1_4_2to1_3_1_2 extends AbstractProtocol<ClientboundPackets1
                 });
             }
         });
-        this.registerClientbound(ClientboundPackets1_3_1.SPAWN_PLAYER, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_3_1.SPAWN_PLAYER, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // entity id
                 map(Type1_6_4.STRING); // name
                 map(Type.INT); // x
@@ -86,9 +86,9 @@ public class Protocol1_4_2to1_3_1_2 extends AbstractProtocol<ClientboundPackets1
                 handler(wrapper -> rewriteMetadata(wrapper.get(Type1_4_2.METADATA_LIST, 0)));
             }
         });
-        this.registerClientbound(ClientboundPackets1_3_1.SPAWN_ITEM, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_3_1.SPAWN_ITEM, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // entity id
                 map(Type1_3_1_2.NBTLESS_ITEM, Type1_7_6_10.COMPRESSED_ITEM);
                 map(Type.INT); // x
@@ -99,9 +99,9 @@ public class Protocol1_4_2to1_3_1_2 extends AbstractProtocol<ClientboundPackets1
                 map(Type.BYTE); // velocity z
             }
         });
-        this.registerClientbound(ClientboundPackets1_3_1.SPAWN_MOB, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_3_1.SPAWN_MOB, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // entity id
                 map(Type.UNSIGNED_BYTE); // type id
                 map(Type.INT); // x
@@ -126,9 +126,9 @@ public class Protocol1_4_2to1_3_1_2 extends AbstractProtocol<ClientboundPackets1
                 });
             }
         });
-        this.registerClientbound(ClientboundPackets1_3_1.SPAWN_PAINTING, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_3_1.SPAWN_PAINTING, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // entity id
                 map(Type1_6_4.STRING); // motive
                 map(Type1_7_6_10.POSITION_INT); // position
@@ -147,26 +147,26 @@ public class Protocol1_4_2to1_3_1_2 extends AbstractProtocol<ClientboundPackets1
                 });
             }
         });
-        this.registerClientbound(ClientboundPackets1_3_1.ENTITY_METADATA, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_3_1.ENTITY_METADATA, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // entity id
                 map(Type1_3_1_2.METADATA_LIST, Type1_4_2.METADATA_LIST); // metadata
                 handler(wrapper -> rewriteMetadata(wrapper.get(Type1_4_2.METADATA_LIST, 0)));
             }
         });
-        this.registerClientbound(ClientboundPackets1_3_1.EFFECT, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_3_1.EFFECT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // effect id
                 map(Type1_7_6_10.POSITION_UBYTE); // position
                 map(Type.INT); // data
                 create(Type.BOOLEAN, false); // server wide
             }
         });
-        this.registerClientbound(ClientboundPackets1_3_1.MAP_DATA, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_3_1.MAP_DATA, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.SHORT); // item id
                 map(Type.SHORT); // map id
                 map(Type1_4_2.UNSIGNED_BYTE_BYTE_ARRAY); // data
@@ -186,9 +186,9 @@ public class Protocol1_4_2to1_3_1_2 extends AbstractProtocol<ClientboundPackets1
                 });
             }
         });
-        this.registerClientbound(ClientboundPackets1_3_1.PLUGIN_MESSAGE, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_3_1.PLUGIN_MESSAGE, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type1_6_4.STRING); // channel
                 handler(wrapper -> {
                     final String channel = wrapper.get(Type1_6_4.STRING, 0);
@@ -209,9 +209,9 @@ public class Protocol1_4_2to1_3_1_2 extends AbstractProtocol<ClientboundPackets1
             }
         });
 
-        this.registerServerbound(ServerboundPackets1_5_2.CLIENT_SETTINGS, new PacketRemapper() {
+        this.registerServerbound(ServerboundPackets1_5_2.CLIENT_SETTINGS, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type1_6_4.STRING); // language
                 map(Type.BYTE); // view distance
                 map(Type.BYTE); // mask

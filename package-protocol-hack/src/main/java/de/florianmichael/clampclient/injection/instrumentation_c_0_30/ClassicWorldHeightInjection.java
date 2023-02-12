@@ -4,7 +4,9 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
 import com.viaversion.viaversion.api.minecraft.chunks.ChunkSection;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandler;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.IntTag;
@@ -22,14 +24,15 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
+@SuppressWarnings("DataFlowIssue")
 public class ClassicWorldHeightInjection {
 
-    public static PacketRemapper handleJoinGame(final Protocol1_17To1_16_4 protocol, final PacketRemapper parentRemapper) {
-        return new PacketRemapper() {
+    public static PacketHandler handleJoinGame(final PacketHandler parentRemapper) {
+        return new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
-                    parentRemapper.remap(wrapper);
+                    parentRemapper.handle(wrapper);
                     if (wrapper.isCancelled()) return;
 
                     if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)) {
@@ -43,12 +46,12 @@ public class ClassicWorldHeightInjection {
         };
     }
 
-    public static PacketRemapper handleRespawn(final Protocol1_17To1_16_4 protocol, final PacketRemapper parentRemapper) {
-        return new PacketRemapper() {
+    public static PacketHandler handleRespawn(final PacketHandler parentRemapper) {
+        return new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
-                    parentRemapper.remap(wrapper);
+                    parentRemapper.handle(wrapper);
                     if (wrapper.isCancelled()) return;
 
                     if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)) {
@@ -59,12 +62,12 @@ public class ClassicWorldHeightInjection {
         };
     }
 
-    public static PacketRemapper handleChunkData(final Protocol1_17To1_16_4 protocol, final PacketRemapper parentRemapper) {
-        return new PacketRemapper() {
+    public static PacketHandler handleChunkData(final PacketHandler parentRemapper) {
+        return new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
-                    parentRemapper.remap(wrapper);
+                    parentRemapper.handle(wrapper);
                     if (wrapper.isCancelled()) return;
 
                     if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)) {
@@ -99,10 +102,10 @@ public class ClassicWorldHeightInjection {
         };
     }
 
-    public static PacketRemapper handleUpdateLight(final Protocol1_17To1_16_4 protocol, final PacketRemapper parentRemapper) {
-        final PacketRemapper classicLightHandler = new PacketRemapper() {
+    public static PacketHandler handleUpdateLight(final PacketHandler parentRemapper) {
+        final PacketHandler classicLightHandler = new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.VAR_INT); // x
                 map(Type.VAR_INT); // y
                 map(Type.BOOLEAN); // trust edges
@@ -128,9 +131,8 @@ public class ClassicWorldHeightInjection {
 
                     int skyLightCount = 16;
                     int blockLightCount = sectionYCount;
-                    if (lightArrays.size() == 16 + 0 + 2) {
+                    if (lightArrays.size() == 18) {
                         blockLightCount = 0;
-                    } else if (lightArrays.size() == 16 + sectionYCount + 2) {
                     } else if (lightArrays.size() == sectionYCount + sectionYCount + 2) {
                         skyLightCount = sectionYCount;
                     }
@@ -158,14 +160,14 @@ public class ClassicWorldHeightInjection {
             }
         };
 
-        return new PacketRemapper() {
+        return new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(BetaProtocols.c0_28toc0_30)) {
-                        classicLightHandler.remap(wrapper);
+                        classicLightHandler.handle(wrapper);
                     } else {
-                        parentRemapper.remap(wrapper);
+                        parentRemapper.handle(wrapper);
                     }
                 });
             }

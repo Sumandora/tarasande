@@ -8,7 +8,7 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.RegistryType;
 import com.viaversion.viaversion.api.minecraft.entities.Entity1_16Types;
 import com.viaversion.viaversion.api.platform.providers.ViaProviders;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.data.entity.EntityTrackerBase;
 import com.viaversion.viaversion.protocols.protocol1_14to1_13_2.data.RecipeRewriter1_14;
@@ -61,9 +61,9 @@ public class Protocol1_16to20w14infinite extends BackwardsProtocol<ClientboundPa
         soundRewriter.registerStopSound(ClientboundPackets20w14infinite.STOP_SOUND);
         new RecipeRewriter1_14<>(this).registerDefaultHandler(ClientboundPackets20w14infinite.DECLARE_RECIPES);
 
-        this.registerClientbound(ClientboundPackets20w14infinite.CHAT_MESSAGE, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets20w14infinite.CHAT_MESSAGE, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.COMPONENT);
                 map(Type.BYTE);
                 handler(wrapper -> {
@@ -73,9 +73,9 @@ public class Protocol1_16to20w14infinite extends BackwardsProtocol<ClientboundPa
         });
 
         this.cancelServerbound(ServerboundPackets1_16.GENERATE_JIGSAW);
-        this.registerServerbound(ServerboundPackets1_16.INTERACT_ENTITY, new PacketRemapper() {
+        this.registerServerbound(ServerboundPackets1_16.INTERACT_ENTITY, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     wrapper.passthrough(Type.VAR_INT); // Entity Id
                     int action = wrapper.passthrough(Type.VAR_INT);
@@ -95,9 +95,9 @@ public class Protocol1_16to20w14infinite extends BackwardsProtocol<ClientboundPa
                 });
             }
         });
-        this.registerServerbound(ServerboundPackets1_16.PLAYER_ABILITIES, new PacketRemapper() {
+        this.registerServerbound(ServerboundPackets1_16.PLAYER_ABILITIES, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     wrapper.passthrough(Type.BYTE);
                     final PlayerAbilitiesProvider playerAbilitiesProvider = Via.getManager().getProviders().get(PlayerAbilitiesProvider.class);

@@ -7,7 +7,7 @@ import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.api.platform.providers.ViaProviders;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.viabeta.api.data.BlockList1_6;
 import de.florianmichael.viabeta.api.data.ItemList1_6;
@@ -32,22 +32,22 @@ public class Protocolb1_6_0_6tob1_5_0_2 extends AbstractProtocol<ClientboundPack
 
     @Override
     protected void registerPackets() {
-        this.registerClientbound(ClientboundPacketsb1_5.TIME_UPDATE, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsb1_5.TIME_UPDATE, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.LONG); // time
                 handler(wrapper -> wrapper.user().get(WorldTimeStorage.class).time = wrapper.get(Type.LONG, 0));
             }
         });
-        this.registerClientbound(ClientboundPacketsb1_5.RESPAWN, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsb1_5.RESPAWN, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 create(Type.BYTE, (byte) 0); // dimension id
             }
         });
-        this.registerClientbound(ClientboundPacketsb1_5.SPAWN_ENTITY, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsb1_5.SPAWN_ENTITY, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // entity id
                 map(Type.BYTE); // type id
                 map(Type.INT); // x
@@ -57,15 +57,15 @@ public class Protocolb1_6_0_6tob1_5_0_2 extends AbstractProtocol<ClientboundPack
             }
         });
 
-        this.registerServerbound(ServerboundPacketsb1_7.RESPAWN, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsb1_7.RESPAWN, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 read(Type.BYTE); // dimension id
             }
         });
-        this.registerServerbound(ServerboundPacketsb1_7.PLAYER_BLOCK_PLACEMENT, new PacketRemapper() {
+        this.registerServerbound(ServerboundPacketsb1_7.PLAYER_BLOCK_PLACEMENT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type1_7_6_10.POSITION_UBYTE); // position
                 map(Type.UNSIGNED_BYTE); // direction
                 map(Type1_4_2.NBTLESS_ITEM); // item

@@ -5,7 +5,7 @@ import com.viaversion.viaversion.api.minecraft.chunks.Chunk;
 import com.viaversion.viaversion.api.minecraft.chunks.ChunkSection;
 import com.viaversion.viaversion.api.minecraft.chunks.DataPalette;
 import com.viaversion.viaversion.api.minecraft.chunks.PaletteType;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag;
 import com.viaversion.viaversion.libs.opennbt.tag.builtin.LongArrayTag;
@@ -44,17 +44,17 @@ public class BlockItemPackets20w14infinite extends ItemRewriter<ClientboundPacke
         blockRewriter.registerAcknowledgePlayerDigging(ClientboundPackets20w14infinite.ACKNOWLEDGE_PLAYER_DIGGING);
         blockRewriter.registerEffect(ClientboundPackets20w14infinite.EFFECT, 1010, 2001);
 
-        protocol.registerClientbound(ClientboundPackets20w14infinite.UPDATE_LIGHT, new PacketRemapper() {
+        protocol.registerClientbound(ClientboundPackets20w14infinite.UPDATE_LIGHT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.VAR_INT); // x
                 map(Type.VAR_INT); // y
                 handler(wrapper -> wrapper.write(Type.BOOLEAN, true)); // Take neighbour's light into account as well
             }
         });
-        protocol.registerClientbound(ClientboundPackets20w14infinite.CHUNK_DATA, new PacketRemapper() {
+        protocol.registerClientbound(ClientboundPackets20w14infinite.CHUNK_DATA, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     Chunk chunk = wrapper.read(new Chunk1_15Type());
                     wrapper.write(new Chunk1_16Type(), chunk);
@@ -89,9 +89,9 @@ public class BlockItemPackets20w14infinite extends ItemRewriter<ClientboundPacke
                 });
             }
         });
-        protocol.registerClientbound(ClientboundPackets20w14infinite.ENTITY_EQUIPMENT, new PacketRemapper() {
+        protocol.registerClientbound(ClientboundPackets20w14infinite.ENTITY_EQUIPMENT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.VAR_INT); // 0 - Entity ID
 
                 handler(wrapper -> {
@@ -102,9 +102,9 @@ public class BlockItemPackets20w14infinite extends ItemRewriter<ClientboundPacke
             }
         });
 
-        protocol.registerServerbound(ServerboundPackets1_16.EDIT_BOOK, new PacketRemapper() {
+        protocol.registerServerbound(ServerboundPackets1_16.EDIT_BOOK, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> handleItemToServer(wrapper.passthrough(Type.FLAT_VAR_INT_ITEM)));
             }
         });

@@ -2,7 +2,7 @@ package de.florianmichael.viasnapshot.protocol.protocol1_14to3D_Shareware.packet
 
 import com.viaversion.viaversion.api.minecraft.metadata.Metadata;
 import com.viaversion.viaversion.api.minecraft.metadata.types.MetaType1_14;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.version.Types1_14;
 import de.florianmichael.viasnapshot.protocol.protocol1_14to3D_Shareware.ClientboundPackets3D_Shareware;
@@ -19,9 +19,9 @@ public class EntityPackets3D_Shareware {
     }
 
     public void registerPackets() {
-        this.protocol.registerClientbound(ClientboundPackets3D_Shareware.SPAWN_MOB, new PacketRemapper() {
+        this.protocol.registerClientbound(ClientboundPackets3D_Shareware.SPAWN_MOB, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.VAR_INT); // 0 - Entity ID
                 map(Type.UUID); // 1 - Entity UUID
                 map(Type.VAR_INT); // 2 - Entity Type
@@ -38,9 +38,9 @@ public class EntityPackets3D_Shareware {
                 handler(packetWrapper -> handleMetadata(packetWrapper.get(Types1_14.METADATA_LIST, 0)));
             }
         });
-        this.protocol.registerClientbound(ClientboundPackets3D_Shareware.SPAWN_PLAYER, new PacketRemapper() {
+        this.protocol.registerClientbound(ClientboundPackets3D_Shareware.SPAWN_PLAYER, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.VAR_INT); // 0 - Entity ID
                 map(Type.UUID); // 1 - Player UUID
                 map(Type.DOUBLE); // 2 - X
@@ -52,9 +52,9 @@ public class EntityPackets3D_Shareware {
                 handler(packetWrapper -> handleMetadata(packetWrapper.get(Types1_14.METADATA_LIST, 0)));
             }
         });
-        this.protocol.registerClientbound(ClientboundPackets3D_Shareware.ENTITY_METADATA, new PacketRemapper() {
+        this.protocol.registerClientbound(ClientboundPackets3D_Shareware.ENTITY_METADATA, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.VAR_INT); // 0 - Entity ID
                 map(Types1_14.METADATA_LIST);
                 handler(packetWrapper -> handleMetadata(packetWrapper.get(Types1_14.METADATA_LIST, 0)));

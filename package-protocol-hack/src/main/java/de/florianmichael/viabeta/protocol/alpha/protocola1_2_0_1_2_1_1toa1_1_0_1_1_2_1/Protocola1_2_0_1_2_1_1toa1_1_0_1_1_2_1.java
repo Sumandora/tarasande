@@ -3,7 +3,7 @@ package de.florianmichael.viabeta.protocol.alpha.protocola1_2_0_1_2_1_1toa1_1_0_
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.State;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
 import de.florianmichael.viabeta.protocol.alpha.protocola1_2_2toa1_2_0_1_2_1_1.ClientboundPacketsa1_2_0;
@@ -18,9 +18,9 @@ public class Protocola1_2_0_1_2_1_1toa1_1_0_1_1_2_1 extends AbstractProtocol<Cli
 
     @Override
     protected void registerPackets() {
-        this.registerClientbound(ClientboundPacketsa1_1_0.JOIN_GAME, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsa1_1_0.JOIN_GAME, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // entity id
                 map(Typeb1_7_0_3.STRING); // username
                 map(Typeb1_7_0_3.STRING); // password
@@ -29,9 +29,9 @@ public class Protocola1_2_0_1_2_1_1toa1_1_0_1_1_2_1 extends AbstractProtocol<Cli
             }
         });
 
-        this.registerServerbound(State.LOGIN, ServerboundPacketsa1_1_0.LOGIN.getId(), ServerboundPacketsa1_2_0.LOGIN.getId(), new PacketRemapper() {
+        this.registerServerbound(State.LOGIN, ServerboundPacketsa1_1_0.LOGIN.getId(), ServerboundPacketsa1_2_0.LOGIN.getId(), new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // protocol id
                 map(Typeb1_7_0_3.STRING); // username
                 map(Typeb1_7_0_3.STRING); // password

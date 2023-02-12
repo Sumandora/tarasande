@@ -41,7 +41,7 @@ import com.viaversion.viaversion.api.minecraft.PlayerMessageSignature;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.types.BitSetType;
 import com.viaversion.viaversion.api.type.types.ByteArrayType;
@@ -85,18 +85,18 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
 
     @Inject(method = "registerPackets", at = @At("RETURN"))
     public void fixKeys(CallbackInfo ci) {
-        this.registerClientbound(State.LOGIN, ClientboundLoginPackets.HELLO.getId(), ClientboundLoginPackets.HELLO.getId(), new PacketRemapper() {
+        this.registerClientbound(State.LOGIN, ClientboundLoginPackets.HELLO.getId(), ClientboundLoginPackets.HELLO.getId(), new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.STRING); // Server-ID
                 map(Type.BYTE_ARRAY_PRIMITIVE); // Public Key
                 map(Type.BYTE_ARRAY_PRIMITIVE); // Nonce
                 handler(wrapper -> wrapper.user().put(new NonceStorage(wrapper.get(Type.BYTE_ARRAY_PRIMITIVE, 1))));
             }
         }, true);
-        this.registerServerbound(State.LOGIN, ServerboundLoginPackets.HELLO.getId(), ServerboundLoginPackets.HELLO.getId(), new PacketRemapper() {
+        this.registerServerbound(State.LOGIN, ServerboundLoginPackets.HELLO.getId(), ServerboundLoginPackets.HELLO.getId(), new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.STRING);
                 handler(wrapper -> {
                     final UUID uuid = wrapper.read(Type.OPTIONAL_UUID);
@@ -108,9 +108,9 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                 });
             }
         }, true);
-        this.registerServerbound(State.LOGIN, ServerboundLoginPackets.ENCRYPTION_KEY.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId(), new PacketRemapper() {
+        this.registerServerbound(State.LOGIN, ServerboundLoginPackets.ENCRYPTION_KEY.getId(), ServerboundLoginPackets.ENCRYPTION_KEY.getId(), new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.BYTE_ARRAY_PRIMITIVE); // Keys
                 create(Type.BOOLEAN, true); // Is nonce
 
@@ -149,9 +149,9 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
             }
         }, true);
 
-        this.registerClientbound(ClientboundPackets1_19_1.PLAYER_CHAT, ClientboundPackets1_19_3.DISGUISED_CHAT, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_19_1.PLAYER_CHAT, ClientboundPackets1_19_3.DISGUISED_CHAT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 read(Type.OPTIONAL_BYTE_ARRAY_PRIMITIVE); // Previous signature
                 handler(wrapper -> {
                     final PlayerMessageSignature signature = wrapper.read(Type.PLAYER_MESSAGE_SIGNATURE);
@@ -200,9 +200,9 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
             }
         }, true);
 
-        registerServerbound(ServerboundPackets1_19_3.CHAT_COMMAND, ServerboundPackets1_19_1.CHAT_COMMAND, new PacketRemapper() {
+        registerServerbound(ServerboundPackets1_19_3.CHAT_COMMAND, ServerboundPackets1_19_1.CHAT_COMMAND, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.STRING); // Command
                 map(Type.LONG); // Timestamp
                 map(Type.LONG); // Salt
@@ -290,9 +290,9 @@ public class MixinProtocol1_19_3To1_19_1 extends AbstractProtocol<ClientboundPac
                 });
             }
         }, true);
-        registerServerbound(ServerboundPackets1_19_3.CHAT_MESSAGE, ServerboundPackets1_19_1.CHAT_MESSAGE, new PacketRemapper() {
+        registerServerbound(ServerboundPackets1_19_3.CHAT_MESSAGE, ServerboundPackets1_19_1.CHAT_MESSAGE, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.STRING); // Command
                 map(Type.LONG); // Timestamp
                 map(Type.LONG); // Salt

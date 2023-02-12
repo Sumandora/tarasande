@@ -4,10 +4,12 @@ import de.florianmichael.viabeta.api.BetaProtocols;
 import de.florianmichael.vialoadingbase.api.version.ComparableProtocolVersion;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
@@ -114,6 +116,8 @@ public class ClassicItemSelectionScreen extends Screen {
 
             this.client.player.getInventory().main.set(MinecraftClient.getInstance().player.getInventory().selectedSlot, selectedItem);
             this.client.player.playerScreenHandler.sendContentUpdates();
+
+            this.client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
             this.close();
         }

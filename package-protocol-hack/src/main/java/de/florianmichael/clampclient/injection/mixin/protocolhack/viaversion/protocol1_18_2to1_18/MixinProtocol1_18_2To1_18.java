@@ -2,7 +2,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.viaversion.pr
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_17to1_16_4.ServerboundPackets1_17;
 import com.viaversion.viaversion.protocols.protocol1_18_2to1_18.Protocol1_18_2To1_18;
@@ -19,15 +19,15 @@ public class MixinProtocol1_18_2To1_18 extends AbstractProtocol<ClientboundPacke
 
     @Inject(method = "registerPackets", at = @At("RETURN"))
     public void fixSpawnPositionSending(CallbackInfo ci) {
-        this.registerClientbound(ClientboundPackets1_18.PLAYER_POSITION, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_18.PLAYER_POSITION, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> wrapper.user().get(SpawnPositionTracker.class).sendSpawnPosition());
             }
         });
-        this.registerClientbound(ClientboundPackets1_18.SPAWN_POSITION, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_18.SPAWN_POSITION, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.POSITION1_14); // position
                 map(Type.FLOAT); // angle
 

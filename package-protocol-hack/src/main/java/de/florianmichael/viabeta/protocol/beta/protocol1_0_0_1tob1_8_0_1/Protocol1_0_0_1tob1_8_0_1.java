@@ -4,7 +4,7 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.platform.providers.ViaProviders;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.viabeta.api.rewriter.LegacyItemRewriter;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
@@ -30,9 +30,9 @@ public class Protocol1_0_0_1tob1_8_0_1 extends AbstractProtocol<ClientboundPacke
     protected void registerPackets() {
         this.itemRewriter.register();
 
-        this.registerClientbound(ClientboundPacketsb1_8.SET_EXPERIENCE, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsb1_8.SET_EXPERIENCE, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 handler(wrapper -> {
                     float experience = (float) wrapper.read(Type.BYTE);
                     final byte experienceLevel = wrapper.read(Type.BYTE);
@@ -44,33 +44,33 @@ public class Protocol1_0_0_1tob1_8_0_1 extends AbstractProtocol<ClientboundPacke
                 });
             }
         });
-        this.registerClientbound(ClientboundPacketsb1_8.SET_SLOT, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsb1_8.SET_SLOT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.BYTE); // window id
                 map(Type.SHORT); // slot
                 map(Type1_4_2.NBTLESS_ITEM, Type1_2_4_5.COMPRESSED_NBT_ITEM); // item
             }
         });
-        this.registerClientbound(ClientboundPacketsb1_8.WINDOW_ITEMS, new PacketRemapper() {
+        this.registerClientbound(ClientboundPacketsb1_8.WINDOW_ITEMS, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.BYTE); // window id
                 map(Type1_4_2.NBTLESS_ITEM_ARRAY, Type1_2_4_5.COMPRESSED_NBT_ITEM_ARRAY); // item
             }
         });
 
-        this.registerServerbound(ServerboundPackets1_0.PLAYER_BLOCK_PLACEMENT, new PacketRemapper() {
+        this.registerServerbound(ServerboundPackets1_0.PLAYER_BLOCK_PLACEMENT, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type1_7_6_10.POSITION_UBYTE); // position
                 map(Type.UNSIGNED_BYTE); // direction
                 map(Type1_2_4_5.COMPRESSED_NBT_ITEM, Type1_4_2.NBTLESS_ITEM);
             }
         });
-        this.registerServerbound(ServerboundPackets1_0.CLICK_WINDOW, new PacketRemapper() {
+        this.registerServerbound(ServerboundPackets1_0.CLICK_WINDOW, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.BYTE); // window id
                 map(Type.SHORT); // slot
                 map(Type.BYTE); // button
@@ -79,9 +79,9 @@ public class Protocol1_0_0_1tob1_8_0_1 extends AbstractProtocol<ClientboundPacke
                 map(Type1_2_4_5.COMPRESSED_NBT_ITEM, Type1_4_2.NBTLESS_ITEM); // item
             }
         });
-        this.registerServerbound(ServerboundPackets1_0.CREATIVE_INVENTORY_ACTION, new PacketRemapper() {
+        this.registerServerbound(ServerboundPackets1_0.CREATIVE_INVENTORY_ACTION, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.SHORT); // slot
                 map(Type1_2_4_5.COMPRESSED_NBT_ITEM, Typeb1_8_0_1.CREATIVE_ITEM); // item
                 handler(wrapper -> itemRewriter.handleItemToServer(wrapper.get(Typeb1_8_0_1.CREATIVE_ITEM, 0)));

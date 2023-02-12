@@ -7,49 +7,31 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.function.BiConsumer;
 
-import static de.florianmichael.viabeta.pre_netty.type.PreNettyTypes.readString64;
-
 public enum ServerboundPacketsc0_30cpe implements ServerboundPacketType, PreNettyPacketType {
 
     LOGIN(0, (user, buf) -> {
-        buf.readByte();
-        readString64(buf);
-        readString64(buf);
-        buf.readByte();
+        buf.skipBytes(130);
     }),
     PLAYER_BLOCK_PLACEMENT(5, (user, buf) -> {
-        buf.readShort();
-        buf.readShort();
-        buf.readShort();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(8);
     }),
     PLAYER_POSITION_AND_ROTATION(8, (user, buf) -> {
-        buf.readByte();
-        buf.readShort();
-        buf.readShort();
-        buf.readShort();
-        buf.readByte();
-        buf.readByte();
+        buf.skipBytes(9);
     }),
     CHAT_MESSAGE(13, (user, buf) -> {
-        buf.readByte();
-        readString64(buf);
+        buf.skipBytes(65);
     }),
     EXTENSION_PROTOCOL_INFO(16, (user, buf) -> {
-        readString64(buf);
-        buf.readShort();
+        buf.skipBytes(66);
     }),
     EXTENSION_PROTOCOL_ENTRY(17, (user, buf) -> {
-        readString64(buf);
-        buf.readInt();
+        buf.skipBytes(68);
     }),
     EXT_CUSTOM_BLOCKS_SUPPORT_LEVEL(19, (user, buf) -> {
-        buf.readByte();
+        buf.skipBytes(1);
     }),
     EXT_TWO_WAY_PING(43, (user, buf) -> {
-        buf.readByte();
-        buf.readShort();
+        buf.skipBytes(3);
     });
 
     private static final ServerboundPacketsc0_30cpe[] REGISTRY = new ServerboundPacketsc0_30cpe[256];

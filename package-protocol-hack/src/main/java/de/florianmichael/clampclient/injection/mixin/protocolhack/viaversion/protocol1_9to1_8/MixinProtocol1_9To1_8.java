@@ -24,7 +24,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.viaversion.pr
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.Position;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.libs.gson.JsonElement;
 import com.viaversion.viaversion.protocols.protocol1_8.ClientboundPackets1_8;
@@ -53,8 +53,8 @@ public class MixinProtocol1_9To1_8 extends AbstractProtocol<ClientboundPackets1_
 
     @Inject(method = "registerPackets", at = @At("RETURN"))
     public void emulateSignData(CallbackInfo ci) {
-        this.registerServerbound(ServerboundPackets1_9.UPDATE_SIGN, ServerboundPackets1_8.UPDATE_SIGN, new PacketRemapper() {
-            public void registerMap() {
+        this.registerServerbound(ServerboundPackets1_9.UPDATE_SIGN, ServerboundPackets1_8.UPDATE_SIGN, new PacketHandlers() {
+            public void register() {
                 this.map(Type.POSITION);
 
                 this.map(Type.STRING, Protocol1_9To1_8.FIX_JSON);
@@ -83,8 +83,8 @@ public class MixinProtocol1_9To1_8 extends AbstractProtocol<ClientboundPackets1_
             }
         }, true);
 
-        this.registerClientbound(ClientboundPackets1_8.UPDATE_SIGN, ClientboundPackets1_9.UPDATE_SIGN, new PacketRemapper() {
-            public void registerMap() {
+        this.registerClientbound(ClientboundPackets1_8.UPDATE_SIGN, ClientboundPackets1_9.UPDATE_SIGN, new PacketHandlers() {
+            public void register() {
                 this.map(Type.POSITION);
                 this.map(Type.STRING, Protocol1_9To1_8.FIX_JSON);
                 this.map(Type.STRING, Protocol1_9To1_8.FIX_JSON);

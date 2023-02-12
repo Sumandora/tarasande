@@ -5,7 +5,7 @@ import com.viaversion.viaversion.api.minecraft.entities.Entity1_10Types;
 import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.type.Type;
 import de.florianmichael.viabeta.api.rewriter.LegacyItemRewriter;
 import de.florianmichael.viabeta.pre_netty.viaversion.PreNettySplitter;
@@ -28,9 +28,9 @@ public class Protocol1_5_0_1to1_4_6_7 extends AbstractProtocol<ClientboundPacket
         super.registerPackets();
         this.itemRewriter.register();
 
-        this.registerClientbound(ClientboundPackets1_4_6.SPAWN_ENTITY, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_4_6.SPAWN_ENTITY, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.INT); // entity id
                 map(Type.BYTE); // type id
                 map(Type.INT); // x
@@ -65,9 +65,9 @@ public class Protocol1_5_0_1to1_4_6_7 extends AbstractProtocol<ClientboundPacket
                 });
             }
         });
-        this.registerClientbound(ClientboundPackets1_4_6.OPEN_WINDOW, new PacketRemapper() {
+        this.registerClientbound(ClientboundPackets1_4_6.OPEN_WINDOW, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.UNSIGNED_BYTE); // window id
                 map(Type.UNSIGNED_BYTE); // window type
                 map(Type1_6_4.STRING); // title
@@ -76,9 +76,9 @@ public class Protocol1_5_0_1to1_4_6_7 extends AbstractProtocol<ClientboundPacket
             }
         });
 
-        this.registerServerbound(ServerboundPackets1_5_2.CLICK_WINDOW, new PacketRemapper() {
+        this.registerServerbound(ServerboundPackets1_5_2.CLICK_WINDOW, new PacketHandlers() {
             @Override
-            public void registerMap() {
+            public void register() {
                 map(Type.BYTE); // window id
                 map(Type.SHORT); // slot
                 map(Type.BYTE); // button
