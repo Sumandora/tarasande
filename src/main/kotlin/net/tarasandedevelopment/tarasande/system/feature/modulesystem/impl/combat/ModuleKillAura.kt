@@ -63,7 +63,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         override fun isEnabled() = dontAttackWhenBlocking.value
     }
     private val throughWalls = ValueMode(this, "Through walls", false, "Off", "Continue aiming", "Hit and aim through walls")
-    private val attackCooldown = ValueBoolean(this, "Attack cooldown", false)
     private val autoBlock = object : ValueMode(this, "Auto block", false, "Disabled", "Permanent", "Legit") {
         override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
             blocking = false
@@ -413,9 +412,6 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
     private fun attack(entity: Entity?, amount: Int, aimPoint: Vec3d? = null) {
         repeat(amount) {
-            if (!attackCooldown.value) {
-                mc.attackCooldown = 0
-            }
             PlayerUtil.attack(entity, aimPoint)
         }
     }

@@ -37,7 +37,6 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
         override fun isEnabled() = mode.isSelected(1)
     }
     private val ignoreTinyVelocity = ValueNumber(this, "Ignore tiny velocity", 0.0, 0.1, 0.5, 0.01)
-    private val cancelIgnoredVelocity = ValueBoolean(this, "Cancel ignored velocity", false)
     private val chance = ValueNumber(this, "Chance", 0.0, 75.0, 100.0, 1.0)
 
     init {
@@ -53,12 +52,11 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
         registerEvent(EventVelocity::class.java) { event ->
             if (ThreadLocalRandom.current().nextInt(100) > chance.value) return@registerEvent
             if (!packets.isSelected(event.packet.ordinal)) return@registerEvent
+            if(event.cancelled) return@registerEvent
+
             val velocityVector = Vec3d(event.velocityX, event.velocityY, event.velocityZ)
-            if(velocityVector.horizontalLengthSquared() <= ignoreTinyVelocity.value * ignoreTinyVelocity.value) {
-                if(cancelIgnoredVelocity.value)
-                    event.cancelled = true
+            if(velocityVector.horizontalLengthSquared() <= ignoreTinyVelocity.value * ignoreTinyVelocity.value)
                 return@registerEvent
-            }
 
             when {
                 mode.isSelected(0) -> {

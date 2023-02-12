@@ -12,6 +12,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBool
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.copy
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
 import kotlin.math.max
@@ -49,23 +50,19 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
             if (!PlayerUtil.isPlayerMoving()) return@registerEvent
 
-            val prevVelocity = mc.player?.velocity?.add(0.0, 0.0, 0.0)!!
+            val prevVelocity = mc.player?.velocity?.copy()!!
             if (mc.player?.isOnGround == true) {
                 if (jumpHeight.value > 0.0) {
-
                     mc.player?.jump()
 
-                    if (!mc.options.jumpKey.pressed)
-                        mc.player?.velocity = mc.player?.velocity?.multiply(1.0, jumpHeight.value, 1.0)
-
-                    event.velocity = event.velocity.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!!)
+                    event.velocity = event.velocity.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!! * jumpHeight.value)
 
                     mc.player?.velocity = Vec3d(
                         prevVelocity.x,
-                        if (lowHop.value && mc.player?.horizontalCollision == false && !mc.options.jumpKey.pressed)
+                        if (lowHop.value && mc.player?.horizontalCollision == false && !PlayerUtil.input.jumping)
                             prevVelocity.y
                         else
-                            mc.player?.velocity?.y!!,
+                            event.velocity.y,
                         prevVelocity.z
                     )
 
@@ -73,7 +70,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                     speed = PlayerUtil.calcBaseSpeed(speedValue.value)
                 }
             }
-            if (event.velocity.y < 0.0 && !mc.options.jumpKey.pressed) {
+            if (event.velocity.y < 0.0 && !PlayerUtil.input.jumping) {
                 event.velocity = event.velocity.multiply(1.0, gravity.value, 1.0)
             }
 

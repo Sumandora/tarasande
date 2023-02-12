@@ -60,12 +60,9 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
                 return@registerEvent
             if (!event.collisionShape.isEmpty)
                 return@registerEvent
-            if (event.pos.y <= mc.player?.blockPos?.y!!) {
-                var yOffset = mc.player?.y!! - mc.player?.blockPos?.y!!
-                if (event.pos.y < mc.player?.blockPos?.y!!)
-                    yOffset = 1.0
-                event.collisionShape = VoxelShapes.cuboid(0.0, 0.0, 0.0, 1.0, yOffset, 1.0)
-            }
+            val offset = mc.player?.y!! - event.pos.y
+            if(offset in 0.0..1.0)
+                event.collisionShape = VoxelShapes.cuboid(0.0, 0.0, 0.0, 1.0, offset, 1.0)
         }
 
         registerEvent(EventJump::class.java) { event ->

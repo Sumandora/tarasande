@@ -58,7 +58,6 @@ class ModulePreferredOffHandItem : Module("Preferred off-hand item", "Equips you
                 return@registerEvent
             }
 
-            println(mc.player?.offHandStack?.isEmpty == true)
             if (!screenHandler.cursorStack.nullOr { it.isEmpty } || mc.player?.offHandStack?.isEmpty == false) {
                 return@registerEvent
             }
@@ -71,11 +70,9 @@ class ModulePreferredOffHandItem : Module("Preferred off-hand item", "Equips you
             val offHandSlot = screenHandler.slots.firstOrNull { it.id == ContainerUtil.offHandIndex.first }
 
             if (offHandSlot?.isEnabled == true) {
-                println(item.id)
                 if (LivingEntity.getPreferredEquipmentSlot(item.stack) == EquipmentSlot.OFFHAND)
                     mc.interactionManager?.clickSlot(screenHandler.syncId, item.id, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
                 else if (ContainerUtil.isInHotbar(item.id) || allowIllegalSwapping.value) {
-                    println(ContainerUtil.offHandIndex.first)
                     mc.interactionManager?.clickSlot(screenHandler.syncId, item.id, ContainerUtil.offHandIndex.second, SlotActionType.SWAP, mc.player)
                 } else {
                     mc.interactionManager?.clickSlot(screenHandler.syncId, item.id, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.PICKUP, mc.player)
