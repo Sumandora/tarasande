@@ -28,9 +28,7 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
 
     override fun init() {
         if (components.isEmpty()) {
-            for (value in ManagerValue.getValues(module)) {
-                components.add(value.createValueComponent())
-            }
+            components.addAll(ManagerValue.getValues(module).mapNotNull { it.createValueComponent() })
         }
         components.forEach(ElementWidthValueComponent<*>::init)
     }

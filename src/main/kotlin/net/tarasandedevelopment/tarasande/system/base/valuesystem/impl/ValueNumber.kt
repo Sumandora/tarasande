@@ -5,7 +5,18 @@ import com.google.gson.JsonPrimitive
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentNumber
 
-open class ValueNumber(owner: Any, name: String, val min: Double, value: Double, val max: Double, val increment: Double, val exceed: Boolean = true, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentNumber::class.java, manage) {
+open class ValueNumber(
+    owner: Any,
+    name: String,
+    val min: Double,
+    value: Double,
+    val max: Double,
+    val increment: Double,
+    val exceed: Boolean = true,
+    visible: Boolean = true,
+    isEnabled: () -> Boolean = { true },
+    manage: Boolean = true
+) : Value(owner, name, visible, isEnabled, ElementWidthValueComponentNumber::class.java, manage) {
 
     var value = value
         set(value) {

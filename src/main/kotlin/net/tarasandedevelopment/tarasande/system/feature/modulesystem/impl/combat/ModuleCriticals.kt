@@ -11,15 +11,9 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 class ModuleCriticals : Module("Criticals", "Forces critical hits", ModuleCategory.COMBAT) {
 
     private val mode = ValueMode(this, "Mode", false, "Packet", "Jump", "Off-ground", "Crack")
-    private val offset = object : ValueNumber(this, "Offset", 0.0, 0.1, 1.0, 0.01) {
-        override fun isEnabled() = mode.isSelected(0)
-    }
-    private val motion = object : ValueNumber(this, "Motion", 0.0, 0.1, 1.0, 0.01) {
-        override fun isEnabled() = mode.isSelected(1)
-    }
-    private val particles = object : ValueMode(this, "Particles", true, "Critical hit", "Enchanted hit") {
-        override fun isEnabled() = mode.isSelected(3)
-    }
+    private val offset = ValueNumber(this, "Offset", 0.0, 0.1, 1.0, 0.01, isEnabled = { mode.isSelected(0) })
+    private val motion = ValueNumber(this, "Motion", 0.0, 0.1, 1.0, 0.01, isEnabled = { mode.isSelected(1) })
+    private val particles = ValueMode(this, "Particles", true, "Critical hit", "Enchanted hit", isEnabled = { mode.isSelected(3) })
 
     init {
         registerEvent(EventAttackEntity::class.java) { event ->

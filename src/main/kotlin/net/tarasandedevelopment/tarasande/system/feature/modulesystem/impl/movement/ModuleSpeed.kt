@@ -28,9 +28,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
     private val turnRate = ValueNumber(this, "Turn rate", 0.0, 180.0, 180.0, 1.0)
     private val lowHop = ValueBoolean(this, "Low hop", false)
     private val damageBoost = ValueBoolean(this, "Damage boost", false)
-    private val boostAmount = object : ValueNumber(this, "Boost amount", 0.0, PlayerUtil.DEFAULT_WALK_SPEED, 1.0, 0.01) {
-        override fun isEnabled() = damageBoost.value
-    }
+    private val boostAmount = ValueNumber(this, "Boost amount", 0.0, PlayerUtil.DEFAULT_WALK_SPEED, 1.0, 0.01, isEnabled = { damageBoost.value })
 
     private var speed = 0.0
     private var moveDir = 0.0

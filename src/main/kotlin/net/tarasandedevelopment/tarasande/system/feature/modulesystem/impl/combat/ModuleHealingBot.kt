@@ -23,15 +23,9 @@ import net.tarasandedevelopment.tarasande.util.player.container.ContainerUtil
 class ModuleHealingBot : Module("Healing bot", "Automates healing using items", ModuleCategory.COMBAT) {
 
     private val items = ValueMode(this, "Items", true, "Soup", "Pot")
-    private val stews = object : ValueMode(this, "Stews", true, "Mushroom Stew", "Rabbit stew", "Suspicious stew") {
-        override fun isEnabled() = items.isSelected(0)
-    }
-    private val foodCheck = object : ValueBoolean(this, "Food check", false) {
-        override fun isEnabled() = items.isSelected(0)
-    }
-    private val health = object : ValueNumber(this, "Health", 0.0, 0.4, 1.0, 0.01) {
-        override fun isEnabled() = items.anySelected()
-    }
+    private val stews = ValueMode(this, "Stews", true, "Mushroom Stew", "Rabbit stew", "Suspicious stew", isEnabled = { items.isSelected(0) })
+    private val foodCheck = ValueBoolean(this, "Food check", false, isEnabled = { items.isSelected(0) })
+    private val health = ValueNumber(this, "Health", 0.0, 0.4, 1.0, 0.01, isEnabled = { items.anySelected() })
     private val delay = ValueNumber(this, "Delay", 0.0, 300.0, 500.0, 50.0)
 
     /*

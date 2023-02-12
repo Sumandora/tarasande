@@ -6,7 +6,14 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.meta.ElementWidthValueComponentSpacer
 import java.awt.Color
 
-open class ValueSpacer(owner: Any, name: String, val scale: Float = 0.5F, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentSpacer::class.java, manage) {
+open class ValueSpacer(
+    owner: Any,
+    name: String,
+    val scale: Float = 0.5F,
+    visible: Boolean = true,
+    isEnabled: () -> Boolean = { true },
+    manage: Boolean = true
+) : Value(owner, name, visible, isEnabled, ElementWidthValueComponentSpacer::class.java, manage) {
     override fun save(): JsonElement? = null
     override fun load(jsonElement: JsonElement) {}
 

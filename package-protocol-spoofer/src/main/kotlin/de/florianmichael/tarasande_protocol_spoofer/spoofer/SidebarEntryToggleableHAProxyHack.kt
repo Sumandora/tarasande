@@ -15,14 +15,10 @@ import java.net.InetSocketAddress
 class SidebarEntryToggleableHAProxyHack : SidebarEntryToggleable("HA-Proxy hack", "Spoofer") {
 
     val modifyIP = ValueBoolean(this, "Modify ip", true)
-    val ip = object : ValueText(this, "IP", "127.0.0.1") {
-        override fun isEnabled() = modifyIP.value
-    }
+    val ip = ValueText(this, "IP", "127.0.0.1", isEnabled = { modifyIP.value })
 
     val modifyPort = ValueBoolean(this, "Modify port", false)
-    val port = object : ValueText(this, "Port", "25565") {
-        override fun isEnabled() = modifyPort.value
-    }
+    val port = ValueText(this, "Port", "25565", isEnabled = { modifyPort.value })
 
     val protocolVersion = ValueMode(this, "Protocol version", false, *HAProxyProtocolVersion.values().map { it.name + "(0x" + "%x".format(it.byteValue()) + ")" }.toTypedArray())
     val tcpVersion = ValueMode(this, "TCP version", false, *HAProxyProxiedProtocol.values().toList().subList(1, 3).map { it.name + "(0x" + "%x".format(it.byteValue()) + ")" }.toTypedArray())

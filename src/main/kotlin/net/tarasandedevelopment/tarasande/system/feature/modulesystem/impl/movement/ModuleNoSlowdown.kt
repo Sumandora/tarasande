@@ -29,12 +29,8 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
     val slowdown = ValueNumber(this, "Slowdown", 0.0, 1.0, 1.0, 0.01)
     val actions = ValueMode(this, "Actions", true, *useActions.map { it.value }.toTypedArray())
     private val bypass = ValueMode(this, "Bypass", true, "Reuse", "Rehold", "Sneaking")
-    private val reuseMode = object : ValueMode(this, "Reuse mode", false, "Same slot", "Different slot") {
-        override fun isEnabled() = bypass.isSelected(1)
-    }
-    private val bypassedActions = object : ValueMode(this, "Bypassed actions", true, *useActions.map { it.value }.toTypedArray()) {
-        override fun isEnabled() = bypass.anySelected()
-    }
+    private val reuseMode = ValueMode(this, "Reuse mode", false, "Same slot", "Different slot", isEnabled = { bypass.isSelected(1) })
+    private val bypassedActions = ValueMode(this, "Bypassed actions", true, *useActions.map { it.value }.toTypedArray(), isEnabled = { bypass.anySelected() })
 
     fun isActionEnabled(setting: ValueMode): Boolean {
         val activeHand = PlayerUtil.getUsedHand()

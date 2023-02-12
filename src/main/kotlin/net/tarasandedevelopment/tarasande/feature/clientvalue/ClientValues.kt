@@ -24,14 +24,12 @@ object ClientValues {
 
     // General
     val accentColor = ValueColor(this, "Accent color", 0.6, 1.0, 1.0)
-    val autoSaveConfig = object : ValueBoolean(this, "Auto save: config", true) {
+    private val autoSaveConfig = object : ValueBoolean(this, "Auto save: config", true) {
         override fun onChange(oldValue: Boolean?, newValue: Boolean) {
             autoSaveDaemon.name = autoSaveDaemonName + if (!newValue) " (disabled)" else ""
         }
     }
-    private val autoSaveDelay = object : ValueNumber(this, "Auto save: delay", 0.0, 10000.0, 60000.0, 1000.0) {
-        override fun isEnabled() = autoSaveConfig.value
-    }
+    private val autoSaveDelay = ValueNumber(this, "Auto save: delay", 0.0, 10000.0, 60000.0, 1000.0, isEnabled = { autoSaveConfig.value })
 
     init {
         ValueButtonOwnerValues(this, "Privacy values", PrivacyValues)

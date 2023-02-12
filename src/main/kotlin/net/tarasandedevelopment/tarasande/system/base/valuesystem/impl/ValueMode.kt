@@ -6,7 +6,14 @@ import net.tarasandedevelopment.tarasande.gson
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentMode
 
-open class ValueMode(owner: Any, name: String, private val multiSelection: Boolean, vararg val values: String, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentMode::class.java, manage) {
+open class ValueMode(owner: Any,
+    name: String,
+    private val multiSelection: Boolean,
+    vararg val values: String,
+    visible: Boolean = true,
+    isEnabled: () -> Boolean = { true },
+    manage: Boolean = true
+) : Value(owner, name, visible, isEnabled, ElementWidthValueComponentMode::class.java, manage) {
     private val selected = ArrayList<String>()
 
     init {

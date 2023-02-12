@@ -10,9 +10,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCategory.COMBAT) {
 
     private val mode = ValueMode(this, "Mode", true, "Vanilla team", "Display name")
-    private val displayNameMode = object : ValueMode(this, "Display name mode", true, "Sibling styles", "Paragraph symbols") {
-        override fun isEnabled() = mode.isSelected(1)
-    }
+    private val displayNameMode = ValueMode(this, "Display name mode", true, "Sibling styles", "Paragraph symbols", isEnabled = { mode.isSelected(1) })
 
     fun isTeammate(entity: PlayerEntity): Boolean {
         if (mode.isSelected(0)) {

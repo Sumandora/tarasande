@@ -5,7 +5,14 @@ import com.google.gson.JsonPrimitive
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl.ElementWidthValueComponentFocusableText
 
-open class ValueText(owner: Any, name: String, value: String, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableText::class.java, manage) {
+open class ValueText(
+    owner: Any,
+    name: String,
+    value: String,
+    visible: Boolean = true,
+    isEnabled: () -> Boolean = { true },
+    manage: Boolean = true
+) : Value(owner, name, visible, isEnabled, ElementWidthValueComponentFocusableText::class.java, manage) {
 
     var value = value
         set(value) {

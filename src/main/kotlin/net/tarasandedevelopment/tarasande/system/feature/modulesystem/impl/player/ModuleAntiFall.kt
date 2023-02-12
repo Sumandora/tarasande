@@ -17,12 +17,8 @@ class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you ar
     private val fallDistance = ValueNumber(this, "Fall distance", 0.0, 3.0, 10.0, 0.1)
     private val void = ValueBoolean(this, "Void", false)
     private val mode = ValueMode(this, "Mode", false, "Setback", "Jump")
-    private val jumpMultiplier = object : ValueNumber(this, "Jump multiplier", 0.0, 1.0, 10.0, 0.1) {
-        override fun isEnabled() = mode.isSelected(1)
-    }
-    private val boost = object : ValueNumber(this, "Boost", 0.0, 1.0, 10.0, 0.1) {
-        override fun isEnabled() = mode.isSelected(1)
-    }
+    private val jumpMultiplier = ValueNumber(this, "Jump multiplier", 0.0, 1.0, 10.0, 0.1, isEnabled = { mode.isSelected(1) })
+    private val boost = ValueNumber(this, "Boost", 0.0, 1.0, 10.0, 0.1, isEnabled = { mode.isSelected(1) })
     private val repeating = ValueBoolean(this, "Repeating", false)
 
     private var lastOnGroundPos: Vec3d? = null

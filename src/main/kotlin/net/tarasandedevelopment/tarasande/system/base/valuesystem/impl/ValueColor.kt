@@ -8,7 +8,17 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
 import java.awt.Color
 
-open class ValueColor(owner: Any, name: String, hue: Double, sat: Double, bri: Double, alpha: Double? = null, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentColor::class.java, manage) {
+open class ValueColor(
+    owner: Any,
+    name: String,
+    hue: Double,
+    sat: Double,
+    bri: Double,
+    alpha: Double? = null,
+    visible: Boolean = true,
+    isEnabled: () -> Boolean = { true },
+    manage: Boolean = true
+) : Value(owner, name, visible, isEnabled, ElementWidthValueComponentColor::class.java, manage) {
 
     var hue = hue
         get() {
@@ -62,10 +72,14 @@ open class ValueColor(owner: Any, name: String, hue: Double, sat: Double, bri: D
         return hsb.withAlpha(if (alpha == null) 255 else (alpha!! * 255).toInt())
     }
 
-    fun onHueChange(oldHue: Double?, newHue: Double) {}
-    fun onSatChange(oldSat: Double?, newSat: Double) {}
-    fun onBriChange(oldBri: Double?, newBri: Double) {}
-    fun onAlphaChange(oldAlpha: Double?, newAlpha: Double?) {}
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun onHueChange(@Suppress("UNUSED_PARAMETER") oldHue: Double?, @Suppress("UNUSED_PARAMETER") newHue: Double) {}
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun onSatChange(@Suppress("UNUSED_PARAMETER") oldSat: Double?, @Suppress("UNUSED_PARAMETER") newSat: Double) {}
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun onBriChange(@Suppress("UNUSED_PARAMETER") oldBri: Double?, @Suppress("UNUSED_PARAMETER") newBri: Double) {}
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun onAlphaChange(@Suppress("UNUSED_PARAMETER") oldAlpha: Double?, @Suppress("UNUSED_PARAMETER") newAlpha: Double?) {}
 
     override fun save(): JsonElement {
         val jsonArray = JsonArray()

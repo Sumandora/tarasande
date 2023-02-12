@@ -5,7 +5,14 @@ import com.google.gson.JsonElement
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl.ElementWidthValueComponentFocusableTextList
 
-open class ValueTextList(owner: Any, name: String, private val value: ArrayList<String>, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableTextList::class.java, manage) {
+open class ValueTextList(
+    owner: Any,
+    name: String,
+    private val value: ArrayList<String>,
+    visible: Boolean = true,
+    isEnabled: () -> Boolean = { true },
+    manage: Boolean = true
+) : Value(owner, name, visible, isEnabled, ElementWidthValueComponentFocusableTextList::class.java, manage) {
 
     fun add(text: String) {
         value.add(text)

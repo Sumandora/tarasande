@@ -11,9 +11,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 class ModuleNoSwing : Module("No swing", "Hides the hand swing animation", ModuleCategory.RENDER) {
 
     private val mode = ValueMode(this, "Mode", true, "Clientside", "Serverside")
-    private val hand = object : ValueMode(this, "Hand", true, "Main hand", "Off hand") {
-        override fun isEnabled() = mode.anySelected()
-    }
+    private val hand = ValueMode(this, "Hand", true, "Main hand", "Off hand", isEnabled = { mode.anySelected() })
     val disableEquipProgress = ValueBoolean(this, "Disable equip progress", true)
 
     init {

@@ -1,6 +1,12 @@
 package de.florianmichael.tarasande_creative_features.creativesystem
 
 import de.florianmichael.tarasande_creative_features.clientvalue.CreativeValues
+import de.florianmichael.tarasande_creative_features.creativesystem.impl.ExploitCreativeCommandBlockSpawner
+import de.florianmichael.tarasande_creative_features.creativesystem.impl.ExploitCreativeItemControl
+import de.florianmichael.tarasande_creative_features.creativesystem.impl.ExploitCreativeLightItems
+import de.florianmichael.tarasande_creative_features.creativesystem.impl.ExploitCreativeSpecialVanillaItems
+import de.florianmichael.tarasande_creative_features.creativesystem.panel.PanelElementsCreative
+import de.florianmichael.tarasande_creative_features.creativesystem.valuecomponent.meta.ValueButtonItem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
@@ -12,12 +18,6 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import de.florianmichael.tarasande_creative_features.creativesystem.impl.ExploitCreativeCommandBlockSpawner
-import de.florianmichael.tarasande_creative_features.creativesystem.impl.ExploitCreativeItemControl
-import de.florianmichael.tarasande_creative_features.creativesystem.impl.ExploitCreativeLightItems
-import de.florianmichael.tarasande_creative_features.creativesystem.impl.ExploitCreativeSpecialVanillaItems
-import de.florianmichael.tarasande_creative_features.creativesystem.panel.PanelElementsCreative
-import de.florianmichael.tarasande_creative_features.creativesystem.valuecomponent.meta.ValueButtonItem
 
 object ManagerCreative : Manager<ExploitCreative>() {
 
@@ -59,10 +59,8 @@ object ManagerCreative : Manager<ExploitCreative>() {
 abstract class ExploitCreative(val parent: Any, val name: String, val icon: ItemStack) {
 
     fun createAction(name: String, icon: ItemStack, action: () -> Unit) {
-        object : ValueButtonItem(parent, name, icon) {
+        object : ValueButtonItem(parent, name, icon, isEnabled = { mc.interactionManager!!.currentGameMode == GameMode.CREATIVE || CreativeValues.unlockInAllGameModes.value }) {
             override fun onClick() { action() }
-
-            override fun isEnabled() = mc.interactionManager!!.currentGameMode == GameMode.CREATIVE || CreativeValues.unlockInAllGameModes.value
         }
     }
 

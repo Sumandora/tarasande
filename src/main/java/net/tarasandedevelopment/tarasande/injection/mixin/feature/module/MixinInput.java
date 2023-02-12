@@ -13,7 +13,7 @@ public class MixinInput {
     @Redirect(method = "hasForwardMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/Input;movementForward:F"))
     public float hookSprint(Input instance) {
         ModuleSprint moduleSprint = ManagerModule.INSTANCE.get(ModuleSprint.class);
-        if (moduleSprint.getEnabled().getValue() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
+        if (moduleSprint.getEnabled().getValue() && moduleSprint.getAllowBackwards().isEnabled().invoke() && moduleSprint.getAllowBackwards().getValue())
             return instance.getMovementInput().length();
         return instance.movementForward;
     }

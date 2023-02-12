@@ -11,11 +11,9 @@ class ClickSpeedUtil(private val owner: Any, enabledCallback: () -> Boolean, var
 
     private val clickMethods = ManagerClickMethod.getAllExcept(*excluded)
 
-    private val cpsMode = object : ValueMode(owner, namePrefix + "CPS mode", false, *clickMethods.map { it.name }.toTypedArray()) {
-        override fun isEnabled() = enabledCallback.invoke()
-    }
+    private val cpsMode = ValueMode(owner, namePrefix + "CPS mode", false, *clickMethods.map { it.name }.toTypedArray(), isEnabled = enabledCallback)
 
-    private val cps = object : ValueNumberRange(owner, namePrefix + "CPS", 1.0, 8.0, 12.0, 20.0, 1.0) {
+    private val cps = object : ValueNumberRange(owner, namePrefix + "CPS", 1.0, 8.0, 12.0, 20.0, 1.0, isEnabled = { enabledCallback() && selected().cpsBased }) {
         override fun onMinValueChange(oldMinValue: Double?, newMinValue: Double) {
             reset()
         }
@@ -23,8 +21,6 @@ class ClickSpeedUtil(private val owner: Any, enabledCallback: () -> Boolean, var
         override fun onMaxValueChange(oldMaxValue: Double?, newMaxValue: Double) {
             reset()
         }
-
-        override fun isEnabled() = selected().cpsBased && enabledCallback.invoke()
     }
 
     private val timeUtil = TimeUtil()

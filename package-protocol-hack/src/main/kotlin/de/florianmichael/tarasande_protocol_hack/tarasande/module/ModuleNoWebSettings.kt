@@ -8,7 +8,5 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movem
 lateinit var removeVelocityReset: ValueBoolean
 
 fun modifyModuleNoWeb() {
-    removeVelocityReset = object : ValueBoolean(ManagerModule.get(ModuleNoWeb::class.java), "Remove velocity reset (" + ProtocolHackValues.emulatePlayerMovement.name + ")", false) {
-        override fun isEnabled() = ProtocolHackValues.emulatePlayerMovement.value
-    }
+    removeVelocityReset = ValueBoolean(ManagerModule.get(ModuleNoWeb::class.java), "Remove velocity reset (" + ProtocolHackValues.emulatePlayerMovement.name + ")", false, isEnabled = { ProtocolHackValues.emulatePlayerMovement.value })
 }

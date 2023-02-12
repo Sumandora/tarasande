@@ -15,12 +15,8 @@ import net.tarasandedevelopment.tarasande.util.player.prediction.with
 class ModuleSafeWalk : Module("Safe walk", "Prevents falling off blocks", ModuleCategory.MOVEMENT) {
 
     val sneak = ValueBoolean(this, "Sneak", false)
-    private val offGround = object : ValueMode(this, "Off-ground", false, "Force disable", "Force enable", "Ignore") {
-        override fun isEnabled() = sneak.value
-    }
-    private val extrapolation = object : ValueNumber(this, "Extrapolation", 0.0, 1.0, 10.0, 1.0) {
-        override fun isEnabled() = sneak.value
-    }
+    private val offGround = ValueMode(this, "Off-ground", false, "Force disable", "Force enable", "Ignore", isEnabled = { sneak.value })
+    private val extrapolation = ValueNumber(this, "Extrapolation", 0.0, 1.0, 10.0, 1.0, isEnabled = { sneak.value })
 
     init {
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->

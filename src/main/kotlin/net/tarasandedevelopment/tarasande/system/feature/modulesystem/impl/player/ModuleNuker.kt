@@ -27,25 +27,19 @@ import kotlin.math.pow
 class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius", ModuleCategory.PLAYER) {
 
     private val selectionMode = ValueMode(this, "Selection mode", false, "Include", "Exclude")
-    private val includedBlocks = object : ValueRegistry<Block>(this, "Included blocks", Registries.BLOCK, true) {
-        override fun isEnabled() = selectionMode.isSelected(0)
+    private val includedBlocks = object : ValueRegistry<Block>(this, "Included blocks", Registries.BLOCK, true, isEnabled = { selectionMode.isSelected(0) }) {
         override fun filter(key: Block) = !key.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN).isEmpty && key.defaultState.calcBlockBreakingDelta(mc.player, mc.world, BlockPos.ORIGIN) > 0.0
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
-    private val excludedBlocks = object : ValueRegistry<Block>(this, "Excluded blocks", Registries.BLOCK, true) {
-        override fun isEnabled() = selectionMode.isSelected(1)
+    private val excludedBlocks = object : ValueRegistry<Block>(this, "Excluded blocks", Registries.BLOCK, true, isEnabled = { selectionMode.isSelected(1) }) {
         override fun filter(key: Block) = !key.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN).isEmpty && key.defaultState.calcBlockBreakingDelta(mc.player, mc.world, BlockPos.ORIGIN) > 0.0
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
     private val radius = ValueNumber(this, "Radius", 0.1, 4.5, 6.0, 0.1)
     private val throughWalls = ValueMode(this, "Through walls", false, "Off", "On", "Free")
     private val breakSpeed = ValueMode(this, "Break speed", false, "Vanilla", "Instant")
-    private val delay = object : ValueNumber(this, "Delay", 0.0, 200.0, 1000.0, 1.0) {
-        override fun isEnabled() = breakSpeed.isSelected(1)
-    }
-    private val maxDestructions = object : ValueNumber(this, "Max destructions", 1.0, floor(4.5.pow(3.0)), 6.0.pow(3.0), 1.0) {
-        override fun isEnabled() = breakSpeed.isSelected(1)
-    }
+    private val delay = ValueNumber(this, "Delay", 0.0, 200.0, 1000.0, 1.0, isEnabled = { breakSpeed.isSelected(1) })
+    private val maxDestructions = ValueNumber(this, "Max destructions", 1.0, floor(4.5.pow(3.0)), 6.0.pow(3.0), 1.0, isEnabled = {breakSpeed.isSelected(1)})
     private val priority = ValueMode(this, "Priority", false, "Far away", "Nearby", "Break speed")
 
     private var list = ArrayList<Pair<BlockPos, BlockHitResult>>()

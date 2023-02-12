@@ -16,9 +16,7 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 class ModuleCivBreak : Module("Civ break", "Breaks blocks multiple times", ModuleCategory.PLAYER) {
 
     private val packets = ValueMode(this, "Packets", true, "Start block breaking", "Stop block breaking")
-    private val multiplier = object : ValueNumber(this, "Multiplier", 0.0, 100.0, 1000.0, 1.0) {
-        override fun isEnabled() = packets.anySelected()
-    }
+    private val multiplier = ValueNumber(this, "Multiplier", 0.0, 100.0, 1000.0, 1.0, isEnabled = { packets.anySelected() })
 
     private fun sendPackets(startBreaking: Boolean, stopBreaking: Boolean, pos: BlockPos, direction: Direction) {
         for (i in 0 until multiplier.value.toInt()) {

@@ -5,7 +5,14 @@ import com.google.gson.JsonPrimitive
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.ElementWidthValueComponentBoolean
 
-open class ValueBoolean(owner: Any, name: String, value: Boolean, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentBoolean::class.java, manage) {
+open class ValueBoolean(
+    owner: Any,
+    name: String,
+    value: Boolean,
+    visible: Boolean = true,
+    isEnabled: () -> Boolean = { true },
+    manage: Boolean = true
+) : Value(owner, name, visible, isEnabled, ElementWidthValueComponentBoolean::class.java, manage) {
 
     var value = value
         set(value) {

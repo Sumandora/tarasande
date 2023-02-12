@@ -8,7 +8,19 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 import kotlin.math.min
 
-open class ValueNumberRange(owner: Any, name: String, val min: Double, minValue: Double, maxValue: Double, val max: Double, val increment: Double, val exceed: Boolean = true, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentNumberRange::class.java, manage) {
+open class ValueNumberRange(
+    owner: Any,
+    name: String,
+    val min: Double,
+    minValue: Double,
+    maxValue: Double,
+    val max: Double,
+    val increment: Double,
+    val exceed: Boolean = true,
+    visible: Boolean = true,
+    isEnabled: () -> Boolean = { true },
+    manage: Boolean = true
+) : Value(owner, name, visible, isEnabled, ElementWidthValueComponentNumberRange::class.java, manage) {
 
     var minValue = minValue
         set(value) {

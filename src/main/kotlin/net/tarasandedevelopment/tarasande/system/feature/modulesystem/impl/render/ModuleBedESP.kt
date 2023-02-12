@@ -7,7 +7,6 @@ import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventRender3D
 import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.mc
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
@@ -33,36 +32,22 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
     private val searchRadius = ValueNumber(this, "Search radius", 1.0, 10.0, 50.0, 1.0)
 
-    val calculateBestWay = ValueBoolean(this, "Calculate best way", true)
+    private val maxDefenders = ValueNumber(this, "Max defenders", 1.0, 128.0, 512.0, 64.0)
 
-    private val maxDefenders = object : ValueNumber(this, "Max defenders", 1.0, 128.0, 512.0, 64.0) {
-        override fun isEnabled() = calculateBestWay.value
-    }
-
-    private val bedColor = object : ValueColor(this, "Bed color", 0.0, 1.0, 1.0, 1.0) {
-        override fun isEnabled() = calculateBestWay.value
-    }
-    private val defenderColor = object : ValueColor(this, "Defender color", 0.0, 1.0, 1.0, 0.0) {
-        override fun isEnabled() = calculateBestWay.value
-    }
-    private val solutionColor = object : ValueColor(this, "Solution color", 0.0, 1.0, 1.0, 1.0) {
-        override fun isEnabled() = calculateBestWay.value
-    }
+    private val bedColor = ValueColor(this, "Bed color", 0.0, 1.0, 1.0, 1.0)
+    private val defenderColor = ValueColor(this, "Defender color", 0.0, 1.0, 1.0, 0.0)
+    private val solutionColor = ValueColor(this, "Solution color", 0.0, 1.0, 1.0, 1.0)
 
     // Going full polak
-    private val refreshRate = object : ValueNumber(this, "Refresh rate", 1.0, 5.0, 20.0, 1.0) {
-        override fun isEnabled() = calculateBestWay.value
-    }
-    private val maxProcessingTime = object : ValueNumber(this, "Max processing time", 1.0, 10.0, 100.0, 1.0) {
-        override fun isEnabled() = calculateBestWay.value
-    }
+    private val refreshRate = ValueNumber(this, "Refresh rate", 1.0, 5.0, 20.0, 1.0)
+    private val maxProcessingTime = ValueNumber(this, "Max processing time", 1.0, 10.0, 100.0, 1.0)
 
     var bedDatas = ArrayList<BedData>()
 
     init {
         ManagerInformation.add(object : Information("Bed ESP", "Beds") {
             override fun getMessage(): String? {
-                if (enabled.value && calculateBestWay.value && bedDatas.isNotEmpty()) {
+                if (enabled.value && bedDatas.isNotEmpty()) {
                     return "\n" + bedDatas.sortedBy {
                         mc.player?.squaredDistanceTo(it.bedParts.let { bedPart ->
                             var vec = Vec3d.ZERO
@@ -139,7 +124,7 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
 
                     if (bedDatas.any { it.bedParts.any { part1 -> bedParts.any { part2 -> part1 == part2 } } }) continue // we already processed these
 
-                    if (!calculateBestWay.value || bedParts.any { allSurroundings(it).any { surrounding -> mc.world?.isAir(surrounding)!! } }) {
+                    if (bedParts.any { allSurroundings(it).any { surrounding -> mc.world?.isAir(surrounding)!! } }) {
                         bedDatas.add(BedData(bedParts, null, null))
                         continue // this is pointless
                     }

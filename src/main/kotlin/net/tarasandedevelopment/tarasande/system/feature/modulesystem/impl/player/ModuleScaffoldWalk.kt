@@ -38,23 +38,13 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val offsetGoalYaw = ValueBoolean(this, "Offset goal yaw", true)
     private val edgeDistance = ValueNumber(this, "Edge distance", 0.0, 0.5, 1.0, 0.05)
     private val edgeIncrement = ValueBoolean(this, "Edge increment", true)
-    private val increment = object : ValueNumber(this, "Increment", 0.0, 0.15, 0.5, 0.05) {
-        override fun isEnabled() = edgeIncrement.value
-    }
-    private val preventImpossibleEdge = object : ValueBoolean(this, "Prevent impossible edge", true) {
-        override fun isEnabled() = edgeIncrement.value
-    }
+    private val increment = ValueNumber(this, "Increment", 0.0, 0.15, 0.5, 0.05, isEnabled = { edgeIncrement.value })
+    private val preventImpossibleEdge = ValueBoolean(this, "Prevent impossible edge", true, isEnabled = { edgeIncrement.value })
     private val rotateAtEdgeMode = ValueMode(this, "Rotate at edge mode", false, "Off", "Distance", "Extrapolated position")
-    private val distance = object : ValueNumber(this, "Distance", 0.0, 0.5, 1.0, 0.05) {
-        override fun isEnabled() = rotateAtEdgeMode.isEnabled() && rotateAtEdgeMode.isSelected(1)
-    }
-    private val extrapolation = object : ValueNumber(this, "Extrapolation", 0.0, 1.0, 10.0, 1.0) {
-        override fun isEnabled() = rotateAtEdgeMode.isEnabled() && rotateAtEdgeMode.isSelected(2)
-    }
+    private val distance = ValueNumber(this, "Distance", 0.0, 0.5, 1.0, 0.05, isEnabled = { rotateAtEdgeMode.isEnabled() && rotateAtEdgeMode.isSelected(1) })
+    private val extrapolation = ValueNumber(this, "Extrapolation", 0.0, 1.0, 10.0, 1.0, isEnabled = { rotateAtEdgeMode.isEnabled() && rotateAtEdgeMode.isSelected(2) })
     private val preventRerotation = ValueBoolean(this, "Prevent re-rotation", false)
-    private val rerotateOnFacingChange = object : ValueBoolean(this, "Re-rotate on facing change", false) {
-        override fun isEnabled() = preventRerotation.value
-    }
+    private val rerotateOnFacingChange = ValueBoolean(this, "Re-rotate on facing change", false, isEnabled = { preventRerotation.value })
     private val aimHeight = ValueNumberRange(this, "Aim height", 0.0, 0.4, 0.6, 1.0, 0.05)
     private val speculativeWaiting = ValueBoolean(this, "Speculative waiting", false)
     private val silent = ValueMode(this, "Silent", false, "Disabled", "Invisible", "Visible")

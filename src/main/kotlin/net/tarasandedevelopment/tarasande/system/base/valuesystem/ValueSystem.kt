@@ -39,17 +39,19 @@ object ManagerValue : Manager<Value>() {
 }
 
 @Suppress("LeakingThis")
-abstract class Value(var owner: Any, val name: String, var valueComponent: Class<out ElementWidthValueComponent<*>>, manage: Boolean = true) {
+abstract class Value(var owner: Any, val name: String, val visible: Boolean, val isEnabled: () -> Boolean, var valueComponent: Class<out ElementWidthValueComponent<*>>, manage: Boolean = true) {
 
     init {
         if (manage)
             ManagerValue.add(this)
     }
 
-    open fun isEnabled() = true
-
     abstract fun save(): JsonElement?
     abstract fun load(jsonElement: JsonElement)
 
-    fun createValueComponent() = valueComponent.getDeclaredConstructor(Value::class.java).newInstance(this)!!
+    fun createValueComponent() =
+        if(visible)
+            valueComponent.getDeclaredConstructor(Value::class.java).newInstance(this)!!
+        else
+            null
 }

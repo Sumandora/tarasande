@@ -22,21 +22,11 @@ import java.util.*
 
 class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with bots", ModuleCategory.COMBAT) {
     private val checks = ValueMode(this, "Checks", true, "Ticks existed", "Sound", "Ground", "Invisible", "Sneaked", "Movement", "Line of sight", "Invalid game mode", "Swing")
-    private val ticksExisted = object : ValueNumber(this, "Ticks existed", 0.0, 20.0, 100.0, 1.0) {
-        override fun isEnabled() = checks.isSelected(0)
-    }
-    private val soundDistance = object : ValueNumber(this, "Sound distance", 0.0, 1.0, 1.0, 0.1) {
-        override fun isEnabled() = checks.isSelected(1)
-    }
-    private val groundMode = object : ValueMode(this, "Ground mode", false, "On ground", "Off ground") {
-        override fun isEnabled() = checks.isSelected(2)
-    }
-    private val invisibleMode = object : ValueMode(this, "Invisible mode", true, "Invisible to everyone", "Invisible to self") {
-        override fun isEnabled() = checks.isSelected(3)
-    }
-    private val fov = object : ValueNumber(this, "FOV", 0.0, Rotation.MAXIMUM_DELTA / 2, Rotation.MAXIMUM_DELTA, 1.0) {
-        override fun isEnabled() = checks.isSelected(6)
-    }
+    private val ticksExisted = ValueNumber(this, "Ticks existed", 0.0, 20.0, 100.0, 1.0, isEnabled = { checks.isSelected(0) })
+    private val soundDistance = ValueNumber(this, "Sound distance", 0.0, 1.0, 1.0, 0.1, isEnabled = { checks.isSelected(1) })
+    private val groundMode = ValueMode(this, "Ground mode", false, "On ground", "Off ground", isEnabled = { checks.isSelected(2) })
+    private val invisibleMode = ValueMode(this, "Invisible mode", true, "Invisible to everyone", "Invisible to self", isEnabled = { checks.isSelected(3) })
+    private val fov = ValueNumber(this, "FOV", 0.0, Rotation.MAXIMUM_DELTA / 2, Rotation.MAXIMUM_DELTA, 1.0, isEnabled = { checks.isSelected(6) })
 
     init {
         object : ValueButton(this, "Reset captured data") {

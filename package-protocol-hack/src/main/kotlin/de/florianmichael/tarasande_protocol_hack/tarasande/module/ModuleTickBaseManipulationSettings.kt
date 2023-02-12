@@ -10,9 +10,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.explo
 
 fun modifyModuleTickBaseManipulation() {
     ManagerModule.get(ModuleTickBaseManipulation::class.java).apply {
-        val chargeOnIdlePacketSkip = object : ValueBoolean(this, "Charge on idle packet skip (" + formatRange(*ProtocolHackValues.sendIdlePacket.version[0].inverse()) + ")", false) {
-            override fun isEnabled() = !ProtocolHackValues.sendIdlePacket.value
-        }
+        val chargeOnIdlePacketSkip = ValueBoolean(this, "Charge on idle packet skip (" + formatRange(*ProtocolHackValues.sendIdlePacket.version[0].inverse()) + ")", false, isEnabled = { !ProtocolHackValues.sendIdlePacket.value })
 
         registerEvent(EventSkipIdlePacket::class.java) {
             if (chargeOnIdlePacketSkip.isEnabled() && chargeOnIdlePacketSkip.value)

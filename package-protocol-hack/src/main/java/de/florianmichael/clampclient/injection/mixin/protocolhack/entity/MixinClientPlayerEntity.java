@@ -22,13 +22,15 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.entity;
 
 import com.mojang.authlib.GameProfile;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import de.florianmichael.clampclient.injection.instrumentation_1_8.ClientPlayerMovement_1_8;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.ArmorPointsDefinition;
 import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.LegacyConstants_1_8;
-import de.florianmichael.clampclient.injection.instrumentation_1_8.ClientPlayerMovement_1_8;
 import de.florianmichael.clampclient.injection.mixininterface.IClientPlayerEntity_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.ILivingEntity_Protocol;
+import de.florianmichael.tarasande_protocol_hack.tarasande.EventSkipIdlePacket;
+import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -41,8 +43,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
-import de.florianmichael.tarasande_protocol_hack.tarasande.EventSkipIdlePacket;
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -194,7 +194,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     private boolean disableSprintSneak(Input input) {
         if (ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_14_1)) {
             ModuleSprint moduleSprint = ManagerModule.INSTANCE.get(ModuleSprint.class);
-            if (moduleSprint.getEnabled().getValue() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
+            if (moduleSprint.getEnabled().getValue() && moduleSprint.getAllowBackwards().isEnabled().invoke() && moduleSprint.getAllowBackwards().getValue())
                 return input.getMovementInput().lengthSquared() >= 0.8 * 0.8;
 
             return input.movementForward >= 0.8F;

@@ -58,9 +58,7 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
                         longest
                     }
                 }
-                values[useAction] = object : ValueNumber(this, nameMap[useAction] + ": Ticks", 0.0, longest.toDouble(), longest.toDouble(), 1.0) {
-                    override fun isEnabled() = actions.isSelected(nameMap[useAction]!!)
-                }
+                values[useAction] = ValueNumber(this, nameMap[useAction] + ": Ticks", 0.0, longest.toDouble(), longest.toDouble(), 1.0, isEnabled = { actions.isSelected(nameMap[useAction]!!) })
             }
         }
     }

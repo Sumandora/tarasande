@@ -71,7 +71,7 @@ open class SidebarEntry(val name: String, val category: String) {
                     openValues()
                 }
             }
-        }.createValueComponent())
+        }.createValueComponent()!!)
     }
 }
 
@@ -99,14 +99,14 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
                     }
                     return super.getColor(hovered)
                 }
-            }.createValueComponent()
+            }.createValueComponent()!!
         }
     }
 }
 
 open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry(name, category) {
     @Suppress("LeakingThis")
-    val enabled = ValueBoolean(this, name, false)
+    val enabled = ValueBoolean(this, "Enabled", false, visible = false)
     open fun onClick(enabled: Boolean) {
     }
 
@@ -123,6 +123,6 @@ open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry
             }
 
             override fun getColor(hovered: Boolean) = (if (enabled.value) Color.green else Color.red).let { if (hovered) RenderUtil.colorInterpolate(it, ClientValues.accentColor.getColor(), 0.4) else it }
-        }.createValueComponent())
+        }.createValueComponent()!!)
     }
 }

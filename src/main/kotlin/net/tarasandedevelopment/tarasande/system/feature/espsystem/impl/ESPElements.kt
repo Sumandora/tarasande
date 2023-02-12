@@ -25,9 +25,7 @@ import kotlin.math.min
 class ESPElementBox : ESPElement("Box") {
     private val width = ValueNumber(this, "Width", 1.0, 2.0, 5.0, 0.1)
     private val outlined = ValueBoolean(this, "Outlined", true)
-    private val outlineWidth = object : ValueNumber(this, "Outline width", 1.0, 2.0, 5.0, 0.1) {
-        override fun isEnabled() = outlined.value
-    }
+    private val outlineWidth = ValueNumber(this, "Outline width", 1.0, 2.0, 5.0, 0.1, isEnabled = { outlined.value })
 
     override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
         val col = Color(entity.teamColorValue).rgb // ignore alpha

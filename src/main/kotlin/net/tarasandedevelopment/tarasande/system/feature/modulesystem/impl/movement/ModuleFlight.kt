@@ -19,15 +19,9 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", ModuleCategory.MOVEMENT) {
 
     val mode = ValueMode(this, "Mode", false, "Vanilla", "Motion", "Air walk", "Motion reset")
-    val flightSpeed = object : ValueNumber(this, "Flight speed", 0.0, 1.0, 5.0, 0.1) {
-        override fun isEnabled() = mode.isSelected(0) || mode.isSelected(1)
-    }
-    private val baseYMotion = object : ValueNumber(this, "Base Y-motion", -1.0, 0.0, 1.0, 0.01) {
-        override fun isEnabled() = mode.isSelected(1)
-    }
-    private val tickFrequency = object : ValueNumber(this, "Tick frequency", 1.0, 2.0, 10.0, 1.0) {
-        override fun isEnabled() = mode.isSelected(3)
-    }
+    val flightSpeed = ValueNumber(this, "Flight speed", 0.0, 1.0, 5.0, 0.1, isEnabled = { mode.isSelected(0) || mode.isSelected(1) })
+    private val baseYMotion = ValueNumber(this, "Base Y-motion", -1.0, 0.0, 1.0, 0.01, isEnabled = { mode.isSelected(1) })
+    private val tickFrequency = ValueNumber(this, "Tick frequency", 1.0, 2.0, 10.0, 1.0, isEnabled = { mode.isSelected(3) })
 
     init {
         registerEvent(EventMovement::class.java, 1002) { event ->

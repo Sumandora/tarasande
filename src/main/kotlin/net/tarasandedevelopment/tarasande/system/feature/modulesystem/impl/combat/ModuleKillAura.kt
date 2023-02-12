@@ -53,56 +53,32 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val clickSpeedUtil = ClickSpeedUtil(this, { true }) // for setting order
     private val waitForDamageValue = ValueBoolean(this, "Wait for damage", false)
     private val rayTrace = ValueBoolean(this, "Ray trace", false)
-    private val simulateMouseDelay = object : ValueBoolean(this, "Simulate mouse delay", false) {
-        override fun isEnabled() = rayTrace.value && !mode.isSelected(1)
-    }
+    private val simulateMouseDelay = ValueBoolean(this, "Simulate mouse delay", false, isEnabled = { rayTrace.value && !mode.isSelected(1) })
     private val swingInAir = ValueBoolean(this, "Swing in air", true)
     private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.1, 1.0, 1.0, 1.0, 0.1)
     private val dontAttackWhenBlocking = ValueBoolean(this, "Don't attack when blocking", false)
-    private val simulateShieldBlock = object : ValueBoolean(this, "Simulate shield block", false) {
-        override fun isEnabled() = dontAttackWhenBlocking.value
-    }
+    private val simulateShieldBlock = ValueBoolean(this, "Simulate shield block", false, isEnabled = { dontAttackWhenBlocking.value })
     private val throughWalls = ValueMode(this, "Through walls", false, "Off", "Continue aiming", "Hit and aim through walls")
     private val autoBlock = object : ValueMode(this, "Auto block", false, "Disabled", "Permanent", "Legit") {
         override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
             blocking = false
         }
     }
-    private val expectSwordBlocking = object : ValueBoolean(this, "Expect sword blocking", false) {
-        override fun isEnabled() = !autoBlock.isSelected(0)
-    }
-    private val needUnblock = object : ValueBoolean(this, "Need unblock", true) {
-        override fun isEnabled() = autoBlock.isSelected(1)
-    }
-    private val blockOutOfReach = object : ValueBoolean(this, "Block out of reach", true) {
-        override fun isEnabled() = !autoBlock.isSelected(0)
-    }
-    private val preventBlockCooldown = object : ValueBoolean(this, "Prevent block cooldown", false) {
-        override fun isEnabled() = !autoBlock.isSelected(0)
-    }
+    private val expectSwordBlocking = ValueBoolean(this, "Expect sword blocking", false, isEnabled = { !autoBlock.isSelected(0) })
+    private val needUnblock = ValueBoolean(this, "Need unblock", true, isEnabled = { autoBlock.isSelected(1) })
+    private val blockOutOfReach = ValueBoolean(this, "Block out of reach", true, isEnabled = { !autoBlock.isSelected(0) })
+    private val preventBlockCooldown = ValueBoolean(this, "Prevent block cooldown", false, isEnabled = { !autoBlock.isSelected(0) })
     private val counterBlocking = ValueMode(this, "Counter blocking", false, "Off", "Wait for block", "Immediately")
     private val guaranteeHit = ValueBoolean(this, "Guarantee hit", false)
     private val rotations = ValueMode(this, "Rotations", true, "Around walls", "Randomized")
-    private val precision = object : ValueNumber(this, "Precision", 0.0, 0.01, 1.0, 0.01) {
-        override fun isEnabled() = rotations.anySelected()
-    }
+    private val precision = ValueNumber(this, "Precision", 0.0, 0.01, 1.0, 0.01, isEnabled = { rotations.anySelected() })
     private val flex = ValueBoolean(this, "Flex", false)
-    private val flexTurn = object : ValueNumber(this, "Flex turn", 1.0, 90.0, 180.0, 1.0) {
-        override fun isEnabled() = flex.value
-    }
-    private val flexHurtTime = object : ValueNumber(this, "Flex hurt time", 0.1, 0.5, 0.9, 0.1) {
-        override fun isEnabled() = flex.value
-    }
+    private val flexTurn = ValueNumber(this, "Flex turn", 1.0, 90.0, 180.0, 1.0, isEnabled = { flex.value })
+    private val flexHurtTime = ValueNumber(this, "Flex hurt time", 0.1, 0.5, 0.9, 0.1, isEnabled = { flex.value })
     private val waitForCritical = ValueBoolean(this, "Wait for critical", false)
-    private val dontWaitWhenEnemyHasShield = object : ValueBoolean(this, "Don't wait when enemy has shield", true) {
-        override fun isEnabled() = waitForCritical.value
-    }
-    private val criticalSprint = object : ValueBoolean(this, "Critical sprint", false) {
-        override fun isEnabled() = waitForCritical.value
-    }
-    private val forceCritical = object : ValueBoolean(this, "Force critical", true) {
-        override fun isEnabled() = waitForCritical.value && criticalSprint.value
-    }
+    private val dontWaitWhenEnemyHasShield = ValueBoolean(this, "Don't wait when enemy has shield", true, isEnabled = { waitForCritical.value })
+    private val criticalSprint = ValueBoolean(this, "Critical sprint", false, isEnabled = { waitForCritical.value })
+    private val forceCritical = ValueBoolean(this, "Force critical", true, isEnabled = { criticalSprint.isEnabled() && criticalSprint.value })
     object SmartClickingBehaviour {
         val enableSmartClickingBehaviour = ValueBoolean(this, "Enable smart clicking behaviour", false)
         val enemyHurtTime = ValueNumber(this, "Enemy hurt time", 0.1, 1.0, 1.0, 0.1)

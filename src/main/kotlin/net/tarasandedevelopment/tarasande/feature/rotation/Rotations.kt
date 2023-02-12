@@ -19,9 +19,7 @@ object Rotations {
 
     val correctMovement = ValueMode(this, "Correct movement", false, "Off", "Prevent Backwards Sprinting", "Direct", "Silent")
     private val updateRotationsWhenTickSkipping = ValueBoolean(this, "Update rotations when tick skipping", false)
-    private val updateRotationsAccurately = object : ValueBoolean(this, "Update rotations accurately", true) {
-        override fun isEnabled() = updateRotationsWhenTickSkipping.value
-    }
+    private val updateRotationsAccurately = ValueBoolean(this, "Update rotations accurately", true, isEnabled = { updateRotationsWhenTickSkipping.value })
     private val rotateToOriginSpeed = ValueNumberRange(this, "Rotate to origin speed", 0.0, 1.0, 1.0, 1.0, 0.1)
     private val visualizeFakeRotation = ValueBoolean(this, "Visualize fake rotation", false)
 

@@ -9,9 +9,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 class ModuleFullBright : Module("Full bright", "Makes everything bright", ModuleCategory.RENDER) {
 
     private val bright = ValueBoolean(this, "Bright", true)
-    private val colorModulation = object : ValueColor(this, "Color modulation", 0.0, 1.0, 1.0) {
-        override fun isEnabled() = !bright.value
-    }
+    private val colorModulation = ValueColor(this, "Color modulation", 0.0, 1.0, 1.0, isEnabled = { !bright.value })
 
     init {
         registerEvent(EventGamma::class.java) { event ->

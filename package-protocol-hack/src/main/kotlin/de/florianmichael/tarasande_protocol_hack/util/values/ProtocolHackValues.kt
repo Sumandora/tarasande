@@ -24,8 +24,7 @@ object ProtocolHackValues {
     val entityDimensionReplacements = ValueBoolean(this, "Entity dimension replacements", true)
 
     @Suppress("unused")
-    val createViaDump = object : ValueButton(this, "Create via dump") {
-        override fun isEnabled() = !mc.isInSingleplayer && mc.world != null
+    val createViaDump = object : ValueButton(this, "Create via dump", isEnabled = { !mc.isInSingleplayer && mc.world != null }) {
         override fun onClick() {
             Via.getManager().commandHandler.getSubCommand("dump")?.execute(ViaDumpBypassSender, arrayOf())
         }

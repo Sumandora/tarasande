@@ -123,7 +123,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     public float hookSprint(Input instance) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             ModuleSprint moduleSprint = ManagerModule.INSTANCE.get(ModuleSprint.class);
-            if (moduleSprint.getEnabled().getValue() && moduleSprint.getAllowBackwards().isEnabled() && moduleSprint.getAllowBackwards().getValue())
+            if (moduleSprint.getEnabled().getValue() && moduleSprint.getAllowBackwards().isEnabled().invoke() && moduleSprint.getAllowBackwards().getValue())
                 return instance.getMovementInput().length();
         }
         return instance.movementForward;

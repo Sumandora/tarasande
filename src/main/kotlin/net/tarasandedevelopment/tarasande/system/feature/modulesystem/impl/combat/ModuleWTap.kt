@@ -16,9 +16,7 @@ import net.tarasandedevelopment.tarasande.util.extension.minecraft.prevPos
 class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCategory.COMBAT) {
 
     private val mode = ValueMode(this, "Mode", false, "W-Tap", "S-Tap", "Packet")
-    private val packets = object : ValueNumber(this, "Packets", 2.0, 2.0, 10.0, 2.0) {
-        override fun isEnabled() = mode.isSelected(2)
-    }
+    private val packets = ValueNumber(this, "Packets", 2.0, 2.0, 10.0, 2.0, isEnabled = { mode.isSelected(2) })
     private val maximalHurtTime = ValueNumber(this, "Maximal hurt time", 1.0, 5.0, 10.0, 1.0)
 
     private var changeBinds = false

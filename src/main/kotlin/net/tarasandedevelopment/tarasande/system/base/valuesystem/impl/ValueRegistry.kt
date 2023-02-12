@@ -8,7 +8,16 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.util.concurrent.CopyOnWriteArrayList
 
-abstract class ValueRegistry<T>(owner: Any, name: String, private val registry: Registry<T>, private val multiSelection: Boolean, vararg keys: T, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableRegistry::class.java, manage) {
+abstract class ValueRegistry<T>(
+    owner: Any,
+    name: String,
+    private val registry: Registry<T>,
+    private val multiSelection: Boolean,
+    vararg keys: T,
+    visible: Boolean = true,
+    isEnabled: () -> Boolean = { true },
+    manage: Boolean = true
+) : Value(owner, name, visible, isEnabled, ElementWidthValueComponentFocusableRegistry::class.java, manage) {
 
     private val list = CopyOnWriteArrayList<T>()
 

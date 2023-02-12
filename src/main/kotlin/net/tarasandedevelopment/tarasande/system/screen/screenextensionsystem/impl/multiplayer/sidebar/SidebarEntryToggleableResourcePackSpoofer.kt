@@ -1,12 +1,9 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.sidebar
 
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ConfirmScreen
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.packet.c2s.play.ResourcePackStatusC2SPacket
 import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket
-import net.minecraft.text.MutableText
-import net.minecraft.text.TranslatableTextContent
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.injection.accessor.IConfirmScreen
 import net.tarasandedevelopment.tarasande.injection.accessor.IServerResourcePackProvider
@@ -14,7 +11,6 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import su.mandora.event.EventDispatcher
@@ -23,15 +19,9 @@ class SidebarEntryToggleableResourcePackSpoofer : SidebarEntryToggleable("Resour
 
     private val ignoreInvalidProtocol = ValueMode(this, "Ignore invalid protocol", false, "Ignore", "Ignore and send response")
     private val mode = ValueMode(this, "Mode", false, "Accept", "Decline")
-    private val sendHTTPRequest = object : ValueBoolean(this, "Send HTTP request", true) {
-        override fun isEnabled() = mode.isSelected(0)
-    }
-    private val spoofHTTPRequestResponse = object : ValueBoolean(this, "Spoof HTTP request response", false) {
-        override fun isEnabled() = sendHTTPRequest.value
-    }
-    private val acceptMode = object : ValueMode(this, "Accept mode", false, "Successful loaded", "Fail download") {
-        override fun isEnabled() = !sendHTTPRequest.isEnabled() || spoofHTTPRequestResponse.value
-    }
+    private val sendHTTPRequest = ValueBoolean(this, "Send HTTP request", true, isEnabled = { mode.isSelected(0) })
+    private val spoofHTTPRequestResponse = ValueBoolean(this, "Spoof HTTP request response", false, isEnabled = { sendHTTPRequest.value })
+    private val acceptMode = ValueMode(this, "Accept mode", false, "Successful loaded", "Fail download", isEnabled = { !sendHTTPRequest.isEnabled() || spoofHTTPRequestResponse.value })
 
     private var lastUrl: String? = null
     private var lastSHA1: String? = null

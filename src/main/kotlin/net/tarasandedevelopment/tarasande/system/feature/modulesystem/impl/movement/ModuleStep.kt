@@ -22,9 +22,7 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
     private val predictedMotionLimit = ValueNumber(this, "Predicted motion limit", 1.0, 2.0, 5.0, 1.0)
 
     private val slowdown = ValueNumber(this, "Slowdown", 0.0, 1.0, 1.0, 0.1)
-    private val slowdownTicks = object : ValueNumber(this, "Slowdown ticks", 1.0, 1.0, 10.0, 1.0) {
-        override fun isEnabled() = slowdown.value < 1.0
-    }
+    private val slowdownTicks = ValueNumber(this, "Slowdown ticks", 1.0, 1.0, 10.0, 1.0, isEnabled = { slowdown.value < 1.0 })
     private val onGroundTicks = ValueNumber(this, "On-ground ticks", 0.0, 0.0, 10.0, 1.0)
 
     private var stepTick = 0

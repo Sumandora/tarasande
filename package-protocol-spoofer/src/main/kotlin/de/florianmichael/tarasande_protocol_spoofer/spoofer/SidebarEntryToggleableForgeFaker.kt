@@ -32,9 +32,7 @@ class SidebarEntryToggleableForgeFaker : SidebarEntryToggleable("Forge faker", "
 
     val useFML1Cache = ValueBoolean(this, "Use FML1 cache", true)
     val autoDetectFmlHandlerWithViaVersion = ValueBoolean(this, "Auto detect fml handler with ViaVersion", true)
-    val fmlHandler = object : ValueMode(this, "FML Handler", false, "FML1", "Modern v2", "Modern v3", "Modern v4") {
-        override fun isEnabled() = !autoDetectFmlHandlerWithViaVersion.value
-    }
+    val fmlHandler = ValueMode(this, "FML Handler", false, "FML1", "Modern v2", "Modern v3", "Modern v4", isEnabled = { !autoDetectFmlHandlerWithViaVersion.value })
     private val alwaysShowInformation = ValueBoolean(this, "Always show information", false)
 
     init {

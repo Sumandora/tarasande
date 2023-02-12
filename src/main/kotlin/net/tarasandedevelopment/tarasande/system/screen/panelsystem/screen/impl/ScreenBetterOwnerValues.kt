@@ -24,8 +24,7 @@ class ScreenBetterOwnerValues(title: String, parent: Screen, val owner: Any) : S
         this.addDrawableChild(ClickableWidgetPanel(object : PanelElements<ElementWidthValueComponent<*>>(this.title.string, 300.0, 0.0) {
 
             init {
-                for (it in ManagerValue.getValues(owner))
-                    elementList.add(it.createValueComponent())
+                elementList.addAll(ManagerValue.getValues(owner).mapNotNull { it.createValueComponent() })
             }
 
             override fun init() {

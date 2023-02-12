@@ -11,7 +11,16 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
 
-open class ValueBind(owner: Any, name: String, type: Type, button: Int, val mouse: Boolean = true, manage: Boolean = true) : Value(owner, name, ElementWidthValueComponentFocusableBind::class.java, manage) {
+open class ValueBind(
+    owner: Any,
+    name: String,
+    type: Type,
+    button: Int,
+    val mouse: Boolean = true,
+    visible: Boolean = true,
+    isEnabled: () -> Boolean = { true },
+    manage: Boolean = true
+) : Value(owner, name, visible, isEnabled, ElementWidthValueComponentFocusableBind::class.java, manage) {
 
     var type = type
         set(value) {

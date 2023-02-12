@@ -13,12 +13,8 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 class ModuleAutoLog : Module("Auto log", "Disconnects when death is imminent", ModuleCategory.COMBAT) {
 
     private val disconnectWhen = ValueMode(this, "Triggers", true, "Low health", "Fall distance", "Targeted entity")
-    private val health = object : ValueNumber(this, "Health", 0.0, 0.4, 1.0, 0.01) {
-        override fun isEnabled() = disconnectWhen.isSelected(0)
-    }
-    private val fallDistance = object : ValueNumber(this, "Fall distance", 0.0, 3.0, 10.0, 0.1) {
-        override fun isEnabled() = disconnectWhen.isSelected(1)
-    }
+    private val health = ValueNumber(this, "Health", 0.0, 0.4, 1.0, 0.01, isEnabled = { disconnectWhen.isSelected(0) })
+    private val fallDistance = ValueNumber(this, "Fall distance", 0.0, 3.0, 10.0, 0.1, isEnabled = { disconnectWhen.isSelected(1) })
 
     init {
         registerEvent(EventPacket::class.java) { event ->

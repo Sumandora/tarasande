@@ -185,7 +185,8 @@ object ManagerModule : Manager<Module>() {
 open class Module(val name: String, val description: String, val category: String) {
     private val eventListeners = HashSet<Triple<Class<Event>, Int, Consumer<Event>>>()
 
-    var enabled = object : ValueBoolean(ManagerModule, name, false) {
+    @Suppress("LeakingThis")
+    var enabled = object : ValueBoolean(this, "Enabled", false, visible = false) {
         override fun onChange(oldValue: Boolean?, newValue: Boolean) {
             if (oldValue == null)
                 return

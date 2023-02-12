@@ -23,12 +23,8 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a
 
     val mode = ValueMode(this, "Mode", true, "Blocks", "Entities")
 
-    val useAxeToCounterBlocking = object : ValueBoolean(this, "Use axe to counter blocking", false) {
-        override fun isEnabled() = mode.isSelected(1)
-    }
-    private val despiseAxes = object : ValueBoolean(this, "Despise axes", false) {
-        override fun isEnabled() = mode.isSelected(1)
-    }
+    val useAxeToCounterBlocking = ValueBoolean(this, "Use axe to counter blocking", false, isEnabled = { mode.isSelected(1) })
+    private val despiseAxes = ValueBoolean(this, "Despise axes", false, isEnabled = { mode.isSelected(1) })
 
     init {
         registerEvent(EventUpdate::class.java) { event ->

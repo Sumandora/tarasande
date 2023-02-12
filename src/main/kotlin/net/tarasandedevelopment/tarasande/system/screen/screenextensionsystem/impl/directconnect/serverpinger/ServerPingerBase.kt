@@ -46,12 +46,8 @@ class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvid
     }, true)
 
     private val autoPing = ValueBoolean(parent, "Auto ping", false)
-    val delay = object : ValueNumber(parent, "Delay", 100.0, 5000.0, 10000.0, 100.0) {
-        override fun isEnabled() = autoPing.value
-    }
-    private val showProgress = object : ValueBoolean(parent, "Show progress", true) {
-        override fun isEnabled() = autoPing.value
-    }
+    val delay = ValueNumber(parent, "Delay", 100.0, 5000.0, 10000.0, 100.0, isEnabled = { autoPing.value })
+    private val showProgress = ValueBoolean(parent, "Show progress", true, isEnabled = { autoPing.value })
 
     init {
         EventDispatcher.add(EventTick::class.java) {

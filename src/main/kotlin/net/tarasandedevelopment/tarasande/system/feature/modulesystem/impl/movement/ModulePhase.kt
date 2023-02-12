@@ -17,12 +17,8 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 class ModulePhase : Module("Phase", "Allows you to move through blocks", ModuleCategory.MOVEMENT) {
 
     private val mode = ValueMode(this, "Mode", false, "Skip", "Disable collision")
-    private val distance = object : ValueNumber(this, "Distance", 0.0, 1.0, 2.0, 0.1) {
-        override fun isEnabled() = mode.isSelected(0)
-    }
-    private val fallThrough = object : ValueBoolean(this, "Fall through", false) {
-        override fun isEnabled() = mode.isSelected(1)
-    }
+    private val distance = ValueNumber(this, "Distance", 0.0, 1.0, 2.0, 0.1, isEnabled = { mode.isSelected(0) })
+    private val fallThrough = ValueBoolean(this, "Fall through", false, isEnabled = { mode.isSelected(1) })
 
     init {
         registerEvent(EventUpdate::class.java) { event ->

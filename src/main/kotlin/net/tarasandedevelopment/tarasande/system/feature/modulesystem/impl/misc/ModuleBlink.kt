@@ -39,30 +39,20 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     private val mode = object : ValueMode(this, "Mode", false, "State-dependent", "Pulse blink", "Latency", "Automatic") {
         override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) = onDisable()
     }
-    private val pulseDelay = object : ValueNumber(this, "Pulse delay", 0.0, 500.0, 1000.0, 10.0) {
-        override fun isEnabled() = mode.isSelected(1) || mode.isSelected(3)
+    private val pulseDelay = object : ValueNumber(this, "Pulse delay", 0.0, 500.0, 1000.0, 10.0, isEnabled = { mode.isSelected(1) || mode.isSelected(3) }) {
         override fun onChange(oldValue: Double?, newValue: Double) {
             onDisable()
         }
     }
-    private val latency = object : ValueNumber(this, "Latency", 0.0, 500.0, 1000.0, 10.0) {
-        override fun isEnabled() = mode.isSelected(2)
+    private val latency = object : ValueNumber(this, "Latency", 0.0, 500.0, 1000.0, 10.0, isEnabled = { mode.isSelected(2) }) {
         override fun onChange(oldValue: Double?, newValue: Double) {
             onDisable()
         }
     }
-    private val reach = object : ValueNumber(this, "Reach", 0.1, 3.0, 6.0, 0.1) {
-        override fun isEnabled() = mode.isSelected(3)
-    }
-    private val cancelKey = object : ValueBind(this, "Cancel key", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
-        override fun isEnabled() = mode.isSelected(0) && affectedPackets.isSelected(0)
-    }
-    private val restrictPackets = object : ValueMode(this, "Restrict packets", true, "Keep alive", "Ping") {
-        override fun isEnabled() = affectedPackets.anySelected()
-    }
-    private val hitBoxColor = object : ValueColor(this, "Hit box color", 0.0, 1.0, 1.0, 1.0) {
-        override fun isEnabled() = affectedPackets.isSelected(1)
-    }
+    private val reach = ValueNumber(this, "Reach", 0.1, 3.0, 6.0, 0.1, isEnabled = { mode.isSelected(3) })
+    private val cancelKey = ValueBind(this, "Cancel key", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN, isEnabled = { mode.isSelected(0) && affectedPackets.isSelected(0) })
+    private val restrictPackets = ValueMode(this, "Restrict packets", true, "Keep alive", "Ping", isEnabled =  { affectedPackets.anySelected() })
+    private val hitBoxColor = ValueColor(this, "Hit box color", 0.0, 1.0, 1.0, 1.0, isEnabled = { affectedPackets.isSelected(1) })
     private val ignoreChunks = ValueBoolean(this, "Ignore chunks", true)
 
     private var packets = CopyOnWriteArrayList<Triple<Packet<*>, EventPacket.Type, Long>>()

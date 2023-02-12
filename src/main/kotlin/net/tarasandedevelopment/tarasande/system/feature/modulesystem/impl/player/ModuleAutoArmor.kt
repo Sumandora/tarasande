@@ -23,9 +23,7 @@ import kotlin.math.sqrt
 class ModuleAutoArmor : Module("Auto armor", "Equips armor if none is equipped", ModuleCategory.PLAYER) {
     private val openInventory = ValueBoolean(this, "Open inventory", true)
     private val delay = ValueNumberRange(this, "Delay", 0.0, 100.0, 200.0, 500.0, 1.0)
-    private val openDelay = object : ValueNumber(this, "Open delay", 0.0, 100.0, 500.0, 1.0) {
-        override fun isEnabled() = openInventory.value
-    }
+    private val openDelay = ValueNumber(this, "Open delay", 0.0, 100.0, 500.0, 1.0, isEnabled = { openInventory.value })
     private val randomize = ValueNumber(this, "Randomize", 0.0, 0.0, 30.0, 1.0)
 
     private val timeUtil = TimeUtil()

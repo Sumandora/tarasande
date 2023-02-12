@@ -33,15 +33,13 @@ object TargetingValues {
                 }
             }
         }
-        object : ValueBoolean(this, "Don't attack riding entity", false) {
+        object : ValueBoolean(this, "Don't attack riding entity", false, isEnabled = { entities.anySelected() }) {
             init {
                 EventDispatcher.add(EventIsEntityAttackable::class.java) {
                     if (value)
                         it.attackable = it.attackable && it.entity != mc.player?.vehicle
                 }
             }
-
-            override fun isEnabled() = entities.anySelected()
         }
         object : ValueBoolean(this, "Prevent hitting of invalid entities", false) {
             init {

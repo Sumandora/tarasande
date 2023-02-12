@@ -24,12 +24,8 @@ import kotlin.math.abs
 class ModuleAutoFish : Module("Auto fish", "Automates fishing", ModuleCategory.PLAYER) {
 
     private val mode = ValueMode(this, "Mode", false, "Data tracker", "Bubbles")
-    private val sensitiveDistance = object : ValueNumber(this, "Distance", 0.0, 1.0, 3.0, 0.1) {
-        override fun isEnabled(): Boolean = mode.isSelected(1)
-    }
-    private val timeToWait = object : ValueNumber(this, "Time to wait", 0.0, 100.0, 1000.0, 50.0) {
-        override fun isEnabled(): Boolean = mode.isSelected(1)
-    }
+    private val sensitiveDistance = ValueNumber(this, "Distance", 0.0, 1.0, 3.0, 0.1, isEnabled = { mode.isSelected(1) })
+    private val timeToWait = ValueNumber(this, "Time to wait", 0.0, 100.0, 1000.0, 50.0, isEnabled = { mode.isSelected(1) })
 
     private var blocked = false
     private var hasCaught = false

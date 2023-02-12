@@ -11,9 +11,7 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 
 class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MOVEMENT) {
 
-    val allowBackwards = object : ValueBoolean(this, "Allow backwards", false) {
-        override fun isEnabled() = !Rotations.correctMovement.isSelected(1)
-    }
+    val allowBackwards = ValueBoolean(this, "Allow backwards", false, isEnabled = { !Rotations.correctMovement.isSelected(1) })
 
     init {
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->

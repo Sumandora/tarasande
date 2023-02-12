@@ -12,9 +12,7 @@ import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 class ModuleParkour : Module("Parkour", "Jumps when falling off ledges", ModuleCategory.MOVEMENT) {
 
     private val detectionMethod = ValueMode(this, "Detection method", false, "Extrapolation", "Ground")
-    private val extrapolation = object : ValueNumber(this, "Extrapolation", 0.0, 1.0, 10.0, 1.0) {
-        override fun isEnabled() = detectionMethod.isSelected(0)
-    }
+    private val extrapolation = ValueNumber(this, "Extrapolation", 0.0, 1.0, 10.0, 1.0, isEnabled = { detectionMethod.isSelected(0) })
 
     private var wasOnGround = false
 

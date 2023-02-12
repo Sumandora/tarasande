@@ -22,27 +22,13 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
 
     private val delay = ValueNumber(this, "Delay", 0.0, 2000.0, 10000.0, 500.0)
     private val noArbitraryTexts = ValueBoolean(this, "No arbitrary texts", false)
-    private val garbage = object : ValueBoolean(this, "Garbage", false) {
-        override fun isEnabled() = !noArbitraryTexts.value
-    }
-    private val amount = object : ValueNumber(this, "Amount", 0.0, 5.0, 10.0, 1.0) {
-        override fun isEnabled() = !noArbitraryTexts.value && garbage.value
-    }
-    private val case = object : ValueMode(this, "Case", false, "Uppercase", "Random", "Lowercase") {
-        override fun isEnabled() = !noArbitraryTexts.value && garbage.value
-    }
-    private val position = object : ValueMode(this, "Position", true, "Before", "After") {
-        override fun isEnabled() = !noArbitraryTexts.value && garbage.value
-    }
-    private val mode = object : ValueMode(this, "Mode", false, "Custom message", "Position broadcast") {
-        override fun isEnabled() = !noArbitraryTexts.value
-    }
-    private val message = object : ValueText(this, "Message", "") {
-        override fun isEnabled() = !noArbitraryTexts.value && mode.isSelected(0)
-    }
-    private val target = object : ValueText(this, "Target", "") {
-        override fun isEnabled() = !noArbitraryTexts.value && mode.isSelected(1)
-    }
+    private val garbage = ValueBoolean(this, "Garbage", false, isEnabled = { !noArbitraryTexts.value })
+    private val amount = ValueNumber(this, "Amount", 0.0, 5.0, 10.0, 1.0, isEnabled = { !noArbitraryTexts.value && garbage.value })
+    private val case = ValueMode(this, "Case", false, "Uppercase", "Random", "Lowercase", isEnabled = { !noArbitraryTexts.value && garbage.value })
+    private val position = ValueMode(this, "Position", true, "Before", "After", isEnabled = { !noArbitraryTexts.value && garbage.value })
+    private val mode = ValueMode(this, "Mode", false, "Custom message", "Position broadcast", isEnabled = { !noArbitraryTexts.value })
+    private val message = ValueText(this, "Message", "", isEnabled = { !noArbitraryTexts.value && mode.isSelected(0) })
+    private val target = ValueText(this, "Target", "", isEnabled = { !noArbitraryTexts.value && mode.isSelected(1) })
 
     private val timeUtil = TimeUtil()
     private val priorityMessages = ArrayList<String>()

@@ -33,9 +33,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
     init {
         ValueButtonOwnerValues(this, "Entity colors", entityColor)
-        object : ValueButtonOwnerValues(this, "2D ESP values", ManagerESP) {
-            override fun isEnabled() = mode.isSelected(1)
-        }
+        ValueButtonOwnerValues(this, "2D ESP values", ManagerESP, isEnabled = { mode.isSelected(1) })
     }
 
     fun shouldRender(entity: Entity) =

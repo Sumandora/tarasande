@@ -21,21 +21,11 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
 
     private val packets = ValueMode(this, "Packets", true, "Velocity", "Explosion")
     private val mode = ValueMode(this, "Mode", false, "Cancel", "Custom", "Jump")
-    private val horizontal = object : ValueNumber(this, "Horizontal", -1.0, 0.0, 1.0, 0.01) {
-        override fun isEnabled() = mode.isSelected(1)
-    }
-    private val vertical = object : ValueNumber(this, "Vertical", 0.0, 0.0, 1.0, 0.01) {
-        override fun isEnabled() = mode.isSelected(1)
-    }
-    private val delay = object : ValueNumber(this, "Delay", 0.0, 0.0, 20.0, 1.0) {
-        override fun isEnabled() = mode.isSelected(1)
-    }
-    private val addition = object : ValueMode(this, "Addition", false, "Never", "Depending on packet", "Always") {
-        override fun isEnabled() = mode.isSelected(1) && delay.value > 0.0
-    }
-    private val changeDirection = object : ValueBoolean(this, "Change direction", false) {
-        override fun isEnabled() = mode.isSelected(1)
-    }
+    private val horizontal = ValueNumber(this, "Horizontal", -1.0, 0.0, 1.0, 0.01, isEnabled = { mode.isSelected(1) })
+    private val vertical = ValueNumber(this, "Vertical", 0.0, 0.0, 1.0, 0.01, isEnabled = { mode.isSelected(1) })
+    private val delay = ValueNumber(this, "Delay", 0.0, 0.0, 20.0, 1.0, isEnabled = { mode.isSelected(1) })
+    private val addition = ValueMode(this, "Addition", false, "Never", "Depending on packet", "Always", isEnabled = { mode.isSelected(1) && delay.value > 0.0 })
+    private val changeDirection = ValueBoolean(this, "Change direction", false, isEnabled = { mode.isSelected(1) })
     private val ignoreTinyVelocity = ValueNumber(this, "Ignore tiny velocity", 0.0, 0.1, 0.5, 0.01)
     private val chance = ValueNumber(this, "Chance", 0.0, 75.0, 100.0, 1.0)
 

@@ -10,7 +10,5 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movem
 lateinit var cancelOpenPacket: ValueBoolean
 
 fun modifyModuleInventoryMove() {
-    cancelOpenPacket = object : ValueBoolean(ManagerModule.get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolVersion.v1_11_1.andOlder() + ")", false) {
-        override fun isEnabled() = ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_11_1)
-    }
+    cancelOpenPacket = ValueBoolean(ManagerModule.get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolVersion.v1_11_1.andOlder() + ")", false, isEnabled = { ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_11_1) })
 }

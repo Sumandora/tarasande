@@ -7,8 +7,6 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelEle
 
 class PanelElementsClientValues(clientValues: ClientValues) : PanelElements<ElementWidthValueComponent<*>>("Client values", 150.0, 100.0) {
     init {
-        for (it in ManagerValue.getValues(clientValues)) {
-            elementList.add(it.createValueComponent())
-        }
+        elementList.addAll(ManagerValue.getValues(clientValues).mapNotNull { it.createValueComponent() })
     }
 }

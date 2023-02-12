@@ -16,18 +16,10 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", ModuleCategory.PLAYER) {
 
     val mode = ValueMode(this, "Mode", false, "Ground spoof", "Re-Ground", "Drag down", "Sneak-jump")
-    val groundSpoofMode = object : ValueMode(this, "Ground spoof mode", false, "Force on-ground", "Force off-ground") {
-        override fun isEnabled() = mode.isSelected(0)
-    }
-    private val fallDistance = object : ValueNumber(this, "Fall distance", 0.0, 3.0, 10.0, 0.1) {
-        override fun isEnabled() = !mode.isSelected(2) && !(mode.isSelected(0) && groundSpoofMode.isSelected(1))
-    }
-    private val motion = object : ValueNumber(this, "Motion", 1.0, 50.0, 50.0, 1.0) {
-        override fun isEnabled() = mode.isSelected(2)
-    }
-    private val resetFallDistance = object : ValueBoolean(this, "Reset fall distance", true) {
-        override fun isEnabled() = (mode.isSelected(0) && groundSpoofMode.isSelected(0)) || mode.isSelected(1)
-    }
+    val groundSpoofMode = ValueMode(this, "Ground spoof mode", false, "Force on-ground", "Force off-ground", isEnabled = { mode.isSelected(0) })
+    private val fallDistance = ValueNumber(this, "Fall distance", 0.0, 3.0, 10.0, 0.1, isEnabled = { !mode.isSelected(2) && !(mode.isSelected(0) && groundSpoofMode.isSelected(1)) })
+    private val motion = ValueNumber(this, "Motion", 1.0, 50.0, 50.0, 1.0, isEnabled = { mode.isSelected(2) })
+    private val resetFallDistance = ValueBoolean(this, "Reset fall distance", true, isEnabled = { (mode.isSelected(0) && groundSpoofMode.isSelected(0)) || mode.isSelected(1) })
 
     private var prevFallDistance = 0.0F
 

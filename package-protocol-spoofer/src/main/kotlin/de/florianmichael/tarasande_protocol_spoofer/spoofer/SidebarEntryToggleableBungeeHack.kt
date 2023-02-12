@@ -13,9 +13,7 @@ class SidebarEntryToggleableBungeeHack : SidebarEntryToggleable("Bungee hack", "
 
     private val endIP = ValueText(this, "End IP", "127.0.0.1")
     private val customUUID = ValueBoolean(this, "Custom UUID", false)
-    private val uuid = object : ValueText(this, "UUID", UUID.randomUUID().toString()) {
-        override fun isEnabled() = customUUID.value
-    }
+    private val uuid = ValueText(this, "UUID", UUID.randomUUID().toString(), isEnabled = { customUUID.value })
 
     private val zero = "\u0000"
     private fun stripID(input: String) = input.replace("-", "")
