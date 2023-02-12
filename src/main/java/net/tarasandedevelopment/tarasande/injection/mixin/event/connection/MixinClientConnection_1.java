@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event.connection;
 
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
+import net.tarasandedevelopment.tarasande.TarasandeMainKt;
 import net.tarasandedevelopment.tarasande.util.connection.MessageToMessageDecoderEvent;
 import net.tarasandedevelopment.tarasande.util.connection.MessageToMessageEncoderEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,8 +17,8 @@ public class MixinClientConnection_1 {
     public void hookEventEncoderAndEventDecoder(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
             channel.pipeline()
-                    .addFirst("tarasande-encoder", new MessageToMessageEncoderEvent())
-                    .addFirst("tarasande-decoder", new MessageToMessageDecoderEvent());
+                    .addFirst(TarasandeMainKt.TARASANDE_NAME + "-encoder", new MessageToMessageEncoderEvent())
+                    .addFirst(TarasandeMainKt.TARASANDE_NAME + "-decoder", new MessageToMessageDecoderEvent());
         }
     }
 }

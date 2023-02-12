@@ -1,6 +1,7 @@
 package de.florianmichael.tarasande_rejected_features.information
 
 import net.fabricmc.loader.api.FabricLoader
+import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.ManagerGraph
@@ -21,13 +22,13 @@ class InformationFeaturesGraphs : Information("Features", "Graphs") {
     override fun getMessage() = ManagerGraph.list.size.toString()
 }
 
-class InformationFeaturesPackagesForTarasande : Information("Features", "Packages for tarasande") {
+class InformationFeaturesPackagesForTarasande : Information("Features", "Packages for $TARASANDE_NAME") {
 
     private val packages = ArrayList<String>()
 
     init {
         FabricLoader.getInstance().allMods.forEach {
-            if (it.metadata.dependencies.any { dependency -> dependency.modId == "tarasande" }) {
+            if (it.metadata.dependencies.any { dependency -> dependency.modId == TARASANDE_NAME }) {
                 packages.add(it.metadata.name)
             }
         }

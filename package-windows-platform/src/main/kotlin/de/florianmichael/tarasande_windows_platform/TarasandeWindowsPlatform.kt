@@ -1,19 +1,20 @@
 package de.florianmichael.tarasande_windows_platform
 
+import de.florianmichael.tarasande_windows_platform.information.InformationWindowsSpotify
 import net.fabricmc.api.ClientModInitializer
 import net.minecraft.util.Util
+import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.event.EventShutdown
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.sidebar.SidebarEntryProxy
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntry
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.connection.ProxyType
-import de.florianmichael.tarasande_windows_platform.information.InformationWindowsSpotify
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.sidebar.SidebarEntryProxy
 import org.spongepowered.include.com.google.common.io.Files
 import su.mandora.event.EventDispatcher
 import java.io.File
@@ -22,12 +23,12 @@ import java.util.logging.Logger
 
 const val NETWORK = "Network"
 class TarasandeWindowsPlatform : ClientModInitializer {
-    private val logger = Logger.getLogger("tarasande-windows-platform")!!
+    private val logger = Logger.getLogger("$TARASANDE_NAME-windows-platform")!!
 
     override fun onInitializeClient() {
         val operatingSystem = Util.getOperatingSystem()
         if(operatingSystem != Util.OperatingSystem.WINDOWS) {
-            logger.warning("tarasande Windows Platform is not designed to run on '" + operatingSystem.getName() + "' systems")
+            logger.warning("$TARASANDE_NAME Windows Platform is not designed to run on '" + operatingSystem.getName() + "' systems")
             return
         }
         EventDispatcher.add(EventSuccessfulLoad::class.java) {

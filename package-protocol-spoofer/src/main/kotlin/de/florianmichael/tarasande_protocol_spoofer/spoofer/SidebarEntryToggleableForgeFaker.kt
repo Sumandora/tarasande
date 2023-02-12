@@ -14,7 +14,7 @@ import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventPacket
 import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
@@ -74,7 +74,7 @@ class SidebarEntryToggleableForgeFaker : SidebarEntryToggleable("Forge faker", "
                         val text = FontWrapper.trimToWidth("Forge/FML Server", it.x)
                         val endWidth = FontWrapper.getWidth(text) + 4
 
-                        FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, ClientValues.accentColor.getColor().rgb, offset = 0.5F)
+                        FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
 
                         if (RenderUtil.isHovered(it.mouseX.toDouble(), it.mouseY.toDouble(), it.x - endWidth.toDouble(), it.y + yPos.toDouble(), it.x - 4.0, it.y + yPos + fontHeight.toDouble())) {
                             val tooltip = ArrayList<Text>()

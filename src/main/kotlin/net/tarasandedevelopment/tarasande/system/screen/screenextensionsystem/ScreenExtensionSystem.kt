@@ -8,7 +8,6 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.button.
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.*
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.ScreenExtensionButtonListDirectConnect
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.ScreenExtensionDirectConnectScreen
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import su.mandora.event.EventDispatcher
 
@@ -17,7 +16,7 @@ object ManagerScreenExtension : Manager<ScreenExtension<*>>() {
     init {
         add(
             ScreenExtensionSidebarMultiplayerScreen(),
-            ScreenExtensionButtonListMultiplayerScreen(),
+            ScreenExtensionButtonListTitleScreen(),
             ScreenExtensionDownloadingTerrainScreen(),
             ScreenExtensionButtonListDeathScreen(),
             ScreenExtensionButtonListPackScreen(),

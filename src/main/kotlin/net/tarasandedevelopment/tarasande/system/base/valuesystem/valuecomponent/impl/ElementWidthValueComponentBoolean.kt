@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl
 
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
@@ -23,8 +23,8 @@ class ElementWidthValueComponentBoolean(value: Value) : ElementWidthValueCompone
         val expandedAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0 /* length in ms */, 1.0)
         val fade = (if (value.value) expandedAnimation else 1.0 - expandedAnimation)
 
-        var color = RenderUtil.colorInterpolate(Color.white, ClientValues.accentColor.getColor(), fade)
-        var colorInverted = RenderUtil.colorInterpolate(ClientValues.accentColor.getColor(), Color.white, fade)
+        var color = RenderUtil.colorInterpolate(Color.white, TarasandeValues.accentColor.getColor(), fade)
+        var colorInverted = RenderUtil.colorInterpolate(TarasandeValues.accentColor.getColor(), Color.white, fade)
 
         if (!value.isEnabled()) {
             color = color.darker().darker()

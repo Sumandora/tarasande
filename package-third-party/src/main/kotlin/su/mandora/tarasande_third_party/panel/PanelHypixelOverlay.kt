@@ -4,7 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mojang.authlib.GameProfile
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.gson
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
@@ -62,7 +62,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
     }
 
     private fun drawString(matrices: MatrixStack, str: String, x: Double, y: Double) {
-        val accent = ClientValues.accentColor.getColor()
+        val accent = TarasandeValues.accentColor.getColor()
         val width = FontWrapper.getWidth(str)
         val titleBarHeight = titleBarHeight
         when (alignment) {

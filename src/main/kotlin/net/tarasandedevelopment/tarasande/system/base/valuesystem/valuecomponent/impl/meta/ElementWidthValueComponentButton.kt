@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.meta
 
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
@@ -30,7 +30,7 @@ open class ElementWidthValueComponentButton(value: Value) : ElementWidthValueCom
                         getHeight() / 2.0 - FontWrapper.fontHeight() / 2,
                         width,
                         getHeight() / 2.0 + FontWrapper.fontHeight() / 2))
-                    ClientValues.accentColor.getColor().rgb
+                    TarasandeValues.accentColor.getColor().rgb
                 else
                     -1
             else

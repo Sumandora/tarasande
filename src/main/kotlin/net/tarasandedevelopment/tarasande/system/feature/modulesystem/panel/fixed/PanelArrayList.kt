@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import de.florianmichael.rmath.EzEasing
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
@@ -45,7 +45,7 @@ class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array Lis
         enabledModules.sortedBy { FontWrapper.getWidth(it.name) }.reversed().forEach {
             val animation = animations[it]!!
             if (animation > speedIn.min) { // hack
-                val accent = ClientValues.accentColor.getColor()
+                val accent = TarasandeValues.accentColor.getColor()
                 val color = accent.withAlpha((animation * 255).toInt())
                 RenderSystem.enableBlend()
                 val animatedPosition = easing.ease(animation.toFloat())

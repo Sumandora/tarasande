@@ -10,7 +10,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.tarasandedevelopment.tarasande.event.EventChangeScreen
 import net.tarasandedevelopment.tarasande.event.EventUpdate
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
@@ -86,7 +86,7 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
             }
         }
 
-        val color = ClientValues.accentColor.getColor()
+        val color = TarasandeValues.accentColor.getColor()
 
         val strength = round(animation * ManagerBlur.strength.value).toInt()
         if (strength > 0) {

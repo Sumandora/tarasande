@@ -10,6 +10,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.util.Identifier
+import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
@@ -19,7 +20,7 @@ import su.mandora.event.EventDispatcher
 class TarasandeProtocolSpoofer : ClientModInitializer {
 
     companion object {
-        val tarasandeProtocolHackLoaded = FabricLoader.getInstance().isModLoaded("tarasande-protocol-hack")
+        val tarasandeProtocolHackLoaded = FabricLoader.getInstance().isModLoaded("$TARASANDE_NAME-protocol-hack")
 
         fun enforcePluginMessage(channel: String, value: ByteArray, remap: Boolean = false) {
             val modernPayload = CustomPayloadC2SPacket(Identifier(if (remap) channel.lowercase().replace("|", ":") else channel), PacketByteBuf(Unpooled.buffer()).writeByteArray(value))

@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponen
 
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.injection.accessor.ITextFieldWidget
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
@@ -48,7 +48,7 @@ class ElementWidthValueComponentFocusableTextList(value: Value) : ElementWidthVa
                             (FontWrapper.fontHeight() / 2.0F * (index + 0.5F)).toDouble(),
                             width,
                             (FontWrapper.fontHeight() / 2.0F * ((index + 1) + 0.5F)).toDouble()))
-                        ClientValues.accentColor.getColor().rgb
+                        TarasandeValues.accentColor.getColor().rgb
                     else
                         -1
                 else
@@ -62,7 +62,7 @@ class ElementWidthValueComponentFocusableTextList(value: Value) : ElementWidthVa
         matrices.push()
         matrices.translate(width - 40, FontWrapper.fontHeight() / 2.0F * (entries.size + 0.5F) + 2.0, 0.0)
         matrices.scale(0.5F, 0.5F, 1.0F)
-        if (textFieldWidget.isFocused) textFieldAccessor.tarasande_setColor(ClientValues.accentColor.getColor())
+        if (textFieldWidget.isFocused) textFieldAccessor.tarasande_setColor(TarasandeValues.accentColor.getColor())
         if (!value.isEnabled()) textFieldAccessor.tarasande_setColor(Color.white.darker().darker())
         textFieldWidget.render(matrices, mouseX, mouseY, delta)
         textFieldAccessor.tarasande_setColor(null)

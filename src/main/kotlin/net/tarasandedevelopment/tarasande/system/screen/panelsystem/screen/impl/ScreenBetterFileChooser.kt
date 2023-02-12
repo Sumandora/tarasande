@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl
 
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.Panel
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
@@ -78,7 +78,7 @@ class ScreenBetterFileChooser(
                     if (((y + height + scrollOffset)) > y && (height + scrollOffset) < panelHeight) {
                         var color = Color.white
                         if (file.isDirectory) {
-                            color = ClientValues.accentColor.getColor()
+                            color = TarasandeValues.accentColor.getColor()
                         }
                         if (file.isHidden) {
                             color = color.darker().darker()

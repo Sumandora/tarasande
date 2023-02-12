@@ -9,7 +9,7 @@ import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventRender2D
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.event.EventTick
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
@@ -196,7 +196,7 @@ open class Panel(
                 RenderUtil.fill(matrices, x, y, x + panelWidth, y + effectivePanelHeight(), -1)
                 GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, previousFramebuffer)
 
-                val accent = ClientValues.accentColor.getColor()
+                val accent = TarasandeValues.accentColor.getColor()
                 RenderUtil.fill(matrices, x, y + titleBarHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 0.7).rgb)
                 matrices.pop()
             }
@@ -244,7 +244,7 @@ open class Panel(
     }
 
     open fun renderTitleBar(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, ClientValues.accentColor.getColor().rgb)
+        RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeValues.accentColor.getColor().rgb)
         when (alignment) {
             Alignment.LEFT -> FontWrapper.textShadow(matrices, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
             Alignment.MIDDLE -> FontWrapper.textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)

@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.feature.friend.panel
 import com.mojang.authlib.GameProfile
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.Vec2f
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.injection.accessor.ITextFieldWidget
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl.ElementWidthValueComponentFocusableText
@@ -58,8 +58,8 @@ class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementW
 
         val toggleAnimation = min((System.currentTimeMillis() - friendTime) / 100.0, 1.0)
         val radius = if (friended) toggleAnimation else 1.0 - toggleAnimation
-        RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, ClientValues.accentColor.getColor().rgb)
-        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0F, RenderUtil.colorInterpolate(ClientValues.accentColor.getColor(), Color.white, radius).rgb)
+        RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeValues.accentColor.getColor().rgb)
+        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0F, RenderUtil.colorInterpolate(TarasandeValues.accentColor.getColor(), Color.white, radius).rgb)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

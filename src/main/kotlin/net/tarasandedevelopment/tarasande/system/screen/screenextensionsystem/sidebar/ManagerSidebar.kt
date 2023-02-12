@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar
 
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
-import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.AccessibilityValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.impl.AccessibilityValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -95,7 +95,7 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
 
                 override fun getColor(hovered: Boolean): Color {
                     if (isSelected(it)) {
-                        return ClientValues.accentColor.getColor()
+                        return TarasandeValues.accentColor.getColor()
                     }
                     return super.getColor(hovered)
                 }
@@ -122,7 +122,7 @@ open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry
                 }
             }
 
-            override fun getColor(hovered: Boolean) = (if (enabled.value) Color.green else Color.red).let { if (hovered) RenderUtil.colorInterpolate(it, ClientValues.accentColor.getColor(), 0.4) else it }
+            override fun getColor(hovered: Boolean) = (if (enabled.value) Color.green else Color.red).let { if (hovered) RenderUtil.colorInterpolate(it, TarasandeValues.accentColor.getColor(), 0.4) else it }
         }.createValueComponent()!!)
     }
 }

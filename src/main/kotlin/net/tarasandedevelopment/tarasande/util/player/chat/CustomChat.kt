@@ -4,7 +4,7 @@ import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.text.TextColor
 import net.tarasandedevelopment.tarasande.TARASANDE_NAME
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.mc
 
 object CustomChat {
@@ -18,6 +18,6 @@ object CustomChat {
     }
 
     private fun buildPrefix(): MutableText {
-        return Text.literal(TARASANDE_NAME).styled { it.withColor(TextColor.fromRgb(ClientValues.accentColor.getColor().rgb)) }.append(" ")
+        return Text.literal(TARASANDE_NAME).styled { it.withColor(TextColor.fromRgb(TarasandeValues.accentColor.getColor().rgb)) }.append(" ")
     }
 }

@@ -5,7 +5,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.Value
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
@@ -82,7 +82,7 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
         val maxSliderPos = MathHelper.clamp((this.value.maxValue - this.value.min) / (this.value.max - this.value.min), 0.0, 1.0)
 
         var white = Color.white
-        var accentColor = ClientValues.accentColor.getColor()
+        var accentColor = TarasandeValues.accentColor.getColor()
         var color = accentColor.withAlpha(255 / 4)
         var otherColor = Color(255, 255, 255, 255 / 4)
 

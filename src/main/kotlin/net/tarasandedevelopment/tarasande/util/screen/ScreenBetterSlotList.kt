@@ -6,7 +6,7 @@ import net.minecraft.client.gui.screen.narration.NarrationPart
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.feature.clientvalue.impl.AccessibilityValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.impl.AccessibilityValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.ManagerGrabber
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberScrollbarWidth

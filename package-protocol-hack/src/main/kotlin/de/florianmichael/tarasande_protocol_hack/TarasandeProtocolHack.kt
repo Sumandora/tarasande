@@ -15,10 +15,6 @@ import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.Enti
 import de.florianmichael.tarasande_protocol_hack.platform.ViaBetaPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.platform.ViaSnapshotPlatformImpl
 import de.florianmichael.tarasande_protocol_hack.provider.*
-import de.florianmichael.tarasande_protocol_hack.provider.FabricCommandArgumentsProvider
-import de.florianmichael.tarasande_protocol_hack.provider.FabricPlayerAbilitiesProvider
-import de.florianmichael.tarasande_protocol_hack.provider.FabricHandItemProvider
-import de.florianmichael.tarasande_protocol_hack.provider.FabricMovementTransmitterProvider
 import de.florianmichael.tarasande_protocol_hack.tarasande.information.*
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleEveryItemOnArmor
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleInventoryMove
@@ -54,7 +50,7 @@ import net.tarasandedevelopment.tarasande.event.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
 import net.tarasandedevelopment.tarasande.event.EventScreenRender
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
-import net.tarasandedevelopment.tarasande.feature.clientvalue.ClientValues
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
@@ -182,7 +178,7 @@ class TarasandeProtocolHack {
                 ManagerModule.add(ModuleEveryItemOnArmor())
 
                 ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.insert(SidebarEntrySelectionProtocolHack(), 2)
-                ValueButtonOwnerValues(ClientValues, "Protocol hack values", ProtocolHackValues)
+                ValueButtonOwnerValues(TarasandeValues, "Protocol hack values", ProtocolHackValues)
 
                 ClassicItemSelectionScreen.create(InternalProtocolList.fromProtocolVersion(BetaProtocols.c0_28toc0_30))
             }
