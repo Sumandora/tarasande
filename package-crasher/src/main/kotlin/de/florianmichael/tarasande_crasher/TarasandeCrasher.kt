@@ -1,9 +1,13 @@
 package de.florianmichael.tarasande_crasher
 
+import de.florianmichael.tarasande_crasher.module.ModuleBoatCrasher
+import de.florianmichael.tarasande_crasher.module.ModuleOffHandCrasher
+import de.florianmichael.tarasande_crasher.module.ModuleZeroSmasher
 import net.fabricmc.api.ClientModInitializer
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import de.florianmichael.tarasande_crasher.screenextension.ScreenExtensionButtonListDirectConnect
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.event.EventDispatcher
 
 class TarasandeCrasher : ClientModInitializer {
@@ -12,6 +16,12 @@ class TarasandeCrasher : ClientModInitializer {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
             ManagerScreenExtension.add(
                 ScreenExtensionButtonListDirectConnect()
+            )
+
+            ManagerModule.add(
+                ModuleBoatCrasher(),
+                ModuleOffHandCrasher(),
+                ModuleZeroSmasher()
             )
         }
     }

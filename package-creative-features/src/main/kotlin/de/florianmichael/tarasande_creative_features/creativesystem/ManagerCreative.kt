@@ -1,6 +1,7 @@
 package de.florianmichael.tarasande_creative_features.creativesystem
 
 import de.florianmichael.tarasande_creative_features.clientvalue.CreativeValues
+import de.florianmichael.tarasande_creative_features.creativesystem.impl.*
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
@@ -12,10 +13,6 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import de.florianmichael.tarasande_creative_features.creativesystem.impl.ExploitCreativeCommandBlockSpawner
-import de.florianmichael.tarasande_creative_features.creativesystem.impl.ExploitCreativeItemControl
-import de.florianmichael.tarasande_creative_features.creativesystem.impl.ExploitCreativeLightItems
-import de.florianmichael.tarasande_creative_features.creativesystem.impl.ExploitCreativeSpecialVanillaItems
 import de.florianmichael.tarasande_creative_features.creativesystem.panel.PanelElementsCreative
 import de.florianmichael.tarasande_creative_features.creativesystem.valuecomponent.meta.ValueButtonItem
 
@@ -36,12 +33,13 @@ object ManagerCreative : Manager<ExploitCreative>() {
 
     init {
         add(
+            ExploitCreativeSingleShutdownCreeper(this),
+
             ExploitCreativeCommandBlockSpawner(this),
 
             ExploitCreativeItemControl(this),
 
-            ExploitCreativeSpecialVanillaItems(this),
-            ExploitCreativeLightItems(this),
+            ExploitCreativeSpecialVanillaItems(this), ExploitCreativeLightItems(this)
         )
 
         packager = ValueMode(this, "Spawner Packager", false, *mutableListOf("None").apply { addAll(storages.map { s -> StringUtil.uncoverTranslation(s.translationKey) }) }.toTypedArray())

@@ -48,6 +48,9 @@ import java.util.logging.Logger
  *  - Add basic exploits from bash for Forge
  *  - Crayfish Fill and Nuker
  *
+ * TODO | Dupe Exploits:
+ *  - https://youtu.be/2lUK-2yo_zo
+ *
  * TODO | Litematica:
  *  - Implement PixelArt generator
  *  - Implement head and skin generator
