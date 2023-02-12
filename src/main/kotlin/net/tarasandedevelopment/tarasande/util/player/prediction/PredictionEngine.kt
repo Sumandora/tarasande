@@ -23,7 +23,7 @@ import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 
 object PredictionEngine {
 
-    fun predictState(count: Int, baseEntity: PlayerEntity = mc.player!!, input: Input? = null, postConfig: ((ClientPlayerEntity) -> Unit)? = null): Pair<ClientPlayerEntity, ArrayList<Vec3d>> {
+    fun predictState(count: Int, baseEntity: PlayerEntity = mc.player!!, input: Input? = null, abortWhen: (ClientPlayerEntity) -> Boolean = { false }): Pair<ClientPlayerEntity, ArrayList<Vec3d>> {
         val selfVelocity = baseEntity.velocity.copy()
         val localVelocity = mc.player?.velocity?.copy()
 
@@ -34,7 +34,8 @@ object PredictionEngine {
         val wasSoundDisabled = soundSystem.tarasande_isDisabled()
         soundSystem.tarasande_setDisabled(true)
 
-        val playerEntity = object : ClientPlayerEntity(mc,
+        val playerEntity = object : ClientPlayerEntity(
+            mc,
             mc.world,
             ClientPlayNetworkHandlerDummy.create(),
             StatHandler(),
@@ -122,18 +123,18 @@ object PredictionEngine {
             playerEntity.autoJumpEnabled = false // Who plays with that?
         }
 
-        postConfig?.invoke(playerEntity)
-
         val list = ArrayList<Vec3d>()
 
         val prevParticlesEnabled = (mc.particleManager as IParticleManager).tarasande_isParticlesEnabled() // race conditions :c
         (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
 
-        repeat(count) {
+        for(i in 0 until count) {
             playerEntity.resetPosition()
             playerEntity.age++
             playerEntity.tick()
             list.add(playerEntity.pos)
+            if(abortWhen.invoke(playerEntity))
+                break
         }
 
         (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
@@ -147,7 +148,7 @@ object PredictionEngine {
         return Pair(playerEntity, list)
     }
 
-    private val allInputs = run {
+    val allInputs = run {
         val list = ArrayList<Input>()
         for (forward in -1..1)
             for (sideways in -1..1)
