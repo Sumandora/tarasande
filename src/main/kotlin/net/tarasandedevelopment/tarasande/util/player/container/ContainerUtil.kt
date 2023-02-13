@@ -80,7 +80,7 @@ object ContainerUtil {
 
         for (otherStack in list) {
             if (isSameItemType(stack, otherStack)) {
-                if(stack.isOf(Items.TURTLE_HELMET) && !otherStack.isOf(Items.TURTLE_HELMET))
+                if(stack.isOf(Items.TURTLE_HELMET) != otherStack.isOf(Items.TURTLE_HELMET))
                     continue // Turtle helmets grant water breathing, this is something unique to the turtle helmet, this behaviour is hardcoded into the game, im going to commit arson
 
                 val otherEnchantments = EnchantmentHelper.get(otherStack)
