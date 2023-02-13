@@ -211,8 +211,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity_
             if (instance.isSprinting()) {
                 float f = this.getYaw() * 0.017453292F;
                 // this casts are very important, please: don't delete them
-                this.getVelocity().x -= (double)(MathHelper_1_8.sin(f) * 0.2F);
-                this.getVelocity().z += (double)(MathHelper_1_8.cos(f) * 0.2F);
+                this.setVelocity(this.getVelocity().add(-(double)(MathHelper_1_8.sin(f) * 0.2F), 0, (double)(MathHelper_1_8.cos(f) * 0.2F)));
             }
             return false;
         }

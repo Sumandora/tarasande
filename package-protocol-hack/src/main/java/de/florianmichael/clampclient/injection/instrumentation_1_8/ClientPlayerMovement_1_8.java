@@ -23,10 +23,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
@@ -35,6 +32,7 @@ import net.tarasandedevelopment.tarasande.event.*;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoWeb;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSpeed;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
 import su.mandora.event.EventDispatcher;
 
@@ -82,8 +80,7 @@ public class ClientPlayerMovement_1_8 {
             EventDispatcher.INSTANCE.call(eventVelocityYaw);
             float f1 = MathHelper_1_8.sin(eventVelocityYaw.getYaw() * (float) Math.PI / 180.0F);
             float f2 = MathHelper_1_8.cos(eventVelocityYaw.getYaw() * (float) Math.PI / 180.0F);
-            original.getVelocity().x += (double) (strafe * f2 - forward * f1);
-            original.getVelocity().z += (double) (forward * f2 + strafe * f1);
+            original.setVelocity(original.getVelocity().add((double) (strafe * f2 - forward * f1), 0.0D, (double) (forward * f2 + strafe * f1)));
         }
     }
 
@@ -168,9 +165,7 @@ public class ClientPlayerMovement_1_8 {
             if (vec3.length() > 0.0D) {
                 vec3 = vec3.normalize();
                 double d1 = 0.014D;
-                entityIn.getVelocity().x += vec3.getX() * d1;
-                entityIn.getVelocity().y += vec3.getY() * d1;
-                entityIn.getVelocity().z += vec3.getZ() * d1;
+                entityIn.setVelocity(entityIn.getVelocity().add(vec3.getX() * d1, vec3.getY() * d1, vec3.getZ() * d1));
             }
 
             return flag;
@@ -178,11 +173,11 @@ public class ClientPlayerMovement_1_8 {
     }
 
     protected void updateAITick() {
-        original.getVelocity().y += 0.03999999910593033D;
+        original.setVelocity(original.getVelocity().add(0.0D, 0.03999999910593033D, 0.0D));
     }
 
     protected void handleJumpLava() {
-        original.getVelocity().y += 0.03999999910593033D;
+        original.setVelocity(original.getVelocity().add(0.0D, 0.03999999910593033D, 0.0D));
     }
 
     // This method doesn't exist in 1.8, it's a pseudo method for handling the jump cooldown
@@ -264,36 +259,32 @@ public class ClientPlayerMovement_1_8 {
 
                 if (this.isOnLadder()) {
                     float f6 = 0.15F;
-                    original.getVelocity().x = MathHelper.clamp(original.getVelocity().x, (double) (-f6), (double) f6);
-                    original.getVelocity().z = MathHelper.clamp(original.getVelocity().z, (double) (-f6), (double) f6);
+                    original.setVelocity(new Vec3d(MathHelper.clamp(original.getVelocity().x, (double) (-f6), (double) f6), original.getVelocity().y, MathHelper.clamp(original.getVelocity().z, (double) (-f6), (double) f6)));
                     original.fallDistance = 0.0F;
 
                     if (original.getVelocity().y < -0.15D) {
-                        original.getVelocity().y = -0.15D;
+                        original.setVelocity(original.getVelocity().withAxis(Direction.Axis.Y, -0.15D));
                     }
 
                     boolean flag = original.isSneaking() && original instanceof PlayerEntity;
                     if (flag && original.getVelocity().y < 0.0D) {
-                        original.getVelocity().y = 0.0D;
+                        original.setVelocity(original.getVelocity().withAxis(Direction.Axis.Y, 0.0D));
                     }
                 }
 
                 moveEntity(original.getVelocity().x, original.getVelocity().y, original.getVelocity().z);
 
                 if (original.horizontalCollision && this.isOnLadder()) {
-                    original.getVelocity().y = 0.2D;
+                    original.setVelocity(original.getVelocity().withAxis(Direction.Axis.Y, 0.2D));
                 }
 
                 if (!original.world.isChunkLoaded(new BlockPos((int) original.getPos().x, 0, (int) original.getPos().z))) {
                     if (original.getPos().y > 0)
-                        original.getVelocity().y = -0.1;
-                    else
-                        original.getVelocity().y = 0;
-                } else original.getVelocity().y -= 0.08D;
+                        original.setVelocity(original.getVelocity().withAxis(Direction.Axis.Y, -0.1));
+                    else original.setVelocity(original.getVelocity().withAxis(Direction.Axis.Y, 0));
+                } else original.setVelocity(original.getVelocity().subtract(0.0D, 0.08D, 0.0D));
 
-                original.getVelocity().y *= 0.98F;
-                original.getVelocity().x *= (double) f4;
-                original.getVelocity().z *= (double) f4;
+                original.setVelocity(original.getVelocity().multiply((double) f4, 0.98F, (double) f4));
             } else {
                 double d0 = original.getPos().y;
                 float f1 = 0.8F;
@@ -315,26 +306,22 @@ public class ClientPlayerMovement_1_8 {
 
                 this.moveFlying(strafe, forward, f2);
                 this.moveEntity(original.getVelocity().x, original.getVelocity().y, original.getVelocity().z);
-                original.getVelocity().x *= (double) f1;
-                original.getVelocity().y *= 0.800000011920929D;
-                original.getVelocity().z *= (double) f1;
-                original.getVelocity().y -= 0.02D;
+                original.setVelocity(original.getVelocity().multiply((double) f1, 0.800000011920929D, (double) f1));
+                original.setVelocity(original.getVelocity().subtract(0.0D, 0.02D, 0.0D));
 
                 if (original.horizontalCollision && this.isOffsetPositionInLiquid(original.getVelocity().x, original.getVelocity().y + 0.6000000238418579D - original.getPos().y + d0, original.getVelocity().z)) {
-                    original.getVelocity().y = 0.30000001192092896D;
+                    original.setVelocity(original.getVelocity().withAxis(Direction.Axis.Y, 0.30000001192092896D));
                 }
             }
         } else {
             double d1 = original.getPos().y;
             this.moveFlying(strafe, forward, 0.02F);
             this.moveEntity(original.getVelocity().x, original.getVelocity().y, original.getVelocity().z);
-            original.getVelocity().x *= 0.5D;
-            original.getVelocity().y *= 0.5D;
-            original.getVelocity().z *= 0.5D;
-            original.getVelocity().y -= 0.02D;
+            original.setVelocity(original.getVelocity().multiply(0.5D, 0.5D, 0.5D));
+            original.setVelocity(original.getVelocity().subtract(0.0D, 0.02D, 0.0D));
 
             if (original.horizontalCollision && this.isOffsetPositionInLiquid(original.getVelocity().x, original.getVelocity().y + 0.6000000238418579D - original.getPos().y + d1, original.getVelocity().z)) {
-                original.getVelocity().y = 0.30000001192092896D;
+                original.setVelocity(original.getVelocity().withAxis(Direction.Axis.Y, 0.30000001192092896D));
             }
         }
         original.updateLimbs((LivingEntity) (Object) original, original instanceof Flutterer);
@@ -502,17 +489,13 @@ public class ClientPlayerMovement_1_8 {
                     y *= moduleNoWeb.getVerticalSlowdown().getValue();
                     z *= moduleNoWeb.getHorizontalSlowdown().getValue();
                     if(!ModuleNoWebSettingsKt.removeVelocityReset.getValue()) {
-                        original.getVelocity().x = 0.0D;
-                        original.getVelocity().y = 0.0D;
-                        original.getVelocity().z = 0.0D;
+                        original.setVelocity(new Vec3d(0.0D, 0.0D, 0.0D));
                     }
                 } else {
                     x *= 0.25D;
                     y *= 0.05000000074505806D;
                     z *= 0.25D;
-                    original.getVelocity().x = 0.0D;
-                    original.getVelocity().y = 0.0D;
-                    original.getVelocity().z = 0.0D;
+                    original.setVelocity(new Vec3d(0.0D, 0.0D, 0.0D));
                 }
             }
 
@@ -705,8 +688,8 @@ public class ClientPlayerMovement_1_8 {
 
             this.updateFallState(y, original.isOnGround(), block1, blockModel, blockpos);
 
-            if (d3 != x) original.getVelocity().x = 0.0D;
-            if (d5 != z) original.getVelocity().z = 0.0D;
+            if (d3 != x) original.setVelocity(original.getVelocity().withAxis(Direction.Axis.X, 0.0D));
+            if (d5 != z) original.setVelocity(original.getVelocity().withAxis(Direction.Axis.Z, 0.0D));
 
             if (d4 != y) blockModel.onLanded(original.world, original);
 
@@ -805,7 +788,7 @@ public class ClientPlayerMovement_1_8 {
             float f = original.airStrafingSpeed;
             original.airStrafingSpeed = playerAbilities.getFlySpeed() * (float) (original.isSprinting() ? 2 : 1);
             moveEntityWithHeading(strafe, forward);
-            original.getVelocity().y = d3 * 0.6D;
+            original.setVelocity(original.getVelocity().withAxis(Direction.Axis.Y, d3 * 0.6D));
             original.airStrafingSpeed = f;
         } else {
             moveEntityWithHeading(strafe, forward);
@@ -883,12 +866,7 @@ public class ClientPlayerMovement_1_8 {
 
             float f = 0.1F;
 
-            Vec3d motion = original.getVelocity();
-            if (i == 0) motion.x = (double) (-f);
-            if (i == 1) motion.x = (double) f;
-            if (i == 4) motion.z = (double) (-f);
-            if (i == 5) motion.z = (double) f;
-            original.setVelocity(motion);
+            original.setVelocity(original.getVelocity().add(i == 0 ? (double) (-f) : i == 1 ? (double) f : 0, 0, i == 4 ? (double) (-f) : i == 5 ? (double) f : 0));
         }
     }
 
