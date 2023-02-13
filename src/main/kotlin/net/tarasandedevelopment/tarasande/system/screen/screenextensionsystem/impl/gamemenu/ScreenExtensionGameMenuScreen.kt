@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl
+package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.gamemenu
 
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.GameMenuScreen
