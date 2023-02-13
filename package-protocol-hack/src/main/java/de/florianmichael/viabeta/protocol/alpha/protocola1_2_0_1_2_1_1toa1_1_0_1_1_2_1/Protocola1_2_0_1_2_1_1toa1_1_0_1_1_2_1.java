@@ -29,7 +29,7 @@ public class Protocola1_2_0_1_2_1_1toa1_1_0_1_1_2_1 extends AbstractProtocol<Cli
             }
         });
 
-        this.registerServerbound(State.LOGIN, ServerboundPacketsa1_1_0.LOGIN.getId(), ServerboundPacketsa1_2_0.LOGIN.getId(), new PacketHandlers() {
+        this.registerServerbound(State.LOGIN, ServerboundPacketsa1_2_0.LOGIN.getId(), ServerboundPacketsa1_1_0.LOGIN.getId(), new PacketHandlers() {
             @Override
             public void register() {
                 map(Type.INT); // protocol id

@@ -73,7 +73,7 @@ public class BaseProtocol1_6 extends AbstractSimpleProtocol {
                 });
             }
         });
-        this.registerServerbound(State.STATUS, ServerboundPackets1_6_4.SERVER_PING.getId(), ServerboundStatusPackets.STATUS_REQUEST.getId(), new PacketHandlers() {
+        this.registerServerbound(State.STATUS, ServerboundStatusPackets.STATUS_REQUEST.getId(), ServerboundPackets1_6_4.SERVER_PING.getId(), new PacketHandlers() {
             @Override
             public void register() {
                 handler(wrapper -> {
@@ -90,7 +90,7 @@ public class BaseProtocol1_6 extends AbstractSimpleProtocol {
                 });
             }
         });
-        this.registerServerbound(State.STATUS, -1, ServerboundStatusPackets.PING_REQUEST.getId(), new PacketHandlers() {
+        this.registerServerbound(State.STATUS, ServerboundStatusPackets.PING_REQUEST.getId(), -1, new PacketHandlers() {
             @Override
             public void register() {
                 handler(wrapper -> {

@@ -20,7 +20,7 @@ public class BaseProtocolb1_7 extends AbstractSimpleProtocol {
     protected void registerPackets() {
         super.registerPackets();
 
-        this.registerServerbound(State.STATUS, -1, ServerboundPacketsb1_8.SERVER_PING.getId(), new PacketHandlers() {
+        this.registerServerbound(State.STATUS, ServerboundPacketsb1_8.SERVER_PING.getId(), -1, new PacketHandlers() {
             @Override
             public void register() {
                 handler(wrapper -> {

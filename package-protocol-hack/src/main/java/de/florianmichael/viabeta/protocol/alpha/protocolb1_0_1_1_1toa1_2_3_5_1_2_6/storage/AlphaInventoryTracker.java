@@ -328,7 +328,7 @@ public class AlphaInventoryTracker extends StoredObject {
         }
     }
 
-    // Add support for cheating items and classic block placement
+    // Add support for cheating items in creative and classic block placement
     public void handleCreativeSetSlot(short slot, Item item) throws Exception {
         if (!this.getUser().getProtocolInfo().getPipeline().contains(Protocolc0_30toc0_30cpe.class)) item = Protocolb1_0_1_1_1toa1_2_3_5_1_2_6.fixItem(item);
         if (slot <= 0) return;

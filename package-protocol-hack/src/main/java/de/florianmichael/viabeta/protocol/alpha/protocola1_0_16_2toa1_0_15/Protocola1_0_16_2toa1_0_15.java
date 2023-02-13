@@ -18,7 +18,7 @@ public class Protocola1_0_16_2toa1_0_15 extends AbstractProtocol<ClientboundPack
 
     @Override
     protected void registerPackets() {
-        this.registerServerbound(State.LOGIN, -1, ServerboundPacketsa1_0_17.HANDSHAKE.getId(), new PacketHandlers() {
+        this.registerServerbound(State.LOGIN, ServerboundPacketsa1_0_17.HANDSHAKE.getId(), -1, new PacketHandlers() {
             @Override
             public void register() {
                 handler(wrapper -> {

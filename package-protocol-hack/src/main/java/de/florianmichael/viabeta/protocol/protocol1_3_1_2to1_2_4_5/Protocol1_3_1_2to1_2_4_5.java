@@ -603,7 +603,7 @@ public class Protocol1_3_1_2to1_2_4_5 extends AbstractProtocol<ClientboundPacket
             }
         });
 
-        this.registerServerbound(State.LOGIN, ServerboundPackets1_2_4.HANDSHAKE.getId(), ServerboundPackets1_3_1.CLIENT_PROTOCOL.getId(), new PacketHandlers() {
+        this.registerServerbound(State.LOGIN, ServerboundPackets1_3_1.CLIENT_PROTOCOL.getId(), ServerboundPackets1_2_4.HANDSHAKE.getId(), new PacketHandlers() {
             @Override
             public void register() {
                 handler(wrapper -> {

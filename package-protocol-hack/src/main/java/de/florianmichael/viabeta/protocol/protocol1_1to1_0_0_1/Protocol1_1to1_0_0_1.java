@@ -27,7 +27,7 @@ public class Protocol1_1to1_0_0_1 extends AbstractProtocol<ClientboundPackets1_0
         super.registerPackets();
         this.itemRewriter.register();
 
-        this.registerServerbound(State.LOGIN, ServerboundPackets1_0.LOGIN.getId(), ServerboundPackets1_1.LOGIN.getId(), new PacketHandlers() {
+        this.registerServerbound(State.LOGIN, ServerboundPackets1_1.LOGIN.getId(), ServerboundPackets1_0.LOGIN.getId(), new PacketHandlers() {
             @Override
             public void register() {
                 map(Type.INT); // protocol id

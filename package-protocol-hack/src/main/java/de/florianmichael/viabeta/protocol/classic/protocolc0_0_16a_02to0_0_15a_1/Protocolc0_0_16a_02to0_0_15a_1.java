@@ -57,7 +57,7 @@ public class Protocolc0_0_16a_02to0_0_15a_1 extends AbstractProtocol<Clientbound
             }
         });
 
-        this.registerServerbound(State.LOGIN, ServerboundPacketsc0_15a.LOGIN.getId(), ServerboundPacketsc0_19a.LOGIN.getId(), new PacketHandlers() {
+        this.registerServerbound(State.LOGIN, ServerboundPacketsc0_19a.LOGIN.getId(), ServerboundPacketsc0_15a.LOGIN.getId(), new PacketHandlers() {
             @Override
             public void register() {
                 handler(wrapper -> {
