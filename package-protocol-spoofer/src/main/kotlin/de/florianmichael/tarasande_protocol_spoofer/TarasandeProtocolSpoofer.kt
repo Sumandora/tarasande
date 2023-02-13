@@ -22,36 +22,38 @@ class TarasandeProtocolSpoofer : ClientModInitializer {
     companion object {
         val tarasandeProtocolHackLoaded = FabricLoader.getInstance().isModLoaded("$TARASANDE_NAME-protocol-hack")
 
-        fun enforcePluginMessage(channel: String, value: ByteArray, remap: Boolean = false) {
-            val modernPayload = CustomPayloadC2SPacket(Identifier(if (remap) channel.lowercase().replace("|", ":") else channel), PacketByteBuf(Unpooled.buffer()).writeByteArray(value))
-            if (tarasandeProtocolHackLoaded) {
-                if (!ViaVersionUtil.sendLegacyPluginMessage(channel, value)) MinecraftClient.getInstance().networkHandler!!.sendPacket(modernPayload)
-            } else {
-                MinecraftClient.getInstance().networkHandler!!.sendPacket(modernPayload)
+        fun enforcePluginMessage(channel: String, oldChannel: String? = null, value: ByteArray) {
+            if (tarasandeProtocolHackLoaded && ViaVersionUtil.sendLegacyPluginMessage(oldChannel!!, value)) {
+                return
             }
+
+            MinecraftClient.getInstance().networkHandler!!.sendPacket(CustomPayloadC2SPacket(Identifier(channel), PacketByteBuf(Unpooled.buffer()).writeByteArray(value)))
         }
     }
 
     override fun onInitializeClient() {
-        if (tarasandeProtocolHackLoaded) {
-            ViaVersionUtil.builtForgeChannelMappings()
-        }
-
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
-            ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.apply {
-                add(
-                    SidebarEntryToggleableBungeeHack(),
+            val sidebar = ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar
+
+            if (tarasandeProtocolHackLoaded) {
+                ViaVersionUtil.builtForgeChannelMappings()
+
+                sidebar.add(
                     SidebarEntryToggleableForgeFaker(),
-                    SidebarEntryToggleableHAProxyHack(),
-                    SidebarEntryToggleableQuiltFaker(),
-                    SidebarEntryToggleableVivecraftFaker(),
-                    SidebarEntryToggleableTeslaClientFaker(),
-                    SidebarEntryToggleablePluginMessageFilter()
+                    SidebarEntryToggleableTeslaClientFaker()
+                )
+
+                ManagerCommand.add(
+                    CommandOpenModsRCE()
                 )
             }
 
-            ManagerCommand.add(
-                CommandOpenModsRCE()
+            sidebar.add(
+                SidebarEntryToggleableBungeeHack(),
+                SidebarEntryToggleableHAProxyHack(),
+                SidebarEntryToggleableQuiltFaker(),
+                SidebarEntryToggleableVivecraftFaker(),
+                SidebarEntryToggleablePluginMessageFilter()
             )
         }
     }

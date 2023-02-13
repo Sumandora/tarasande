@@ -1,18 +1,15 @@
 package de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker
 
 import com.google.gson.JsonObject
-import de.florianmichael.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.SidebarEntryToggleableForgeFaker
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.Fml1NetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.ModernFmlNetClientHandler
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.handler.ModernFmlState
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.legacy.LegacyForgePayload
 import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.modern.ModernForgePayload
-import de.florianmichael.tarasande_protocol_spoofer.viaversion.ViaVersionUtil
+import de.florianmichael.vialoadingbase.ViaLoadingBase
 import net.minecraft.network.ClientConnection
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 
 object ForgeCreator {
 
@@ -30,15 +27,9 @@ object ForgeCreator {
     }
 
     fun createNetHandler(connection: ClientConnection): IForgeNetClientHandler {
-        val forgeFaker = ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntryToggleableForgeFaker::class.java)
-
-        if (TarasandeProtocolSpoofer.tarasandeProtocolHackLoaded && forgeFaker.autoDetectFmlHandlerWithViaVersion.value) {
-            return ViaVersionUtil.createForgeHandler(connection)
-        }
-
-        if (forgeFaker.fmlHandler.isSelected(1)) return ModernFmlNetClientHandler(ModernFmlState.FML_2, connection)
-        if (forgeFaker.fmlHandler.isSelected(2)) return ModernFmlNetClientHandler(ModernFmlState.FML_3, connection)
-        if (forgeFaker.fmlHandler.isSelected(3)) return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
+        if (ViaLoadingBase.getTargetVersion().isNewerThan(ProtocolVersion.v1_18_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
+        if (ViaLoadingBase.getTargetVersion().isNewerThan(ProtocolVersion.v1_17_1)) return ModernFmlNetClientHandler(ModernFmlState.FML_3, connection)
+        if (ViaLoadingBase.getTargetVersion().isNewerThan(ProtocolVersion.v1_12_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_2, connection)
 
         return Fml1NetClientHandler(connection)
     }

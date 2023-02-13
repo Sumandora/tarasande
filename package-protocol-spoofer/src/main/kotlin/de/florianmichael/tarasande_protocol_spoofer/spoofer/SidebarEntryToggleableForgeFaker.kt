@@ -17,7 +17,6 @@ import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
 import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -31,8 +30,6 @@ class SidebarEntryToggleableForgeFaker : SidebarEntryToggleable("Forge faker", "
     private var currentHandler: IForgeNetClientHandler? = null
 
     val useFML1Cache = ValueBoolean(this, "Use FML1 cache", true)
-    val autoDetectFmlHandlerWithViaVersion = ValueBoolean(this, "Auto detect fml handler with ViaVersion", true)
-    val fmlHandler = ValueMode(this, "FML Handler", false, "FML1", "Modern v2", "Modern v3", "Modern v4", isEnabled = { !autoDetectFmlHandlerWithViaVersion.value })
     private val alwaysShowInformation = ValueBoolean(this, "Always show information", false)
 
     init {

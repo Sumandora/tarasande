@@ -28,6 +28,8 @@ class SidebarEntryToggleableTeslaClientFaker : SidebarEntryToggleable("Tesla cli
     private val weCuiVersion = ValueText(this, "We-cui version", "v|4")
     //http://teslacraft.org/launcher/TeslaCraft.jar
 
+    private val registerContent = "WECUI\u0000tesla:client".toByteArray(StandardCharsets.US_ASCII)
+
     init {
         EventDispatcher.add(EventPacket::class.java) { event ->
             if(!enabled.value) return@add
@@ -37,15 +39,12 @@ class SidebarEntryToggleableTeslaClientFaker : SidebarEntryToggleable("Tesla cli
                     when(event.packet) {
                         is CustomPayloadC2SPacket -> {
                             val packet = event.packet as CustomPayloadC2SPacket
-                            if(packet.channel.toString() == "minecraft:register") {
-                                packet.data = PacketByteBuf(Unpooled.buffer()).writeByteArray("WECUI\u0000tesla:client".toByteArray(StandardCharsets.US_ASCII))
-                            }
-                            if (TarasandeProtocolSpoofer.tarasandeProtocolHackLoaded) {
-                                if (ViaVersionUtil.sendLegacyPluginMessage("REGISTER", "WECUI\u0000tesla:client".toByteArray(StandardCharsets.US_ASCII))) {
-                                    event.cancelled = true
-                                }
-                            }
-                            if (fakeWeCui.value) TarasandeProtocolSpoofer.enforcePluginMessage("WECUI", weCuiVersion.value.toByteArray(StandardCharsets.UTF_8))
+                            if (packet.channel.toString() == "minecraft:register")
+                                event.cancelled = true
+
+                            TarasandeProtocolSpoofer.enforcePluginMessage("minecraft:register", "REGISTER", registerContent)
+                            if (fakeWeCui.value)
+                                TarasandeProtocolSpoofer.enforcePluginMessage("wecui", "WECUI", weCuiVersion.value.toByteArray(StandardCharsets.UTF_8))
                         }
 
                         is HandshakeC2SPacket -> {
