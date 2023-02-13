@@ -31,6 +31,7 @@ object ManagerAccount : Manager<Class<out Account>>() {
 abstract class Account {
     var environment: Environment = ManagerEnvironment.list.first().create()
     var session: Session? = null
+    var status: String? = null
 
     abstract fun logIn()
     abstract fun getDisplayName(): String
@@ -47,4 +48,6 @@ abstract class Account {
             environment = newEnvironment
         })
     }
+
+    fun ready() = session != null && getSessionService() != null
 }
