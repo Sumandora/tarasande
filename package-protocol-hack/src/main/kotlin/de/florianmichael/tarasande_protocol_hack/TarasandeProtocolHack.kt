@@ -71,13 +71,11 @@ class TarasandeProtocolHack {
         fun update(protocol: ProtocolVersion, reloadProtocolHackValues: Boolean) {
             val comparable = InternalProtocolList.fromProtocolVersion(protocol)
 
-            if (ViaLoadingBase.getTargetVersion() != protocol) {
-                displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, comparable) }.toMutableList()
-                EntityDimensionsDefinition.reload(comparable)
+            displayItems = Registries.ITEM.filter { ItemReleaseVersionsDefinition.shouldDisplay(it, comparable) }.toMutableList()
+            EntityDimensionsDefinition.reload(comparable)
 
-                if (comparable.isOlderThan(BetaProtocols.a1_0_15)) {
-                    ClassicItemSelectionScreen.INSTANCE.reload(comparable)
-                }
+            if (comparable.isOlderThan(BetaProtocols.a1_0_15)) {
+                ClassicItemSelectionScreen.INSTANCE.reload(comparable)
             }
 
             ViaLoadingBase.getClassWrapper().reload(protocol)
