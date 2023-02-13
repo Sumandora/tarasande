@@ -71,7 +71,7 @@ object ContainerUtil {
     }
 
     fun hasBetterEquivalent(stack: ItemStack, list: List<ItemStack>, keepSameMaterial: Boolean, keepSameEnchantments: Boolean): Boolean {
-        if (stack.item.enchantability == 0) // actually a pretty smart check even tho its not perfect
+        if (stack.item.enchantability == 0) // actually a pretty smart check even tho it's not perfect
             return false
 
         val materialScore = wrapMaterialScore(stack, false)
@@ -80,6 +80,9 @@ object ContainerUtil {
 
         for (otherStack in list) {
             if (isSameItemType(stack, otherStack)) {
+                if(stack.isOf(Items.TURTLE_HELMET) && !otherStack.isOf(Items.TURTLE_HELMET))
+                    continue // Turtle helmets grant water breathing, this is something unique to the turtle helmet, this behaviour is hardcoded into the game, im going to commit arson
+
                 val otherEnchantments = EnchantmentHelper.get(otherStack)
 
                 val otherMaterialScore = wrapMaterialScore(otherStack, false)
