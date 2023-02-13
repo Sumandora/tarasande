@@ -47,7 +47,7 @@ object ProtocolHackValues {
     val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", ProtocolVersion.v1_12_2.andOlder())
     val executeInputsInSync = ValueBooleanProtocol("Execute inputs in sync", ProtocolVersion.v1_12_2.andOlder())
     val emulateMouseInputs = ValueBooleanProtocol("Emulate mouse inputs", ProtocolVersion.v1_12_2.andOlder())
-    val sneakInstant = ValueBooleanProtocol("Sneak instant", ProtocolVersion.v1_8..ProtocolVersion.v1_12_2)
+    val sneakInstant = ValueBooleanProtocol("Sneak instant", ProtocolVersion.v1_12_2..ProtocolVersion.v1_8)
     val replaceRayTrace = ValueBooleanProtocol("Replace ray trace", ProtocolVersion.v1_12_2.andOlder())
     val replacePetrifiedOakSlab = ValueBooleanProtocol("Replace petrified oak slab", ProtocolVersion.v1_12_2..BetaProtocols.r1_3_1tor1_3_2)
 
