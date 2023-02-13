@@ -35,7 +35,11 @@ class ModulePreferredOffHandItem : Module("Preferred off-hand item", "Equips you
                 if(!enabled.value)
                     return null
 
-                return ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).filter { it.stack.isOf(items.getSelected()) }.sumOf { it.stack.safeCount() }.toString()
+                val amount =  ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).filter { it.stack.isOf(items.getSelected()) }.sumOf { it.stack.safeCount() }
+                if(amount == 0)
+                    return null
+
+                return amount.toString()
             }
         })
     }
