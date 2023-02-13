@@ -47,8 +47,12 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                 val currentPosition = mc.player?.pos!!
 
                 val entityPosition = event.entity.pos
+                val prevEntityPosition = event.entity.prevPos()
 
-                if((entityPosition - prevPosition).horizontalLength() > (entityPosition - currentPosition).horizontalLength()) // We are walking towards the entity
+                val selfColliding = (entityPosition - prevPosition).horizontalLength() > (entityPosition - currentPosition).horizontalLength()
+                val otherColliding = (currentPosition - prevEntityPosition).horizontalLength() > (currentPosition - entityPosition).horizontalLength()
+
+                if(selfColliding && otherColliding) // Are the duellists running into each other?
                     changeBinds = true
             }
         }

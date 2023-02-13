@@ -143,7 +143,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
             })
         }.also { addButton = it })
 
-        addDrawableChild(ButtonWidget(3, 3, 100, 20, Text.of("Add random session")) {
+        addDrawableChild(ButtonWidget(3, 3, 150, 20, Text.of("Add random session")) {
             accounts.add(AccountSession().also {
                 it.username = RandomStringUtils.randomAlphanumeric(16)
                 it.uuid = UUID.randomUUID().toString()

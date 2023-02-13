@@ -14,6 +14,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.times
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
+import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import java.util.concurrent.ThreadLocalRandom
 
@@ -28,6 +29,8 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
     private val changeDirection = ValueBoolean(this, "Change direction", false, isEnabled = { mode.isSelected(1) })
     private val ignoreTinyVelocity = ValueNumber(this, "Ignore tiny velocity", 0.0, 0.1, 0.5, 0.01)
     private val chance = ValueNumber(this, "Chance", 0.0, 75.0, 100.0, 1.0)
+    private val onlyWhenFacing = ValueBoolean(this, "Only when facing", false)
+    private val facingThreshold = ValueNumber(this, "Facing threshold", 0.0, 60.0, 360.0, 15.0, isEnabled = { onlyWhenFacing.value })
 
     init {
         addition.select(1) // Default, that's the most normal one
@@ -47,6 +50,12 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
             val velocityVector = Vec3d(event.velocityX, event.velocityY, event.velocityZ)
             if(velocityVector.horizontalLengthSquared() <= ignoreTinyVelocity.value * ignoreTinyVelocity.value)
                 return@registerEvent
+
+            if(onlyWhenFacing.value) {
+                val deltaRotation = RotationUtil.getYaw(velocityVector) - PlayerUtil.getMoveDirection()
+                if(deltaRotation > facingThreshold.value)
+                    return@registerEvent
+            }
 
             when {
                 mode.isSelected(0) -> {

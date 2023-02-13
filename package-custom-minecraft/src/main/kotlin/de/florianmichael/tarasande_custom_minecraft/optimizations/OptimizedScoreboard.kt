@@ -58,10 +58,10 @@ object OptimizedScoreboard {
             matrices.pop()
         }
 
-        InGameHud.fill(matrices, screenWidth - maxWidth - 2, halfScreenHeight - halfHeight, screenWidth, halfScreenHeight + halfHeight, titleBackground)
+        InGameHud.fill(matrices, screenWidth - maxWidth - 2, halfScreenHeight - halfHeight, screenWidth, halfScreenHeight - halfHeight + fontHeight, titleBackground)
         inGameHud.textRenderer.draw(matrices, title, (screenWidth - maxWidth / 2 - inGameHud.textRenderer.getWidth(title) / 2).toFloat(), (halfScreenHeight - halfHeight + 1).toFloat(), -1)
 
-        InGameHud.fill(matrices, screenWidth - maxWidth - 2, halfScreenHeight - halfHeight + fontHeight, screenWidth, halfScreenHeight - halfHeight, background)
+        InGameHud.fill(matrices, screenWidth - maxWidth - 2, halfScreenHeight - halfHeight + fontHeight, screenWidth, halfScreenHeight + halfHeight, background)
 
 
         lines.forEachIndexed { index, it ->
@@ -71,19 +71,5 @@ object OptimizedScoreboard {
                 inGameHud.textRenderer.draw(matrices, score, (screenWidth - inGameHud.textRenderer.getWidth(score)).toFloat(), (halfScreenHeight + halfHeight - fontHeight - index * inGameHud.textRenderer.fontHeight).toFloat(), -1)
             }
         }
-
-//        for (pair in lines) {
-//            val scoreboardPlayerScore2 = pair.first as ScoreboardPlayerScore
-//            val text3 = pair.second as Text
-//            val string = "" + Formatting.RED + scoreboardPlayerScore2.score
-//            val t = m - ++p * inGameHud.textRenderer.fontHeight
-//            val u = inGameHud.scaledWidth - 3 + 2
-//            InGameHud.fill(matrices, o - 2, t, u, t + inGameHud.textRenderer.fontHeight, background)
-//            inGameHud.textRenderer.draw(matrices, string, (u - inGameHud.textRenderer.getWidth(string)).toFloat(), t.toFloat(), -1)
-//            if (p != playerScores.size) continue
-//            InGameHud.fill(matrices, o - 2, t - inGameHud.textRenderer.fontHeight - 1, u, t - 1, titleBackground)
-//            InGameHud.fill(matrices, o - 2, t - 1, u, t, background)
-//            inGameHud.textRenderer.draw(matrices, title, (o + maxWidth / 2 - i / 2).toFloat(), (t - inGameHud.textRenderer.fontHeight).toFloat(), -1)
-//        }
     }
 }
