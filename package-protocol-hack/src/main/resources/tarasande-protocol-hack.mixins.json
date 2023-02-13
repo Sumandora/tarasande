@@ -10,6 +10,7 @@
     "tarasande.MixinEventCollisionShape",
     "tarasande.MixinEventDispatcher",
     "tarasande.MixinEventScreenInput",
+    "tarasande.MixinModuleSpeed",
     "tarasande.MixinRotationCompanion",
     "tarasande.module.MixinPlayerScreenHandler",
     "vialoadingbase.MixinCustomViaConfig"
