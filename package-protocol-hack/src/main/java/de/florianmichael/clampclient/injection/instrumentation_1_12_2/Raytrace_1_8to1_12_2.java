@@ -16,10 +16,12 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride;
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoMiningTrace;
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.HitResultKt;
+import su.mandora.event.EventDispatcher;
 
 import java.util.List;
 
@@ -80,7 +82,11 @@ public class Raytrace_1_8to1_12_2 {
 
                 for (Entity entity1 : list) {
                     float f1 = entity1.getTargetingMargin();
-                    Box axisalignedbb = entity1.getBoundingBox().expand((double) f1, (double) f1, (double) f1);
+
+                    EventBoundingBoxOverride eventBoundingBoxOverride = new EventBoundingBoxOverride(entity1, entity1.getBoundingBox());
+                    EventDispatcher.INSTANCE.call(eventBoundingBoxOverride);
+
+                    Box axisalignedbb = eventBoundingBoxOverride.getBoundingBox().expand((double) f1, (double) f1, (double) f1);
                     HitResult movingobjectposition = ((IBox_Protocol) axisalignedbb).protocolhack_calculateIntercept(vec3, vec32);
 
                     if (axisalignedbb.contains(vec3)) {
