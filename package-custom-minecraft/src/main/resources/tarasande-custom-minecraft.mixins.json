@@ -4,9 +4,10 @@
   "package": "de.florianmichael.tarasande_custom_minecraft.injection.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "MixinBuiltinEmptyGlyph",
-    "MixinBuiltinEmptyGlyph_1",
-    "MixinFontStorage"
+    "MixinInGameHud",
+    "fontcache.MixinBuiltinEmptyGlyph",
+    "fontcache.MixinBuiltinEmptyGlyph_1",
+    "fontcache.MixinFontStorage"
   ],
   "injectors": {
     "defaultRequire": 1
