@@ -13,13 +13,11 @@ class SidebarEntrySelectionProtocolHack : SidebarEntrySelection("Protocol Hack",
 
     override fun onClick(newValue: String) {
         val newProtocol = InternalProtocolList.getProtocols().first { it.name == newValue }.version.toDouble()
-        if (version.value != newProtocol) {
-            version.value = newProtocol
-            TarasandeProtocolHack.update(
-                InternalProtocolList.fromProtocolId(version.value.toInt()),
-                ProtocolHackValues.autoChangeValuesDependentOnVersion.value
-            )
-        }
+        version.value = newProtocol
+        TarasandeProtocolHack.update(
+            InternalProtocolList.fromProtocolId(version.value.toInt()),
+            ProtocolHackValues.autoChangeValuesDependentOnVersion.value
+        )
     }
 
     override fun isSelected(value: String): Boolean {
