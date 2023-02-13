@@ -31,7 +31,7 @@ public class Protocolc0_27toc0_0_19a_06 extends AbstractProtocol<ClientboundPack
             }
         });
 
-        this.registerServerbound(State.LOGIN, ServerboundPacketsc0_19a.LOGIN.getId(), ServerboundPacketsc0_28.LOGIN.getId(), new PacketHandlers() {
+        this.registerServerbound(State.LOGIN, ServerboundPacketsc0_28.LOGIN.getId(), ServerboundPacketsc0_19a.LOGIN.getId(), new PacketHandlers() {
             @Override
             public void register() {
                 map(Type.BYTE); // protocol id

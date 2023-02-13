@@ -278,13 +278,13 @@ public class Protocol1_2_1_3to1_1 extends AbstractProtocol<ClientboundPackets1_1
             }
         });
 
-        this.registerServerbound(State.LOGIN, ServerboundPackets1_1.HANDSHAKE.getId(), ServerboundPackets1_2_1.HANDSHAKE.getId(), new PacketHandlers() {
+        this.registerServerbound(State.LOGIN, ServerboundPackets1_2_1.HANDSHAKE.getId(), ServerboundPackets1_1.HANDSHAKE.getId(), new PacketHandlers() {
             @Override
             public void register() {
                 map(Type1_6_4.STRING, Type1_6_4.STRING, s -> s.split(";")[0]); // info
             }
         });
-        this.registerServerbound(State.LOGIN, ServerboundPackets1_1.LOGIN.getId(), ServerboundPackets1_2_1.LOGIN.getId(), new PacketHandlers() {
+        this.registerServerbound(State.LOGIN, ServerboundPackets1_2_1.LOGIN.getId(), ServerboundPackets1_1.LOGIN.getId(), new PacketHandlers() {
             @Override
             public void register() {
                 map(Type.INT); // protocol id

@@ -121,13 +121,13 @@ public class Protocolb1_5_0_2tob1_4_0_1 extends AbstractProtocol<ClientboundPack
             }
         });
 
-        this.registerServerbound(State.LOGIN, ServerboundPacketsb1_5.HANDSHAKE.getId(), ServerboundPacketsb1_4.HANDSHAKE.getId(), new PacketHandlers() {
+        this.registerServerbound(State.LOGIN, ServerboundPacketsb1_4.HANDSHAKE.getId(), ServerboundPacketsb1_5.HANDSHAKE.getId(), new PacketHandlers() {
             @Override
             public void register() {
                 map(Type1_6_4.STRING, Typeb1_7_0_3.STRING); // username
             }
         });
-        this.registerServerbound(State.LOGIN, ServerboundPacketsb1_4.LOGIN.getId(), ServerboundPacketsb1_5.LOGIN.getId(), new PacketHandlers() {
+        this.registerServerbound(State.LOGIN, ServerboundPacketsb1_5.LOGIN.getId(), ServerboundPacketsb1_4.LOGIN.getId(), new PacketHandlers() {
             @Override
             public void register() {
                 map(Type.INT); // protocol id

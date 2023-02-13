@@ -72,31 +72,12 @@ public class ClassicLevel {
         }
     }
 
-    public boolean isLightBlocking(Position position) {
-        return this.isLightBlocking(position.x(), position.y(), position.z());
-    }
-
     public boolean isLightBlocking(int x, int y, int z) {
-        switch (this.getBlock(x, y, z)) {
-            case ClassicBlocks.AIR:
-            case ClassicBlocks.WATER:
-            case ClassicBlocks.STATIONARY_WATER:
-            case ClassicBlocks.LAVA:
-            case ClassicBlocks.STATIONARY_LAVA:
-            case ClassicBlocks.LEAVES:
-            case ClassicBlocks.DANDELION:
-            case ClassicBlocks.ROSE:
-            case ClassicBlocks.BROWN_MUSHROOM:
-            case ClassicBlocks.RED_MUSHROOM:
-            case ClassicBlocks.GLASS:
-                return false;
-            default:
-                return true;
-        }
-    }
-
-    public boolean isLit(Position position) {
-        return this.isLit(position.x(), position.y(), position.z());
+        return switch (this.getBlock(x, y, z)) {
+            case ClassicBlocks.AIR, ClassicBlocks.WATER, ClassicBlocks.STATIONARY_WATER, ClassicBlocks.LAVA, ClassicBlocks.STATIONARY_LAVA, ClassicBlocks.LEAVES, ClassicBlocks.DANDELION, ClassicBlocks.ROSE, ClassicBlocks.BROWN_MUSHROOM, ClassicBlocks.RED_MUSHROOM, ClassicBlocks.GLASS ->
+                    false;
+            default -> true;
+        };
     }
 
     public boolean isLit(int x, int y, int z) {
@@ -106,5 +87,4 @@ public class ClassicLevel {
     public boolean isInBounds(int x, int y, int z) {
         return x >= 0 && y >= 0 && z >= 0 && x < this.sizeX && y < this.sizeY && z < this.sizeZ;
     }
-
 }
