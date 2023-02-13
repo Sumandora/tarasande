@@ -3,7 +3,6 @@ package net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
-import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.screen.NoticeScreen
@@ -50,8 +49,6 @@ open class AccountMicrosoft : Account() {
 
     @TextFieldInfo("Password", true)
     var password = ""
-
-    private var service: MinecraftSessionService? = null
 
     protected var msAuthProfile: MSAuthProfile? = null
     private var redirectUri: String? = null
@@ -331,8 +328,6 @@ $errorDescription""".toByteArray())
     }
 
     override fun getDisplayName() = if (session != null) session?.username!! else if(email.isNotEmpty()) email else "Unnamed Microsoft-account"
-
-    override fun getSessionService(): MinecraftSessionService? = service
 
     override fun save(): JsonArray? {
         if(msAuthProfile == null)

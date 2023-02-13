@@ -18,7 +18,7 @@ public class MixinMinecraftClient {
     public void correctSessionService(CallbackInfoReturnable<MinecraftSessionService> cir) {
         final Account account = ManagerScreenExtension.INSTANCE.get(ScreenExtensionSidebarMultiplayerScreen.class).getSidebar().get(SidebarEntryAccountManager.class).getScreenBetterSlotListAccountManager().getCurrentAccount();
         if (account != null) {
-            cir.setReturnValue(account.getSessionService());
+            cir.setReturnValue(account.getService());
         }
     }
 }

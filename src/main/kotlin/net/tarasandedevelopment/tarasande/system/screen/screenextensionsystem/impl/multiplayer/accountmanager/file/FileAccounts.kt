@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mojang.authlib.Environment
+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.system.base.filesystem.File
@@ -12,6 +13,7 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.a
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.ScreenBetterSlotListAccountManager
 import org.apache.commons.codec.binary.Hex
 import oshi.SystemInfo
+import java.net.Proxy
 import java.util.*
 import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
@@ -83,15 +85,15 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
 
     override fun load(jsonElement: JsonElement) {
         val jsonObject: JsonObject = jsonElement as JsonObject
-        for (jsonElement2 in jsonObject.getAsJsonArray("Accounts")) {
+        for (account in jsonObject.getAsJsonArray("Accounts")) {
             for (accountClass in ManagerAccount.list) {
-                val jsonObject2 = jsonElement2 as JsonObject
-                if (accountClass.getAnnotation(AccountInfo::class.java).name == jsonObject2["Type"].asString) {
-                    val account = accountClass.getDeclaredConstructor().newInstance().load(jsonObject2["Account"].asJsonArray)
+                val accountObject = account.asJsonObject
+                if (accountClass.getAnnotation(AccountInfo::class.java).name == accountObject["Type"].asString) {
+                    val accountImplementation = accountClass.getDeclaredConstructor().newInstance().load(accountObject["Account"].asJsonArray)
 
-                    if (jsonObject2.has("Session")) {
-                        val sessionObject = jsonObject2["Session"].asJsonObject
-                        account.session = Session(
+                    if (accountObject.has("Session")) {
+                        val sessionObject = accountObject["Session"].asJsonObject
+                        accountImplementation.session = Session(
                             sessionObject["Username"].asString,
                             sessionObject["UUID"].asString,
                             sessionObject["Access-Token"].asString,
@@ -101,15 +103,18 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
                         )
                     }
 
-                    val environment = jsonObject2.getAsJsonObject("Environment")
-                    account.environment = Environment.create(
+                    val environment = accountObject.getAsJsonObject("Environment")
+                    accountImplementation.environment = Environment.create(
                         environment["Auth-Host"].asString,
                         environment["Accounts-Host"].asString,
                         environment["Session-Host"].asString,
                         environment["Services-Host"].asString,
                         TARASANDE_NAME
                     )
-                    accountManager.accounts.add(account)
+
+                    accountImplementation.service = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", accountImplementation.environment).createMinecraftSessionService()
+
+                    accountManager.accounts.add(accountImplementation)
                 }
             }
         }

@@ -31,11 +31,11 @@ object ManagerAccount : Manager<Class<out Account>>() {
 abstract class Account {
     var environment: Environment = ManagerEnvironment.list.first().create()
     var session: Session? = null
+    var service: MinecraftSessionService? = null
     var status: String? = null
 
     abstract fun logIn()
     abstract fun getDisplayName(): String
-    abstract fun getSessionService(): MinecraftSessionService?
 
     abstract fun save(): JsonArray?
     abstract fun load(jsonArray: JsonArray): Account
@@ -49,5 +49,5 @@ abstract class Account {
         })
     }
 
-    fun ready() = session != null && getSessionService() != null
+    fun ready() = session != null && service != null
 }

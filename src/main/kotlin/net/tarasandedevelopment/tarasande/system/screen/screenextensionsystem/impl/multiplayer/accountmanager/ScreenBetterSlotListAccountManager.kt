@@ -143,11 +143,12 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
             })
         }.also { addButton = it })
 
-        addDrawableChild(ButtonWidget(3, 3, 100, 20, Text.of("Random session")) {
-            logIn(AccountSession().also {
+        addDrawableChild(ButtonWidget(3, 3, 100, 20, Text.of("Add random session")) {
+            accounts.add(AccountSession().also {
                 it.username = RandomStringUtils.randomAlphanumeric(16)
                 it.uuid = UUID.randomUUID().toString()
             })
+            reload()
         })
 
         tick()
@@ -203,7 +204,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
         with(mc) {
             session = account.session
             authenticationService = YggdrasilAuthenticationService(java.net.Proxy.NO_PROXY, "", account.environment)
-            sessionService = account.getSessionService()
+            sessionService = account.service
             userApiService = try {
                 authenticationService.createUserApiService(account.session?.accessToken)
             } catch (ignored: Exception) {
@@ -230,7 +231,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
             }
         }
         currentAccount = account
-        account.status = Formatting.GREEN.toString() + "Updated session to \"" + account.session!!.username + "\"" + if (!updatedUserApiService) Formatting.RED.toString() + " (failed to update UserApiService)" else ""
+        account.status = Formatting.GREEN.toString() + "Updated session" + if (!updatedUserApiService) Formatting.RED.toString() + " (failed to update UserApiService)" else ""
     }
 
     inner class RunnableLogin(private val account: Account) : Runnable {
@@ -242,7 +243,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
                 account.status = Formatting.GREEN.toString() + "The account has been logged into."
             } catch (e: Throwable) {
                 e.printStackTrace()
-                account.status = if (e.message?.isEmpty()!!) Formatting.RED.toString() + "Login failed!" else Formatting.RED.toString() + e.message
+                account.status = Formatting.RED.toString() + e.localizedMessage.ifEmpty { "Login failed!" }
             }
         }
     }

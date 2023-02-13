@@ -8,7 +8,7 @@ object OptimizationValues {
 
     val optimizeScoreboard = ValueBoolean(this, "Optimize scoreboard", true)
     init {
-        ValueButtonOwnerValues(this, "Scoreboard values", ScoreboardValues)
+        ValueButtonOwnerValues(this, "Scoreboard values", ScoreboardValues, isEnabled = { optimizeScoreboard.value })
     }
 
 }

@@ -1,7 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl
 
 import com.google.gson.JsonArray
-import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account
@@ -29,7 +28,6 @@ class AccountSession : Account() {
     @TextFieldInfo("Client Uid", false)
     private var clientUid = ""
 
-    private var service: MinecraftSessionService? = null
 
     override fun logIn() {
         uuid = UUID.randomUUID().toString()
@@ -38,8 +36,6 @@ class AccountSession : Account() {
     }
 
     override fun getDisplayName() = username
-
-    override fun getSessionService() = service
 
     override fun save(): JsonArray {
         val jsonArray = JsonArray()

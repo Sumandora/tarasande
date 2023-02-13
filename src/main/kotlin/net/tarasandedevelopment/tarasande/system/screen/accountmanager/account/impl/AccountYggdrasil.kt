@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.
 
 import com.google.gson.JsonArray
 import com.mojang.authlib.Agent
-import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication
 import net.minecraft.client.util.Session
@@ -21,8 +20,6 @@ class AccountYggdrasil : Account() {
     @TextFieldInfo("Password", true)
     var password = ""
 
-    private var service: MinecraftSessionService? = null
-
     override fun logIn() {
         val authenticationService = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment)
         val userAuthentication = YggdrasilUserAuthentication(authenticationService, "", Agent.MINECRAFT, environment)
@@ -36,8 +33,6 @@ class AccountYggdrasil : Account() {
     }
 
     override fun getDisplayName() = if (session != null) session?.username!! else username
-
-    override fun getSessionService() = this.service
 
     override fun save(): JsonArray {
         val jsonArray = JsonArray()

@@ -41,8 +41,8 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
         for (entry in listProvider!!()) {
             entries.add(entry)
         }
-        val entryWidth = entries.maxOf { it.width }
-        val entryHeight = entries.maxOf { it.height }
+        val entryWidth = entries.maxOfOrNull { it.width } ?: 1
+        val entryHeight = entries.maxOfOrNull { it.height } ?: 1
         this.addDrawableChild(SlotListWidget(this, width, height, top, height - bottom - top, entryWidth, entryHeight).also {
             slotList = it
         })
@@ -66,16 +66,22 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
         for (entry in listProvider!!()) {
             entries.add(entry)
         }
-        val entryWidth = entries.maxOf { it.width }
-        val entryHeight = entries.maxOf { it.height }
+        if(entries.isNotEmpty()) {
+            val entryWidth = entries.maxOf { it.width }
+            val entryHeight = entries.maxOf { it.height }
 
-        entries.forEach { entry ->
-            entry.parentList = slotList
-            slotList.addEntry(entry)
+            entries.forEach { entry ->
+                entry.parentList = slotList
+                slotList.addEntry(entry)
+            }
+
+            slotList.entryWidth = entryWidth
+            slotList.itemHeight = entryHeight
+        } else {
+            slotList.entryWidth = 1
+            slotList.itemHeight = 1
         }
 
-        slotList.entryWidth = entryWidth
-        slotList.itemHeight = entryHeight
         if(slotList.scrollAmount > slotList.maxScroll)
             slotList.scrollAmount = slotList.maxScroll.toDouble()
     }

@@ -2,7 +2,6 @@ package net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
 import net.tarasandedevelopment.tarasande.gson
@@ -26,8 +25,6 @@ class AccountToken : Account() {
     @TextFieldInfo("Token", false)
     private var token = ""
 
-    private var service: MinecraftSessionService? = null
-
     init {
         // Default environment
         environment = ManagerEnvironment.get(EnvironmentPresetEasyMC::class.java).create()
@@ -43,15 +40,11 @@ class AccountToken : Account() {
 
         val json = gson.fromJson(String(http.inputStream.readAllBytes()), JsonObject::class.java)
 
-        val authenticationService = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment)
-
         session = Session(json["mcName"].asString, json["uuid"].asString, json["session"].asString, Optional.empty(), Optional.empty(), Session.AccountType.MOJANG)
-        service = authenticationService.createMinecraftSessionService()
+        service = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment).createMinecraftSessionService()
     }
 
     override fun getDisplayName() = if (session != null) session?.username!! else token
-
-    override fun getSessionService() = this.service
 
     override fun save(): JsonArray {
         val jsonArray = JsonArray()
