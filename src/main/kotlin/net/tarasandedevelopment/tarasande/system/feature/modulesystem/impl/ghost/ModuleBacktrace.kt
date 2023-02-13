@@ -5,7 +5,7 @@ import net.minecraft.util.math.Box
 import net.tarasandedevelopment.tarasande.event.EventAttackEntity
 import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride
 import net.tarasandedevelopment.tarasande.event.EventRender3D
-import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.mc
@@ -45,8 +45,8 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
             event.boundingBox = computeSelectedBox(event.entity) ?: return@registerEvent
         }
 
-        registerEvent(EventUpdate::class.java) { event ->
-            if (event.state == EventUpdate.State.PRE) {
+        registerEvent(EventTick::class.java) { event ->
+            if (event.state == EventTick.State.PRE) {
                 boundingBoxes.entries.removeIf { mc.world?.entities?.contains(it.key) != true }
                 for (entity in mc.world?.entities!!)
                     if (PlayerUtil.isAttackable(entity))

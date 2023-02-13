@@ -14,7 +14,7 @@ class ModuleHitBox : Module("Hit box", "Makes enemy hit boxes larger", ModuleCat
     private val disableInterpolation = ValueBoolean(this, "Disable interpolation", false)
 
     init {
-        registerEvent(EventBoundingBoxOverride::class.java) { event ->
+        registerEvent(EventBoundingBoxOverride::class.java, 1001) { event ->
             if (disableInterpolation.value) {
                 if (event.entity is LivingEntity) {
                     val center = event.boundingBox.center

@@ -29,7 +29,7 @@ class ModuleTroubleInTerroristTown : Module("Trouble in terrorist town", "Uses a
         val traitors = ArrayList<PlayerEntity>()
 
         for (player in mc.world?.players?.filter { it != entity } ?: return null) {
-            if (player.distanceTo(entity) <= distance.value && RotationUtil.getRotations(player.eyePos, entity.eyePos).fov(Rotation(player)) <= Rotation.MAXIMUM_DELTA * rotationThreshold.value)
+            if (player.squaredDistanceTo(entity) <= distance.value * distance.value && RotationUtil.getRotations(player.eyePos, entity.eyePos).fov(Rotation(player)) <= Rotation.MAXIMUM_DELTA * rotationThreshold.value)
                 if (items.isSelected(player.mainHandStack.item)) {
                     // This player is probably a traitor
                     traitors.add(player)

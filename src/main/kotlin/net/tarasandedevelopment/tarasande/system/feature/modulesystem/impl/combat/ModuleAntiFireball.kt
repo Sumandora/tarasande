@@ -37,7 +37,7 @@ class ModuleAntiFireball : Module("Anti fireball", "Hits fireballs to turn them"
                 val aimPoint = MathUtil.getBestAimPoint(entity.boundingBox.expand(entity.targetingMargin.toDouble()))
                 if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.value * reach.value)
                     continue
-                if ((Vec3d(entity.prevX, entity.prevY, entity.prevZ) - mc.player?.eyePos!!).horizontalLengthSquared() <= (entity.pos - mc.player?.eyePos!!).horizontalLengthSquared())
+                if ((Vec3d(entity.prevX, entity.prevY, entity.prevZ) - mc.player?.eyePos!!).horizontalLength() <= (entity.pos - mc.player?.eyePos!!).horizontalLength())
                     continue
 
                 if (!targets.contains(entity)) {
