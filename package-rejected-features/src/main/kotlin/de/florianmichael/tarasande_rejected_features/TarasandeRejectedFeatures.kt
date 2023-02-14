@@ -6,6 +6,7 @@ import de.florianmichael.tarasande_rejected_features.module.ModuleAutoRescuePlat
 import de.florianmichael.tarasande_rejected_features.module.ModuleDropper
 import de.florianmichael.tarasande_rejected_features.module.ModuleRoundedMovement
 import de.florianmichael.tarasande_rejected_features.screenextension.ScreenExtensionHandledScreen
+import de.florianmichael.tarasande_rejected_features.tarasandevalues.ClosedInventory
 import net.fabricmc.api.ClientModInitializer
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
@@ -46,6 +47,8 @@ class TarasandeRejectedFeatures : ClientModInitializer {
             ManagerCommand.add(
                 CommandDeadByDaylightEscape()
             )
+
+            ClosedInventory
         }
     }
 }

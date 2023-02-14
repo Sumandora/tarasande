@@ -20,6 +20,9 @@
       "de.florianmichael.tarasande_rejected_features.TarasandeRejectedFeatures"
     ]
   },
+  "mixins": [
+    "tarasande-rejected-features.mixins.json"
+  ],
   "accessWidener": "tarasande-rejected-features.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.9",
