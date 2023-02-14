@@ -6,6 +6,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.tarasandedevelopment.tarasande.feature.statusrenderer.StatusRenderer
 import net.tarasandedevelopment.tarasande.util.connection.Proxy
 import net.tarasandedevelopment.tarasande.util.connection.ProxyAuthentication
 import net.tarasandedevelopment.tarasande.util.connection.ProxyType
@@ -37,8 +38,6 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
 
     private var proxyTypeButtonWidget: ButtonWidget? = null
     private var proxyType: ProxyType? = null
-
-    private var status: String? = null
 
     private var pingThread: ThreadRunnableExposed? = null
 
@@ -82,10 +81,9 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
 
         addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50, 100, 20, Text.of("Done")) {
             if (ipTextField?.text?.isEmpty()!! || portTextField?.text?.isEmpty()!!) {
-                status = Formatting.RED.toString() + if (ipTextField?.text?.isEmpty()!! && portTextField?.text?.isEmpty()!!) "IP and port are empty"
+                StatusRenderer.setStatus(this, Formatting.RED.toString() + if (ipTextField?.text?.isEmpty()!! && portTextField?.text?.isEmpty()!!) "IP and port are empty"
                 else if (ipTextField?.text?.isEmpty()!!) "IP is empty"
-                else if (portTextField?.text?.isEmpty()!!) "Port is empty"
-                else null
+                else if (portTextField?.text?.isEmpty()!!) "Port is empty" else "")
             } else {
                 try {
                     val port = portTextField?.text?.toInt()!!
@@ -108,20 +106,20 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
                         (pingThread?.runnable as RunnablePing).cancelled = true
                     ThreadRunnableExposed(RunnablePing(proxy)).also { pingThread = it }.start()
                 } catch (numberFormatException: NumberFormatException) {
-                    status = Formatting.RED.toString() + "Port is not numeric"
+                    StatusRenderer.setStatus(this, Formatting.RED.toString() + "Port is not numeric")
                 } catch (unknownHostException: UnknownHostException) {
-                    status = Formatting.RED.toString() + "Invalid IP or port"
+                    StatusRenderer.setStatus(this, Formatting.RED.toString() + "Invalid IP or port")
                 } catch (illegalArgumentException: IllegalArgumentException) {
-                    status = Formatting.RED.toString() + "Invalid IP or port"
+                    StatusRenderer.setStatus(this, Formatting.RED.toString() + "Invalid IP or port")
                 } catch (throwable: Throwable) {
-                    status = Formatting.RED.toString() + throwable.message
+                    StatusRenderer.setStatus(this, Formatting.RED.toString() + throwable.message!!)
                 }
             }
         }.also { doneButton = it })
 
         addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25, 100, 20, Text.of("Disable")) {
             this.proxy = null
-            status = "Disabled"
+            StatusRenderer.setStatus(this, "Disabled")
         })
 
         tick()
@@ -144,9 +142,6 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
-        FontWrapper.textShadow(matrices, "Proxy", width / 2.0F, 8 - FontWrapper.fontHeight() / 2.0F, -1, centered = true)
-        FontWrapper.textShadow(matrices, status ?: return, width / 2.0F, height / 2F - 50 - 15 - FontWrapper.fontHeight() - 2, -1, centered = true)
-
         proxy?.socketAddress?.apply {
             FontWrapper.textShadow(matrices, address.hostAddress + ":" + port + if (proxy?.ping != null) " (" + proxy?.ping + "ms)" else "", 6F, 27F)
         }
@@ -180,25 +175,25 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
         override fun run() {
             val socket = Socket()
             try {
-                status = Formatting.YELLOW.toString() + "Pinging..."
+                StatusRenderer.setStatus(this@ScreenBetterProxy, Formatting.YELLOW.toString() + "Pinging...")
                 val beginTime = System.currentTimeMillis()
                 socket.connect(proxy.socketAddress, 5000)
                 if (cancelled)
                     return
                 val timeDelta = System.currentTimeMillis() - beginTime
                 if (this.proxy == proxy) {
-                    status = RenderUtil.formattingByHex(RenderUtil.colorInterpolate(Color.green, Color.red.darker(), (timeDelta / 1000.0).coerceAtMost(1.0)).rgb).toString() + "Reached proxy in " + timeDelta + "ms"
+                    StatusRenderer.setStatus(this@ScreenBetterProxy, RenderUtil.formattingByHex(RenderUtil.colorInterpolate(Color.green, Color.red.darker(), (timeDelta / 1000.0).coerceAtMost(1.0)).rgb).toString() + "Reached proxy in " + timeDelta + "ms")
                     proxy.ping = timeDelta
                 }
             } catch (throwable: Throwable) {
                 if (this.proxy == proxy) {
-                    status = when (throwable) {
+                    StatusRenderer.setStatus(this@ScreenBetterProxy, when (throwable) {
                         is SocketTimeoutException -> Formatting.RED.toString() + "Timeout reached, unreachable"
                         is IOException -> Formatting.RED.toString() + "Failed to reach proxy"
                         is IllegalBlockingModeException -> Formatting.RED.toString() + "Illegal blocking method"
                         is IllegalArgumentException -> Formatting.RED.toString() + "Invalid IP or port"
                         else -> Formatting.RED.toString() + (if (throwable.message != null && throwable.message?.isNotEmpty()!!) throwable.message else "Unknown error")
-                    }
+                    })
                 }
                 throwable.printStackTrace()
             } finally {

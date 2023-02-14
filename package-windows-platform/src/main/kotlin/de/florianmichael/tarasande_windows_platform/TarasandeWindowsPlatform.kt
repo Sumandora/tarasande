@@ -64,10 +64,10 @@ class TarasandeWindowsPlatform : ClientModInitializer {
                             }
                         }
 
-                        override fun onClick(enabled: Boolean) {
+                        override fun onClick(mouseButton: Int) {
                             val screenBetterProxy = ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntryProxy::class.java).screenBetterProxy
 
-                            if (enabled) {
+                            if (enabled.value) {
                                 torProcess = ProcessBuilder(torFile.absolutePath).start()
                                 screenBetterProxy.proxy = Proxy(InetSocketAddress("127.0.0.1", 9050), ProxyType.SOCKS5)
                             } else {

@@ -7,14 +7,26 @@ import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.minecraft.client.network.ServerAddress
+import net.minecraft.util.Formatting
+import net.tarasandedevelopment.tarasande.feature.statusrenderer.StatusRenderer
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.ScreenExtensionButtonListDirectConnect
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.gamemenu.ScreenExtensionButtonListGameMenuScreen
+import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import org.lwjgl.glfw.GLFW
 import su.mandora.event.EventDispatcher
+
+fun errorMessage(text: String) {
+    @Suppress("NAME_SHADOWING") val text = Formatting.RED.toString() + text
+    if (mc.currentScreen == null) {
+        CustomChat.printChatMessage(text)
+    } else {
+        StatusRenderer.setStatus(mc.currentScreen!!, text)
+    }
+}
 
 class TarasandeCrasher : ClientModInitializer {
 
@@ -28,8 +40,11 @@ class TarasandeCrasher : ClientModInitializer {
                     try {
                         ServerAddress.parse(if (directConnect) (mc.currentScreen as DirectConnectScreen).addressField.text else mc.currentServerEntry?.address ?: "").apply {
                             crasher.crash(address, port)
+                            StatusRenderer.setStatus(mc.currentScreen!!, Formatting.GREEN.toString() + "Successfully executed crasher $name")
                         }
-                    } catch (_: Exception) {
+                    } catch (e: Exception) {
+                        StatusRenderer.setStatus(mc.currentScreen!!, Formatting.RED.toString() + "Failed to execute crasher $name, see logs for more details")
+                        e.printStackTrace()
                     }
                 } else if (it == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     mc.setScreen(ScreenBetterOwnerValues(name, mc.currentScreen!!, crasher))

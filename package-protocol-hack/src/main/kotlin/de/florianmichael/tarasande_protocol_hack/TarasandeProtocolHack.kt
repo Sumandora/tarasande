@@ -183,7 +183,7 @@ class TarasandeProtocolHack {
 
             // First-time load
             add(EventSuccessfulLoad::class.java, 10000 /* after value load */) {
-                update(InternalProtocolList.fromProtocolId(ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntrySelectionProtocolHack::class.java).version.value.toInt()), false)
+                update(ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntrySelectionProtocolHack::class.java).selectedProtocol(), false)
             }
 
             // Via Connection tracker

@@ -36,6 +36,6 @@ public abstract class MixinScreen {
             return;
         }
 
-        EventDispatcher.INSTANCE.call(new EventScreenRender(matrices, thisScreen));
+        EventDispatcher.INSTANCE.call(new EventScreenRender(matrices, thisScreen, EventScreenRender.State.PRE));
     }
 }
