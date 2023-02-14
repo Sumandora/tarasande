@@ -1,7 +1,9 @@
 package de.florianmichael.tarasande_protocol_spoofer.spoofer
 
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
 import de.florianmichael.tarasande_protocol_spoofer.viaversion.ViaVersionUtil
+import de.florianmichael.vialoadingbase.ViaLoadingBase
 import io.netty.buffer.Unpooled
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
@@ -10,8 +12,11 @@ import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.text.LiteralTextContent
 import net.minecraft.text.MutableText
+import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.feature.statusrenderer.StatusRenderer
 import net.tarasandedevelopment.tarasande.logger
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
@@ -29,6 +34,12 @@ class SidebarEntryToggleableTeslaClientFaker : SidebarEntryToggleable("Tesla cli
     //http://teslacraft.org/launcher/TeslaCraft.jar
 
     private val registerContent = "WECUI\u0000tesla:client".toByteArray(StandardCharsets.US_ASCII)
+
+    override fun onClick(mouseButton: Int) {
+        if (enabled.value && ViaLoadingBase.getTargetVersion() != ProtocolVersion.v1_12_2) {
+            StatusRenderer.setStatus(mc.currentScreen!!, Formatting.YELLOW.toString() + "This spoofer was only made for " + ProtocolVersion.v1_12_2.name + ", it makes little sense on other versions")
+        }
+    }
 
     init {
         EventDispatcher.add(EventPacket::class.java) { event ->

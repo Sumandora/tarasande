@@ -1,5 +1,6 @@
 package de.florianmichael.tarasande_crasher.module
 
+import de.florianmichael.tarasande_crasher.errorMessage
 import net.minecraft.entity.vehicle.BoatEntity
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
@@ -8,7 +9,6 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 
 class ModuleBoatCrasher : Module("Boat crasher", "Weird exploit that crashes vanilla servers", ModuleCategory.EXPLOIT) {
 
@@ -25,7 +25,7 @@ class ModuleBoatCrasher : Module("Boat crasher", "Weird exploit that crashes van
         registerEvent(EventUpdate::class.java) {
             if (it.state == EventUpdate.State.POST) {
                 if (mc.player!!.vehicle == null && mc.player!!.vehicle !is BoatEntity && enabled.value) {
-                    CustomChat.printChatMessage("You dismounted the boat, disabled $name")
+                    errorMessage("You dismounted the boat, disabled $name")
                     switchState()
                 }
             }
@@ -33,7 +33,6 @@ class ModuleBoatCrasher : Module("Boat crasher", "Weird exploit that crashes van
     }
 
     override fun onEnable() {
-        mc.setScreen(null)
         if (mc.player == null) {
             switchState()
             return
@@ -51,7 +50,7 @@ class ModuleBoatCrasher : Module("Boat crasher", "Weird exploit that crashes van
                 mc.networkHandler!!.sendPacket(VehicleMoveC2SPacket(mc.player!!.vehicle!!))
             }
         } else {
-            CustomChat.printChatMessage("You need to be in a boat to use this")
+            errorMessage("You need to be in a boat to use this")
             switchState()
         }
     }

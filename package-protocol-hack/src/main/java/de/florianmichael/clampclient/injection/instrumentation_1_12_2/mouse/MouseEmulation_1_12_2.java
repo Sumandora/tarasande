@@ -4,6 +4,8 @@ import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.util.GlfwUtil;
+import net.tarasandedevelopment.tarasande.event.EventMouseDelta;
+import su.mandora.event.EventDispatcher;
 
 @SuppressWarnings({"DataFlowIssue", "UnnecessaryUnboxing"})
 public class MouseEmulation_1_12_2 {
@@ -24,6 +26,11 @@ public class MouseEmulation_1_12_2 {
     private float smoothCamFilterY;
 
     public void updateMouse() {
+        EventMouseDelta eventMouseDelta = new EventMouseDelta(smoothCamYaw, smoothCamPitch);
+        EventDispatcher.INSTANCE.call(eventMouseDelta);
+        smoothCamYaw = (float) eventMouseDelta.getDeltaX();
+        smoothCamPitch = (float) eventMouseDelta.getDeltaY();
+
         float tickDelta = MinecraftClient.getInstance().getTickDelta();
         double d = GlfwUtil.getTime();
         double e = d - original.lastMouseUpdateTime;

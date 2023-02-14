@@ -15,7 +15,13 @@ import su.mandora.event.Event
 
 class EventResolutionUpdate(val prevWidth: Double, val prevHeight: Double, val width: Double, val height: Double) : Event(false)
 class EventRender2D(val matrices: MatrixStack) : Event(false)
-class EventScreenRender(val matrices: MatrixStack, val screen: Screen) : Event(false)
+
+class EventScreenRender(val matrices: MatrixStack, val screen: Screen, val state: State) : Event(false) {
+    enum class State {
+        PRE, POST
+    }
+}
+
 class EventRender3D(val matrices: MatrixStack, val positionMatrix: Matrix4f) : Event(false)
 class EventGamma(val x: Int, val y: Int, var color: Int) : Event(false)
 class EventColorCorrection(var red: Int, var green: Int, var blue: Int) : Event(false)

@@ -6,6 +6,7 @@ import net.tarasandedevelopment.tarasande.feature.tarasandevalue.impl.Accessibil
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.ManagerValue
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueSpacer
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
@@ -77,16 +78,14 @@ open class SidebarEntry(val name: String, val category: String) {
 
 @Suppress("unused") // Packages use this
 abstract class SidebarEntrySelection(name: String, category: String, val list: List<String>) : SidebarEntry(name, category) {
-    abstract fun onClick(newValue: String)
-
-    abstract fun isSelected(value: String): Boolean
+    val value = ValueMode(this, "Selection", false, *list.toTypedArray())
 
     override fun createElements(owner: Any): List<ElementWidthValueComponent<*>> {
         return list.map {
             object : ValueSpacer(owner, it, 0.75F, manage = false) {
                 override fun onClick(mouseButton: Int) {
                     if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
-                        onClick(it)
+                        value.select(list.indexOf(it))
                         if (AccessibilityValues.playSoundWhenClickingInSidebar.value) ScreenUtil.playClickSound()
                     } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                         openValues()
@@ -94,7 +93,7 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
                 }
 
                 override fun getColor(hovered: Boolean): Color {
-                    if (isSelected(it)) {
+                    if (value.isSelected(it)) {
                         return TarasandeValues.accentColor.getColor()
                     }
                     return super.getColor(hovered)
@@ -107,15 +106,13 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
 open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry(name, category) {
     @Suppress("LeakingThis")
     val enabled = ValueBoolean(this, "Enabled", false, visible = false)
-    open fun onClick(enabled: Boolean) {
-    }
 
     override fun createElements(owner: Any): List<ElementWidthValueComponent<*>> {
         return listOf(object : ValueSpacer(owner, name, 0.75F, manage = false) {
             override fun onClick(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     enabled.value = !enabled.value
-                    onClick(enabled.value)
+                    this@SidebarEntryToggleable.onClick(mouseButton)
                     if (AccessibilityValues.playSoundWhenClickingInSidebar.value) ScreenUtil.playClickSound()
                 } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openValues()
