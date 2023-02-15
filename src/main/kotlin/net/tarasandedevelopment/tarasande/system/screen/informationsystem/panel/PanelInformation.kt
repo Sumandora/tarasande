@@ -23,17 +23,23 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
 
     private val elements = ValueMode(this, "Elements", true, *informationSystem.list.map { map[it]!! }.toTypedArray())
 
-    fun isSelected(information: Information) = elements.isSelected(map[information]!!)
+    class InformationValues(panelInformation: PanelInformation) {
+        init {
+            for (information in ManagerInformation.list) {
+                if (ManagerValue.getValues(information).isNotEmpty()) {
+                    val name = panelInformation.map[information]!!
 
-    init {
-        for (information in informationSystem.list) {
-            if (ManagerValue.getValues(information).isNotEmpty()) {
-                val name = map[information]!!
-
-                ValueButtonOwnerValues(this, "$name values", information)
+                    ValueButtonOwnerValues(this, "$name values", information)
+                }
             }
         }
     }
+
+    init {
+        ValueButtonOwnerValues(this, "Information values", InformationValues(this))
+    }
+
+    fun isSelected(information: Information) = elements.isSelected(map[information]!!)
 
     override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val text = ArrayList<String>()

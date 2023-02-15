@@ -15,6 +15,7 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.i
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.microsoft.AccountMicrosoftRefreshToken
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environment.ManagerEnvironment
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterEnvironment
+import net.tarasandedevelopment.tarasande.util.render.skin.SkinRenderer
 
 object ManagerAccount : Manager<Class<out Account>>() {
     init {
@@ -31,8 +32,14 @@ object ManagerAccount : Manager<Class<out Account>>() {
 abstract class Account {
     var environment: Environment = ManagerEnvironment.list.first().create()
     var session: Session? = null
+        set(value) {
+            if (value != null)
+                skin = SkinRenderer(value.uuidOrNull, value.username)
+            field = value
+        }
     var service: MinecraftSessionService? = null
     var status: String? = null
+    var skin: SkinRenderer? = null
 
     abstract fun logIn()
     abstract fun getDisplayName(): String

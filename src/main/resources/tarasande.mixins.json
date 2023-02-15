@@ -109,6 +109,7 @@
   },
   "client": [
     "core.rotation.MixinInventoryScreen",
+    "core.skin.MixinPlayerSkinProvider",
     "feature.module.MixinClientPlayNetworkHandler",
     "feature.module.MixinConfirmScreen",
     "feature.spoofer.MixinServerResourcePackProvider",

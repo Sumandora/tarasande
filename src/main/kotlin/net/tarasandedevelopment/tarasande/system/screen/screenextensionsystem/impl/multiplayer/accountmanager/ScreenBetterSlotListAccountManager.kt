@@ -186,6 +186,8 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
             FontWrapper.textShadow(matrices, formatting.toString() + account.getDisplayName(), entryWidth / 2F, entryHeight / 2F - FontWrapper.fontHeight(), centered = true, scale = 2.0F)
             if(account.status != null)
                 FontWrapper.textShadow(matrices, account.status!!, entryWidth / 2F, entryHeight / 2F + FontWrapper.fontHeight(), centered = true)
+            if (account.skin != null)
+                account.skin!!.draw(matrices, 5, 5, 32)
         }
     }
 

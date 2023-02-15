@@ -36,8 +36,16 @@ class TarasandeRejectedFeatures : ClientModInitializer {
                 InformationFeaturesGraphs(),
                 InformationFeaturesPackagesForTarasande(),
 
+                // System
+                InformationCPU(),
+                InformationGPU(),
+
                 // KeyBinds
-                InformationKeyBinds()
+                InformationKeyBinds(),
+
+                // Server
+                InformationLag(),
+                InformationMovements()
             )
 
             ManagerScreenExtension.add(

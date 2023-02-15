@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
+package de.florianmichael.tarasande_rejected_features.information
 
 import com.mojang.blaze3d.platform.GlDebugInfo
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information

@@ -25,10 +25,6 @@ object ManagerInformation : Manager<Information>() {
             InformationHandlers(),
             InformationPlayTime(),
 
-            // System
-            InformationCPU(),
-            InformationGPU(),
-
             // World
             InformationEntities(),
             InformationWorldTime(),
@@ -40,7 +36,6 @@ object ManagerInformation : Manager<Information>() {
             // Server
             InformationServerBrand(),
             InformationOpenChannels(),
-            InformationLag(),
 
             // Game
             InformationTickDelta()
