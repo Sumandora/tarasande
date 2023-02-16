@@ -78,6 +78,7 @@ open class SidebarEntry(val name: String, val category: String) {
 
 @Suppress("unused") // Packages use this
 abstract class SidebarEntrySelection(name: String, category: String, val list: List<String>) : SidebarEntry(name, category) {
+    @Suppress("LeakingThis")
     val value = ValueMode(this, "Selection", false, *list.toTypedArray())
 
     override fun createElements(owner: Any): List<ElementWidthValueComponent<*>> {
@@ -94,10 +95,10 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
                 }
 
                 override fun getColor(hovered: Boolean): Color {
-                    if (value.isSelected(it)) {
-                        return TarasandeValues.accentColor.getColor()
-                    }
-                    return super.getColor(hovered)
+                    return if (value.isSelected(it))
+                        TarasandeValues.accentColor.getColor()
+                    else
+                        super.getColor(hovered)
                 }
             }.createValueComponent()!!
         }
@@ -120,7 +121,12 @@ open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry
                 }
             }
 
-            override fun getColor(hovered: Boolean) = (if (enabled.value) Color.green else Color.red).let { if (hovered) RenderUtil.colorInterpolate(it, TarasandeValues.accentColor.getColor(), 0.4) else it }
+            override fun getColor(hovered: Boolean): Color {
+                var color = if (enabled.value) Color.green else Color.red
+                if(hovered)
+                    color = RenderUtil.colorInterpolate(color, TarasandeValues.accentColor.getColor(), 0.4)
+                return color
+            }
         }.createValueComponent()!!)
     }
 }
