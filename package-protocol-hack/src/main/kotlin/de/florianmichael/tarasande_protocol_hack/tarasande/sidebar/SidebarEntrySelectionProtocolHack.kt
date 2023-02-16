@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.si
 
 class SidebarEntrySelectionProtocolHack : SidebarEntrySelection("Protocol Hack", "Protocol Hack", InternalProtocolList.getProtocols().map { it.name }) {
 
-    override fun onClick(mouseButton: Int) {
+    override fun onClick() {
         TarasandeProtocolHack.update(selectedProtocol(), ProtocolHackValues.autoChangeValuesDependentOnVersion.value)
     }
 

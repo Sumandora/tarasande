@@ -35,7 +35,7 @@ class SidebarEntryToggleableTeslaClientFaker : SidebarEntryToggleable("Tesla cli
 
     private val registerContent = "WECUI\u0000tesla:client".toByteArray(StandardCharsets.US_ASCII)
 
-    override fun onClick(mouseButton: Int) {
+    override fun onClick() {
         if (enabled.value && ViaLoadingBase.getTargetVersion() != ProtocolVersion.v1_12_2) {
             StatusRenderer.setStatus(mc.currentScreen!!, Formatting.YELLOW.toString() + "This spoofer was only made for " + ProtocolVersion.v1_12_2.name + ", it makes little sense on other versions")
         }

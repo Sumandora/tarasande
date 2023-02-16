@@ -59,14 +59,14 @@ open class SidebarEntry(val name: String, val category: String) {
         }
     }
 
-    open fun onClick(mouseButton: Int) {
+    open fun onClick() {
     }
 
     open fun createElements(owner: Any): List<ElementWidthValueComponent<*>> {
         return listOf(object : ValueSpacer(owner, name, 0.75F, manage = false) {
             override fun onClick(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
-                    this@SidebarEntry.onClick(mouseButton)
+                    this@SidebarEntry.onClick()
                     if (AccessibilityValues.playSoundWhenClickingInSidebar.value) ScreenUtil.playClickSound()
                 } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openValues()
@@ -86,6 +86,7 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
                 override fun onClick(mouseButton: Int) {
                     if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                         value.select(list.indexOf(it))
+                        this@SidebarEntrySelection.onClick()
                         if (AccessibilityValues.playSoundWhenClickingInSidebar.value) ScreenUtil.playClickSound()
                     } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                         openValues()
@@ -112,7 +113,7 @@ open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry
             override fun onClick(mouseButton: Int) {
                 if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                     enabled.value = !enabled.value
-                    this@SidebarEntryToggleable.onClick(mouseButton)
+                    this@SidebarEntryToggleable.onClick()
                     if (AccessibilityValues.playSoundWhenClickingInSidebar.value) ScreenUtil.playClickSound()
                 } else if (mouseButton == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
                     openValues()

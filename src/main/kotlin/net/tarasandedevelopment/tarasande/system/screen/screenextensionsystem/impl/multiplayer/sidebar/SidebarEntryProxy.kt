@@ -8,7 +8,7 @@ class SidebarEntryProxy : SidebarEntry("Proxy", "General") {
 
     val screenBetterProxy = ScreenBetterProxy()
 
-    override fun onClick(mouseButton: Int) {
+    override fun onClick() {
         mc.setScreen(screenBetterProxy.apply { prevScreen = mc.currentScreen })
     }
 }

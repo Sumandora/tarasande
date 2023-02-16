@@ -8,7 +8,7 @@ class SidebarEntryAccountManager : SidebarEntry("Account manager", "General") {
 
     val screenBetterSlotListAccountManager = ScreenBetterSlotListAccountManager()
 
-    override fun onClick(mouseButton: Int) {
+    override fun onClick() {
         mc.setScreen(screenBetterSlotListAccountManager.apply { prevScreen = mc.currentScreen })
     }
 }
