@@ -13,6 +13,8 @@ import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.blursystem.ManagerBlur
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.max
 
 object OptimizedScoreboard {
@@ -45,7 +47,7 @@ object OptimizedScoreboard {
         val fontHeight = inGameHud.textRenderer.fontHeight
 
         val height = (playerScores.size + 1 /* title */) * fontHeight
-        val halfHeight = height / 2
+        val halfHeight = height / 2.0f
 
         val background = mc.options.getTextBackgroundColor(0.3f)
         val titleBackground = mc.options.getTextBackgroundColor(0.4f)
@@ -58,14 +60,14 @@ object OptimizedScoreboard {
             matrices.pop()
         }
 
-        InGameHud.fill(matrices, screenWidth - maxWidth - 2, halfScreenHeight - halfHeight, screenWidth, halfScreenHeight - halfHeight + fontHeight, titleBackground)
-        inGameHud.textRenderer.draw(matrices, title, (screenWidth - maxWidth / 2 - inGameHud.textRenderer.getWidth(title) / 2).toFloat(), (halfScreenHeight - halfHeight + 1).toFloat(), -1)
+        InGameHud.fill(matrices, screenWidth - maxWidth - 2, floor(halfScreenHeight - halfHeight).toInt(), screenWidth, floor(halfScreenHeight - halfHeight + fontHeight).toInt(), titleBackground)
+        inGameHud.textRenderer.draw(matrices, title, screenWidth - maxWidth / 2.0f - inGameHud.textRenderer.getWidth(title) / 2.0f, floor(halfScreenHeight - halfHeight) + 1.0f, -1)
 
-        InGameHud.fill(matrices, screenWidth - maxWidth - 2, halfScreenHeight - halfHeight + fontHeight, screenWidth, halfScreenHeight + halfHeight, background)
+        InGameHud.fill(matrices, screenWidth - maxWidth - 2, floor(halfScreenHeight - halfHeight + fontHeight).toInt(), screenWidth, ceil(halfScreenHeight + halfHeight).toInt(), background)
 
 
         lines.forEachIndexed { index, it ->
-            inGameHud.textRenderer.draw(matrices, it.second, (screenWidth - maxWidth).toFloat(), (halfScreenHeight + halfHeight - fontHeight - index * inGameHud.textRenderer.fontHeight).toFloat(), -1)
+            inGameHud.textRenderer.draw(matrices, it.second, (screenWidth - maxWidth).toFloat(), halfScreenHeight + halfHeight - fontHeight - index * inGameHud.textRenderer.fontHeight, -1)
             if(ScoreboardValues.showScoreNumber.value) {
                 val score = Formatting.RED.toString() + it.first.score
                 inGameHud.textRenderer.draw(matrices, score, (screenWidth - inGameHud.textRenderer.getWidth(score)).toFloat(), (halfScreenHeight + halfHeight - fontHeight - index * inGameHud.textRenderer.fontHeight).toFloat(), -1)
