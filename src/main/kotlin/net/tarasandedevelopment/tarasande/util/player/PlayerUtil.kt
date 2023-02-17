@@ -209,24 +209,12 @@ object PlayerUtil {
         return (y - 1).coerceAtLeast(0)
     }
 
-    private var queuedDisconnect = false
-    init {
-        EventDispatcher.add(EventTick::class.java, Int.MAX_VALUE) {
-            if(mc.world == null)
-                queuedDisconnect = false // race condition?
-            else if(queuedDisconnect) {
-                GameMenuScreen(true).also {
-                    it.init(mc, mc.window.scaledWidth, mc.window.scaledHeight)
-                    it.exitButton!!.onPress()
-                }
-                queuedDisconnect = false
-            }
-        }
-    }
-
     fun disconnect() {
         if(mc.world != null)
-            queuedDisconnect = true
+            GameMenuScreen(true).also {
+                it.init(mc, mc.window.scaledWidth, mc.window.scaledHeight)
+                it.exitButton!!.onPress()
+            }
     }
 
     fun attack(entity: Entity?, position: Vec3d? = null) {

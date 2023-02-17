@@ -7,7 +7,7 @@ import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Inform
 
 class InformationViaVersionProtocolVersion : Information("Via Version", "Protocol Version") {
 
-    override fun getMessage(): String? = ViaLoadingBase.getTargetVersion()?.getName()
+    override fun getMessage(): String? = ViaLoadingBase.getTargetVersion()?.name
 }
 
 class InformationViaVersionProtocolsInPipeline : Information("Via Version", "Protocols in pipeline") {

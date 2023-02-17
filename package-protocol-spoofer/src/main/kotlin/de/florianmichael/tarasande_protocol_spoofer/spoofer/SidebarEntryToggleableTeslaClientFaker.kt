@@ -78,7 +78,7 @@ class SidebarEntryToggleableTeslaClientFaker : SidebarEntryToggleable("Tesla cli
                     if (event.packet is CustomPayloadS2CPacket) {
                         val packet = (event.packet as CustomPayloadS2CPacket)
                         if(packet.channel.toString() == "tesla:client") {
-                            CustomChat.printChatMessage(MutableText.of(LiteralTextContent(("Tesla Client Request: " + packet.data.writtenBytes.decodeToString()).also { logger.warning(it) })))
+                            CustomChat.printChatMessage(MutableText.of(LiteralTextContent(("[Tesla Client Request] " + packet.data.writtenBytes.decodeToString()).also { logger.warning(it) })))
                         }
                     }
                 }

@@ -54,7 +54,6 @@ accessible field net/minecraft/client/gui/widget/TextFieldWidget text Ljava/lang
 accessible field net/minecraft/entity/TntEntity DEFAULT_FUSE I
 accessible field net/minecraft/client/render/WorldRenderer frustum Lnet/minecraft/client/render/Frustum;
 accessible field net/minecraft/network/packet/s2c/play/WorldTimeUpdateS2CPacket timeOfDay J
-accessible field net/minecraft/client/gui/screen/DirectConnectScreen addressField Lnet/minecraft/client/gui/widget/TextFieldWidget;
 accessible field net/minecraft/client/resource/ServerResourcePackProvider serverContainer Lnet/minecraft/resource/ResourcePackProfile;
 accessible field net/minecraft/resource/ZipResourcePack backingZipFile Ljava/io/File;
 accessible field net/minecraft/client/realms/RealmsClient sessionId Ljava/lang/String;
@@ -66,7 +65,6 @@ accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket deltaY S
 accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket deltaZ S
 accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket positionChanged Z
 accessible field net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized profileId Ljava/util/UUID;
-accessible field net/minecraft/client/network/MultiplayerServerListPinger clientConnections Ljava/util/List;
 accessible field net/minecraft/entity/player/PlayerEntity reducedDebugInfo Z
 accessible field net/minecraft/client/gui/screen/GameMenuScreen exitButton Lnet/minecraft/client/gui/widget/ButtonWidget;
 accessible field net/minecraft/client/gui/widget/EntryListWidget itemHeight I
@@ -85,7 +83,6 @@ accessible method net/minecraft/client/gui/hud/InGameHud renderHotbarItem (IIFLn
 accessible method net/minecraft/client/MinecraftClient doItemUse ()V
 accessible method net/minecraft/client/MinecraftClient doAttack ()Z
 accessible method net/minecraft/client/MinecraftClient handleBlockBreaking (Z)V
-accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry <init> (Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget;Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;Lnet/minecraft/client/network/ServerInfo;)V
 accessible method net/minecraft/entity/Entity adjustMovementForSneaking (Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/entity/MovementType;)Lnet/minecraft/util/math/Vec3d;
 accessible method net/minecraft/entity/player/PlayerEntity adjustMovementForSneaking (Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/entity/MovementType;)Lnet/minecraft/util/math/Vec3d;
 accessible method net/minecraft/client/world/ClientWorld getPendingUpdateManager ()Lnet/minecraft/client/network/PendingUpdateManager;

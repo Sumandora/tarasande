@@ -45,7 +45,7 @@ class TarasandeWindowsPlatform : ClientModInitializer {
                             }
                         }
 
-                        override fun onClick(mouseButton: Int) {
+                        override fun onClick() {
                             val builder = ProcessBuilder("wscript", this.script.absolutePath)
 
                             builder.directory(ManagerFile.rootDirectory)
@@ -64,7 +64,7 @@ class TarasandeWindowsPlatform : ClientModInitializer {
                             }
                         }
 
-                        override fun onClick(mouseButton: Int) {
+                        override fun onClick() {
                             val screenBetterProxy = ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar.get(SidebarEntryProxy::class.java).screenBetterProxy
 
                             if (enabled.value) {

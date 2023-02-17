@@ -6,10 +6,6 @@ import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.EventChildren
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.*
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.ScreenExtensionButtonListDirectConnect
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.ScreenExtensionDirectConnectScreen
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.gamemenu.ScreenExtensionButtonListGameMenuScreen
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.gamemenu.ScreenExtensionGameMenuScreen
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import su.mandora.event.EventDispatcher
 
@@ -23,11 +19,7 @@ object ManagerScreenExtension : Manager<ScreenExtension<*>>() {
             ScreenExtensionButtonListDeathScreen(),
             ScreenExtensionButtonListPackScreen(),
             ScreenExtensionButtonListHandledScreen(),
-            ScreenExtensionButtonListSleepingChatScreen(),
-            ScreenExtensionDirectConnectScreen(),
-            ScreenExtensionGameMenuScreen(),
-            ScreenExtensionButtonListDirectConnect(),
-            ScreenExtensionButtonListGameMenuScreen()
+            ScreenExtensionButtonListSleepingChatScreen()
         )
 
         EventDispatcher.add(EventChildren::class.java) { eventChildren ->

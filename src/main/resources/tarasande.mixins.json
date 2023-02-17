@@ -102,12 +102,7 @@
     "feature.tarasandevalue.MixinSharedConstants",
     "feature.tarasandevalue.MixinTelemetryManager",
     "feature.tarasandevalue.MixinWindow",
-    "feature.tarasandevalue.antirdi.MixinPlayerEntity"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "client": [
+    "feature.tarasandevalue.antirdi.MixinPlayerEntity",
     "core.rotation.MixinInventoryScreen",
     "core.skin.MixinPlayerSkinProvider",
     "feature.module.MixinClientPlayNetworkHandler",
@@ -122,5 +117,8 @@
     "feature.tarasandevalue.MixinHeldItemRenderer",
     "feature.tarasandevalue.MixinInGameHud",
     "feature.tarasandevalue.antirdi.MixinClientPlayNetworkHandler"
-  ]
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

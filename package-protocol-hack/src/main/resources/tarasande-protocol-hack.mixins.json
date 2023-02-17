@@ -13,7 +13,8 @@
     "tarasande.MixinModuleSpeed",
     "tarasande.MixinRotationCompanion",
     "tarasande.module.MixinPlayerScreenHandler",
-    "vialoadingbase.MixinCustomViaConfig"
+    "vialoadingbase.MixinCustomViaConfig",
+    "viaversion.MixinProtocol1_13to1_12_2"
   ],
   "injectors": {
     "defaultRequire": 1

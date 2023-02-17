@@ -23,7 +23,7 @@ class TarasandeProtocolSpoofer : ClientModInitializer {
         val tarasandeProtocolHackLoaded = FabricLoader.getInstance().isModLoaded("$TARASANDE_NAME-protocol-hack")
 
         fun enforcePluginMessage(channel: String, oldChannel: String? = null, value: ByteArray) {
-            if (tarasandeProtocolHackLoaded && ViaVersionUtil.sendLegacyPluginMessage(oldChannel!!, value)) {
+            if (tarasandeProtocolHackLoaded && oldChannel != null && ViaVersionUtil.sendLegacyPluginMessage(oldChannel, value)) {
                 return
             }
 
@@ -53,7 +53,8 @@ class TarasandeProtocolSpoofer : ClientModInitializer {
                 SidebarEntryToggleableHAProxyHack(),
                 SidebarEntryToggleableQuiltFaker(),
                 SidebarEntryToggleableVivecraftFaker(),
-                SidebarEntryToggleablePluginMessageFilter()
+                SidebarEntryToggleablePluginMessageFilter(),
+                SidebarEntryToggleableMysteryModFaker()
             )
         }
     }

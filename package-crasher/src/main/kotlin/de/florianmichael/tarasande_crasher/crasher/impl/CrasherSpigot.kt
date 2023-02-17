@@ -9,7 +9,7 @@ import java.net.Socket
 class CrasherSpigot : Crasher("Spigot") {
     
     private val counter = ValueNumber(this, "Counter", 1.0, 500.0, 10000.0, 20.0)
-    private val sessionName = ValueText(this, "Session name", "CoolerCrasher")
+    private val sessionName = ValueText(this, "Session name", "Player")
     private val protocolVersion = ValueText(this, "Protocol version", "47")
 
     override fun crash(address: String, port: Int) {

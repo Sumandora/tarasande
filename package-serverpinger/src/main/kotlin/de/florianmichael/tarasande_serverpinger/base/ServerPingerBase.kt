@@ -1,5 +1,9 @@
-package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger
+package de.florianmichael.tarasande_serverpinger.base
 
+import de.florianmichael.tarasande_serverpinger.base.panel.PanelServerInformation
+import de.florianmichael.tarasande_serverpinger.base.panel.copy
+import de.florianmichael.tarasande_serverpinger.base.panel.emptyServer
+import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.event.EventTick
 import net.tarasandedevelopment.tarasande.mc
@@ -7,20 +11,17 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBool
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtension
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.PanelServerInformation
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.copy
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel.emptyServer
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import su.mandora.event.EventDispatcher
 import kotlin.math.ceil
 
-class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvider: () -> String) {
+class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvider: () -> String, private val finish: (server: ServerInfo) -> Unit) {
 
     val pingTask = TimeUtil()
 
-    private val clickableWidgetPanel = ClickableWidgetPanel(object : PanelServerInformation(parent) {
+    private val clickableWidgetPanel = ClickableWidgetPanel(object : PanelServerInformation(parent, finish) {
         override fun renderTitleBar(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
             super.renderTitleBar(matrices, mouseX, mouseY, delta)
             if (showProgress.value && autoPing.value) {
@@ -67,6 +68,7 @@ class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvid
                     address = name
                 }
                 createEntry()
+                finish(server)
             }
             pingTask.reset()
         }

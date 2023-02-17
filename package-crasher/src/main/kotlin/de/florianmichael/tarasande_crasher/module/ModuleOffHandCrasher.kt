@@ -8,9 +8,8 @@ import net.tarasandedevelopment.tarasande.event.EventUpdate
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 
-class ModuleOffHandCrasher : Module("Off hand crasher", "Crashing players with spamming the off hand", ModuleCategory.EXPLOIT) {
+class ModuleOffHandCrasher : Module("Off hand crasher", "Crashing players with spamming the off hand", "Crasher") {
 
     private val packet = PlayerActionC2SPacket(PlayerActionC2SPacket.Action.SWAP_ITEM_WITH_OFFHAND, BlockPos(0, 0, 0), Direction.UP)
     private val speed = ValueNumber(this, "Speed", 100.0, 10000.0, 40000.0, 500.0)

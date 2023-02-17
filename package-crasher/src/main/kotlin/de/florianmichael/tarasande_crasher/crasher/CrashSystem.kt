@@ -1,7 +1,9 @@
 package de.florianmichael.tarasande_crasher.crasher
 
+import de.florianmichael.tarasande_crasher.crasher.impl.CrasherBungeeCord
 import net.tarasandedevelopment.tarasande.Manager
 import de.florianmichael.tarasande_crasher.crasher.impl.CrasherSpigot
+import de.florianmichael.tarasande_crasher.crasher.impl.CrasherVelocity
 import de.florianmichael.tarasande_crasher.spigot.SpigotRules
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
@@ -11,7 +13,9 @@ object ManagerCrasher : Manager<Crasher>() {
 
     init {
         add(
-            CrasherSpigot()
+            CrasherSpigot(),
+            CrasherVelocity(),
+            CrasherBungeeCord()
         )
     }
 }

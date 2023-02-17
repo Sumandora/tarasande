@@ -5,9 +5,12 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "MixinInGameHud",
+    "detailedconnectionstatus.MixinClientLoginNetworkHandler",
+    "detailedconnectionstatus.MixinConnectScreen",
     "fontcache.MixinBuiltinEmptyGlyph",
     "fontcache.MixinBuiltinEmptyGlyph_1",
-    "fontcache.MixinFontStorage"
+    "fontcache.MixinFontStorage",
+    "detailedconnectionstatus.MixinConnectScreen_1"
   ],
   "injectors": {
     "defaultRequire": 1

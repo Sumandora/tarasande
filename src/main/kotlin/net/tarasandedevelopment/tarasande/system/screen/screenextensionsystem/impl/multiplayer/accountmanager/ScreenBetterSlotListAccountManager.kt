@@ -21,6 +21,7 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.Account
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.ManagerAccount
+import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.account.impl.AccountSession
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.ManagerAzureApp
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environment.ManagerEnvironment
@@ -188,6 +189,9 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
                 FontWrapper.textShadow(matrices, account.status!!, entryWidth / 2F, entryHeight / 2F + FontWrapper.fontHeight(), centered = true)
             if (account.skin != null)
                 account.skin!!.draw(matrices, 5, 5, 32)
+
+            val accountInfoName = account.javaClass.getAnnotation(AccountInfo::class.java).name
+            FontWrapper.text(matrices, accountInfoName, entryWidth - FontWrapper.getWidth(accountInfoName).toFloat() - 7F, 5F)
         }
     }
 

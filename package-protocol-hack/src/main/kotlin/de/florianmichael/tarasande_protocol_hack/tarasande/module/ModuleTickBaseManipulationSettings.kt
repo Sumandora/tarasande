@@ -1,6 +1,6 @@
 package de.florianmichael.tarasande_protocol_hack.tarasande.module
 
-import de.florianmichael.tarasande_protocol_hack.tarasande.EventSkipIdlePacket
+import de.florianmichael.tarasande_protocol_hack.tarasande.event.EventSkipIdlePacket
 import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues
 import de.florianmichael.tarasande_protocol_hack.util.values.formatRange
 import net.tarasandedevelopment.tarasande.mc

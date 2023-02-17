@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect
+package de.florianmichael.tarasande_serverpinger.screenextension.directconnect
 
 import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.minecraft.client.network.AllowedAddressResolver

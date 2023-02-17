@@ -46,23 +46,23 @@ object StringUtil {
         input -= TimeUnit.MINUTES.toMillis(minutes)
         val seconds = TimeUnit.MILLISECONDS.toSeconds(input)
 
-        val builder = StringBuilder()
-
-        if (seconds > 0) builder.append(seconds).append(" seconds")
-        val thisSplit = ", "
-        if (minutes > 0) {
-            if (seconds != 0L) builder.append(thisSplit)
-            builder.append(minutes).append(" minutes")
-        }
-        if (hours > 0) {
-            builder.append(thisSplit)
-            builder.append(hours).append(" hours")
-        }
-        if (days > 0) {
-            builder.append(thisSplit)
-            builder.append(days).append(" days")
-        }
-        return builder.toString()
+        return StringBuilder().apply {
+            if (days > 0) {
+                append(days).append(" days")
+            }
+            if (hours > 0) {
+                if (isNotEmpty()) append(", ")
+                append(hours).append(" hours")
+            }
+            if (minutes > 0) {
+                if (isNotEmpty()) append(", ")
+                append(minutes).append(" minutes")
+            }
+            if (seconds > 0) {
+                if (isNotEmpty()) append(", ")
+                append(seconds).append(" seconds")
+            }
+        }.toString()
     }
 
     fun extractContent(text: Text): String {

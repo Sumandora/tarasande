@@ -15,6 +15,7 @@ object StatusRenderer {
 
     fun setStatus(screen: Screen, text: String) {
         if (text.isEmpty()) return
+        if (renderer.containsKey(screen)) renderer.remove(screen)
         renderer[screen] = text to TimeUtil()
     }
 

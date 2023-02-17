@@ -42,9 +42,6 @@ import java.util.logging.Logger
  *  - WindowClick is not fully remapped in <= 1.16.5
  *  - Fix Free cam (Enable mouse inputs)
  *
- * TODO | Crasher:
- *  - Basic crasher module
- *
  * TODO | Protocol Spoofer:
  *  - Add basic exploits from bash for Forge
  *  - Crayfish Fill and Nuker

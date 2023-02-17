@@ -1,5 +1,6 @@
-package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.directconnect.serverpinger.panel
+package de.florianmichael.tarasande_serverpinger.base.panel
 
+import de.florianmichael.tarasande_serverpinger.injection.accessor.IMultiplayerServerListWidgetSubServerEntry
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget.ServerEntry
@@ -26,7 +27,7 @@ fun ServerInfo.copy(): ServerInfo {
     return ServerInfo.fromNbt(toNbt())
 }
 
-open class PanelServerInformation(private val owner: Any) : Panel("Server Information", 300.0, FontWrapper.fontHeight() /* I can't access titleBarHeight yet TODO */ + 32.0, background = true, scissor = false) {
+open class PanelServerInformation(private val owner: Any, private val finish: (server: ServerInfo) -> Unit) : Panel("Server Information", 300.0, FontWrapper.fontHeight() /* I can't access titleBarHeight yet TODO */ + 32.0, background = true, scissor = false) {
 
     companion object {
         var tooltip: MutableList<Text>? = null
@@ -68,7 +69,9 @@ open class PanelServerInformation(private val owner: Any) : Panel("Server Inform
             iterator.next().disconnect(Text.empty())
             iterator.remove()
         }
-        serverEntry = emulatedWidget.ServerEntry(emulatedMultiplayerScreen, server)
+        serverEntry = emulatedWidget.ServerEntry(emulatedMultiplayerScreen, server).apply {
+            (this as IMultiplayerServerListWidgetSubServerEntry).tarasande_setCompletionConsumer(finish)
+        }
     }
 
     private val offset = ManagerGrabber.getConstant(GrabberServerInformationOffset::class.java) as Int /* sick, minecraft simple shifts everything by 5 units */
