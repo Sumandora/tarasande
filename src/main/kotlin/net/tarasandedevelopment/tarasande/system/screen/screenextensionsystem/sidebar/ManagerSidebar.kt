@@ -79,7 +79,7 @@ open class SidebarEntry(val name: String, val category: String) {
 @Suppress("unused") // Packages use this
 abstract class SidebarEntrySelection(name: String, category: String, val list: List<String>) : SidebarEntry(name, category) {
     @Suppress("LeakingThis")
-    val value = ValueMode(this, "Selection", false, *list.toTypedArray())
+    val value = ValueMode(ManagerSidebar::class.java, name, false, *list.toTypedArray())
 
     override fun createElements(owner: Any): List<ElementWidthValueComponent<*>> {
         return list.map {
@@ -107,7 +107,7 @@ abstract class SidebarEntrySelection(name: String, category: String, val list: L
 
 open class SidebarEntryToggleable(name: String, category: String) : SidebarEntry(name, category) {
     @Suppress("LeakingThis")
-    val enabled = ValueBoolean(this, "Enabled", false, visible = false)
+    val enabled = ValueBoolean(ManagerSidebar::class.java, name, false, visible = false)
 
     override fun createElements(owner: Any): List<ElementWidthValueComponent<*>> {
         return listOf(object : ValueSpacer(owner, name, 0.75F, manage = false) {

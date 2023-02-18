@@ -23,7 +23,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.screen.hud;
 
 import de.florianmichael.clampclient.injection.mixininterface.IChatInputSuggestor_Protocol;
 import net.minecraft.client.gui.screen.ChatInputSuggestor;
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;

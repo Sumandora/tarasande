@@ -21,9 +21,9 @@ import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleIn
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleNoWeb
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.modifyModuleTickBaseManipulation
 import de.florianmichael.tarasande_protocol_hack.tarasande.sidebar.SidebarEntrySelectionProtocolHack
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues
-import de.florianmichael.tarasande_protocol_hack.util.values.ValueBooleanProtocol
-import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaCommandHandlerTarasandeCommandHandler
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ValueBooleanProtocol
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.command.ViaCommandHandlerTarasandeCommandHandler
 import de.florianmichael.viabeta.api.BetaProtocolAccess
 import de.florianmichael.viabeta.api.BetaProtocols
 import de.florianmichael.viabeta.protocol.beta.protocolb1_8_0_1tob1_7_0_3.provider.ScreenStateProvider

@@ -1,6 +1,6 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.item;
 
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues;
 import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;

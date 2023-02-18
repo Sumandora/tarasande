@@ -41,7 +41,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit;
 import org.spongepowered.asm.mixin.Mixin;

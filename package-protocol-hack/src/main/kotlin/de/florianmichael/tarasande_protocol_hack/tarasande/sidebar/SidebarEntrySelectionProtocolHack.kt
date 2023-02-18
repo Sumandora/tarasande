@@ -2,7 +2,7 @@ package de.florianmichael.tarasande_protocol_hack.tarasande.sidebar
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues
 import de.florianmichael.vialoadingbase.api.version.InternalProtocolList
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntrySelection
 

@@ -5,7 +5,7 @@ import de.florianmichael.clampclient.injection.instrumentation_1_12_2.model.ViaR
 import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.MathHelper_1_8;
 import de.florianmichael.clampclient.injection.mixininterface.IBox_Protocol;
 import de.florianmichael.rmath.mathtable.MathTableRegistry;
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.BlockHitResult;

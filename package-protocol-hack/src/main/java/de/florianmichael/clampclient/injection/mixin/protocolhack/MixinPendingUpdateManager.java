@@ -22,7 +22,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
 import net.minecraft.client.network.PendingUpdateManager;
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

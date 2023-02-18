@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_hack.util.values
+package de.florianmichael.tarasande_protocol_hack.tarasande.values
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.tarasande_protocol_hack.util.extension.andNewer

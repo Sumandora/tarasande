@@ -1,7 +1,7 @@
 package de.florianmichael.clampclient.injection.mixin.protocolhack.screen;
 
 import de.florianmichael.clampclient.injection.instrumentation_c_0_30.ClassicItemSelectionScreen;
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import org.spongepowered.asm.mixin.Mixin;

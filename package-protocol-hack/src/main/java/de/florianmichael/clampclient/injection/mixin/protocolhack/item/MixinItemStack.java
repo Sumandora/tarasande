@@ -36,7 +36,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack.item;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.block.BlockState;

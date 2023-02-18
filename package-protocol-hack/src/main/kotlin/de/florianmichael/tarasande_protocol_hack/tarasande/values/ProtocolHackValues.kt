@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_hack.util.values
+package de.florianmichael.tarasande_protocol_hack.tarasande.values
 
 import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
@@ -7,26 +7,28 @@ import de.florianmichael.rmath.mathtable.MathTableRegistry
 import de.florianmichael.tarasande_protocol_hack.util.extension.andOlder
 import de.florianmichael.tarasande_protocol_hack.util.extension.rangeTo
 import de.florianmichael.tarasande_protocol_hack.util.extension.singleton
-import de.florianmichael.tarasande_protocol_hack.util.values.command.ViaDumpBypassSender
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.command.ViaDumpBypassSender
 import de.florianmichael.viabeta.api.BetaProtocols
 import de.florianmichael.viasnapshot.api.SnapshotProtocols
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleFreeCam
 
 object ProtocolHackValues {
 
     // General
     val autoChangeValuesDependentOnVersion = ValueBoolean(this, "Auto change values dependent on version", true)
     val filterItemGroups = ValueBoolean(this, "Filter item groups", true)
-    val betaCraftAuth = ValueBoolean(this, "BetaCraft auth", true)
     val entityDimensionReplacements = ValueBoolean(this, "Entity dimension replacements", true)
 
-    @Suppress("unused")
-    val createViaDump = object : ValueButton(this, "Create via dump", isEnabled = { !mc.isInSingleplayer && mc.world != null }) {
-        override fun onClick() {
-            Via.getManager().commandHandler.getSubCommand("dump")?.execute(ViaDumpBypassSender, arrayOf())
+    init {
+        object : ValueButton(this, "Create ViaVersion dump", isEnabled = { !mc.isInSingleplayer && mc.world != null }) {
+            override fun onClick() {
+                Via.getManager().commandHandler.getSubCommand("dump")?.execute(ViaDumpBypassSender, arrayOf())
+            }
         }
     }
 
@@ -46,7 +48,7 @@ object ProtocolHackValues {
     // 1.13 -> 1.12.2
     val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", ProtocolVersion.v1_12_2.andOlder())
     val executeInputsInSync = ValueBooleanProtocol("Execute inputs in sync", ProtocolVersion.v1_12_2.andOlder())
-    val emulateMouseInputs = ValueBooleanProtocol("Emulate mouse inputs", ProtocolVersion.v1_12_2.andOlder())
+    val emulateMouseInputs = ValueBooleanProtocol("Emulate mouse inputs", ProtocolVersion.v1_12_2.andOlder(), isEnabled = { !ManagerModule.get(ModuleFreeCam::class.java).enabled.value })
     val sneakInstant = ValueBooleanProtocol("Sneak instant", ProtocolVersion.v1_12_2..ProtocolVersion.v1_8)
     val replaceRayTrace = ValueBooleanProtocol("Replace ray trace", ProtocolVersion.v1_12_2.andOlder())
     val replacePetrifiedOakSlab = ValueBooleanProtocol("Replace petrified oak slab", ProtocolVersion.v1_12_2..BetaProtocols.r1_3_1tor1_3_2)
@@ -73,6 +75,7 @@ object ProtocolHackValues {
 
     // a1_0_15 -> c0_28toc0_30
     val replaceCreativeInventory = ValueBooleanProtocol("Replace creative inventory", BetaProtocols.c0_28toc0_30.andOlder())
+    val useBetaCraftAuthentication = ValueBooleanProtocol("Use BetaCraft authentication", BetaProtocols.c0_28toc0_30.andOlder())
 }
 
-open class ValueBooleanProtocol(name: String, vararg val version: ProtocolRange) : ValueBoolean(ProtocolHackValues, "$name (" + formatRange(*version) + ")", false)
+open class ValueBooleanProtocol(name: String, vararg val version: ProtocolRange, isEnabled: () -> Boolean = { true }) : ValueBoolean(ProtocolHackValues, "$name (" + formatRange(*version) + ")", false, isEnabled = isEnabled)

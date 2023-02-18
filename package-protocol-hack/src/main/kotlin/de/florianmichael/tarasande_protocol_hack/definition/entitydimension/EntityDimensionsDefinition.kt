@@ -4,7 +4,7 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.impl.DimensionWrapper1_12_2
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.impl.DimensionWrapperNative
 import de.florianmichael.tarasande_protocol_hack.definition.entitydimension.wrapper.EntityDimensionWrapper
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolRange
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolRange
 import de.florianmichael.vialoadingbase.api.version.ComparableProtocolVersion
 
 object EntityDimensionsDefinition {

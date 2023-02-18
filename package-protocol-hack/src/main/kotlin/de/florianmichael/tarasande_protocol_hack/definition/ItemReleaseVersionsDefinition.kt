@@ -4,7 +4,7 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.tarasande_protocol_hack.util.extension.andNewer
 import de.florianmichael.tarasande_protocol_hack.util.extension.singleton
 import net.minecraft.item.Item
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolRange
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolRange
 import de.florianmichael.viabeta.api.BetaProtocols
 import de.florianmichael.vialoadingbase.api.version.ComparableProtocolVersion
 import net.minecraft.item.Items

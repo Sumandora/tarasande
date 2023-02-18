@@ -2,8 +2,8 @@ package de.florianmichael.clampclient.injection.instrumentation_1_19_0.storage;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.ProfileKey;
+import de.florianmichael.clampclient.injection.instrumentation_1_19_0.JsonHelper;
 import de.florianmichael.clampclient.injection.instrumentation_1_19_0.MessageMetadataModel;
-import de.florianmichael.tarasande_protocol_hack.util.JsonSorter;
 import net.lenni0451.mcstructs.text.components.StringComponent;
 import net.lenni0451.mcstructs.text.serializer.TextComponentSerializer;
 
@@ -33,7 +33,7 @@ public class ChatSession1_19_0 extends AbstractChatSession {
             buffer.putLong(Instant.ofEpochMilli(messageMetadata.timestamp()).getEpochSecond());
 
             updater.update(data);
-            updater.update(JsonSorter.INSTANCE.toSortedString(TextComponentSerializer.V1_18.serializeJson(new StringComponent(messageMetadata.plain()))).getBytes(StandardCharsets.UTF_8));
+            updater.update(JsonHelper.toSortedString(TextComponentSerializer.V1_18.serializeJson(new StringComponent(messageMetadata.plain()))).getBytes(StandardCharsets.UTF_8));
         });
     }
 

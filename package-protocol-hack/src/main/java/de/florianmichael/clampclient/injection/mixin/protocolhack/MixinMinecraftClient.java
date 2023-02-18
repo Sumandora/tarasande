@@ -43,7 +43,7 @@ import net.tarasandedevelopment.tarasande.event.EventScreenInput;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove;
 import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack;
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -152,7 +152,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient_Protocol 
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;tick()V", ordinal = 0, shift = At.Shift.BEFORE))
     public void tickMouseEmulationFilter(CallbackInfo ci) {
-        if (ProtocolHackValues.INSTANCE.getEmulateMouseInputs().getValue()) {
+        if (ProtocolHackValues.INSTANCE.getEmulateMouseInputs().getValue() && ProtocolHackValues.INSTANCE.getEmulateMouseInputs().isEnabled().invoke()) {
             ((IMouse_Protocol) this.mouse).protocolhack_getMouseEmulation().tickFilter();
         }
     }

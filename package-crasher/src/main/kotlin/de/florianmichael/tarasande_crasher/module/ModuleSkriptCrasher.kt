@@ -23,7 +23,7 @@ class ModuleSkriptCrasher : Module("Skript crasher", "Crashes the Skript plugin"
         registerEvent(EventUpdate::class.java) {
             if (timer.hasReached(delay.value.toLong())) {
                 mc.targetedEntity?.apply {
-                    forcePacket(PlayerInteractEntityC2SPacket.interact(mc.targetedEntity, mc.player!!.isSneaking, Hand.MAIN_HAND))
+                    forcePacket(PlayerInteractEntityC2SPacket.interact(this, mc.player!!.isSneaking, Hand.MAIN_HAND))
                 }
                 timer.reset()
             }

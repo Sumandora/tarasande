@@ -26,7 +26,7 @@ import de.florianmichael.clampclient.injection.mixininterface.IMinecraftClient_P
 import de.florianmichael.clampclient.injection.mixininterface.IMouse_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -56,7 +56,7 @@ public class MixinMouse implements IMouse_Protocol {
 
     @Inject(method = "updateMouse", at = @At("HEAD"), cancellable = true)
     public void emulateMouse(CallbackInfo ci) {
-        if (ProtocolHackValues.INSTANCE.getEmulateMouseInputs().getValue()) {
+        if (ProtocolHackValues.INSTANCE.getEmulateMouseInputs().getValue() && ProtocolHackValues.INSTANCE.getEmulateMouseInputs().isEnabled().invoke()) {
             protocolhack_mouseEmulation.updateMouse();
             ci.cancel();
         }

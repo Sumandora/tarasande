@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_protocol_hack.util.values.command
+package de.florianmichael.tarasande_protocol_hack.tarasande.values.command
 
 import com.viaversion.viaversion.api.command.ViaCommandSender
 import net.tarasandedevelopment.tarasande.mc

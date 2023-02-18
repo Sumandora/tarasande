@@ -2,7 +2,7 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
 import de.florianmichael.clampclient.injection.instrumentation_1_12_2.Raytrace_1_8to1_12_2;
 import de.florianmichael.clampclient.injection.instrumentation_1_12_2.model.ViaRaytraceResult;
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolHackValues;
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;

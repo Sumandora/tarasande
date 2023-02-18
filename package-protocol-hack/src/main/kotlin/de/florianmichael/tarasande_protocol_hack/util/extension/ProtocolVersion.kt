@@ -1,8 +1,7 @@
 package de.florianmichael.tarasande_protocol_hack.util.extension
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import de.florianmichael.tarasande_protocol_hack.util.values.ProtocolRange
-import de.florianmichael.vialoadingbase.api.version.ComparableProtocolVersion
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolRange
 
 operator fun ProtocolVersion.rangeTo(versionListEnum: ProtocolVersion): ProtocolRange {
     return ProtocolRange(this, versionListEnum)
