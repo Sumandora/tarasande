@@ -22,6 +22,7 @@ object Rotations {
     private val updateRotationsAccurately = ValueBoolean(this, "Update rotations accurately", true, isEnabled = { updateRotationsWhenTickSkipping.value })
     private val rotateToOriginSpeed = ValueNumberRange(this, "Rotate to origin speed", 0.0, 1.0, 1.0, 1.0, 0.1)
     private val visualizeFakeRotation = ValueBoolean(this, "Visualize fake rotation", false)
+    val adjustThirdPersonModel = ValueBoolean(this, "Adjust third person model", true)
 
     private var rotated = false
     init {

@@ -9,6 +9,7 @@ import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
+import net.tarasandedevelopment.tarasande.feature.rotation.Rotations;
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,7 +33,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
 
     @Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerpAngleDegrees(FFF)F", ordinal = 1))
     public float modifyYaw(float delta, float start, float end) {
-        if(tarasande_entity == MinecraftClient.getInstance().player) {
+        if(Rotations.INSTANCE.getAdjustThirdPersonModel().getValue() && tarasande_entity == MinecraftClient.getInstance().player) {
             ILivingEntity accessor = (ILivingEntity) tarasande_entity;
             return MathHelper.lerpAngleDegrees(delta, accessor.tarasande_getPrevHeadYaw(), accessor.tarasande_getHeadYaw());
         }
@@ -41,7 +42,7 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
 
     @Redirect(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", ordinal = 0))
     public float modifyPitch(float delta, float start, float end) {
-        if(tarasande_entity == MinecraftClient.getInstance().player) {
+        if(Rotations.INSTANCE.getAdjustThirdPersonModel().getValue() && tarasande_entity == MinecraftClient.getInstance().player) {
             ILivingEntity accessor = (ILivingEntity) tarasande_entity;
             return MathHelper.lerp(delta, accessor.tarasande_getPrevHeadPitch(), accessor.tarasande_getHeadPitch());
         }

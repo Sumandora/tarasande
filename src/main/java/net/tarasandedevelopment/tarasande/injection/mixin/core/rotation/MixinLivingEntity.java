@@ -79,20 +79,24 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getYaw()F"), slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;prevStepBobbingAmount:F"), to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;turnHead(FF)F")))
     public float replaceYaw_tick(LivingEntity instance) {
-        Rotation rotation = Rotations.INSTANCE.getFakeRotation();
-        //noinspection ConstantValue
-        if((Object) this == MinecraftClient.getInstance().player && rotation != null) {
-            return rotation.getYaw();
+        if(Rotations.INSTANCE.getAdjustThirdPersonModel().getValue()) {
+            Rotation rotation = Rotations.INSTANCE.getFakeRotation();
+            //noinspection ConstantValue
+            if((Object) this == MinecraftClient.getInstance().player && rotation != null) {
+                return rotation.getYaw();
+            }
         }
         return instance.getYaw();
     }
 
     @Redirect(method = "turnHead", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getYaw()F"))
     public float replaceYaw_turnHead(LivingEntity instance) {
-        Rotation rotation = Rotations.INSTANCE.getFakeRotation();
-        //noinspection ConstantValue
-        if((Object) this == MinecraftClient.getInstance().player && rotation != null) {
-            return rotation.getYaw();
+        if(Rotations.INSTANCE.getAdjustThirdPersonModel().getValue()) {
+            Rotation rotation = Rotations.INSTANCE.getFakeRotation();
+            //noinspection ConstantValue
+            if((Object) this == MinecraftClient.getInstance().player && rotation != null) {
+                return rotation.getYaw();
+            }
         }
         return instance.getYaw();
     }
