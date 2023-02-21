@@ -37,10 +37,11 @@ import java.util.logging.Logger
  *  - Refactor AccessWidener
  *  - Try out layered maps
  *  - Add Reverse Step (And remove nofall option)
+ *  - Recode build system (remove shadow plugin usage)
+ *  - Remove ManagerSidebar
  *
  * TODO | Protocol Hack:
  *  - WindowClick is not fully remapped in <= 1.16.5
- *  - Fix Free cam (Enable mouse inputs)
  *
  * TODO | Protocol Spoofer:
  *  - Add basic exploits from bash for Forge
@@ -52,11 +53,6 @@ import java.util.logging.Logger
  * TODO | Litematica:
  *  - Implement PixelArt generator
  *  - Implement head and skin generator
- *
- * TODO | IDEAS:
- *  - CheckHost
- *  - Multi-ServerList-System
- *  - https://github.com/HCU-Reborn/LoseBypass/blob/main/com/wallhacks/losebypass/systems/module/modules/render/SuperheroFX.java
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
