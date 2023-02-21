@@ -16,11 +16,11 @@ public class MixinClientLoginNetworkHandler {
 
     @Inject(method = "joinServerSession", at = @At(value = "INVOKE", target = "Lcom/mojang/authlib/minecraft/MinecraftSessionService;joinServer(Lcom/mojang/authlib/GameProfile;Ljava/lang/String;Ljava/lang/String;)V"))
     public void verifyingSession(String serverId, CallbackInfoReturnable<Text> cir) {
-        DetailedConnectionStatus.INSTANCE.setConnectionState(ConnectionState.VERIFYING_SESSION);
+        DetailedConnectionStatus.INSTANCE.updateConnectionState(ConnectionState.VERIFYING_SESSION);
     }
 
     @Inject(method = "onSuccess", at = @At(value = "HEAD"))
     public void success(LoginSuccessS2CPacket packet, CallbackInfo ci) {
-        DetailedConnectionStatus.INSTANCE.setConnectionState(ConnectionState.SUCCESS);
+        DetailedConnectionStatus.INSTANCE.updateConnectionState(ConnectionState.SUCCESS);
     }
 }

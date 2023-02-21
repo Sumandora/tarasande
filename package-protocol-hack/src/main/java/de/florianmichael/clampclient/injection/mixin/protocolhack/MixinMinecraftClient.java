@@ -23,15 +23,17 @@ package de.florianmichael.clampclient.injection.mixin.protocolhack;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.protocols.protocol1_12to1_11_1.Protocol1_12To1_11_1;
 import com.viaversion.viaversion.protocols.protocol1_9_3to1_9_1_2.ServerboundPackets1_9_3;
 import de.florianmichael.clampclient.injection.mixininterface.IMinecraftClient_Protocol;
 import de.florianmichael.clampclient.injection.mixininterface.IMouse_Protocol;
+import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack;
 import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventScreenInput;
 import de.florianmichael.tarasande_protocol_hack.tarasande.module.ModuleInventoryMoveSettingsKt;
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -42,8 +44,7 @@ import net.minecraft.util.Hand;
 import net.tarasandedevelopment.tarasande.event.EventScreenInput;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove;
-import de.florianmichael.tarasande_protocol_hack.TarasandeProtocolHack;
-import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackValues;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleFreeCam;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -152,7 +153,7 @@ public abstract class MixinMinecraftClient implements IMinecraftClient_Protocol 
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;tick()V", ordinal = 0, shift = At.Shift.BEFORE))
     public void tickMouseEmulationFilter(CallbackInfo ci) {
-        if (ProtocolHackValues.INSTANCE.getEmulateMouseInputs().getValue() && ProtocolHackValues.INSTANCE.getEmulateMouseInputs().isEnabled().invoke()) {
+        if (ProtocolHackValues.INSTANCE.getEmulateMouseInputs().getValue() && !ManagerModule.INSTANCE.get(ModuleFreeCam.class).getEnabled().getValue()) {
             ((IMouse_Protocol) this.mouse).protocolhack_getMouseEmulation().tickFilter();
         }
     }

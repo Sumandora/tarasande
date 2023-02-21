@@ -1,6 +1,5 @@
 package de.florianmichael.tarasande_custom_minecraft
 
-import de.florianmichael.tarasande_custom_minecraft.screenextension.ScreenExtensionConnectScreen
 import de.florianmichael.tarasande_custom_minecraft.tarasandevalues.DesignValues
 import de.florianmichael.tarasande_custom_minecraft.tarasandevalues.debug.DetailedConnectionStatus
 import net.fabricmc.api.ClientModInitializer
@@ -9,7 +8,6 @@ import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import su.mandora.event.EventDispatcher
 
 class TarasandeCustomMinecraft : ClientModInitializer {
@@ -23,9 +21,6 @@ class TarasandeCustomMinecraft : ClientModInitializer {
 
             ValueButtonOwnerValues(TarasandeValues, "Design values", DesignValues)
 
-            ManagerScreenExtension.add(
-                ScreenExtensionConnectScreen()
-            )
             DetailedConnectionStatus
         }
     }

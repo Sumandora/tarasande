@@ -25,14 +25,7 @@ public class MixinConnectScreen extends Screen {
 
     @Inject(method = "connect(Lnet/minecraft/client/gui/screen/Screen;Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/network/ServerAddress;Lnet/minecraft/client/network/ServerInfo;)V", at = @At("HEAD"))
     private static void reset(Screen screen, MinecraftClient client, ServerAddress address, ServerInfo info, CallbackInfo ci) {
-        DetailedConnectionStatus.INSTANCE.setConnectionState(ConnectionState.UNKNOWN);
-    }
-
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;tick()V", shift = At.Shift.BEFORE))
-    public void waitingForResponse(CallbackInfo ci) {
-        if (DetailedConnectionStatus.INSTANCE.getConnectionState() == ConnectionState.SENDING_LOGIN_PACKETS) {
-            DetailedConnectionStatus.INSTANCE.setConnectionState(ConnectionState.WAITING_FOR_RESPONSE);
-        }
+        DetailedConnectionStatus.INSTANCE.updateConnectionState(ConnectionState.UNKNOWN);
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ConnectScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V"))

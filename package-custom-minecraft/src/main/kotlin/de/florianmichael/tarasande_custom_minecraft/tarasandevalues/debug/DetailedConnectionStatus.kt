@@ -2,12 +2,10 @@ package de.florianmichael.tarasande_custom_minecraft.tarasandevalues.debug
 
 import de.florianmichael.tarasande_custom_minecraft.TarasandeCustomMinecraft
 import de.florianmichael.tarasande_custom_minecraft.viaversion.ViaVersionUtil
-import net.minecraft.network.packet.c2s.login.LoginKeyC2SPacket
-import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.feature.statusrenderer.StatusRenderer
 import net.tarasandedevelopment.tarasande.feature.tarasandevalue.impl.DebugValues
+import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
-import su.mandora.event.EventDispatcher
-import java.util.concurrent.CopyOnWriteArrayList
 
 object DetailedConnectionStatus {
 
@@ -17,23 +15,10 @@ object DetailedConnectionStatus {
         else
             true
     })
-    var connectionHistory = CopyOnWriteArrayList<String>()
 
-    var connectionState = ConnectionState.UNKNOWN
-        set(value) {
-            if (value == ConnectionState.UNKNOWN)
-                connectionHistory.clear()
-            else
-                connectionHistory.add(value.display)
-            field = value
-        }
+    fun updateConnectionState(connectionState: ConnectionState) {
+        if (!showDetailedConnectionStatus.value) return
 
-    init {
-        EventDispatcher.add(EventPacket::class.java) {
-            if (it.type == EventPacket.Type.SEND && it.packet is LoginKeyC2SPacket) {
-                if (connectionState != ConnectionState.UNKNOWN) connectionState = ConnectionState.ENCRYPTING
-            }
-        }
+        StatusRenderer.setStatus(mc.currentScreen!!, connectionState.display)
     }
 }
-

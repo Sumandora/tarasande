@@ -4,18 +4,16 @@ import com.viaversion.viaversion.api.Via
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.clampclient.injection.instrumentation_1_8.definition.MathHelper_1_8
 import de.florianmichael.rmath.mathtable.MathTableRegistry
+import de.florianmichael.tarasande_protocol_hack.tarasande.values.command.ViaDumpBypassSender
 import de.florianmichael.tarasande_protocol_hack.util.extension.andOlder
 import de.florianmichael.tarasande_protocol_hack.util.extension.rangeTo
 import de.florianmichael.tarasande_protocol_hack.util.extension.singleton
-import de.florianmichael.tarasande_protocol_hack.tarasande.values.command.ViaDumpBypassSender
 import de.florianmichael.viabeta.api.BetaProtocols
 import de.florianmichael.viasnapshot.api.SnapshotProtocols
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.ValueButton
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleFreeCam
 
 object ProtocolHackValues {
 
@@ -48,7 +46,7 @@ object ProtocolHackValues {
     // 1.13 -> 1.12.2
     val removeNewTabCompletion = ValueBooleanProtocol("Remove new tab completion", ProtocolVersion.v1_12_2.andOlder())
     val executeInputsInSync = ValueBooleanProtocol("Execute inputs in sync", ProtocolVersion.v1_12_2.andOlder())
-    val emulateMouseInputs = ValueBooleanProtocol("Emulate mouse inputs", ProtocolVersion.v1_12_2.andOlder(), isEnabled = { !ManagerModule.get(ModuleFreeCam::class.java).enabled.value })
+    val emulateMouseInputs = ValueBooleanProtocol("Emulate mouse inputs", ProtocolVersion.v1_12_2.andOlder())
     val sneakInstant = ValueBooleanProtocol("Sneak instant", ProtocolVersion.v1_12_2..ProtocolVersion.v1_8)
     val replaceRayTrace = ValueBooleanProtocol("Replace ray trace", ProtocolVersion.v1_12_2.andOlder())
     val replacePetrifiedOakSlab = ValueBooleanProtocol("Replace petrified oak slab", ProtocolVersion.v1_12_2..BetaProtocols.r1_3_1tor1_3_2)

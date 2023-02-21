@@ -5,14 +5,12 @@ import de.florianmichael.tarasande_rejected_features.information.*
 import de.florianmichael.tarasande_rejected_features.module.ModuleAutoRescuePlatform
 import de.florianmichael.tarasande_rejected_features.module.ModuleDropper
 import de.florianmichael.tarasande_rejected_features.module.ModuleRoundedMovement
-import de.florianmichael.tarasande_rejected_features.screenextension.ScreenExtensionHandledScreen
 import de.florianmichael.tarasande_rejected_features.tarasandevalues.ClosedInventory
 import net.fabricmc.api.ClientModInitializer
 import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import su.mandora.event.EventDispatcher
 
 class TarasandeRejectedFeatures : ClientModInitializer {
@@ -46,10 +44,6 @@ class TarasandeRejectedFeatures : ClientModInitializer {
                 // Server
                 InformationLag(),
                 InformationMovements()
-            )
-
-            ManagerScreenExtension.add(
-                ScreenExtensionHandledScreen()
             )
 
             ManagerCommand.add(

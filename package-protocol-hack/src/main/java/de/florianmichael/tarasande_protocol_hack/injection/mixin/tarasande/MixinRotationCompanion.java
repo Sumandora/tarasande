@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.MathHelper;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit;
+import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleFreeCam;
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinRotationCompanion {
     @Inject(method = "calculateNewRotation", at = @At("HEAD"), cancellable = true)
     public void overwriteCalculation(Rotation prevRotation, Pair<Double, Double> cursorDeltas, CallbackInfoReturnable<Rotation> cir) {
-        if (ProtocolHackValues.INSTANCE.getEmulateMouseInputs().getValue() && ProtocolHackValues.INSTANCE.getEmulateMouseInputs().isEnabled().invoke()) {
+        if (ProtocolHackValues.INSTANCE.getEmulateMouseInputs().getValue() && !ManagerModule.INSTANCE.get(ModuleFreeCam.class).getEnabled().getValue()) {
             float f = SensitivityCalculations.get1_12SensitivityFor1_19(MinecraftClient.getInstance().options.getMouseSensitivity().getValue()) * 0.6F + 0.2F;
             float f1 = f * f * f * 8.0F;
             float f2 = ((int) cursorDeltas.getFirst().doubleValue()) * f1;

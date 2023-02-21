@@ -16,7 +16,6 @@ pluginManagement {
 }
 include 'tools'
 include 'package-chat-exploits'
-include 'package-windows-platform'
 include 'package-linux-platform'
 include 'package-mod-fixes'
 include 'package-rejected-features'
