@@ -42,7 +42,7 @@ class PanelElementsIanaRegistryEntry : PanelElements<ElementWidthValueComponent<
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        panelHeight = titleBarHeight + getMaxScrollOffset() + 2.0
+        panelHeight = titleBarHeight + elementList.sumOf { (FontWrapper.fontHeight() * (it.value as ValueSpacer).scale) + 2.0 } + 2.0
         y = mc.currentScreen!!.height - panelHeight - 5.0
 
         super.render(matrices, mouseX, mouseY, delta)
@@ -58,7 +58,7 @@ class PanelElementsIanaRegistryEntry : PanelElements<ElementWidthValueComponent<
 
     override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         if (elementList.isEmpty()) {
-            addText("Enable Auto Requests or left-click the panel")
+            addText("Enable auto requests or left-click the panel")
         }
         super.renderContent(matrices, mouseX, mouseY, delta)
     }
