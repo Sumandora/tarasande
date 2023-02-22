@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelEle
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 
-class PanelElementsIanaRegistryEntry : PanelElements<ElementWidthValueComponent<*>>("IANA Registry Entry", 100.0, 20.0) {
+class PanelElementsIanaFunction : PanelElements<ElementWidthValueComponent<*>>("Iana function", 100.0, 20.0) {
     private val autoRequest = object : ValueBoolean(this, "Auto request", true) {
         override fun onChange(oldValue: Boolean?, newValue: Boolean) {
             elementList.clear()

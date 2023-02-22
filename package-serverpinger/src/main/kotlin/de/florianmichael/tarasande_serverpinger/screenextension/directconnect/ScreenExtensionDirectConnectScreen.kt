@@ -28,13 +28,13 @@ class ScreenExtensionDirectConnectScreen : ScreenExtension<DirectConnectScreen>(
         if (lastAddress != it.address) {
             GraphPlayers.clear()
             GraphPing.clear()
-            panelElementsIanaRegistryEntry.update(it.address)
+            panelElementsIanaFunction.update(it.address)
         }
         lastAddress = it.address
         update(it)
     }
 
-    private val panelElementsIanaRegistryEntry = PanelElementsIanaRegistryEntry()
+    private val panelElementsIanaFunction = PanelElementsIanaFunction()
 
     private val graphPlayers = PanelGraph(GraphPlayers)
     private val graphPing = PanelGraph(GraphPing)
@@ -62,7 +62,7 @@ class ScreenExtensionDirectConnectScreen : ScreenExtension<DirectConnectScreen>(
         }), ClickableWidgetPanel(graphPing.apply {
             x = screen.width - panelWidth - 5.0
             y = graphPlayers.y - panelHeight - 5.0
-        }), ClickableWidgetPanel(panelElementsIanaRegistryEntry.apply {
+        }), ClickableWidgetPanel(panelElementsIanaFunction.apply {
             x = 5.0
             y = screen.height - panelHeight - 5.0
         }))

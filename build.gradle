@@ -3,19 +3,21 @@ import su.mandora.codechecker.CodeChecker
 plugins {
 	id "fabric-loom"
 	id "org.jetbrains.kotlin.jvm"
-	id "com.github.johnrengelman.shadow"
 }
 
 archivesBaseName = "tarasande"
 version = tarasande_version
 group = "net.tarasandedevelopment"
 
-def libs = [
-		"io.netty:netty-handler-proxy:4.1.82.Final"
-]
-
 loom {
 	accessWidenerPath = file("src/main/resources/tarasande.accesswidener")
+}
+
+configurations {
+	include
+
+	implementation.extendsFrom include
+	api.extendsFrom include
 }
 
 allprojects {
@@ -35,13 +37,6 @@ allprojects {
 
 subprojects {
 	apply plugin: "java"
-	dependencies {
-		for (final def lib in libs) {
-			implementation(lib) {
-				transitive = false
-			}
-		}
-	}
 }
 
 dependencies {
@@ -49,9 +44,7 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	for (final def lib in libs) {
-		implementation(lib)
-	}
+	include "io.netty:netty-handler-proxy:4.1.82.Final"
 }
 
 processResources {
@@ -71,26 +64,17 @@ java {
 }
 
 jar {
+	dependsOn configurations.include
+	from {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+		configurations.include.collect {
+			zipTree(it)
+		}
+	} {
+		exclude "META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA"
+	}
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
-	}
-}
-
-this.remapJar {
-	dependsOn shadowJar
-    //noinspection GrDeprecatedAPIUsage
-	input.set(shadowJar.archiveFile)
-}
-
-this.shadowJar {
-	archiveClassifier.set("shadow")
-	compileJava.options.encoding = "UTF-8"
-	exclude "native-binaries/*"
-
-	dependencies {
-		for (final def lib in libs) {
-			include(dependency(lib))
-		}
 	}
 }
 

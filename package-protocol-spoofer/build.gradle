@@ -2,11 +2,17 @@ plugins {
     id "java"
     id "fabric-loom"
     id "org.jetbrains.kotlin.jvm"
-    id "com.github.johnrengelman.shadow"
 }
 
 group 'net.tarasandedevelopment'
 version tarasande_version
+
+configurations {
+    include
+
+    implementation.extendsFrom include
+    api.extendsFrom include
+}
 
 repositories {
     mavenCentral()
@@ -16,40 +22,31 @@ loom {
     accessWidenerPath = file("src/main/resources/tarasande-protocol-spoofer.accesswidener")
 }
 
-this.remapJar {
-    dependsOn shadowJar
-    //noinspection GrDeprecatedAPIUsage
-    input.set(shadowJar.archiveFile)
-}
-
-this.shadowJar {
-    archiveClassifier.set("shadow")
-    compileJava.options.encoding = "UTF-8"
-    exclude "native-binaries/*"
-
-    dependencies {
-        include(dependency("io.netty:netty-codec-haproxy:4.1.82.Final"))
-    }
-}
-
-var viaLibs = [
-        "com.viaversion:viaversion:${project.viaversion_version}",
-
-        "com.github.FlorianMichael:ViaLoadingBase:${project.vialoadingbase_version}"
-]
-
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    implementation project(path: ":", configuration: "shadow")
-    implementation project(path: ":package-protocol-hack", configuration: "shadow")
+    implementation project(":")
+    implementation project(":package-protocol-hack")
+    implementation "com.viaversion:viaversion:${project.viaversion_version}"
+    implementation "com.github.FlorianMichael:ViaLoadingBase:${project.vialoadingbase_version}"
 
-    implementation "io.netty:netty-codec-haproxy:4.1.82.Final"
+    include "io.netty:netty-codec-haproxy:4.1.82.Final"
+}
 
-    for (final def via in viaLibs) {
-        implementation(via)
+jar {
+    dependsOn configurations.include
+    from {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        configurations.include.collect {
+            zipTree(it)
+        }
+    } {
+        exclude "META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA"
+    }
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}" }
     }
 }
 

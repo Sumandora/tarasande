@@ -7,13 +7,13 @@ import net.minecraft.client.gui.PlayerSkinDrawer
 import net.minecraft.client.network.PlayerListEntry
 import net.minecraft.client.util.math.MatrixStack
 import net.tarasandedevelopment.tarasande.injection.accessor.IPlayerSkinProvider
-import java.util.UUID
+import java.util.*
 
 class SkinRenderer(val uuid: UUID?, val name: String) {
     private val playerListHud = PlayerListEntry(GameProfile(uuid, name), false)
 
     init {
-        (MinecraftClient.getInstance().skinProvider as IPlayerSkinProvider).disableSessionCheckOnce()
+        (MinecraftClient.getInstance().skinProvider as IPlayerSkinProvider).tarasande_disableSessionCheckOnce()
         playerListHud.skinTexture // force-load
     }
 

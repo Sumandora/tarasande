@@ -25,7 +25,7 @@ public class MixinPlayerSkinProvider implements IPlayerSkinProvider {
     }
 
     @Override
-    public void disableSessionCheckOnce() {
+    public void tarasande_disableSessionCheckOnce() {
         sessionCheck = false;
     }
 }
