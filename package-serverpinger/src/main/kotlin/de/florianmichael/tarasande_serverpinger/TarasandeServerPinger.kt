@@ -4,9 +4,9 @@ import de.florianmichael.tarasande_serverpinger.screenextension.ScreenExtensionG
 import de.florianmichael.tarasande_serverpinger.screenextension.directconnect.ScreenExtensionButtonListDirectConnect
 import de.florianmichael.tarasande_serverpinger.screenextension.directconnect.ScreenExtensionDirectConnectScreen
 import net.fabricmc.api.ClientModInitializer
-import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
-import su.mandora.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
 
 class TarasandeServerPinger : ClientModInitializer {
 

@@ -6,7 +6,7 @@ import net.minecraft.client.option.Perspective
 import net.minecraft.entity.Entity
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.event.impl.*
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean

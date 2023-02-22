@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc
 
-import net.tarasandedevelopment.tarasande.event.EventShowsDeathScreen
+import net.tarasandedevelopment.tarasande.event.impl.EventShowsDeathScreen
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 

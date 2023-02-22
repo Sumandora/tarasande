@@ -1,13 +1,13 @@
 package de.florianmichael.tarasande_rejected_features.injection.mixin;
 
 import de.florianmichael.tarasande_rejected_features.tarasandevalues.ClosedInventory;
-import net.tarasandedevelopment.tarasande.event.EventAttack;
+import net.tarasandedevelopment.tarasande.event.Event;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventAttack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.event.Event;
-import su.mandora.event.EventDispatcher;
 
 @Mixin(value = EventDispatcher.class, remap = false)
 public class MixinEventDispatcher {

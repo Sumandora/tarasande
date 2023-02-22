@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.comb
 
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.event.EventRotation
+import net.tarasandedevelopment.tarasande.event.impl.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.event.impl.EventRotation
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber

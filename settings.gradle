@@ -1,32 +1,31 @@
 pluginManagement {
     repositories {
         maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
+            name = "Fabric"
+            url = "https://maven.fabricmc.net/"
         }
         mavenCentral()
         gradlePluginPortal()
     }
 
     plugins {
-        id 'fabric-loom' version '1.1-SNAPSHOT'
-        id 'org.jetbrains.kotlin.jvm' version '1.8.0'
-        id 'com.github.johnrengelman.shadow' version '7.0.0'
+        id "fabric-loom" version "1.1-SNAPSHOT"
+        id "org.jetbrains.kotlin.jvm" version "1.8.0"
     }
 }
-include 'tools'
-include 'package-chat-exploits'
-include 'package-linux-platform'
-include 'package-mod-fixes'
-include 'package-rejected-features'
-include 'package-protocol-hack'
-include 'package-third-party'
-include 'package-dupe-exploits'
-include 'package-protocol-spoofer'
-include 'package-litematica'
-include 'package-custom-minecraft'
-include 'package-crasher'
-include 'package-nbt-edit'
-include 'package-creative-features'
-include 'package-serverpinger'
+include "tools"
+include "package-chat-exploits"
+include "package-linux-platform"
+include "package-mod-fixes"
+include "package-rejected-features"
+include "package-protocol-hack"
+include "package-third-party"
+include "package-dupe-exploits"
+include "package-protocol-spoofer"
+include "package-litematica"
+include "package-custom-minecraft"
+include "package-crasher"
+include "package-nbt-edit"
+include "package-creative-features"
+include "package-serverpinger"
 

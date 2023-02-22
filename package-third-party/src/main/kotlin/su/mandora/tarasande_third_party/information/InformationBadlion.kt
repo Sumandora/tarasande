@@ -2,13 +2,13 @@ package su.mandora.tarasande_third_party.information
 
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
-import net.tarasandedevelopment.tarasande.event.EventDisconnect
-import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
 import net.tarasandedevelopment.tarasande.gson
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
-import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 

@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.play
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
-import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
+import net.tarasandedevelopment.tarasande.event.impl.EventTick
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode

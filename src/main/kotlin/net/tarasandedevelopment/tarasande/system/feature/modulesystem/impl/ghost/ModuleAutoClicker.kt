@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghost
 
 import net.minecraft.client.option.KeyBinding
-import net.tarasandedevelopment.tarasande.event.EventAttack
+import net.tarasandedevelopment.tarasande.event.impl.EventAttack
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil

@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.event
+package net.tarasandedevelopment.tarasande.event.impl
 
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.StringReader
@@ -6,7 +6,7 @@ import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.command.CommandSource
 import net.minecraft.item.Item
-import su.mandora.event.Event
+import net.tarasandedevelopment.tarasande.event.Event
 import java.util.*
 
 class EventTick(val state: State) : Event(false) {

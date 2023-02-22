@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
-import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventRotation
-import net.tarasandedevelopment.tarasande.event.EventRotationSet
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
+import net.tarasandedevelopment.tarasande.event.impl.EventRotation
+import net.tarasandedevelopment.tarasande.event.impl.EventRotationSet
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module

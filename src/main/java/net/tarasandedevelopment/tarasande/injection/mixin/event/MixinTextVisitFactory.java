@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.event;
 
 import net.minecraft.text.TextVisitFactory;
-import net.tarasandedevelopment.tarasande.event.EventTextVisit;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventTextVisit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import su.mandora.event.EventDispatcher;
 
 @Mixin(TextVisitFactory.class)
 public class MixinTextVisitFactory {

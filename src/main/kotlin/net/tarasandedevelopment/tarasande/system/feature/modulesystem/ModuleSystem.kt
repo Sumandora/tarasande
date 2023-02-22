@@ -4,6 +4,7 @@ import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.tarasandedevelopment.tarasande.Manager
 import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.event.impl.*
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -19,8 +20,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.elem
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.panel.fixed.PanelArrayList
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.Event
-import su.mandora.event.EventDispatcher
 import java.util.function.Consumer
 
 object ManagerModule : Manager<Module>() {

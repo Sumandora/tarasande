@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable.connection.traffic
 
-import net.tarasandedevelopment.tarasande.event.EventPacketTransform
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventPacketTransform
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.GraphTickable
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 
 class GraphTickableIncomingTraffic : GraphTickable("Connection", "Incoming Traffic", 200, true) {

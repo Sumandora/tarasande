@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render
 
 import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket
-import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventSwing
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
+import net.tarasandedevelopment.tarasande.event.impl.EventSwing
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module

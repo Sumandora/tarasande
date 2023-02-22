@@ -4,10 +4,10 @@ import net.minecraft.entity.EntityType
 import net.minecraft.particle.ParticleType
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.registry.Registries
-import net.tarasandedevelopment.tarasande.event.EventChunkOcclusion
-import net.tarasandedevelopment.tarasande.event.EventFogEnd
-import net.tarasandedevelopment.tarasande.event.EventFogStart
-import net.tarasandedevelopment.tarasande.event.EventParticle
+import net.tarasandedevelopment.tarasande.event.impl.EventChunkOcclusion
+import net.tarasandedevelopment.tarasande.event.impl.EventFogEnd
+import net.tarasandedevelopment.tarasande.event.impl.EventFogStart
+import net.tarasandedevelopment.tarasande.event.impl.EventParticle
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry

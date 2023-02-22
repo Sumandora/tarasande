@@ -5,10 +5,10 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.item.SplashPotionItem
 import net.minecraft.potion.PotionUtil
-import net.tarasandedevelopment.tarasande.event.EventAttack
-import net.tarasandedevelopment.tarasande.event.EventDisconnect
-import net.tarasandedevelopment.tarasande.event.EventKeyBindingIsPressed
-import net.tarasandedevelopment.tarasande.event.EventRotation
+import net.tarasandedevelopment.tarasande.event.impl.EventAttack
+import net.tarasandedevelopment.tarasande.event.impl.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.impl.EventKeyBindingIsPressed
+import net.tarasandedevelopment.tarasande.event.impl.EventRotation
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean

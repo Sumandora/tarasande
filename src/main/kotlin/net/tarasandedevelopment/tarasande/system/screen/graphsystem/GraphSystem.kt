@@ -1,8 +1,9 @@
 package net.tarasandedevelopment.tarasande.system.screen.graphsystem
 
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
-import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.impl.EventTick
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.GraphPing
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.GraphTPS
@@ -17,7 +18,6 @@ import net.tarasandedevelopment.tarasande.system.screen.graphsystem.information.
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.panel.PanelGraph
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
-import su.mandora.event.EventDispatcher
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.pow
 import kotlin.math.roundToInt

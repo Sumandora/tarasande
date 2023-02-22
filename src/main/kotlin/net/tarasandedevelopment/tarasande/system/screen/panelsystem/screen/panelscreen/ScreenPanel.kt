@@ -8,8 +8,9 @@ import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.event.EventChangeScreen
-import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventChangeScreen
+import net.tarasandedevelopment.tarasande.event.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
@@ -21,7 +22,6 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.panel
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
 import kotlin.math.floor
 import kotlin.math.round
 

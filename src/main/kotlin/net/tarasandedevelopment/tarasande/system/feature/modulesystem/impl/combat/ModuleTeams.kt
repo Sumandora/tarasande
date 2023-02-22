@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.combat
 
 import net.minecraft.entity.player.PlayerEntity
-import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
+import net.tarasandedevelopment.tarasande.event.impl.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module

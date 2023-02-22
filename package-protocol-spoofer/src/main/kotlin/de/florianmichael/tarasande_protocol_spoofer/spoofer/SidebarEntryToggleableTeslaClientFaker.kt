@@ -2,10 +2,7 @@ package de.florianmichael.tarasande_protocol_spoofer.spoofer
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
-import de.florianmichael.tarasande_protocol_spoofer.viaversion.ViaVersionUtil
 import de.florianmichael.vialoadingbase.ViaLoadingBase
-import io.netty.buffer.Unpooled
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.c2s.login.LoginHelloC2SPacket
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
@@ -13,7 +10,8 @@ import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.text.LiteralTextContent
 import net.minecraft.text.MutableText
 import net.minecraft.util.Formatting
-import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
 import net.tarasandedevelopment.tarasande.feature.statusrenderer.StatusRenderer
 import net.tarasandedevelopment.tarasande.logger
 import net.tarasandedevelopment.tarasande.mc
@@ -21,7 +19,6 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBool
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueText
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
-import su.mandora.event.EventDispatcher
 import java.nio.charset.StandardCharsets
 
 class SidebarEntryToggleableTeslaClientFaker : SidebarEntryToggleable("Tesla client faker", "Spoofer") {

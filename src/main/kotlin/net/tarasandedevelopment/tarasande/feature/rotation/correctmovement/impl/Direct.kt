@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.feature.rotation.correctmovement.impl
 
-import net.tarasandedevelopment.tarasande.event.EventJump
-import net.tarasandedevelopment.tarasande.event.EventVelocityYaw
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventJump
+import net.tarasandedevelopment.tarasande.event.impl.EventVelocityYaw
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
-import su.mandora.event.EventDispatcher
 
 class Direct(rotations: Rotations) {
 

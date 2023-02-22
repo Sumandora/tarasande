@@ -4,11 +4,11 @@ import de.florianmichael.tarasande_creative_features.command.CommandCheckCMDBloc
 import de.florianmichael.tarasande_creative_features.creativesystem.ManagerCreative
 import de.florianmichael.tarasande_creative_features.tarasandevalue.CreativeValues
 import net.fabricmc.api.ClientModInitializer
-import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.tarasandevalue.impl.DebugValues
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
-import su.mandora.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
 
 class TarasandeCreativeFeatures : ClientModInitializer {
 

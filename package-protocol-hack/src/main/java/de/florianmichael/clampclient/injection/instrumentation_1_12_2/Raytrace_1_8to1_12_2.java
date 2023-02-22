@@ -16,12 +16,12 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
-import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventBoundingBoxOverride;
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoMiningTrace;
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.HitResultKt;
-import su.mandora.event.EventDispatcher;
 
 import java.util.List;
 

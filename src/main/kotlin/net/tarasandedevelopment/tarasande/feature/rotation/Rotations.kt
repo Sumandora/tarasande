@@ -1,8 +1,9 @@
 package net.tarasandedevelopment.tarasande.feature.rotation
 
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
-import net.tarasandedevelopment.tarasande.event.EventRotation
-import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.impl.EventRotation
+import net.tarasandedevelopment.tarasande.event.impl.EventTick
 import net.tarasandedevelopment.tarasande.feature.rotation.correctmovement.CorrectMovement
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -10,7 +11,6 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
-import su.mandora.event.EventDispatcher
 import kotlin.math.roundToInt
 
 object Rotations {

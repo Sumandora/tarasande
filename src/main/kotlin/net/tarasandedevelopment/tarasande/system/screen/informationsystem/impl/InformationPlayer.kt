@@ -4,15 +4,15 @@ import net.minecraft.registry.RegistryKeys
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.dimension.DimensionType
 import net.minecraft.world.dimension.DimensionTypes
-import net.tarasandedevelopment.tarasande.event.EventAttackEntity
-import net.tarasandedevelopment.tarasande.event.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventAttackEntity
+import net.tarasandedevelopment.tarasande.event.impl.EventDisconnect
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import su.mandora.event.EventDispatcher
 
 class InformationName : Information("Player", "Name") {
 

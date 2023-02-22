@@ -4,10 +4,10 @@ import net.minecraft.entity.Entity
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShapes
-import net.tarasandedevelopment.tarasande.event.EventCollisionShape
-import net.tarasandedevelopment.tarasande.event.EventJump
-import net.tarasandedevelopment.tarasande.event.EventMovement
-import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.event.impl.EventCollisionShape
+import net.tarasandedevelopment.tarasande.event.impl.EventJump
+import net.tarasandedevelopment.tarasande.event.impl.EventMovement
+import net.tarasandedevelopment.tarasande.event.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber

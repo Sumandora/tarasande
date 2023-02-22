@@ -9,9 +9,9 @@ import net.minecraft.registry.Registries
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
-import net.tarasandedevelopment.tarasande.event.EventAttack
-import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventRotation
+import net.tarasandedevelopment.tarasande.event.impl.EventAttack
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
+import net.tarasandedevelopment.tarasande.event.impl.EventRotation
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber

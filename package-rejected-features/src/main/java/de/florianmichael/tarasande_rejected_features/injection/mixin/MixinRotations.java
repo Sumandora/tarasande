@@ -1,7 +1,7 @@
 package de.florianmichael.tarasande_rejected_features.injection.mixin;
 
 import de.florianmichael.tarasande_rejected_features.tarasandevalues.ClosedInventory;
-import net.tarasandedevelopment.tarasande.event.EventRotation;
+import net.tarasandedevelopment.tarasande.event.impl.EventRotation;
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations;
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +17,7 @@ public class MixinRotations {
     @Shadow
     private static Rotation fakeRotation;
 
-    @Inject(method = "createRotationEvent", at = @At(value = "INVOKE", target = "Lsu/mandora/event/EventDispatcher;call(Lsu/mandora/event/Event;)V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    @Inject(method = "createRotationEvent", at = @At(value = "INVOKE", target = "Lnet/tarasandedevelopment/tarasande/event/EventDispatcher;call(Lnet/tarasandedevelopment/tarasande/event/Event;)V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     public void injectOldRotation(CallbackInfo ci, Rotation realRotation, EventRotation eventRotation) {
         if(fakeRotation != null && ClosedInventory.INSTANCE.shouldBlock())
             eventRotation.setRotation(fakeRotation);

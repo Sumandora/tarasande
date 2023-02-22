@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.tickable
 
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventPollEvents
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.GraphTickable
-import su.mandora.event.EventDispatcher
 
 class GraphTickableFPS : GraphTickable("Game", "FPS", 200, true) {
 

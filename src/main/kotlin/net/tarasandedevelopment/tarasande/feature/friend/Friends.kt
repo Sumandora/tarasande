@@ -3,16 +3,16 @@ package net.tarasandedevelopment.tarasande.feature.friend
 import com.mojang.authlib.GameProfile
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Formatting
-import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
-import net.tarasandedevelopment.tarasande.event.EventPlayerListName
-import net.tarasandedevelopment.tarasande.event.EventTagName
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventIsEntityAttackable
+import net.tarasandedevelopment.tarasande.event.impl.EventPlayerListName
+import net.tarasandedevelopment.tarasande.event.impl.EventTagName
 import net.tarasandedevelopment.tarasande.feature.friend.panel.PanelElementsFriends
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc.ModuleNoFriends
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleNameProtect
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.clearAndGC
-import su.mandora.event.EventDispatcher
 
 object Friends {
 

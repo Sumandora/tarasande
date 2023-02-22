@@ -3,8 +3,8 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.move
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShapes
-import net.tarasandedevelopment.tarasande.event.EventCollisionShape
-import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.event.impl.EventCollisionShape
+import net.tarasandedevelopment.tarasande.event.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module

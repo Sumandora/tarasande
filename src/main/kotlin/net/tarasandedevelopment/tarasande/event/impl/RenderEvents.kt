@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.event
+package net.tarasandedevelopment.tarasande.event.impl
 
 import net.minecraft.block.BlockState
 import net.minecraft.client.gui.screen.Screen
@@ -10,8 +10,8 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.particle.ParticleEffect
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
+import net.tarasandedevelopment.tarasande.event.Event
 import org.joml.Matrix4f
-import su.mandora.event.Event
 
 class EventResolutionUpdate(val prevWidth: Double, val prevHeight: Double, val width: Double, val height: Double) : Event(false)
 class EventRender2D(val matrices: MatrixStack) : Event(false)

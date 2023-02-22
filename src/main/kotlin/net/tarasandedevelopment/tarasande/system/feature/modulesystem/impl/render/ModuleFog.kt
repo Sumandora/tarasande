@@ -1,8 +1,8 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render
 
-import net.tarasandedevelopment.tarasande.event.EventFogColor
-import net.tarasandedevelopment.tarasande.event.EventFogEnd
-import net.tarasandedevelopment.tarasande.event.EventFogStart
+import net.tarasandedevelopment.tarasande.event.impl.EventFogColor
+import net.tarasandedevelopment.tarasande.event.impl.EventFogEnd
+import net.tarasandedevelopment.tarasande.event.impl.EventFogStart
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColor
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module

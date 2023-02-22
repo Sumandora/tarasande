@@ -46,10 +46,6 @@ import net.minecraft.client.gui.screen.ConnectScreen
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen
 import net.minecraft.item.Item
 import net.minecraft.registry.Registries
-import net.tarasandedevelopment.tarasande.event.EventConnectServer
-import net.tarasandedevelopment.tarasande.event.EventDisconnect
-import net.tarasandedevelopment.tarasande.event.EventScreenRender
-import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
@@ -60,7 +56,11 @@ import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Manage
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
-import su.mandora.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventConnectServer
+import net.tarasandedevelopment.tarasande.event.impl.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.impl.EventScreenRender
+import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
 
 class TarasandeProtocolHack {
 

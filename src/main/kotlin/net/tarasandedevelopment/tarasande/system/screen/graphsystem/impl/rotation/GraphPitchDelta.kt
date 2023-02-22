@@ -1,10 +1,10 @@
 package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl.rotation
 
-import net.tarasandedevelopment.tarasande.event.EventDisconnect
-import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
-import su.mandora.event.EventDispatcher
 
 class GraphPitchDelta : Graph("Player", "Pitch Delta", 200, false) {
     private var lastPitch: Float? = null

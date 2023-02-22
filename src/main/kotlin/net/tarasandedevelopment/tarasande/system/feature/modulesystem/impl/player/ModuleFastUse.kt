@@ -5,8 +5,9 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.OnGroundOnly
 import net.minecraft.registry.Registries
 import net.minecraft.util.UseAction
-import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
-import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
@@ -15,7 +16,6 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import su.mandora.event.EventDispatcher
 
 class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.PLAYER) {
 

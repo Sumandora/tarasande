@@ -4,14 +4,14 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.Tameable
 import net.minecraft.registry.Registries
 import net.minecraft.util.hit.EntityHitResult
-import net.tarasandedevelopment.tarasande.event.EventDoAttack
-import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
+import net.tarasandedevelopment.tarasande.event.impl.EventDoAttack
+import net.tarasandedevelopment.tarasande.event.impl.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.isEntityHitResult
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
-import su.mandora.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
 
 object TargetingValues {
     val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registries.ENTITY_TYPE, true, EntityType.PLAYER) {

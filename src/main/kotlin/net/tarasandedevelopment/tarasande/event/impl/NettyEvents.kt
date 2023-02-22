@@ -1,9 +1,9 @@
-package net.tarasandedevelopment.tarasande.event
+package net.tarasandedevelopment.tarasande.event.impl
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.ClientConnection
 import net.minecraft.network.Packet
-import su.mandora.event.Event
+import net.tarasandedevelopment.tarasande.event.Event
 import java.util.*
 
 class EventPacket(val type: Type, val packet: Packet<*>?) : Event(true) {

@@ -15,6 +15,10 @@ import net.minecraft.network.packet.c2s.play.PlayPongC2SPacket
 import net.minecraft.network.packet.s2c.play.*
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
+import net.tarasandedevelopment.tarasande.event.impl.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.impl.EventRender3D
+import net.tarasandedevelopment.tarasande.event.impl.EventTick
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.injection.accessor.ILivingEntity
 import net.tarasandedevelopment.tarasande.mc
@@ -29,7 +33,6 @@ import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.player.PlayerUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 

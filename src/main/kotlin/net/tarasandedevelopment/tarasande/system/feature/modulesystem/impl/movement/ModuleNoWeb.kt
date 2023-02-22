@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.move
 
 import net.minecraft.block.CobwebBlock
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.event.EventBlockCollision
+import net.tarasandedevelopment.tarasande.event.impl.EventBlockCollision
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module

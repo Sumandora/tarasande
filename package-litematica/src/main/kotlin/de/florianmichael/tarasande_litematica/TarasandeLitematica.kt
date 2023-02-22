@@ -4,9 +4,9 @@ import de.florianmichael.tarasande_litematica.screenextension.ScreenExtensionBut
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.tarasandedevelopment.tarasande.TARASANDE_NAME
-import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
-import su.mandora.event.EventDispatcher
 import java.util.logging.Logger
 
 class TarasandeLitematica : ClientModInitializer {

@@ -2,10 +2,10 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghos
 
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.Box
-import net.tarasandedevelopment.tarasande.event.EventAttackEntity
-import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride
-import net.tarasandedevelopment.tarasande.event.EventRender3D
-import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.event.impl.EventAttackEntity
+import net.tarasandedevelopment.tarasande.event.impl.EventBoundingBoxOverride
+import net.tarasandedevelopment.tarasande.event.impl.EventRender3D
+import net.tarasandedevelopment.tarasande.event.impl.EventTick
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
 import net.tarasandedevelopment.tarasande.mc

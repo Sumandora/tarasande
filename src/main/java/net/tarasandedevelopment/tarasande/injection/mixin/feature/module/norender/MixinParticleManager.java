@@ -7,7 +7,8 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.tarasandedevelopment.tarasande.event.EventParticle;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventParticle;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleNoRender;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import su.mandora.event.EventDispatcher;
 
 @Mixin(ParticleManager.class)
 public abstract class MixinParticleManager {

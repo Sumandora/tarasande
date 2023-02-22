@@ -28,13 +28,12 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
-import net.tarasandedevelopment.tarasande.event.*;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.*;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleNoWeb;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSafeWalk;
-import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleSpeed;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
-import su.mandora.event.EventDispatcher;
 
 import java.util.ArrayList;
 import java.util.List;

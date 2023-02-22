@@ -1,10 +1,10 @@
 package net.tarasandedevelopment.tarasande.feature.rotation.correctmovement.impl
 
 import net.minecraft.util.math.MathHelper
-import net.tarasandedevelopment.tarasande.event.EventCanSprint
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventCanSprint
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
-import su.mandora.event.EventDispatcher
 import kotlin.math.abs
 
 class PreventBackwardsSprinting(rotations: Rotations) {

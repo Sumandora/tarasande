@@ -1,12 +1,12 @@
 package de.florianmichael.tarasande_protocol_spoofer.spoofer
 
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
-import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueTextList
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
-import su.mandora.event.EventDispatcher
 
 class SidebarEntryToggleablePluginMessageFilter : SidebarEntryToggleable("Plugin message filter", "Spoofer") {
 

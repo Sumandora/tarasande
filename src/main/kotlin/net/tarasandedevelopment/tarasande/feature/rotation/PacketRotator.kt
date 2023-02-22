@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.feature.rotation
 
-import net.tarasandedevelopment.tarasande.event.EventUpdate
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventUpdate
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
-import su.mandora.event.EventDispatcher
 
 class PacketRotator(rotations: Rotations) {
 

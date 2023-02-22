@@ -3,7 +3,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.move
 import net.minecraft.block.Block
 import net.minecraft.registry.Registries
 import net.minecraft.util.math.BlockPos
-import net.tarasandedevelopment.tarasande.event.EventVelocityMultiplier
+import net.tarasandedevelopment.tarasande.event.impl.EventVelocityMultiplier
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry

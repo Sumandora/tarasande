@@ -7,13 +7,13 @@ import de.florianmichael.tarasande_serverpinger.base.panel.emptyServer
 import de.florianmichael.tarasande_serverpinger.injection.accessor.IClickableWidget
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.DirectConnectScreen
-import net.tarasandedevelopment.tarasande.event.EventKey
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventKey
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.panel.PanelGraph
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtension
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
 
 class ScreenExtensionDirectConnectScreen : ScreenExtension<DirectConnectScreen>(DirectConnectScreen::class.java) {
 

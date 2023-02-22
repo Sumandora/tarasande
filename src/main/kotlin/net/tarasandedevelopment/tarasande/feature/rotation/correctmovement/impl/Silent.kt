@@ -1,9 +1,9 @@
 package net.tarasandedevelopment.tarasande.feature.rotation.correctmovement.impl
 
-import net.tarasandedevelopment.tarasande.event.EventInput
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventInput
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
-import su.mandora.event.EventDispatcher
 import kotlin.math.cos
 import kotlin.math.round
 import kotlin.math.sin

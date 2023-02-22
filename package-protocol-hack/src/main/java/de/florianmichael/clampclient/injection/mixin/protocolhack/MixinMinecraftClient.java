@@ -41,7 +41,8 @@ import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.tarasandedevelopment.tarasande.event.EventScreenInput;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventScreenInput;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleFreeCam;
@@ -55,7 +56,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.event.EventDispatcher;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 

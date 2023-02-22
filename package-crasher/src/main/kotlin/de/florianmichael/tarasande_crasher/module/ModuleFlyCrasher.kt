@@ -2,8 +2,8 @@ package de.florianmichael.tarasande_crasher.module
 
 import de.florianmichael.tarasande_crasher.forcePacket
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
-import net.tarasandedevelopment.tarasande.event.EventMovement
-import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.impl.EventMovement
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module

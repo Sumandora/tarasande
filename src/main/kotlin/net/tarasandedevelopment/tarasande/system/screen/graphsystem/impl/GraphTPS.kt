@@ -1,12 +1,12 @@
 package net.tarasandedevelopment.tarasande.system.screen.graphsystem.impl
 
 import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket
-import net.tarasandedevelopment.tarasande.event.EventDisconnect
-import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.screen.graphsystem.Graph
-import su.mandora.event.EventDispatcher
 
 class GraphTPS : Graph("Server", "TPS", 25, false) {
 

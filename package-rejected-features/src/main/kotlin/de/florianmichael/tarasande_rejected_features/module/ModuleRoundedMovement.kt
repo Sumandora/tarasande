@@ -1,7 +1,7 @@
 package de.florianmichael.tarasande_rejected_features.module
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
-import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory

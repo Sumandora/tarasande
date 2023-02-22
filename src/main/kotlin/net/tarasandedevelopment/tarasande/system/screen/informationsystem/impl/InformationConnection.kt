@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
 
-import net.tarasandedevelopment.tarasande.event.EventConnectServer
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventConnectServer
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.string.StringUtil
-import su.mandora.event.EventDispatcher
 
 class InformationHandlers : Information("Connection", "Handlers") {
     private val displayMode = ValueMode(this, "Display mode", false, "Names", "Size")

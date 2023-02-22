@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghost
 
 import net.minecraft.entity.LivingEntity
-import net.tarasandedevelopment.tarasande.event.EventBoundingBoxOverride
+import net.tarasandedevelopment.tarasande.event.impl.EventBoundingBoxOverride
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module

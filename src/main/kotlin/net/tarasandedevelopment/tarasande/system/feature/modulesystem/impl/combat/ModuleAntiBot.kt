@@ -7,7 +7,7 @@ import net.minecraft.network.packet.s2c.play.EntityS2CPacket
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.event.impl.*
 import net.tarasandedevelopment.tarasande.injection.accessor.IEntity
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode

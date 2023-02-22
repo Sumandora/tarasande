@@ -5,8 +5,8 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.Registries
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.event.EventRender2D
-import net.tarasandedevelopment.tarasande.event.EventRender3D
+import net.tarasandedevelopment.tarasande.event.impl.EventRender2D
+import net.tarasandedevelopment.tarasande.event.impl.EventRender3D
 import net.tarasandedevelopment.tarasande.feature.entitycolor.EntityColor
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode

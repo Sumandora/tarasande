@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.hit.EntityHitResult
-import net.tarasandedevelopment.tarasande.event.EventMouse
+import net.tarasandedevelopment.tarasande.event.impl.EventMouse
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module

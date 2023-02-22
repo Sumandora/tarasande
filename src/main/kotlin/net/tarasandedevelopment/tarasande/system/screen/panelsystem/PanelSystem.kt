@@ -6,9 +6,10 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.event.EventRender2D
-import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
-import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventRender2D
+import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.impl.EventTick
 import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.filesystem.ManagerFile
@@ -25,7 +26,6 @@ import net.tarasandedevelopment.tarasande.util.render.helper.Alignment
 import net.tarasandedevelopment.tarasande.util.render.helper.DragInfo
 import net.tarasandedevelopment.tarasande.util.render.helper.IElement
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
 import java.awt.Color
 import kotlin.math.abs
 import kotlin.math.min

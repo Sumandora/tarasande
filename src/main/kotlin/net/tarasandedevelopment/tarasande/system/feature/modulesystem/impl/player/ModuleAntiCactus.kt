@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.play
 
 import net.minecraft.block.Blocks
 import net.minecraft.util.shape.VoxelShapes
-import net.tarasandedevelopment.tarasande.event.EventCollisionShape
+import net.tarasandedevelopment.tarasande.event.impl.EventCollisionShape
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory

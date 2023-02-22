@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.player
 
-import net.tarasandedevelopment.tarasande.event.EventTimeTravel
+import net.tarasandedevelopment.tarasande.event.impl.EventTimeTravel
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber

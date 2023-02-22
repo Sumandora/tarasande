@@ -3,13 +3,13 @@ package de.florianmichael.tarasande_protocol_hack.injection.mixin.tarasande;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventScreenInput;
 import de.florianmichael.vialoadingbase.ViaLoadingBase;
-import net.tarasandedevelopment.tarasande.event.EventScreenInput;
+import net.tarasandedevelopment.tarasande.event.Event;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventScreenInput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.event.Event;
-import su.mandora.event.EventDispatcher;
 
 @Mixin(value = EventDispatcher.class, remap = false)
 public class MixinEventDispatcher {

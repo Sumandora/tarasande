@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande
 
 import com.google.gson.GsonBuilder
 import net.minecraft.client.MinecraftClient
-import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.feature.statusrenderer.StatusRenderer
@@ -18,7 +18,7 @@ import net.tarasandedevelopment.tarasande.system.screen.graphsystem.ManagerGraph
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
-import su.mandora.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
 import java.util.logging.Logger
 
 /**

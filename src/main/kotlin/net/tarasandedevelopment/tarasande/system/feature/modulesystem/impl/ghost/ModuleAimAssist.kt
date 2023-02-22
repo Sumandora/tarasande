@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.ghost
 
-import net.tarasandedevelopment.tarasande.event.EventMouseDelta
+import net.tarasandedevelopment.tarasande.event.impl.EventMouseDelta
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange

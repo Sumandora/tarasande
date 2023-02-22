@@ -11,9 +11,10 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.text.Text
-import net.tarasandedevelopment.tarasande.event.EventConnectServer
-import net.tarasandedevelopment.tarasande.event.EventPacket
-import net.tarasandedevelopment.tarasande.event.EventRenderMultiplayerEntry
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventConnectServer
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
+import net.tarasandedevelopment.tarasande.event.impl.EventRenderMultiplayerEntry
 import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -21,7 +22,6 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.si
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
 import java.net.InetSocketAddress
 
 class SidebarEntryToggleableForgeFaker : SidebarEntryToggleable("Forge faker", "Spoofer") {

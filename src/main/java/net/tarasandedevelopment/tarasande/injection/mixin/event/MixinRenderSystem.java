@@ -1,7 +1,8 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.tarasandedevelopment.tarasande.event.*;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -10,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.event.EventDispatcher;
 
 @Mixin(value = RenderSystem.class, remap = false)
 public class MixinRenderSystem {

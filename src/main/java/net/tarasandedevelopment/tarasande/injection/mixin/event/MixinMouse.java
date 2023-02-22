@@ -1,14 +1,14 @@
 package net.tarasandedevelopment.tarasande.injection.mixin.event;
 
 import net.minecraft.client.Mouse;
-import net.tarasandedevelopment.tarasande.event.EventMouse;
-import net.tarasandedevelopment.tarasande.event.EventMouseDelta;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventMouse;
+import net.tarasandedevelopment.tarasande.event.impl.EventMouseDelta;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.event.EventDispatcher;
 
 @Mixin(Mouse.class)
 public class MixinMouse {

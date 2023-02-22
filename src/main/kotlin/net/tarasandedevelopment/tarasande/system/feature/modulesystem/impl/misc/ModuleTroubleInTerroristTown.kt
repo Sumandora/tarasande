@@ -5,8 +5,8 @@ import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket
 import net.minecraft.registry.Registries
-import net.tarasandedevelopment.tarasande.event.EventEntityHurt
-import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.impl.EventEntityHurt
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry

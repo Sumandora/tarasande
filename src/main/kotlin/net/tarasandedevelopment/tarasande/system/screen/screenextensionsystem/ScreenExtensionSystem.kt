@@ -3,11 +3,11 @@ package net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.event.EventChildren
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventChildren
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.*
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
-import su.mandora.event.EventDispatcher
 
 object ManagerScreenExtension : Manager<ScreenExtension<*>>() {
 

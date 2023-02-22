@@ -5,8 +5,9 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.event.EventRender2D
-import net.tarasandedevelopment.tarasande.event.EventScreenRender
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventRender2D
+import net.tarasandedevelopment.tarasande.event.impl.EventScreenRender
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -20,7 +21,6 @@ import net.tarasandedevelopment.tarasande.util.render.shader.Shader
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL20
-import su.mandora.event.EventDispatcher
 
 object ManagerBlur : Manager<Blur>() {
 

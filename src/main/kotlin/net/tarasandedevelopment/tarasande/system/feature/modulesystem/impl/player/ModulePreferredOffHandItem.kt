@@ -7,7 +7,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.screen.slot.SlotActionType
-import net.tarasandedevelopment.tarasande.event.EventScreenInput
+import net.tarasandedevelopment.tarasande.event.impl.EventScreenInput
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegistry

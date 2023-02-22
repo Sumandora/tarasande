@@ -1,9 +1,7 @@
 package de.florianmichael.tarasande_protocol_hack.injection.mixin.tarasande;
 
 import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventScreenInput;
-import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventScreenInput;
-import net.tarasandedevelopment.tarasande.event.EventScreenInput;
-import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventScreenInput;
+import net.tarasandedevelopment.tarasande.event.impl.EventScreenInput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 

@@ -4,7 +4,8 @@ import net.minecraft.client.gui.screen.ConfirmScreen
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.packet.c2s.play.ResourcePackStatusC2SPacket
 import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket
-import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
 import net.tarasandedevelopment.tarasande.injection.accessor.IConfirmScreen
 import net.tarasandedevelopment.tarasande.injection.accessor.IServerResourcePackProvider
 import net.tarasandedevelopment.tarasande.mc
@@ -13,7 +14,6 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
-import su.mandora.event.EventDispatcher
 
 class SidebarEntryToggleableResourcePackSpoofer : SidebarEntryToggleable("Resource pack spoofer", "Spoofer") {
 

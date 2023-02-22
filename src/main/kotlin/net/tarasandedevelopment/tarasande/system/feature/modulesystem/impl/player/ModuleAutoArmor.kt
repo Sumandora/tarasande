@@ -6,7 +6,7 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.ArmorItem
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.Vec2f
-import net.tarasandedevelopment.tarasande.event.EventScreenInput
+import net.tarasandedevelopment.tarasande.event.impl.EventScreenInput
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber

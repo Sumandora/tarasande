@@ -8,13 +8,13 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.util.Identifier
-import net.tarasandedevelopment.tarasande.event.EventConnectServer
-import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventConnectServer
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientConnection
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.sidebar.SidebarEntryToggleable
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
-import su.mandora.event.EventDispatcher
 
 // by ♡Sarah~#0004
 class SidebarEntryToggleableMysteryModFaker : SidebarEntryToggleable("Mystery mod faker", "Spoofer") {

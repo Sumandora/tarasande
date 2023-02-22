@@ -6,7 +6,8 @@ import de.florianmichael.tarasande_protocol_hack.tarasande.values.ProtocolHackVa
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
-import net.tarasandedevelopment.tarasande.event.EventUpdateTargetedEntity;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventUpdateTargetedEntity;
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations;
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
 import org.spongepowered.asm.mixin.Final;
@@ -15,7 +16,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.event.EventDispatcher;
 
 @SuppressWarnings("ShadowModifiers")
 @Mixin(GameRenderer.class)

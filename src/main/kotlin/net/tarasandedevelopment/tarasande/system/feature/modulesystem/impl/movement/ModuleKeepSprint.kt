@@ -1,10 +1,10 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.event.EventAttack
-import net.tarasandedevelopment.tarasande.event.EventAttackEntity
-import net.tarasandedevelopment.tarasande.event.EventKeepSprint
-import net.tarasandedevelopment.tarasande.event.EventVelocity
+import net.tarasandedevelopment.tarasande.event.impl.EventAttack
+import net.tarasandedevelopment.tarasande.event.impl.EventAttackEntity
+import net.tarasandedevelopment.tarasande.event.impl.EventKeepSprint
+import net.tarasandedevelopment.tarasande.event.impl.EventVelocity
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.ManagerGrabber
 import net.tarasandedevelopment.tarasande.system.base.grabbersystem.impl.GrabberSpeedReduction

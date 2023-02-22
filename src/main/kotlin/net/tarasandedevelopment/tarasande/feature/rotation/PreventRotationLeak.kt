@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande.feature.rotation
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
-import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.evaluateNewRotation
-import su.mandora.event.EventDispatcher
 
 class PreventRotationLeak(rotations: Rotations) {
 

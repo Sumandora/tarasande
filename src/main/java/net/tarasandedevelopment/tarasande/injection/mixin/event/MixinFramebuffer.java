@@ -2,11 +2,11 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event;
 
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.render.VertexConsumer;
-import net.tarasandedevelopment.tarasande.event.EventColorCorrection;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventColorCorrection;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import su.mandora.event.EventDispatcher;
 
 @Mixin(Framebuffer.class)
 public class MixinFramebuffer {

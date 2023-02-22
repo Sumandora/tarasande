@@ -4,8 +4,8 @@ import com.viaversion.viaversion.api.connection.UserConnection
 import de.florianmichael.clampclient.injection.mixininterface.IClientConnection_Protocol
 import de.florianmichael.viabeta.protocol.protocol1_7_2_5to1_6_4.provider.EncryptionProvider
 import net.minecraft.network.ClientConnection
-import net.tarasandedevelopment.tarasande.event.EventConnectServer
-import su.mandora.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventConnectServer
 
 class FabricEncryptionProvider : EncryptionProvider() {
 

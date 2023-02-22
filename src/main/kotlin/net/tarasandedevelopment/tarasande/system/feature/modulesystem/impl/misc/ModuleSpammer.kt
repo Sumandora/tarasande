@@ -2,8 +2,8 @@ package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.misc
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
-import net.tarasandedevelopment.tarasande.event.EventChat
-import net.tarasandedevelopment.tarasande.event.EventPollEvents
+import net.tarasandedevelopment.tarasande.event.impl.EventChat
+import net.tarasandedevelopment.tarasande.event.impl.EventPollEvents
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueMode

@@ -4,8 +4,8 @@ import de.florianmichael.clampclient.injection.mixininterface.IEntity_Protocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.util.GlfwUtil;
-import net.tarasandedevelopment.tarasande.event.EventMouseDelta;
-import su.mandora.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventMouseDelta;
 
 @SuppressWarnings({"DataFlowIssue", "UnnecessaryUnboxing"})
 public class MouseEmulation_1_12_2 {

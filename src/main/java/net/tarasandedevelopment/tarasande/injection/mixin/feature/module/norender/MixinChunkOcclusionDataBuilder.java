@@ -2,12 +2,12 @@ package net.tarasandedevelopment.tarasande.injection.mixin.feature.module.norend
 
 import net.minecraft.client.render.chunk.ChunkOcclusionDataBuilder;
 import net.minecraft.util.math.BlockPos;
-import net.tarasandedevelopment.tarasande.event.EventChunkOcclusion;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventChunkOcclusion;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.event.EventDispatcher;
 
 @Mixin(ChunkOcclusionDataBuilder.class)
 public class MixinChunkOcclusionDataBuilder {

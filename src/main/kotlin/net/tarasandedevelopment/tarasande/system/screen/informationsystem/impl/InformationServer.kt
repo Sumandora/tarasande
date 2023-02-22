@@ -1,12 +1,13 @@
 package net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl
 
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
-import net.tarasandedevelopment.tarasande.event.*
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventDisconnect
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.clearAndGC
-import su.mandora.event.EventDispatcher
 import java.nio.charset.StandardCharsets
 
 class InformationServerBrand : Information("Server", "Server Brand") {

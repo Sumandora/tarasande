@@ -2,7 +2,8 @@ package net.tarasandedevelopment.tarasande.feature.tarasandevalue.impl
 
 import net.minecraft.entity.EntityStatuses
 import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket
-import net.tarasandedevelopment.tarasande.event.EventPacket
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventPacket
 import net.tarasandedevelopment.tarasande.feature.tarasandevalue.impl.debug.BlockChangeTracker
 import net.tarasandedevelopment.tarasande.feature.tarasandevalue.impl.debug.Chat
 import net.tarasandedevelopment.tarasande.feature.tarasandevalue.impl.debug.MinecraftDebugger
@@ -11,7 +12,6 @@ import net.tarasandedevelopment.tarasande.feature.tarasandevalue.impl.debug.came
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
-import su.mandora.event.EventDispatcher
 
 object DebugValues {
 

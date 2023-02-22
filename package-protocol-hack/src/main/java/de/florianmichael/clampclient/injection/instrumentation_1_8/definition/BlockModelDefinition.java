@@ -14,8 +14,8 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.tarasandedevelopment.tarasande.event.EventVelocityMultiplier;
-import su.mandora.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventVelocityMultiplier;
 
 import java.util.Arrays;
 import java.util.HashMap;

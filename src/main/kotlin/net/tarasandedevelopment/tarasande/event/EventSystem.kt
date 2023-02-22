@@ -1,4 +1,4 @@
-package su.mandora.event
+package net.tarasandedevelopment.tarasande.event
 
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList

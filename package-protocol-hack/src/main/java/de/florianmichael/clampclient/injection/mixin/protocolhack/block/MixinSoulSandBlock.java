@@ -21,8 +21,8 @@
 
 package de.florianmichael.clampclient.injection.mixin.protocolhack.block;
 
-import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import de.florianmichael.vialoadingbase.ViaLoadingBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -31,11 +31,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.tarasandedevelopment.tarasande.event.EventVelocityMultiplier;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
+import net.tarasandedevelopment.tarasande.event.impl.EventVelocityMultiplier;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import su.mandora.event.EventDispatcher;
 
 @Mixin(SoulSandBlock.class)
 public class MixinSoulSandBlock extends Block {

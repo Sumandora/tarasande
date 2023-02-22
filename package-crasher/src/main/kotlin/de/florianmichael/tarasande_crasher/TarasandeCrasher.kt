@@ -4,10 +4,9 @@ import de.florianmichael.tarasande_crasher.command.CommandItemFrameCrasher
 import de.florianmichael.tarasande_crasher.crasher.ManagerCrasher
 import de.florianmichael.tarasande_crasher.module.*
 import net.fabricmc.api.ClientModInitializer
-import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.minecraft.client.gui.screen.DirectConnectScreen
-import net.minecraft.client.gui.screen.GameMenuScreen
 import net.minecraft.client.network.ServerAddress
 import net.minecraft.network.Packet
 import net.minecraft.util.Formatting
@@ -20,7 +19,7 @@ import net.tarasandedevelopment.tarasande.system.screen.panelsystem.screen.impl.
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
 import net.tarasandedevelopment.tarasande.util.player.chat.CustomChat
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
 
 fun errorMessage(text: String) {
     @Suppress("NAME_SHADOWING") val text = Formatting.RED.toString() + text

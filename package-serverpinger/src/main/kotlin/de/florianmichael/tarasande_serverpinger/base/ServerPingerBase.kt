@@ -5,7 +5,8 @@ import de.florianmichael.tarasande_serverpinger.base.panel.copy
 import de.florianmichael.tarasande_serverpinger.base.panel.emptyServer
 import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.util.math.MatrixStack
-import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventTick
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -14,7 +15,6 @@ import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.Sc
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
-import su.mandora.event.EventDispatcher
 import kotlin.math.ceil
 
 class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvider: () -> String, private val finish: (server: ServerInfo) -> Unit) {

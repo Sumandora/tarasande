@@ -1,7 +1,7 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement
 
 import net.minecraft.util.math.Vec3d
-import net.tarasandedevelopment.tarasande.event.EventMovement
+import net.tarasandedevelopment.tarasande.event.impl.EventMovement
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module

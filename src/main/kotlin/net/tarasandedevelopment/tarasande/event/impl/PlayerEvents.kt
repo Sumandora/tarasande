@@ -1,4 +1,4 @@
-package net.tarasandedevelopment.tarasande.event
+package net.tarasandedevelopment.tarasande.event.impl
 
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -8,7 +8,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShape
-import su.mandora.event.Event
+import net.tarasandedevelopment.tarasande.event.Event
 
 class EventUpdate(val state: State) : Event(state == State.PRE) {
     enum class State {

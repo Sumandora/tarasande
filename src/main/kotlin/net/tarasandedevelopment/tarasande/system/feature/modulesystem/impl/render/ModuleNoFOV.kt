@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render
 
-import net.tarasandedevelopment.tarasande.event.EventFovMultiplier
+import net.tarasandedevelopment.tarasande.event.impl.EventFovMultiplier
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumberRange

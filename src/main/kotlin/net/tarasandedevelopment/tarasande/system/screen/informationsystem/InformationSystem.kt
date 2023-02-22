@@ -1,11 +1,11 @@
 package net.tarasandedevelopment.tarasande.system.screen.informationsystem
 
 import net.tarasandedevelopment.tarasande.Manager
-import net.tarasandedevelopment.tarasande.event.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.impl.*
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.panel.PanelInformation
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
-import su.mandora.event.EventDispatcher
 
 object ManagerInformation : Manager<Information>() {
 

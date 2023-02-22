@@ -7,8 +7,8 @@ import net.minecraft.item.BowItem
 import net.minecraft.item.CrossbowItem
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.Box
-import net.tarasandedevelopment.tarasande.event.EventRender3D
-import net.tarasandedevelopment.tarasande.event.EventRotation
+import net.tarasandedevelopment.tarasande.event.impl.EventRender3D
+import net.tarasandedevelopment.tarasande.event.impl.EventRotation
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean

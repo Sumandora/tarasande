@@ -1,10 +1,8 @@
 package de.florianmichael.tarasande_protocol_hack.injection.mixin.tarasande;
 
 import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventCollisionShape;
-import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventCollisionShape;
 import net.minecraft.util.shape.VoxelShape;
-import net.tarasandedevelopment.tarasande.event.EventCollisionShape;
-import de.florianmichael.tarasande_protocol_hack.injection.accessor.IEventCollisionShape;
+import net.tarasandedevelopment.tarasande.event.impl.EventCollisionShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

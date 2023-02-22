@@ -15,9 +15,9 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.RaycastContext
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.RaycastContext.ShapeType
-import net.tarasandedevelopment.tarasande.event.EventInput
-import net.tarasandedevelopment.tarasande.event.EventIsEntityAttackable
-import net.tarasandedevelopment.tarasande.event.EventTick
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventInput
+import net.tarasandedevelopment.tarasande.event.impl.EventIsEntityAttackable
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
 import net.tarasandedevelopment.tarasande.injection.accessor.IChatScreen
 import net.tarasandedevelopment.tarasande.injection.accessor.IGameRenderer
@@ -28,7 +28,6 @@ import net.tarasandedevelopment.tarasande.util.extension.minecraft.isBlockHitRes
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
 import org.lwjgl.glfw.GLFW
-import su.mandora.event.EventDispatcher
 
 object PlayerUtil {
 

@@ -9,11 +9,11 @@ import com.viaversion.viaversion.protocols.protocol1_13to1_12_2.Protocol1_13To1_
 import com.viaversion.viaversion.protocols.protocol1_13to1_12_2.ServerboundPackets1_13;
 import com.viaversion.viaversion.protocols.protocol1_13to1_12_2.storage.TabCompleteTracker;
 import de.florianmichael.tarasande_protocol_hack.tarasande.event.EventFinishLegacyCompletions;
+import net.tarasandedevelopment.tarasande.event.EventDispatcher;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.event.EventDispatcher;
 
 import java.util.ArrayList;
 
