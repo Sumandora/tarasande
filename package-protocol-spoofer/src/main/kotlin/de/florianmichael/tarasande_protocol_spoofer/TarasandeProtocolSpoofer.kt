@@ -1,29 +1,31 @@
 package de.florianmichael.tarasande_protocol_spoofer
 
 import de.florianmichael.tarasande_protocol_spoofer.command.CommandOpenModsRCE
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.*
+import de.florianmichael.tarasande_protocol_spoofer.tarasandevalues.ProtocolSpooferValues
 import de.florianmichael.tarasande_protocol_spoofer.viaversion.ViaVersionUtil
 import io.netty.buffer.Unpooled
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.MinecraftClient
+import net.minecraft.network.ClientConnection
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.util.Identifier
-import net.tarasandedevelopment.tarasande.TARASANDE_NAME
-import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
 import net.tarasandedevelopment.tarasande.event.EventDispatcher
+import net.tarasandedevelopment.tarasande.event.impl.EventConnectServer
 import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
+import net.tarasandedevelopment.tarasande.feature.tarasandevalue.TarasandeValues
+import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
+import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 
 class TarasandeProtocolSpoofer : ClientModInitializer {
 
     companion object {
-        val tarasandeProtocolHackLoaded = FabricLoader.getInstance().isModLoaded("$TARASANDE_NAME-protocol-hack")
+        val viaFabricPlusLoaded = FabricLoader.getInstance().isModLoaded("viafabricplus")
+        var clientConnection: ClientConnection? = null
 
         fun enforcePluginMessage(channel: String, oldChannel: String? = null, value: ByteArray) {
-            if (tarasandeProtocolHackLoaded && oldChannel != null && ViaVersionUtil.sendLegacyPluginMessage(oldChannel, value)) {
+            if (viaFabricPlusLoaded && oldChannel != null && ViaVersionUtil.sendLegacyPluginMessage(oldChannel, value)) {
                 return
             }
 
@@ -32,30 +34,17 @@ class TarasandeProtocolSpoofer : ClientModInitializer {
     }
 
     override fun onInitializeClient() {
-        EventDispatcher.add(EventSuccessfulLoad::class.java) {
-            val sidebar = ManagerScreenExtension.get(ScreenExtensionSidebarMultiplayerScreen::class.java).sidebar
-
-            if (tarasandeProtocolHackLoaded) {
-                ViaVersionUtil.builtForgeChannelMappings()
-
-                sidebar.add(
-                    SidebarEntryToggleableForgeFaker(),
-                    SidebarEntryToggleableTeslaClientFaker()
-                )
-
-                ManagerCommand.add(
-                    CommandOpenModsRCE()
-                )
+        EventDispatcher.apply {
+            add(EventSuccessfulLoad::class.java) {
+                if (viaFabricPlusLoaded) {
+                    ViaVersionUtil.builtForgeChannelMappings()
+                    ManagerCommand.add(CommandOpenModsRCE())
+                }
+                ValueButtonOwnerValues(TarasandeValues, "Protocol spoofer values", ProtocolSpooferValues)
             }
-
-            sidebar.add(
-                SidebarEntryToggleableBungeeHack(),
-                SidebarEntryToggleableHAProxyHack(),
-                SidebarEntryToggleableQuiltFaker(),
-                SidebarEntryToggleableVivecraftFaker(),
-                SidebarEntryToggleablePluginMessageFilter(),
-                SidebarEntryToggleableMysteryModFaker()
-            )
+            add(EventConnectServer::class.java) {
+                clientConnection = it.connection
+            }
         }
     }
 }

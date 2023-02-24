@@ -10,7 +10,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBool
 object DetailedConnectionStatus {
 
     val showDetailedConnectionStatus = ValueBoolean(DebugValues, "Show detailed connection status", false, isEnabled = {
-        if (TarasandeCustomMinecraft.tarasandeProtocolHackLoaded)
+        if (TarasandeCustomMinecraft.viaFabricPlusLoaded)
             !ViaVersionUtil.isLegacyLogin()
         else
             true

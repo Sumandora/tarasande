@@ -2,6 +2,7 @@ package net.tarasandedevelopment.tarasande
 
 import com.google.gson.GsonBuilder
 import net.minecraft.client.MinecraftClient
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.friend.Friends
 import net.tarasandedevelopment.tarasande.feature.rotation.Rotations
@@ -18,7 +19,6 @@ import net.tarasandedevelopment.tarasande.system.screen.graphsystem.ManagerGraph
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.ManagerPanel
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
-import net.tarasandedevelopment.tarasande.event.EventDispatcher
 import java.util.logging.Logger
 
 /**
@@ -37,11 +37,6 @@ import java.util.logging.Logger
  *  - Refactor AccessWidener
  *  - Try out layered maps
  *  - Add Reverse Step (And remove nofall option)
- *  - Remove ManagerSidebar
- *
- * TODO | Protocol Hack:
- *  - WindowClick is not fully remapped in <= 1.16.5
- *  - Recode to ViaFabricPlus base
  *
  * TODO | Protocol Spoofer:
  *  - Add basic exploits from bash for Forge

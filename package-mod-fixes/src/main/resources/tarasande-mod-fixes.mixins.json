@@ -6,7 +6,6 @@
   "client": [
     "baritone.MixinLookBehavior",
     "modmenu.MixinModMenuEventHandler",
-    "sodium.MixinChunkTracker",
     "sodium.MixinWorldSlice"
   ],
   "injectors": {

@@ -7,13 +7,13 @@ import net.tarasandedevelopment.tarasande.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.impl.EventChildren
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.impl.button.PanelButton
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.*
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
 
 object ManagerScreenExtension : Manager<ScreenExtension<*>>() {
 
     init {
         add(
-            ScreenExtensionSidebarMultiplayerScreen(),
+            ScreenExtensionButtonListMultiplayerScreen(),
             ScreenExtensionButtonListTitleScreen(),
             ScreenExtensionDownloadingTerrainScreen(),
             ScreenExtensionButtonListDeathScreen(),

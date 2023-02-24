@@ -18,7 +18,6 @@ include "package-chat-exploits"
 include "package-linux-platform"
 include "package-mod-fixes"
 include "package-rejected-features"
-include "package-protocol-hack"
 include "package-third-party"
 include "package-dupe-exploits"
 include "package-protocol-spoofer"
@@ -28,4 +27,5 @@ include "package-crasher"
 include "package-nbt-edit"
 include "package-creative-features"
 include "package-serverpinger"
+include 'package-viafabricplus'
 

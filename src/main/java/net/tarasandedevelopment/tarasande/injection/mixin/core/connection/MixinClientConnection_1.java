@@ -5,8 +5,7 @@ import io.netty.handler.proxy.HttpProxyHandler;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.proxy.Socks5ProxyHandler;
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension;
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionSidebarMultiplayerScreen;
-import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.sidebar.SidebarEntryProxy;
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen;
 import net.tarasandedevelopment.tarasande.util.connection.Proxy;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +17,7 @@ public class MixinClientConnection_1 {
 
     @Inject(method = "initChannel", at = @At("TAIL"))
     public void addChannelHandlers(Channel channel, CallbackInfo ci) {
-        final Proxy proxy = ManagerScreenExtension.INSTANCE.get(ScreenExtensionSidebarMultiplayerScreen.class).getSidebar().get(SidebarEntryProxy.class).getScreenBetterProxy().getProxy();
+        final Proxy proxy = ManagerScreenExtension.INSTANCE.get(ScreenExtensionButtonListMultiplayerScreen.class).getScreenBetterSlotListAccountManager().getScreenBetterProxy().getProxy();
 
         if (proxy != null) {
             switch (proxy.getType()) {

@@ -1,6 +1,6 @@
 package de.florianmichael.tarasande_protocol_spoofer.injection.accessor;
 
-import de.florianmichael.tarasande_protocol_spoofer.spoofer.forgefaker.payload.IForgePayload;
+import de.florianmichael.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForgePayload;
 
 public interface IServerMetadata {
 

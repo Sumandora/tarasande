@@ -28,6 +28,7 @@ import net.tarasandedevelopment.tarasande.system.screen.accountmanager.azureapp.
 import net.tarasandedevelopment.tarasande.system.screen.accountmanager.environment.ManagerEnvironment
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.file.FileAccounts
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterAccount
+import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterProxy
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.ButtonWidget
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
@@ -57,6 +58,8 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
         ManagerAzureApp
         ManagerAccount
     }
+
+    val screenBetterProxy = ScreenBetterProxy()
 
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java, 9999) {
@@ -150,6 +153,10 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
                 it.uuid = UUID.randomUUID().toString()
             })
             reload()
+        })
+
+        addDrawableChild(ButtonWidget(width - 103, 3, 100, 20, Text.of("Proxy")) {
+            mc.setScreen(screenBetterProxy.apply { prevScreen = mc.currentScreen })
         })
 
         tick()

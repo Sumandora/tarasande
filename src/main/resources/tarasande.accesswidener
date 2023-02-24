@@ -75,7 +75,6 @@ extendable class net/minecraft/registry/entry/RegistryEntry$Direct
 
 accessible method net/minecraft/client/render/Camera setPos (Lnet/minecraft/util/math/Vec3d;)V
 accessible method net/minecraft/client/render/Camera setRotation (FF)V
-accessible method net/minecraft/client/network/ClientPlayNetworkHandler resolveUrl (Ljava/lang/String;)Ljava/net/URL;
 accessible method net/minecraft/item/CrossbowItem getSpeed (Lnet/minecraft/item/ItemStack;)F
 accessible method net/minecraft/item/CrossbowItem getProjectiles (Lnet/minecraft/item/ItemStack;)Ljava/util/List;
 accessible method net/minecraft/entity/Entity movementInputToVelocity (Lnet/minecraft/util/math/Vec3d;FF)Lnet/minecraft/util/math/Vec3d;
@@ -86,7 +85,6 @@ accessible method net/minecraft/client/MinecraftClient handleBlockBreaking (Z)V
 accessible method net/minecraft/entity/Entity adjustMovementForSneaking (Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/entity/MovementType;)Lnet/minecraft/util/math/Vec3d;
 accessible method net/minecraft/entity/player/PlayerEntity adjustMovementForSneaking (Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/entity/MovementType;)Lnet/minecraft/util/math/Vec3d;
 accessible method net/minecraft/client/world/ClientWorld getPendingUpdateManager ()Lnet/minecraft/client/network/PendingUpdateManager;
-accessible method net/minecraft/client/network/ClientPlayNetworkHandler feedbackAfterDownload (Ljava/util/concurrent/CompletableFuture;)V
 accessible method net/minecraft/client/gui/widget/EntryListWidget clearEntries ()V
 accessible method net/minecraft/client/gui/widget/EntryListWidget addEntry (Lnet/minecraft/client/gui/widget/EntryListWidget$Entry;)I
 

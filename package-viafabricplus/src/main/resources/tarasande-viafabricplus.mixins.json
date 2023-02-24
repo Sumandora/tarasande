@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.florianmichael.tarasande_viafabricplus.injection.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixinPriority": 1,
+  "mixins": [
+    "MixinEventDispatcher",
+    "MixinEventScreenInput",
+    "MixinInventoryPacketSender",
+    "MixinPlayerScreenHandler_1",
+    "MixinSoulSandVelocityHandler"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

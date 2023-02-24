@@ -28,9 +28,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     implementation project(":")
-    implementation project(":package-protocol-hack")
-    implementation "com.viaversion:viaversion:${project.viaversion_version}"
-    implementation "com.github.FlorianMichael:ViaLoadingBase:${project.vialoadingbase_version}"
+    implementation "com.github.FlorianMichael:ViaFabricPlus:${project.viafabricplus_version}"
 
     include "io.netty:netty-codec-haproxy:4.1.82.Final"
 }
