@@ -7,11 +7,11 @@ import de.florianmichael.tarasande_rejected_features.module.ModuleDropper
 import de.florianmichael.tarasande_rejected_features.module.ModuleRoundedMovement
 import de.florianmichael.tarasande_rejected_features.tarasandevalues.ClosedInventory
 import net.fabricmc.api.ClientModInitializer
+import net.tarasandedevelopment.tarasande.event.EventDispatcher
 import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.feature.commandsystem.ManagerCommand
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
-import net.tarasandedevelopment.tarasande.event.EventDispatcher
 
 class TarasandeRejectedFeatures : ClientModInitializer {
 
@@ -43,7 +43,10 @@ class TarasandeRejectedFeatures : ClientModInitializer {
 
                 // Server
                 InformationLag(),
-                InformationMovements()
+                InformationMovements(),
+
+                // Connection
+                InformationNettyLag()
             )
 
             ManagerCommand.add(

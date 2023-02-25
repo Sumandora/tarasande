@@ -9,7 +9,8 @@
     "MixinEventScreenInput",
     "MixinInventoryPacketSender",
     "MixinPlayerScreenHandler_1",
-    "MixinSoulSandVelocityHandler"
+    "MixinSoulSandVelocityHandler",
+    "MixinSyncInputExecutor"
   ],
   "injectors": {
     "defaultRequire": 1
