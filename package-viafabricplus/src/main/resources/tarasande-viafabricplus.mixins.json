@@ -8,8 +8,8 @@
     "MixinEventDispatcher",
     "MixinEventScreenInput",
     "MixinInventoryPacketSender",
+    "MixinMCConstants",
     "MixinPlayerScreenHandler_1",
-    "MixinSoulSandVelocityHandler",
     "MixinSyncInputExecutor"
   ],
   "injectors": {
