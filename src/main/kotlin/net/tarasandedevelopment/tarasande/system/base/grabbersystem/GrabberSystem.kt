@@ -69,8 +69,12 @@ object ManagerGrabber : Manager<Grabber>() {
 
         classNodes.forEach { classNode ->
             list.forEach { transformer ->
-                if (transformer.resolveClassMapping(classNode.name) == transformer.targetedClass.replace(".", "/"))
-                    transformer.transform(classNode)
+                if (System.getProperty("skipGrabberSystem") != null) {
+                    transformer.constant = transformer.expected
+                } else {
+                    if (transformer.resolveClassMapping(classNode.name) == transformer.targetedClass.replace(".", "/"))
+                        transformer.transform(classNode)
+                }
             }
         }
     }
@@ -88,7 +92,7 @@ abstract class Grabber(val targetedClass: String, val expected: Any) {
                 error(javaClass.simpleName + " wasn't able to read their constant")
             return field
         }
-        protected set(value) {
+        set(value) {
             if (value != expected)
                 error(javaClass.simpleName + " read a different value than expected (Expected: $expected, but received $value)")
             field = value
@@ -109,7 +113,7 @@ abstract class Grabber(val targetedClass: String, val expected: Any) {
     }
 
     fun resolveClassMapping(name: String): String {
-        return TinyMappings.mapClassName(name.replace(".", "/"))
+        return TinyMappings.mapClassName(name)
     }
 
     fun reverseClassMapping(name: String): String {
