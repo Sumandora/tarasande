@@ -113,7 +113,7 @@ abstract class Grabber(val targetedClass: String, val expected: Any) {
     }
 
     fun resolveClassMapping(name: String): String {
-        return TinyMappings.mapClassName(name)
+        return TinyMappings.mapClassName(name.replace(".", "/"))
     }
 
     fun reverseClassMapping(name: String): String {
