@@ -5,5 +5,5 @@ import de.florianmichael.vialoadingbase.ViaLoadingBase
 
 object ViaVersionUtil {
 
-    fun isLegacyLogin() = ViaLoadingBase.getTargetVersion().isOlderThan(ProtocolVersion.v1_7_1)
+    fun isLegacyLogin() = ViaLoadingBase.getClassWrapper().targetVersion.isOlderThan(ProtocolVersion.v1_7_1)
 }

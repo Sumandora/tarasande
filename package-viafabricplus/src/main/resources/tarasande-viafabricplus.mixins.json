@@ -7,9 +7,8 @@
   "mixins": [
     "MixinEventDispatcher",
     "MixinEventScreenInput",
-    "MixinInventoryPacketSender",
-    "MixinMCConstants",
     "MixinPlayerScreenHandler_1",
+    "MixinProtocolSyncBooleanSetting",
     "MixinSyncInputExecutor"
   ],
   "injectors": {

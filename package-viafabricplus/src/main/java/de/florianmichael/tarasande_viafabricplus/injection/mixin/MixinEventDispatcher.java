@@ -17,7 +17,7 @@ public class MixinEventDispatcher {
     @SuppressWarnings("InvalidInjectorMethodSignature")
     @Inject(method = "call", at = @At("HEAD"), cancellable = true)
     public void cancelOriginalScreenInputEvent(Event event, CallbackInfo ci) {
-        if (event instanceof EventScreenInput && ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_12_2)) {
+        if (event instanceof EventScreenInput && ViaLoadingBase.getClassWrapper().getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_12_2)) {
             if (((IEventScreenInput) event).getOriginal()) {
                 ci.cancel();
             }

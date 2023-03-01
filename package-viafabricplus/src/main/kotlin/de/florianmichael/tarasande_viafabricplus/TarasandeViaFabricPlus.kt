@@ -3,7 +3,7 @@ package de.florianmichael.tarasande_viafabricplus
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.tarasande_viafabricplus.tarasandevalues.EveryItemOnArmor
 import de.florianmichael.viafabricplus.definition.v1_8_x.IdlePacketExecutor
-import de.florianmichael.viafabricplus.setting.groups.DebugSettings
+import de.florianmichael.viafabricplus.settings.groups.DebugSettings
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.platform.ProtocolRange
 import net.fabricmc.api.ClientModInitializer
@@ -25,7 +25,7 @@ class TarasandeViaFabricPlus : ClientModInitializer {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
             EveryItemOnArmor
 
-            cancelOpenPacket = ValueBoolean(ManagerModule.get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolRange.andOlder(ProtocolVersion.v1_11_1) + ")", false, isEnabled = { ViaLoadingBase.getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_11_1) })
+            cancelOpenPacket = ValueBoolean(ManagerModule.get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolRange.andOlder(ProtocolVersion.v1_11_1) + ")", false, isEnabled = { ViaLoadingBase.getClassWrapper().targetVersion.isOlderThanOrEqualTo(ProtocolVersion.v1_11_1) })
 
             ManagerModule.get(ModuleTickBaseManipulation::class.java).apply {
                 val chargeOnIdlePacketSkip = ValueBoolean(this, "Charge on idle packet skip (" + DebugSettings.getClassWrapper().sendIdlePacket.protocolRange + ")", false, isEnabled = { !DebugSettings.getClassWrapper().sendIdlePacket.value })

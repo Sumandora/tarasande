@@ -28,7 +28,9 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     implementation project(":")
-    implementation "com.github.FlorianMichael:ViaFabricPlus:${project.viafabricplus_version}"
+    implementation ("com.github.FlorianMichael:ViaFabricPlus:${project.viafabricplus_version}") {
+        exclude group: "com.terraformersmc"
+    }
 
     include "io.netty:netty-codec-haproxy:4.1.82.Final"
 }
