@@ -31,6 +31,10 @@ allprojects {
 		maven {
 			url = "https://jitpack.io"
 		}
+		maven {
+			name = "Lenni0451"
+			url = "https://maven.lenni0451.net/releases"
+		}
 		mavenCentral()
 	}
 }
