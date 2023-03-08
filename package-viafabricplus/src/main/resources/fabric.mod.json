@@ -20,6 +20,9 @@
   "entrypoints": {
     "client": [
       "de.florianmichael.tarasande_viafabricplus.TarasandeViaFabricPlus"
+    ],
+    "viafabricplus": [
+      "de.florianmichael.tarasande_viafabricplus.TarasandeViaFabricPlus"
     ]
   },
   "mixins": [

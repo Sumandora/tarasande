@@ -48,6 +48,9 @@ import java.util.logging.Logger
  * TODO | Litematica:
  *  - Implement PixelArt generator
  *  - Implement head and skin generator
+ *
+ * TODO | Creative Features:
+ *  - rewrite most parts of the system
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv

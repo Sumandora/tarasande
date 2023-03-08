@@ -1,7 +1,9 @@
 package de.florianmichael.tarasande_viafabricplus
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import de.florianmichael.tarasande_viafabricplus.tarasandevalues.EveryItemOnArmor
+import de.florianmichael.tarasande_viafabricplus.viafabricplus.CheatingSettings
+import de.florianmichael.viafabricplus.ViaFabricPlus
+import de.florianmichael.viafabricplus.ViaFabricPlusAddon
 import de.florianmichael.viafabricplus.definition.v1_8_x.IdlePacketExecutor
 import de.florianmichael.viafabricplus.settings.groups.DebugSettings
 import de.florianmichael.vialoadingbase.ViaLoadingBase
@@ -15,16 +17,18 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerMod
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleTickBaseManipulation
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove
 
-class TarasandeViaFabricPlus : ClientModInitializer {
+class TarasandeViaFabricPlus : ClientModInitializer, ViaFabricPlusAddon {
 
     companion object {
         lateinit var cancelOpenPacket: ValueBoolean
     }
 
+    override fun onLoad() {
+        ViaFabricPlus.getClassWrapper().loadGroup(CheatingSettings)
+    }
+
     override fun onInitializeClient() {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
-            EveryItemOnArmor
-
             cancelOpenPacket = ValueBoolean(ManagerModule.get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolRange.andOlder(ProtocolVersion.v1_11_1) + ")", false, isEnabled = { ViaLoadingBase.getClassWrapper().targetVersion.isOlderThanOrEqualTo(ProtocolVersion.v1_11_1) })
 
             ManagerModule.get(ModuleTickBaseManipulation::class.java).apply {
