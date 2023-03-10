@@ -27,11 +27,4 @@ public class MixinConnectScreen extends Screen {
     private static void reset(Screen screen, MinecraftClient client, ServerAddress address, ServerInfo info, CallbackInfo ci) {
         DetailedConnectionStatus.INSTANCE.updateConnectionState(ConnectionState.UNKNOWN);
     }
-
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ConnectScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V"))
-    public void hideConnectionStatus(MatrixStack matrixStack, TextRenderer textRenderer, Text text, int x, int y, int color) {
-        if (DetailedConnectionStatus.INSTANCE.getShowDetailedConnectionStatus().getValue() && DetailedConnectionStatus.INSTANCE.getShowDetailedConnectionStatus().isEnabled().invoke()) return;
-
-        drawCenteredText(matrixStack, textRenderer, text, x, y, color);
-    }
 }
