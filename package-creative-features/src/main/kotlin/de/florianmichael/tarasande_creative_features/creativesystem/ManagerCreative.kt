@@ -3,7 +3,7 @@ package de.florianmichael.tarasande_creative_features.creativesystem
 import de.florianmichael.tarasande_creative_features.creativesystem.impl.*
 import de.florianmichael.tarasande_creative_features.creativesystem.panel.PanelElementsCreative
 import de.florianmichael.tarasande_creative_features.creativesystem.valuecomponent.meta.ValueButtonItem
-import de.florianmichael.tarasande_creative_features.tarasandevalue.CreativeValues
+import de.florianmichael.tarasande_creative_features.tarasandevalues.CreativeValues
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
@@ -34,12 +34,10 @@ object ManagerCreative : Manager<ExploitCreative>() {
     init {
         add(
             ExploitCreativeSingleShutdownCreeper(this),
-
             ExploitCreativeCommandBlockSpawner(this),
-
             ExploitCreativeItemControl(this),
-
-            ExploitCreativeSpecialVanillaItems(this), ExploitCreativeLightItems(this)
+            ExploitCreativeSpecialVanillaItems(this),
+            ExploitCreativeLightItems(this)
         )
 
         packager = ValueMode(this, "Spawner Packager", false, *mutableListOf("None").apply { addAll(storages.map { s -> StringUtil.uncoverTranslation(s.translationKey) }) }.toTypedArray())

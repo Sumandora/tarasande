@@ -1,4 +1,4 @@
-package de.florianmichael.tarasande_creative_features.tarasandevalue
+package de.florianmichael.tarasande_creative_features.tarasandevalues
 
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
 

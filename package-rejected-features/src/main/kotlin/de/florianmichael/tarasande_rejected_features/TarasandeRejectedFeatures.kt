@@ -1,6 +1,7 @@
 package de.florianmichael.tarasande_rejected_features
 
 import de.florianmichael.tarasande_rejected_features.command.CommandDeadByDaylightEscape
+import de.florianmichael.tarasande_rejected_features.command.CommandSparkyHeal
 import de.florianmichael.tarasande_rejected_features.information.*
 import de.florianmichael.tarasande_rejected_features.module.ModuleAutoRescuePlatform
 import de.florianmichael.tarasande_rejected_features.module.ModuleDropper
@@ -50,7 +51,8 @@ class TarasandeRejectedFeatures : ClientModInitializer {
             )
 
             ManagerCommand.add(
-                CommandDeadByDaylightEscape()
+                CommandDeadByDaylightEscape(),
+                CommandSparkyHeal()
             )
 
             ClosedInventory

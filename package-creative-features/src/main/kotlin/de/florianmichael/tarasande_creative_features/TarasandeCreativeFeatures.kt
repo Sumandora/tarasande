@@ -2,7 +2,7 @@ package de.florianmichael.tarasande_creative_features
 
 import de.florianmichael.tarasande_creative_features.command.CommandCheckCMDBlock
 import de.florianmichael.tarasande_creative_features.creativesystem.ManagerCreative
-import de.florianmichael.tarasande_creative_features.tarasandevalue.CreativeValues
+import de.florianmichael.tarasande_creative_features.tarasandevalues.CreativeValues
 import net.fabricmc.api.ClientModInitializer
 import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.feature.tarasandevalue.impl.DebugValues
