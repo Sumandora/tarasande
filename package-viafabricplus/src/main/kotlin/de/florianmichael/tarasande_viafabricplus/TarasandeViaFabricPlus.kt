@@ -1,10 +1,10 @@
 package de.florianmichael.tarasande_viafabricplus
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import de.florianmichael.tarasande_viafabricplus.viafabricplus.CheatingSettings
+import de.florianmichael.tarasande_viafabricplus.viafabricplus.TarasandeSettings
 import de.florianmichael.viafabricplus.ViaFabricPlus
-import de.florianmichael.viafabricplus.ViaFabricPlusAddon
-import de.florianmichael.viafabricplus.definition.v1_8_x.IdlePacketExecutor
+import de.florianmichael.viafabricplus.event.InitializeSettingsCallback
+import de.florianmichael.viafabricplus.event.SkipIdlePacketCallback
 import de.florianmichael.viafabricplus.settings.groups.DebugSettings
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 import de.florianmichael.vialoadingbase.platform.ProtocolRange
@@ -17,27 +17,27 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerMod
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.exploit.ModuleTickBaseManipulation
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove
 
-class TarasandeViaFabricPlus : ClientModInitializer, ViaFabricPlusAddon {
+class TarasandeViaFabricPlus : ClientModInitializer {
 
     companion object {
         lateinit var cancelOpenPacket: ValueBoolean
     }
 
-    override fun onLoad() {
-        ViaFabricPlus.getClassWrapper().loadGroup(CheatingSettings)
-    }
-
     override fun onInitializeClient() {
+        InitializeSettingsCallback.EVENT.register(InitializeSettingsCallback {
+            ViaFabricPlus.INSTANCE.settingsSystem.addGroup(TarasandeSettings)
+        })
+
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
             cancelOpenPacket = ValueBoolean(ManagerModule.get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolRange.andOlder(ProtocolVersion.v1_11_1) + ")", false, isEnabled = { ViaLoadingBase.getClassWrapper().targetVersion.isOlderThanOrEqualTo(ProtocolVersion.v1_11_1) })
 
             ManagerModule.get(ModuleTickBaseManipulation::class.java).apply {
-                val chargeOnIdlePacketSkip = ValueBoolean(this, "Charge on idle packet skip (" + DebugSettings.getClassWrapper().sendIdlePacket.protocolRange + ")", false, isEnabled = { !DebugSettings.getClassWrapper().sendIdlePacket.value })
+                val chargeOnIdlePacketSkip = ValueBoolean(this, "Charge on idle packet skip (" + DebugSettings.INSTANCE.sendIdlePacket.protocolRange + ")", false, isEnabled = { !DebugSettings.INSTANCE.sendIdlePacket.value })
 
-                IdlePacketExecutor.registerIdlePacketSkipExecute {
+                SkipIdlePacketCallback.EVENT.register(SkipIdlePacketCallback {
                     if (chargeOnIdlePacketSkip.isEnabled() && chargeOnIdlePacketSkip.value)
                         shifted += mc.renderTickCounter.tickTime.toLong()
-                }
+                })
             }
         }
     }

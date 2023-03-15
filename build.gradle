@@ -37,6 +37,9 @@ allprojects {
 		maven {
 			url = "https://maven.lenni0451.net/snapshots"
 		}
+		maven {
+			url = "https://repo.opencollab.dev/maven-snapshots/"
+		}
 		mavenCentral()
 	}
 }

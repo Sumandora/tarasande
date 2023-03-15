@@ -6,7 +6,7 @@ import com.viaversion.viaversion.api.type.Type
 import com.viaversion.viaversion.protocols.protocol1_12to1_11_1.ServerboundPackets1_12
 import com.viaversion.viaversion.protocols.protocol1_13to1_12_2.Protocol1_13To1_12_2
 import de.florianmichael.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
-import de.florianmichael.viafabricplus.ViaFabricPlus
+import de.florianmichael.viafabricplus.vialoadingbase.ViaLoadingBaseStartup
 import de.florianmichael.vialoadingbase.ViaLoadingBase
 
 object ViaVersionUtil {
@@ -20,7 +20,7 @@ object ViaVersionUtil {
 
     fun sendLegacyPluginMessage(channel: String, value: ByteArray): Boolean {
         if (ViaLoadingBase.getClassWrapper().targetVersion.isOlderThanOrEqualTo(ProtocolVersion.v1_12_2)) {
-            val customPayload = PacketWrapper.create(ServerboundPackets1_12.PLUGIN_MESSAGE, TarasandeProtocolSpoofer.clientConnection!!.channel.attr(ViaFabricPlus.LOCAL_VIA_CONNECTION).get())
+            val customPayload = PacketWrapper.create(ServerboundPackets1_12.PLUGIN_MESSAGE, TarasandeProtocolSpoofer.clientConnection!!.channel.attr(ViaLoadingBaseStartup.LOCAL_VIA_CONNECTION).get())
             customPayload.write(Type.STRING, channel)
             customPayload.write(Type.REMAINING_BYTES, value)
 
