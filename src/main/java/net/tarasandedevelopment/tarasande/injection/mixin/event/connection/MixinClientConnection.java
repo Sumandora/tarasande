@@ -2,9 +2,9 @@ package net.tarasandedevelopment.tarasande.injection.mixin.event.connection;
 
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.listener.PacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.text.Text;
 import net.tarasandedevelopment.tarasande.event.EventDispatcher;
 import net.tarasandedevelopment.tarasande.event.impl.EventDisconnect;
@@ -32,18 +32,16 @@ public abstract class MixinClientConnection implements IClientConnection {
 
     @Inject(method = "handlePacket", at = @At("HEAD"), cancellable = true)
     private static <T extends PacketListener> void hookEventPacketReceive(Packet<T> packet, PacketListener listener, CallbackInfo ci) {
-        if (listener.getConnection().getSide() == NetworkSide.CLIENTBOUND) {
-            EventPacket eventPacket = new EventPacket(EventPacket.Type.RECEIVE, packet);
-            EventDispatcher.INSTANCE.call(eventPacket);
-            if (eventPacket.getCancelled())
-                ci.cancel();
-        }
+        EventPacket eventPacket = new EventPacket(EventPacket.Type.RECEIVE, packet);
+        EventDispatcher.INSTANCE.call(eventPacket);
+
+        if (eventPacket.getCancelled()) ci.cancel();
     }
 
     @Shadow
     public abstract void send(Packet<?> packet);
 
-    @Inject(method = "send(Lnet/minecraft/network/Packet;Lnet/minecraft/network/PacketCallbacks;)V", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "send(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/PacketCallbacks;)V", at = @At("HEAD"), cancellable = true)
     public void hookEventPacketSend(Packet<?> packet, @Nullable PacketCallbacks callbacks, CallbackInfo ci) {
         if (side == NetworkSide.CLIENTBOUND) {
             if (!tarasande_forced.contains(packet)) {

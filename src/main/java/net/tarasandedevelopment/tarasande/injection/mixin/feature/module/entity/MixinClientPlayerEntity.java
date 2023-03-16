@@ -41,7 +41,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     @Shadow
     public abstract float getPitch(float tickDelta);
 
-    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;canSprint()Z"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;hasForwardMovement()Z")))
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
     public boolean hookNoSlowdown(ClientPlayerEntity clientPlayerEntity) {
         if ((Object) this == MinecraftClient.getInstance().player) {
             ModuleNoSlowdown moduleNoSlowdown = ManagerModule.INSTANCE.get(ModuleNoSlowdown.class);

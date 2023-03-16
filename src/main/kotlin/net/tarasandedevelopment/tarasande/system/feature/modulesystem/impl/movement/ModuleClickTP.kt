@@ -20,6 +20,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerMod
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.withAlpha
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.BlockPos
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.Box
 import net.tarasandedevelopment.tarasande.util.math.pathfinder.PathFinder
 import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation

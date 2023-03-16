@@ -1,6 +1,6 @@
 package net.tarasandedevelopment.tarasande.injection.accessor;
 
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 
 public interface IClientConnection {
 

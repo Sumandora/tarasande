@@ -326,7 +326,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 return@registerEvent
             }
 
-            val airBelow = mc.world?.isAir(BlockPos(mc.player?.pos?.add(0.0, -1.0, 0.0)))!!
+            val airBelow = mc.world?.isAir(mc.player?.pos?.add(0.0, -1.0, 0.0)?.let { BlockPos(it) })!!
 
             if (airBelow || alwaysClick.value) {
                 val newEdgeDist = getNewEdgeDist()

@@ -144,7 +144,7 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
                 textFieldWidget.text = ""
                 updateSearchResults()
             }
-            textFieldWidget.setTextFieldFocused(false)
+            textFieldWidget.isFocused = false
             textFieldWidget.setCursorToEnd()
             true
         } else {
@@ -160,7 +160,7 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
     }
 
     override fun onClose() {
-        textFieldWidget.setTextFieldFocused(false)
+        textFieldWidget.isFocused = false
         textFieldWidget.setCursorToEnd()
     }
 

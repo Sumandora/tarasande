@@ -4,6 +4,8 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityStatuses
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
+import net.minecraft.entity.damage.DamageSources
+import net.minecraft.entity.damage.DamageTypes
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.passive.PassiveEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -11,8 +13,11 @@ import net.minecraft.item.AxeItem
 import net.minecraft.item.Items
 import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
+import net.minecraft.network.packet.s2c.play.DamageTiltS2CPacket
 import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket
+import net.minecraft.network.packet.s2c.play.EntityDamageS2CPacket
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket
+import net.minecraft.registry.Registries
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.math.BlockPos
@@ -360,8 +365,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         registerEvent(EventPacket::class.java) { event ->
             if (event.type == EventPacket.Type.RECEIVE) {
                 when (event.packet) {
-                    is EntityStatusS2CPacket -> {
-                        if (mc.world != null && event.packet.getEntity(mc.world) == mc.player && event.packet.status == EntityStatuses.DAMAGE_FROM_GENERIC_SOURCE)
+                    is EntityDamageS2CPacket -> {
+                        if (mc.world != null && event.packet.entityId == mc.player!!.id)
                             waitForDamage = false
                     }
 
@@ -535,7 +540,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private fun shouldAttackEntity(entity: Entity): Boolean {
         if (!isCancellingShields()) {
             if (dontAttackWhenBlocking.value && entity is LivingEntity && entity.isBlocking)
-                if (!simulateShieldBlock.value || entity.blockedByShield(DamageSource.player(mc.player)))
+                if (!simulateShieldBlock.value || entity.blockedByShield(entity.damageSources.playerAttack(mc.player)))
                     return false
         } else if (counterBlocking.isSelected(1)) {
             if (entity is PlayerEntity) {

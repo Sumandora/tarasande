@@ -71,7 +71,7 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a
 
                 hotbar = hotbar.filter { it.value.item is ToolItem }
 
-                val best = hotbar.maxByOrNull { ContainerUtil.wrapMaterialDamage(it.value) + ContainerUtil.getProperEnchantments(it.value).filter { it.key.type == EnchantmentTarget.WEAPON }.values.sum() }
+                val best = hotbar.maxByOrNull { ContainerUtil.wrapMaterialDamage(it.value) + ContainerUtil.getProperEnchantments(it.value).filter { it.key.target == EnchantmentTarget.WEAPON }.values.sum() }
 
                 if (best != null)
                     mc.player?.inventory?.selectedSlot = best.index

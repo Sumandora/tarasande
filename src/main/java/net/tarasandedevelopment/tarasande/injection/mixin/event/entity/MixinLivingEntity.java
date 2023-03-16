@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.tarasandedevelopment.tarasande.event.EventDispatcher;
@@ -60,8 +61,8 @@ public abstract class MixinLivingEntity extends Entity {
         }
     }
 
-    @Inject(method = "handleStatus", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
-    public void hookEventEntityHurtDamage(byte status, CallbackInfo ci) {
+    @Inject(method = "onDamaged", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
+    public void hookEventEntityHurtDamage(DamageSource damageSource, CallbackInfo ci) {
         EventDispatcher.INSTANCE.call(new EventEntityHurt(this));
     }
 }

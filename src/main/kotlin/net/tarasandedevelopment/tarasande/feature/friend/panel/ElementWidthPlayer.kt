@@ -52,7 +52,7 @@ class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementW
             matrices.pop()
             textFieldAccessor.tarasande_setColor(null)
         } else {
-            textField.textFieldWidget.setTextFieldFocused(false)
+            textField.textFieldWidget.isFocused = false
             FontWrapper.textShadow(matrices, gameProfile.name, xOffset.toFloat(), yOffset.toFloat(), -1)
         }
 

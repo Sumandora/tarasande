@@ -17,6 +17,7 @@ import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import org.joml.Matrix4f
 import org.joml.Vector4f
 import org.lwjgl.glfw.GLFW
+import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 import kotlin.math.*
@@ -35,7 +36,7 @@ object RenderUtil {
         val colors = colorToRGBF(color)
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
-        RenderSystem.disableTexture()
+        GL11.glDisable(GL11.GL_TEXTURE)
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
@@ -44,7 +45,7 @@ object RenderUtil {
         bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        RenderSystem.enableTexture()
+        GL11.glEnable(GL11.GL_TEXTURE)
         RenderSystem.disableBlend()
     }
 
@@ -55,7 +56,7 @@ object RenderUtil {
         val colors = colorToRGBF(color)
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
-        RenderSystem.disableTexture()
+        GL11.glDisable(GL11.GL_TEXTURE)
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR)
@@ -78,7 +79,7 @@ object RenderUtil {
             quarterCircle += 0.025F
         }
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        RenderSystem.enableTexture()
+        GL11.glEnable(GL11.GL_TEXTURE)
         RenderSystem.disableBlend()
     }
 
@@ -92,7 +93,7 @@ object RenderUtil {
 
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
-        RenderSystem.disableTexture()
+        GL11.glDisable(GL11.GL_TEXTURE)
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
@@ -102,7 +103,7 @@ object RenderUtil {
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        RenderSystem.enableTexture()
+        GL11.glEnable(GL11.GL_TEXTURE)
         RenderSystem.disableBlend()
         glLineWidth(lineWidth)
         glDisable(GL_LINE_SMOOTH)
@@ -120,7 +121,7 @@ object RenderUtil {
 
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
-        RenderSystem.disableTexture()
+        GL11.glDisable(GL11.GL_TEXTURE)
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
@@ -130,7 +131,7 @@ object RenderUtil {
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
         bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        RenderSystem.enableTexture()
+        GL11.glEnable(GL11.GL_TEXTURE)
         RenderSystem.disableBlend()
         glLineWidth(lineWidth)
         glDisable(GL_LINE_SMOOTH)
@@ -144,7 +145,7 @@ object RenderUtil {
 
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
-        RenderSystem.disableTexture()
+        GL11.glDisable(GL11.GL_TEXTURE)
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
@@ -153,7 +154,7 @@ object RenderUtil {
         bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
         bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        RenderSystem.enableTexture()
+        GL11.glEnable(GL11.GL_TEXTURE)
         RenderSystem.disableBlend()
     }
 
@@ -165,7 +166,7 @@ object RenderUtil {
 
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
-        RenderSystem.disableTexture()
+        GL11.glDisable(GL11.GL_TEXTURE)
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
@@ -174,7 +175,7 @@ object RenderUtil {
         bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
         bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        RenderSystem.enableTexture()
+        GL11.glEnable(GL11.GL_TEXTURE)
         RenderSystem.disableBlend()
     }
 
@@ -187,7 +188,7 @@ object RenderUtil {
         val colors = colorToRGBF(color)
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
-        RenderSystem.disableTexture()
+        GL11.glDisable(GL11.GL_TEXTURE)
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
@@ -197,7 +198,7 @@ object RenderUtil {
             circle += 0.01
         }
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        RenderSystem.enableTexture()
+        GL11.glEnable(GL11.GL_TEXTURE)
         RenderSystem.disableBlend()
         glLineWidth(lineWidth)
         glDisable(GL_LINE_SMOOTH)
@@ -210,7 +211,7 @@ object RenderUtil {
         val colors = colorToRGBF(color)
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
-        RenderSystem.disableTexture()
+        GL11.glDisable(GL11.GL_TEXTURE)
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR)
@@ -220,7 +221,7 @@ object RenderUtil {
             circle += 0.01
         }
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        RenderSystem.enableTexture()
+        GL11.glEnable(GL11.GL_TEXTURE)
         RenderSystem.disableBlend()
     }
 
@@ -302,7 +303,7 @@ object RenderUtil {
 
         RenderSystem.enableCull()
         DiffuseLighting.enableGuiDepthLighting()
-        mc.inGameHud.renderHotbarItem((position.x + x).toInt(), (position.y + y).toInt(), tickDelta, mc.player, item, 0)
+        mc.inGameHud.renderHotbarItem(matrices, (position.x + x).toInt(), (position.y + y).toInt(), tickDelta, mc.player, item, 0)
         DiffuseLighting.disableGuiDepthLighting()
     }
 

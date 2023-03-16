@@ -101,7 +101,7 @@ class ElementWidthValueComponentFocusableTextList(value: Value) : ElementWidthVa
             value.add(this.textFieldWidget.text)
             this.textFieldWidget.text = ""
 
-            textFieldWidget.setTextFieldFocused(false)
+            textFieldWidget.isFocused = false
             textFieldWidget.setCursorToEnd()
             true
         } else {
@@ -119,7 +119,7 @@ class ElementWidthValueComponentFocusableTextList(value: Value) : ElementWidthVa
     }
 
     override fun onClose() {
-        textFieldWidget.setTextFieldFocused(false)
+        textFieldWidget.isFocused = false
         textFieldWidget.setCursorToEnd()
     }
 

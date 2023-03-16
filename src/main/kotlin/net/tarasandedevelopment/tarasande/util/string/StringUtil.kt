@@ -14,7 +14,7 @@ object StringUtil {
     private val languageCache = HashMap<LanguageDefinition, TranslationStorage>()
 
     fun uncoverTranslation(key: String, languageDefinition: LanguageDefinition = LanguageManager.ENGLISH_US): String {
-        return languageCache.computeIfAbsent(languageDefinition) { TranslationStorage.load(mc.resourceManager, Collections.singletonList(languageDefinition)) }.get(key)
+        return languageCache.computeIfAbsent(languageDefinition) { TranslationStorage.load(mc.resourceManager, listOf(languageDefinition.name), languageDefinition.rightToLeft) }.get(key)
     }
 
     fun formatEnumTypes(name: String) = (name.substring(0, 1) + name.substring(1).lowercase()).replace('_', ' ')

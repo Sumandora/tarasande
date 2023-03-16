@@ -15,6 +15,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueRegi
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.clearAndGC
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.BlockPos
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.isMissHitResult
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
 import net.tarasandedevelopment.tarasande.util.math.rotation.RotationUtil
@@ -68,7 +69,7 @@ class ModuleNuker : Module("Nuker", "Destroys certain blocks in a certain radius
             list.clear()
 
             for (x in -rad..rad) for (y in -rad..rad) for (z in -rad..rad) {
-                val blockPos = BlockPos(mc.player?.eyePos).add(x, y, z)
+                val blockPos = BlockPos(mc.player?.eyePos!!).add(x, y, z)
                 val blockState = mc.world?.getBlockState(blockPos)
 
                 if (blockState?.calcBlockBreakingDelta(mc.player, mc.world, blockPos)!! <= 0.0)

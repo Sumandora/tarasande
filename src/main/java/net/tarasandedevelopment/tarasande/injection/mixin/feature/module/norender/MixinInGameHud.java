@@ -17,27 +17,27 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 public class MixinInGameHud {
 
     @Inject(method = "renderPortalOverlay", at = @At("HEAD"), cancellable = true)
-    public void noRender_renderPortalOverlay(float nauseaStrength, CallbackInfo ci) {
+    public void noRender_renderPortalOverlay(MatrixStack matrices, float nauseaStrength, CallbackInfo ci) {
         if (ManagerModule.INSTANCE.get(ModuleNoRender.class).getOverlay().getPortalOverlay().should()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "renderSpyglassOverlay", at = @At("HEAD"), cancellable = true)
-    public void noRender_renderSpyglassOverlay(float nauseaStrength, CallbackInfo ci) {
+    public void noRender_renderSpyglassOverlay(MatrixStack matrices, float scale, CallbackInfo ci) {
         if (ManagerModule.INSTANCE.get(ModuleNoRender.class).getOverlay().getSpyglassOverlay().should()) {
             ci.cancel();
         }
     }
 
-    @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderOverlay(Lnet/minecraft/util/Identifier;F)V", ordinal = 0))
+    @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderOverlay(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/Identifier;F)V", ordinal = 0))
     public void noRender_render_pumpkin(Args args) {
         if (ManagerModule.INSTANCE.get(ModuleNoRender.class).getOverlay().getPumpkinOverlay().should()) {
             args.set(1, 0F);
         }
     }
 
-    @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderOverlay(Lnet/minecraft/util/Identifier;F)V", ordinal = 1))
+    @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderOverlay(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/Identifier;F)V", ordinal = 1))
     public void noRender_render_powderedSnow(Args args) {
         if (ManagerModule.INSTANCE.get(ModuleNoRender.class).getOverlay().getPowderedSnowOverlay().should()) {
             args.set(1, 0F);
@@ -45,7 +45,7 @@ public class MixinInGameHud {
     }
 
     @Inject(method = "renderVignetteOverlay", at = @At("HEAD"), cancellable = true)
-    public void noRender_renderVignetteOverlay(Entity entity, CallbackInfo ci) {
+    public void noRender_renderVignetteOverlay(MatrixStack matrices, Entity entity, CallbackInfo ci) {
         if (ManagerModule.INSTANCE.get(ModuleNoRender.class).getOverlay().getVignette().should()) {
             ci.cancel();
         }

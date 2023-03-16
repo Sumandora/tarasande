@@ -5,8 +5,8 @@ import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer
 import net.minecraft.client.gui.screen.TitleScreen
 import net.minecraft.client.gui.widget.ButtonWidget
-import net.minecraft.client.network.Bans
 import net.minecraft.client.network.SocialInteractionsManager
+import net.minecraft.client.util.Bans
 import net.minecraft.client.util.ProfileKeys
 import net.minecraft.client.util.Session
 import net.minecraft.client.util.math.MatrixStack

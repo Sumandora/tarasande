@@ -19,23 +19,6 @@ open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = 
         panel.init()
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        val opened = panel.opened
-        panel.opened = true
-        val usedInScreen = panel.usedInScreen
-        panel.usedInScreen = true
-        if (update) {
-            panel.x = this.x.toDouble()
-            panel.y = this.y.toDouble()
-            panel.panelWidth = this.width.toDouble()
-            panel.panelHeight = this.height.toDouble()
-        }
-        if (panel.isVisible())
-            panel.render(matrices, mouseX, mouseY, delta)
-        panel.opened = opened
-        panel.usedInScreen = usedInScreen
-    }
-
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         panel.modifiable = false
         val returnValue = panel.isVisible() && panel.mouseClicked(floor(mouseX), floor(mouseY), button)
@@ -70,6 +53,23 @@ open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = 
     open fun tick() = panel.tick()
 
     override fun isFocused() = true
+
+    override fun renderButton(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+        val opened = panel.opened
+        panel.opened = true
+        val usedInScreen = panel.usedInScreen
+        panel.usedInScreen = true
+        if (update) {
+            panel.x = this.x.toDouble()
+            panel.y = this.y.toDouble()
+            panel.panelWidth = this.width.toDouble()
+            panel.panelHeight = this.height.toDouble()
+        }
+        if (panel.isVisible())
+            panel.render(matrices, mouseX, mouseY, delta)
+        panel.opened = opened
+        panel.usedInScreen = usedInScreen
+    }
 
     override fun isHovered() = true
 

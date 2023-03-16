@@ -47,11 +47,11 @@ public class MixinWorldRenderer {
         return instance.getRainGradient(v);
     }
 
-    @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/Biome;getPrecipitation()Lnet/minecraft/world/biome/Biome$Precipitation;"))
-    public Biome.Precipitation hookRain(Biome instance) {
+    @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/biome/Biome;getPrecipitation(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/world/biome/Biome$Precipitation;"))
+    public Biome.Precipitation hookRain(Biome instance, BlockPos pos) {
         if (tarasande_forceRain)
             return Biome.Precipitation.RAIN;
-        return instance.getPrecipitation();
+        return instance.getPrecipitation(pos);
     }
 
     @Redirect(method = "renderWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;getLightmapCoordinates(Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/util/math/BlockPos;)I"))

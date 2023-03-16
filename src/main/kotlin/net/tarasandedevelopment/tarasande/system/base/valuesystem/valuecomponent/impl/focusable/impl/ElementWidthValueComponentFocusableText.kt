@@ -50,7 +50,7 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
 
         if (!value.isEnabled()) {
             textFieldAccessor.tarasande_setColor(Color.white.darker().darker())
-            textFieldWidget.setTextFieldFocused(false)
+            textFieldWidget.isFocused = false
         }
 
         matrices.push()
@@ -66,9 +66,9 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (button != 0) return false
         if (value.isEnabled() && RenderUtil.isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight())) { // hacky fix for size hacks
-            textFieldWidget.setTextFieldFocused(true)
+            textFieldWidget.isFocused = true
         } else {
-            textFieldWidget.setTextFieldFocused(false)
+            textFieldWidget.isFocused = false
         }
         return false
     }
@@ -80,7 +80,7 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         return if (textFieldWidget.isFocused && (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
-            textFieldWidget.setTextFieldFocused(false)
+            textFieldWidget.isFocused = false
             true
         } else
             textFieldWidget.keyPressed(keyCode, scanCode, modifiers)
@@ -94,7 +94,7 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
     }
 
     override fun onClose() {
-        textFieldWidget.setTextFieldFocused(false)
+        textFieldWidget.isFocused = false
     }
 
     override fun isFocused() = textFieldWidget.isFocused

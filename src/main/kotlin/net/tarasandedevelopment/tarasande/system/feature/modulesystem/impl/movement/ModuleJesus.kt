@@ -9,6 +9,7 @@ import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.BlockPos
 
 class ModuleJesus : Module("Jesus", "Lets you walk on liquids", ModuleCategory.MOVEMENT) {
 
@@ -18,7 +19,7 @@ class ModuleJesus : Module("Jesus", "Lets you walk on liquids", ModuleCategory.M
     private fun isStandingOnLiquid(): Boolean {
         if (mc.player?.isSubmergedInWater == false && mc.player?.isInLava == false)
             if (mc.player?.isOnGround == true)
-                if (mc.world?.getBlockState(BlockPos(mc.player?.pos?.add(0.0, -0.01, 0.0)))?.fluidState?.isEmpty == false)
+                if (mc.world?.getBlockState(mc.player?.pos?.add(0.0, -0.01, 0.0)?.let { BlockPos(it) })?.fluidState?.isEmpty == false)
                     return true
 
         return false
@@ -28,7 +29,7 @@ class ModuleJesus : Module("Jesus", "Lets you walk on liquids", ModuleCategory.M
         registerEvent(EventCollisionShape::class.java) { event ->
             if (mc.player == null)
                 return@registerEvent
-            val inLiquid = mc.world?.getBlockState(BlockPos(mc.player?.pos?.add(0.0, 0.5, 0.0)))?.fluidState?.isEmpty == false
+            val inLiquid = mc.world?.getBlockState(mc.player?.pos?.add(0.0, 0.5, 0.0)?.let { BlockPos(it) })?.fluidState?.isEmpty == false
             if (inLiquid || mc.player?.input?.sneaking == true || mc.player?.fallDistance!! > 3.0)
                 return@registerEvent
             if (event.pos.y < mc.player?.y!!)

@@ -4,6 +4,7 @@ import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.mc
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.BlockPos
 import java.util.*
 import kotlin.math.abs
 

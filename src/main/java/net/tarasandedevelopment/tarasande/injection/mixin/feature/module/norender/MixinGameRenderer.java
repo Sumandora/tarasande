@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 
-    @Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
-    public void noRender_bobViewWhenHurt(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+    @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
+    public void noRender_bobView(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         if (ManagerModule.INSTANCE.get(ModuleNoRender.class).getOverlay().getHurtCam().should()) {
             ci.cancel();
         }

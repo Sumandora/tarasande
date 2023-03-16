@@ -42,11 +42,11 @@ object ManagerBlur : Manager<Blur>() {
 
         EventDispatcher.apply {
             add(EventScreenRender::class.java, 1) {
-                if (it.state == EventScreenRender.State.PRE && it.screen !is ScreenPanel)
-                    blurScene(shapesBuffer = screenShapesFramebuffer)
+//                if (it.state == EventScreenRender.State.PRE && it.screen !is ScreenPanel)
+//                    blurScene(shapesBuffer = screenShapesFramebuffer)
             }
             add(EventRender2D::class.java, 999) {
-                blurScene()
+//                blurScene()
             }
         }
 

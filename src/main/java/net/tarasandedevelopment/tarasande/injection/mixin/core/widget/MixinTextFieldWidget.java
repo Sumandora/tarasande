@@ -37,7 +37,7 @@ public class MixinTextFieldWidget implements ITextFieldWidget {
     }
 
     @Inject(method = "drawSelectionHighlight", at = @At("HEAD"), cancellable = true)
-    public void cancelSelectionHighlight(int x1, int y1, int x2, int y2, CallbackInfo ci) {
+    public void cancelSelectionHighlight(MatrixStack matrices, int x1, int y1, int x2, int y2, CallbackInfo ci) {
         if (!tarasande_selectionHighlight)
             ci.cancel();
     }

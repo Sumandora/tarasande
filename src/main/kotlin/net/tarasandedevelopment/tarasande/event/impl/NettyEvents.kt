@@ -2,7 +2,7 @@ package net.tarasandedevelopment.tarasande.event.impl
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.ClientConnection
-import net.minecraft.network.Packet
+import net.minecraft.network.packet.Packet
 import net.tarasandedevelopment.tarasande.event.Event
 import java.util.*
 

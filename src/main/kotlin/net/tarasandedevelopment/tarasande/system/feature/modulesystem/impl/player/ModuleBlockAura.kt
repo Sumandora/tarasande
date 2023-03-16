@@ -21,6 +21,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.render.ModuleBlockESP
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.clearAndGC
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.BlockPos
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.isMissHitResult
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.packet.isNewWorld
 import net.tarasandedevelopment.tarasande.util.math.TimeUtil
@@ -63,7 +64,7 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
             val list = ArrayList<Pair<BlockPos, HitResult>>()
 
             for (x in -rad..rad) for (y in -rad..rad) for (z in -rad..rad) {
-                val blockPos = BlockPos(mc.player?.eyePos).add(x, y, z)
+                val blockPos = BlockPos(mc.player?.eyePos!!).add(x, y, z)
                 val blockState = mc.world?.getBlockState(blockPos) ?: continue
                 if (!block.isSelected(blockState.block)) continue
 

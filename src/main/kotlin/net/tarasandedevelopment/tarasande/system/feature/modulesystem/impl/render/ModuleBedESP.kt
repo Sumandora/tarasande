@@ -14,6 +14,7 @@ import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCate
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.Information
 import net.tarasandedevelopment.tarasande.system.screen.informationsystem.ManagerInformation
 import net.tarasandedevelopment.tarasande.util.extension.javaruntime.clearAndGC
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.BlockPos
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.boundingBox
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.div
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.plus

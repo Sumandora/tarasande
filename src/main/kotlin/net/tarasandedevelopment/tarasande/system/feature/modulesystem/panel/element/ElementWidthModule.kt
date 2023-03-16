@@ -72,7 +72,7 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
             val matrix = matrices.peek()?.positionMatrix!!
             val bufferBuilder = Tessellator.getInstance().buffer
             RenderSystem.enableBlend()
-            RenderSystem.disableTexture()
+            GL11.glDisable(GL11.GL_TEXTURE)
             RenderSystem.defaultBlendFunc()
             RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
             matrices.translate(this.width - 16, this.defaultHeight / 2, 0.0)
@@ -84,7 +84,7 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
             bufferBuilder.vertex(matrix, (this.width - 16 + 1).toFloat(), (this.defaultHeight / 2).toFloat(), 0.0F).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
             bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 + 2).toFloat(), 0.0F).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
             BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-            RenderSystem.enableTexture()
+            GL11.glEnable(GL11.GL_TEXTURE)
             RenderSystem.disableBlend()
             GL11.glLineWidth(lineWidth)
             GL11.glDisable(GL11.GL_LINE_SMOOTH)
