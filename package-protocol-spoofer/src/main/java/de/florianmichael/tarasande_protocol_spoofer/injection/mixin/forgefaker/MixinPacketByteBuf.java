@@ -17,11 +17,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
-import java.util.function.Function;
 
 @Mixin(PacketByteBuf.class)
 public abstract class MixinPacketByteBuf {
@@ -31,22 +26,18 @@ public abstract class MixinPacketByteBuf {
     @Shadow public abstract String readString();
 
     /**
-     * @author
-     * @reason
-     * `// TOOD | Make Code Better
+     * @author Mojang, FlorianMichael
+     * @reason Hook Forge Faker
      */
     @Overwrite
     public <T> T decodeAsJson(Codec<T> codec) {
         JsonElement jsonElement = JsonHelper.deserialize(GSON, this.readString(), JsonElement.class);
         DataResult<T> dataResult = codec.parse(JsonOps.INSTANCE, jsonElement);
+        final T result = Util.getResult(dataResult, (error) -> new DecoderException("Failed to decode json: " + error));
         if (codec == ServerMetadata.CODEC) {
             final IForgePayload payload = ForgeCreator.INSTANCE.createPayload(jsonElement.getAsJsonObject());
-            if (payload != null) {
-                ((IServerMetadata) dataResult).tarasande_setForgePayload(payload);
-            }
+            if (payload != null) ((IServerMetadata) result).tarasande_setForgePayload(payload);
         }
-        return Util.getResult(dataResult, (error) -> {
-            return new DecoderException("Failed to decode json: " + error);
-        });
+        return result;
     }
 }
