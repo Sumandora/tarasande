@@ -39,7 +39,7 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100, FontWrap
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.disableCull()
         RenderSystem.enableBlend()
-        GL11.glDisable(GL11.GL_TEXTURE)
+        
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
@@ -50,7 +50,7 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100, FontWrap
             bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / (graph.bufferLength - 1).toFloat())).toFloat(), (y + panelHeight - onePixel - (panelHeight - titleBarHeight - (1 / mc.window.scaleFactor)) * normalize(value.toDouble(), min, max)).toFloat(), 0.0F).color(1.0F, 1.0F, 1.0F, 1.0F).next()
         }
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        GL11.glEnable(GL11.GL_TEXTURE)
+        
         RenderSystem.disableBlend()
         RenderSystem.enableCull()
 
