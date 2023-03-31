@@ -7,14 +7,12 @@
     "forgefaker.MixinMultiplayerServerListPinger_1",
     "forgefaker.MixinServerInfo",
     "forgefaker.MixinServerMetadata",
-    "forgefaker.MixinServerMetadata_Deserializer",
     "haproxyhack.MixinClientConnection_1",
-    "vivecraftfaker.MixinClientPlayNetworkHandler"
+    "vivecraftfaker.MixinClientPlayNetworkHandler",
+    "forgefaker.MixinPacketByteBuf",
+    "teslaclientfaker.MixinLoginHelloC2SPacket"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "mixins": [
-    "teslaclientfaker.MixinLoginHelloC2SPacket"
-  ]
+  }
 }

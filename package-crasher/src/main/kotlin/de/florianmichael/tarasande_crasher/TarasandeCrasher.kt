@@ -8,7 +8,7 @@ import net.tarasandedevelopment.tarasande.event.impl.EventSuccessfulLoad
 import net.tarasandedevelopment.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.minecraft.client.network.ServerAddress
-import net.minecraft.network.Packet
+import net.minecraft.network.packet.Packet
 import net.minecraft.util.Formatting
 import net.tarasandedevelopment.tarasande.feature.statusrenderer.StatusRenderer
 import net.tarasandedevelopment.tarasande.injection.accessor.IClientConnection

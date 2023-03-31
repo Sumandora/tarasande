@@ -22,7 +22,7 @@ dependencies {
 
     include "com.github.FlorianMichael:ViaFabricPlus:${project.viafabricplus_version}"
     compileOnly "com.github.FlorianMichael:ViaFabricPlus:${project.viafabricplus_version}"
-    compileOnly "net.fabricmc.fabric-api:fabric-api:0.74.0+1.19.3"
+    compileOnly "net.fabricmc.fabric-api:fabric-api:0.76.0+1.19.4"
 
     implementation project(":")
 }

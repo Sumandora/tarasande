@@ -7,7 +7,7 @@ import de.florianmichael.tarasande_protocol_spoofer.tarasandevalues.ForgeProtoco
 import de.florianmichael.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForgePayload;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.server.ServerMetadata;
 import org.spongepowered.asm.mixin.Final;
@@ -28,10 +28,10 @@ public class MixinMultiplayerServerListPinger_1 {
     @Unique
     private ServerMetadata tarasande_metadata;
 
-    @Redirect(method = "onResponse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/Packet;)V"))
+    @Redirect(method = "onResponse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;)V"))
     public void trackForgePayload(ClientConnection instance, Packet<?> packet) {
         if (!TarasandeProtocolSpoofer.Companion.getViaFabricPlusLoaded()) return;
-        final IForgePayload payload = ((IServerMetadata) tarasande_metadata).tarasande_getForgePayload();
+        final IForgePayload payload = ((IServerMetadata) (Object) tarasande_metadata).tarasande_getForgePayload();
 
         if (payload != null) {
             ((IServerInfo) field_3776).tarasande_setForgePayload(payload);
@@ -42,10 +42,10 @@ public class MixinMultiplayerServerListPinger_1 {
         instance.send(packet); // Original Code
     }
 
-    @Redirect(method = "onResponse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/packet/s2c/query/QueryResponseS2CPacket;getServerMetadata()Lnet/minecraft/server/ServerMetadata;"))
+    @Redirect(method = "onResponse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/packet/s2c/query/QueryResponseS2CPacket;metadata()Lnet/minecraft/server/ServerMetadata;"))
     public ServerMetadata trackMetadata(QueryResponseS2CPacket instance) {
-        this.tarasande_metadata = instance.getServerMetadata();
+        this.tarasande_metadata = instance.metadata();
 
-        return instance.getServerMetadata(); // Original Code
+        return instance.metadata(); // Original Code
     }
 }

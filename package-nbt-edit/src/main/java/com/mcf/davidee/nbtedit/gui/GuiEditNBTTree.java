@@ -143,7 +143,7 @@ public class GuiEditNBTTree extends Screen {
 	public void render(MatrixStack matrices, int x, int y, float par3) {
 		this.renderBackground(matrices);
 		guiTree.draw(matrices, x, y, par3);
-		drawCenteredText(matrices, client.textRenderer, this.screenTitle, this.width / 2, 5, 16777215);
+		drawCenteredTextWithShadow(matrices, client.textRenderer, this.screenTitle, this.width / 2, 5, 16777215);
 		if (guiTree.getWindow() == null)
 			super.render(matrices, x, y, par3);
 		else

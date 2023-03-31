@@ -5,6 +5,7 @@ import de.florianmichael.viafabricplus.settings.base.AbstractSetting;
 import de.florianmichael.viafabricplus.settings.base.SettingGroup;
 import de.florianmichael.viafabricplus.settings.groups.DebugSettings;
 import de.florianmichael.viafabricplus.settings.type_impl.ProtocolSyncBooleanSetting;
+import net.minecraft.text.Text;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ManagerModule;
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ProtocolSyncBooleanSetting.class, remap = false)
 public abstract class MixinProtocolSyncBooleanSetting extends AbstractSetting<Boolean> {
 
-    public MixinProtocolSyncBooleanSetting(SettingGroup parent, String name, Boolean defaultValue) {
+    public MixinProtocolSyncBooleanSetting(SettingGroup parent, net.minecraft.class_5250 name, Boolean defaultValue) {
         super(parent, name, defaultValue);
     }
 

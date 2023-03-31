@@ -4,8 +4,8 @@ import de.florianmichael.tarasande_protocol_spoofer.tarasandevalues.forge.IForge
 import de.florianmichael.tarasande_protocol_spoofer.tarasandevalues.forge.payload.legacy.ModStruct
 import io.netty.buffer.Unpooled
 import net.minecraft.network.ClientConnection
-import net.minecraft.network.Packet
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.c2s.login.LoginQueryResponseC2SPacket
 import net.minecraft.network.packet.s2c.login.LoginQueryRequestS2CPacket
 import net.minecraft.registry.Registry

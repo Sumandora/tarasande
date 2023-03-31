@@ -106,7 +106,7 @@ public class GuiNBTNode extends DrawableHelper {
 		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		drawTexture(matrices, x+1, y, (node.getObject().getNBT().getType() -1)*9, 18, 9, 9);
-		drawStringWithShadow(matrices, mc.textRenderer, displayString, x+11, y + (this.height - 8) / 2, color);
+		drawCenteredTextWithShadow(matrices, mc.textRenderer, displayString, x+11, y + (this.height - 8) / 2, color);
 	}
 	
 	public boolean shouldDraw(int top, int bottom) {

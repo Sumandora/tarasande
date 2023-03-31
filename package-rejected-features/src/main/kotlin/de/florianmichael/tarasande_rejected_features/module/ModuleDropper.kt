@@ -3,7 +3,6 @@ package de.florianmichael.tarasande_rejected_features.module
 import net.minecraft.block.HoneyBlock
 import net.minecraft.block.SlimeBlock
 import net.minecraft.client.network.ClientPlayerEntity
-import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.event.impl.EventInput
@@ -13,6 +12,7 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueColo
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueNumber
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.Module
 import net.tarasandedevelopment.tarasande.system.feature.modulesystem.ModuleCategory
+import net.tarasandedevelopment.tarasande.util.extension.minecraft.BlockPos
 import net.tarasandedevelopment.tarasande.util.player.prediction.Input
 import net.tarasandedevelopment.tarasande.util.player.prediction.PredictionEngine
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil

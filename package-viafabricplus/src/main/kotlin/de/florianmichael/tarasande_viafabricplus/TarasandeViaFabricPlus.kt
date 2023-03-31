@@ -1,9 +1,6 @@
 package de.florianmichael.tarasande_viafabricplus
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import de.florianmichael.tarasande_viafabricplus.viafabricplus.TarasandeSettings
-import de.florianmichael.viafabricplus.ViaFabricPlus
-import de.florianmichael.viafabricplus.event.InitializeSettingsCallback
 import de.florianmichael.viafabricplus.event.SkipIdlePacketCallback
 import de.florianmichael.viafabricplus.settings.groups.DebugSettings
 import de.florianmichael.vialoadingbase.ViaLoadingBase
@@ -24,10 +21,6 @@ class TarasandeViaFabricPlus : ClientModInitializer {
     }
 
     override fun onInitializeClient() {
-        InitializeSettingsCallback.EVENT.register(InitializeSettingsCallback {
-            ViaFabricPlus.INSTANCE.settingsSystem.addGroup(TarasandeSettings)
-        })
-
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
             cancelOpenPacket = ValueBoolean(ManagerModule.get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolRange.andOlder(ProtocolVersion.v1_11_1) + ")", false, isEnabled = { ViaLoadingBase.getClassWrapper().targetVersion.isOlderThanOrEqualTo(ProtocolVersion.v1_11_1) })
 

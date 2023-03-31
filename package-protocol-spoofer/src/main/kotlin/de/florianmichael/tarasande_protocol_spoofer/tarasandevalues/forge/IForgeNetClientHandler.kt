@@ -1,6 +1,6 @@
 package de.florianmichael.tarasande_protocol_spoofer.tarasandevalues.forge
 
-import net.minecraft.network.Packet
+import net.minecraft.network.packet.Packet
 
 interface IForgeNetClientHandler {
 

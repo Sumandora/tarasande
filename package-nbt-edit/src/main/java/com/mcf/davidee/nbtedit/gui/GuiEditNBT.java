@@ -85,9 +85,9 @@ public class GuiEditNBT extends DrawableHelper {
 		}).dimensions(x + 9,y + 62,75,20).build();
 		if(!key.isFocused() && !value.isFocused()){
 			if (canEditText)
-				key.setTextFieldFocused(true);
+				key.setFocused(true);
 			else if (canEditValue)
-				value.setTextFieldFocused(true);
+				value.setFocused(true);
 		}
 		section.setEnabled(value.isFocused());
 		newLine.setEnabled(value.isFocused());
@@ -176,12 +176,12 @@ public class GuiEditNBT extends DrawableHelper {
 		}
 		else if (i == GLFW.GLFW_KEY_TAB){
 			if (key.isFocused() && canEditValue){
-				key.setTextFieldFocused(false);
-				value.setTextFieldFocused(true);
+				key.setFocused(false);
+				value.setFocused(true);
 			}
 			else if (value.isFocused() && canEditText){
-				key.setTextFieldFocused(true);
-				value.setTextFieldFocused(false);
+				key.setFocused(true);
+				value.setFocused(false);
 			}
 			section.setEnabled(value.isFocused());
 			newLine.setEnabled(value.isFocused());

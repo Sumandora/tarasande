@@ -15,7 +15,7 @@ class PanelElementsCreative : PanelElements<ElementWidthValueComponent<*>>("Crea
 
     override fun renderTitleBar(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         matrices.push()
-        matrices.translate(0F, 0F, 200F + mc.inGameHud.zOffset) // MC Item zLevel sorting
+        matrices.translate(0F, 0F, 200F) // MC Item zLevel sorting
         super.renderTitleBar(matrices, mouseX, mouseY, delta)
         matrices.pop()
     }
