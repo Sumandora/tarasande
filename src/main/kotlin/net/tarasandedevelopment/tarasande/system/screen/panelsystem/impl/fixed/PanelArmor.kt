@@ -39,7 +39,7 @@ class PanelArmor : Panel("Armor", 75.0, FontWrapper.fontHeight().toDouble()) {
             if (armor.isEmpty && allocateSpaceForEmptySlots.value)
                 continue
 
-            RenderUtil.renderCorrectItem(matrices, (x + m).roundToInt(), (y + titleBarHeight).roundToInt(), delta, armor)
+            RenderUtil.renderItemStack(matrices, (x + m).roundToInt(), (y + titleBarHeight).roundToInt(), delta, armor)
 
             if (showEnchantments.value) {
                 EnchantmentHelper.get(armor).onEachIndexed { index, entry ->

@@ -296,7 +296,7 @@ object RenderUtil {
         return floatArrayOf(g, h, k, f)
     }
 
-    fun renderCorrectItem(matrices: MatrixStack, x: Int, y: Int, tickDelta: Float, item: ItemStack) {
+    fun renderItemStack(matrices: MatrixStack, x: Int, y: Int, tickDelta: Float, item: ItemStack) {
         RenderSystem.enableCull()
         DiffuseLighting.enableGuiDepthLighting()
         mc.inGameHud.renderHotbarItem(matrices, x, y, tickDelta, mc.player, item, 0)

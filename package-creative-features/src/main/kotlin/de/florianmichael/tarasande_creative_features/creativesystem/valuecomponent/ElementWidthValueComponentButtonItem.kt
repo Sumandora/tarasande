@@ -11,7 +11,7 @@ class ElementWidthValueComponentButtonItem(value: Value) : ElementWidthValueComp
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
 
-        RenderUtil.renderCorrectItem(matrices, 0, 0, delta, (value as ValueButtonItem).icon)
+        RenderUtil.renderItemStack(matrices, 0, 0, delta, (value as ValueButtonItem).icon)
     }
 
     override fun getHeight(): Double {
