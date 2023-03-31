@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;applyModelViewMatrix()V", shift = At.Shift.AFTER, remap = false))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;applyModelViewMatrix()V", ordinal = 0, shift = At.Shift.AFTER, remap = false))
     public void hookEventRender2D(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         if (MinecraftClient.getInstance().player != null && !(MinecraftClient.getInstance().currentScreen instanceof DownloadingTerrainScreen)) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
