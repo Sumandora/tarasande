@@ -12,12 +12,10 @@ import net.minecraft.util.math.Vec3d
 import net.tarasandedevelopment.tarasande.TARASANDE_NAME
 import net.tarasandedevelopment.tarasande.mc
 import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBind
-import net.tarasandedevelopment.tarasande.util.extension.minecraft.getPositionVec3d
 import net.tarasandedevelopment.tarasande.util.extension.minecraft.minus
 import org.joml.Matrix4f
 import org.joml.Vector4f
 import org.lwjgl.glfw.GLFW
-import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import java.awt.Color
 import kotlin.math.*
@@ -299,11 +297,9 @@ object RenderUtil {
     }
 
     fun renderCorrectItem(matrices: MatrixStack, x: Int, y: Int, tickDelta: Float, item: ItemStack) {
-        val position = matrices.getPositionVec3d()
-
         RenderSystem.enableCull()
         DiffuseLighting.enableGuiDepthLighting()
-        mc.inGameHud.renderHotbarItem(matrices, (position.x + x).toInt(), (position.y + y).toInt(), tickDelta, mc.player, item, 0)
+        mc.inGameHud.renderHotbarItem(matrices, x, y, tickDelta, mc.player, item, 0)
         DiffuseLighting.disableGuiDepthLighting()
     }
 
