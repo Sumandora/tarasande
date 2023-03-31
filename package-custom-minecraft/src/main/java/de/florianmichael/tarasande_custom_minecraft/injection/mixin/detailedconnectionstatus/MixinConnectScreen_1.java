@@ -25,17 +25,17 @@ public class MixinConnectScreen_1 {
         DetailedConnectionStatus.INSTANCE.updateConnectionState(ConnectionState.RESOLVING_IP);
     }
 
-    @Inject(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/Packet;)V", ordinal = 0))
+    @Inject(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;)V", ordinal = 0))
     public void connecting(CallbackInfo ci) {
         DetailedConnectionStatus.INSTANCE.updateConnectionState(ConnectionState.CONNECTING);
     }
 
-    @Inject(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/Packet;)V", ordinal = 1))
+    @Inject(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;)V", ordinal = 1))
     public void sendingLoginPackets(CallbackInfo ci) {
         DetailedConnectionStatus.INSTANCE.updateConnectionState(ConnectionState.SENDING_LOGIN_PACKETS);
     }
 
-    @Inject(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/Packet;)V", ordinal = 1, shift = At.Shift.AFTER))
+    @Inject(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;)V", ordinal = 1, shift = At.Shift.AFTER))
     public void waitingForResponse(CallbackInfo ci) {
         DetailedConnectionStatus.INSTANCE.updateConnectionState(ConnectionState.WAITING_FOR_RESPONSE);
     }
