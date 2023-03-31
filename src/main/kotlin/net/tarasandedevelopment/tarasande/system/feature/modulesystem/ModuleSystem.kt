@@ -68,6 +68,7 @@ object ManagerModule : Manager<Module>() {
             ModuleNoJumpCooldown(),
             ModuleWaterSpeed(),
             ModuleTerrainSpeed(),
+            ModuleReverseStep(),
 
             // Player
             ModuleTimer(),

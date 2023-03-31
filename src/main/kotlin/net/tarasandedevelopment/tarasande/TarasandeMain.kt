@@ -36,7 +36,6 @@ import java.util.logging.Logger
  *  - AccountMicrosoft: Change Name on login & Remove Get&Post Methods
  *  - Refactor AccessWidener
  *  - Try out layered maps
- *  - Add Reverse Step (And remove nofall option)
  *
  * TODO | Protocol Spoofer:
  *  - Add basic exploits from bash for Forge

@@ -78,7 +78,7 @@ open class PanelServerInformation(private val owner: Any, private val finish: (s
 
     override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         val hovered = RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), x, y + titleBarHeight, panelWidth, panelHeight - titleBarHeight)
-        serverEntry?.render(matrices, 0, y.toInt() + titleBarHeight, x.toInt(), (panelWidth + offset).toInt(), (panelHeight - titleBarHeight).toInt(), mouseX, mouseY, hovered, mc.tickDelta)
+        serverEntry?.render(matrices, 0, y.toInt() + titleBarHeight, x.toInt(), (panelWidth + offset).toInt(), (panelHeight - titleBarHeight).toInt(), mouseX, mouseY, hovered, delta)
     }
 
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {

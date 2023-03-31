@@ -20,13 +20,13 @@ class PanelRadar : Panel("Radar", 100.0, 100.0, true) {
         if (mc.player == null)
             return
 
-        val pos = mc.player?.getLerpedPos(mc.tickDelta)!!
+        val pos = mc.player?.getLerpedPos(delta)!!
         val panelLength = sqrt(panelWidth * panelWidth + panelHeight * panelHeight)
         for (entity in mc.world?.entities!!) {
             if (!ManagerModule.get(ModuleESP::class.java).shouldRender(entity))
                 continue
 
-            val otherPos = entity.getLerpedPos(mc.tickDelta)!!
+            val otherPos = entity.getLerpedPos(delta)!!
             val dist = sqrt((otherPos.x - pos.x).pow(2.0) + (otherPos.z - pos.z).pow(2.0)) * scale.value
 
             if (dist > panelLength)
