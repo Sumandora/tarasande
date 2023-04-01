@@ -9,8 +9,9 @@ import net.tarasandedevelopment.tarasande.system.base.valuesystem.valuecomponent
 import net.tarasandedevelopment.tarasande.system.screen.panelsystem.api.PanelElements
 import net.tarasandedevelopment.tarasande.util.render.RenderUtil
 import net.tarasandedevelopment.tarasande.util.render.font.FontWrapper
+import kotlin.math.max
 
-class PanelElementsIanaFunction : PanelElements<ElementWidthValueComponent<*>>("Iana function", 100.0, 20.0) {
+class PanelElementsIanaFunction : PanelElements<ElementWidthValueComponent<*>>("Iana function", 200.0, 20.0) {
     private val autoRequest = object : ValueBoolean(this, "Auto request", true) {
         override fun onChange(oldValue: Boolean?, newValue: Boolean) {
             elementList.clear()
@@ -36,7 +37,7 @@ class PanelElementsIanaFunction : PanelElements<ElementWidthValueComponent<*>>("
                 val stringWidth = FontWrapper.getWidth(string) * 0.75
                 if (stringWidth > maxWidth) maxWidth = stringWidth.toFloat()
             }
-            panelWidth = maxWidth + 5.0
+            panelWidth = max(maxWidth + 5.0, minWidth)
         }
 
     }
