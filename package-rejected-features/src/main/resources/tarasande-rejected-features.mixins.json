@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "de.florianmichael.tarasande_rejected_features.injection.mixin",
+  "package": "su.mandora.tarasande_rejected_features.injection.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixinPriority": 1,
   "mixins": [

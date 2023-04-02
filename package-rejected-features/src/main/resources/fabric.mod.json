@@ -5,7 +5,7 @@
   "name": "tarasande Rejected Features",
   "description": "tarasande package to provide things which are badly written, broken or unsupported.",
   "authors": [
-    "EnZaXD/FlorianMichael",
+    "Sumandora/Johannes",
     "Sumandora/Johannes"
   ],
   "contact": {
@@ -17,7 +17,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "de.florianmichael.tarasande_rejected_features.TarasandeRejectedFeatures"
+      "su.mandora.tarasande_rejected_features.TarasandeRejectedFeatures"
     ]
   },
   "mixins": [

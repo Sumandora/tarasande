@@ -19,10 +19,10 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "de.florianmichael.tarasande_viafabricplus.TarasandeViaFabricPlus"
+      "su.mandora.tarasande_viafabricplus.TarasandeViaFabricPlus"
     ],
     "viafabricplus": [
-      "de.florianmichael.tarasande_viafabricplus.TarasandeViaFabricPlus"
+      "su.mandora.tarasande_viafabricplus.TarasandeViaFabricPlus"
     ]
   },
   "mixins": [

@@ -4,12 +4,12 @@ import club.minnced.discord.rpc.DiscordEventHandlers
 import club.minnced.discord.rpc.DiscordEventHandlers.OnReady
 import club.minnced.discord.rpc.DiscordRPC
 import club.minnced.discord.rpc.DiscordRichPresence
-import net.tarasandedevelopment.tarasande.event.EventDispatcher
-import net.tarasandedevelopment.tarasande.event.impl.EventConnectServer
-import net.tarasandedevelopment.tarasande.event.impl.EventDisconnect
-import net.tarasandedevelopment.tarasande.logger
-import net.tarasandedevelopment.tarasande.system.base.valuesystem.impl.ValueBoolean
-import net.tarasandedevelopment.tarasande.util.extension.javaruntime.Thread
+import su.mandora.tarasande.event.EventDispatcher
+import su.mandora.tarasande.event.impl.EventConnectServer
+import su.mandora.tarasande.event.impl.EventDisconnect
+import su.mandora.tarasande.logger
+import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
+import su.mandora.tarasande.util.extension.javaruntime.Thread
 import java.net.InetSocketAddress
 
 object DiscordValues {

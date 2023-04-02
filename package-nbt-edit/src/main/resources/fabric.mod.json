@@ -6,7 +6,7 @@
   "name": "tarasande NBT Edit",
   "description": "tarasande package to provide a davidee NBTEdit port",
   "authors": [
-    "EnZaXD/FlorianMichael"
+    "Sumandora/Johannes"
   ],
   "contact": {
     "homepage": "https://github.com/tarasandeDevelopment/",
@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "de.florianmichael.tarasande_nbt_edit.TarasandeNBTEdit"
+      "su.mandora.tarasande_nbt_edit.TarasandeNBTEdit"
     ]
   },
   "depends": {

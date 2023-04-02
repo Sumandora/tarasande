@@ -6,7 +6,7 @@
   "name": "tarasande Protocol Spoofer",
   "description": "tarasande package to provide connection exploits or client spoofers",
   "authors": [
-    "EnZaXD/FlorianMichael"
+    "Sumandora/Johannes"
   ],
   "contact": {
     "homepage": "https://github.com/tarasandeDevelopment/",
@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "de.florianmichael.tarasande_protocol_spoofer.TarasandeProtocolSpoofer"
+      "su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer"
     ]
   },
   "mixins": [

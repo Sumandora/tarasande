@@ -7,7 +7,7 @@ plugins {
 
 archivesBaseName = "tarasande"
 version = tarasande_version
-group = "net.tarasandedevelopment"
+group = "su.mandora"
 
 loom {
 	accessWidenerPath = file("src/main/resources/tarasande.accesswidener")

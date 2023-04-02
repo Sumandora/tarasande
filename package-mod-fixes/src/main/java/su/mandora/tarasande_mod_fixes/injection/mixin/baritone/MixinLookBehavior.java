@@ -1,7 +1,7 @@
 package su.mandora.tarasande_mod_fixes.injection.mixin.baritone;
 
 import net.minecraft.client.MinecraftClient;
-import net.tarasandedevelopment.tarasande.util.math.rotation.Rotation;
+import su.mandora.tarasande.util.math.rotation.Rotation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;

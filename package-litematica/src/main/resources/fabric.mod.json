@@ -6,7 +6,7 @@
   "name": "tarasande Litematica",
   "description": "tarasande package to provide litematica generators",
   "authors": [
-    "EnZaXD/FlorianMichael"
+    "Sumandora/Johannes"
   ],
   "contact": {
     "homepage": "https://github.com/tarasandeDevelopment/",
@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "de.florianmichael.tarasande_litematica.TarasandeLitematica"
+      "su.mandora.tarasande_litematica.TarasandeLitematica"
     ]
   },
   "mixins": [

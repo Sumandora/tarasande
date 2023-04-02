@@ -5,7 +5,7 @@
   "name": "tarasande Server Pinger",
   "description": "tarasande package to provide a server pinger and ip lookup.",
   "authors": [
-    "EnZaXD/FlorianMichael"
+    "Sumandora/Johannes"
   ],
   "contact": {
     "homepage": "https://github.com/tarasandeDevelopment/",
@@ -16,7 +16,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "de.florianmichael.tarasande_serverpinger.TarasandeServerPinger"
+      "su.mandora.tarasande_serverpinger.TarasandeServerPinger"
     ]
   },
   "mixins": [

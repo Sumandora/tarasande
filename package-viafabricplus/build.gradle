@@ -4,7 +4,7 @@ plugins {
     id "org.jetbrains.kotlin.jvm"
 }
 
-group 'net.tarasandedevelopment'
+group 'su.mandora'
 version tarasande_version
 
 repositories {

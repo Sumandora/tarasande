@@ -6,8 +6,7 @@
   "name": "tarasande Mod Fixes",
   "description": "tarasande package to provide fixes for other mods",
   "authors": [
-    "Sumandora/Johannes",
-    "EnZaXD/FlorianMichael"
+    "Sumandora/Johannes"
   ],
   "contact": {
     "homepage": "https://github.com/tarasandeDevelopment/",
@@ -18,11 +17,6 @@
   "icon": "assets/tarasande-mod-fixes/icon.png",
 
   "environment": "client",
-  "entrypoints": {
-    "client": [
-      "su.mandora.tarasande_mod_fixes.TarasandeModFixes"
-    ]
-  },
   "mixins": [
     "tarasande-mod-fixes.mixins.json"
   ],

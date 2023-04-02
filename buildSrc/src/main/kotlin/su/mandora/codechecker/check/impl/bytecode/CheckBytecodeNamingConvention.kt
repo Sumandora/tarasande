@@ -16,7 +16,7 @@ class CheckBytecodeNamingConvention : CheckBytecode("Naming convention") {
 
             val actualName = classNode.name.split("/").last().split("$").last() // packages don't matter
 
-            if (classNode.name.startsWith("net/tarasandedevelopment/tarasande/injection/mixin")) {
+            if (classNode.name.startsWith("su/mandora/tarasande/injection/mixin")) {
                 // Mixins
                 if (classNode.invisibleAnnotations == null || classNode.invisibleAnnotations.isEmpty())
                     violation(classNode, "Is not a Mixin class")

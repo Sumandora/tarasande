@@ -6,7 +6,7 @@
   "name": "tarasande Creative Features",
   "description": "tarasande package to provide creative features",
   "authors": [
-    "EnZaXD/FlorianMichael"
+    "Sumandora/Johannes"
   ],
   "contact": {
     "homepage": "https://github.com/tarasandeDevelopment/",
@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "de.florianmichael.tarasande_creative_features.TarasandeCreativeFeatures"
+      "su.mandora.tarasande_creative_features.TarasandeCreativeFeatures"
     ]
   },
   "depends": {
