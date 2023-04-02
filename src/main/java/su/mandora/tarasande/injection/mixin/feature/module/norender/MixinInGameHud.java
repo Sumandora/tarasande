@@ -35,14 +35,14 @@ public class MixinInGameHud {
     @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderOverlay(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/Identifier;F)V", ordinal = 0))
     public void noRender_render_pumpkin(Args args) {
         if (ManagerModule.INSTANCE.get(ModuleNoRender.class).getOverlay().getPumpkinOverlay().should()) {
-            args.set(1, 0F);
+            args.set(2, 0F);
         }
     }
 
     @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderOverlay(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/Identifier;F)V", ordinal = 1))
     public void noRender_render_powderedSnow(Args args) {
         if (ManagerModule.INSTANCE.get(ModuleNoRender.class).getOverlay().getPowderedSnowOverlay().should()) {
-            args.set(1, 0F);
+            args.set(2, 0F);
         }
     }
 
