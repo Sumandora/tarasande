@@ -2,14 +2,14 @@ package su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge
 
 import com.google.gson.JsonObject
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
+import de.florianmichael.vialoadingbase.ViaLoadingBase
+import net.minecraft.network.ClientConnection
 import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.handler.Fml1NetClientHandler
 import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.handler.ModernFmlNetClientHandler
 import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.handler.ModernFmlState
 import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForgePayload
 import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.legacy.LegacyForgePayload
 import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.modern.ModernForgePayload
-import de.florianmichael.vialoadingbase.ViaLoadingBase
-import net.minecraft.network.ClientConnection
 
 object ForgeCreator {
 

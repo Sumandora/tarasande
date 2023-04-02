@@ -4,6 +4,10 @@ import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
+import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL13
+import org.lwjgl.opengl.GL20
+import su.mandora.tarasande.Manager
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventRender2D
 import su.mandora.tarasande.event.impl.EventScreenRender
@@ -17,10 +21,6 @@ import su.mandora.tarasande.system.screen.panelsystem.screen.panelscreen.ScreenP
 import su.mandora.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import su.mandora.tarasande.util.render.shader.Program
 import su.mandora.tarasande.util.render.shader.Shader
-import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL13
-import org.lwjgl.opengl.GL20
-import su.mandora.tarasande.Manager
 
 object ManagerBlur : Manager<Blur>() {
 

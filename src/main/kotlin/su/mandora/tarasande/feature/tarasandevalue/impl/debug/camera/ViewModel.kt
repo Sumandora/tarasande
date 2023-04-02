@@ -2,12 +2,12 @@ package su.mandora.tarasande.feature.tarasandevalue.impl.debug.camera
 
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.Arm
+import org.joml.Quaternionf
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.util.math.MathUtil.roundAwayFromZero
 import su.mandora.tarasande.util.string.StringUtil
-import org.joml.Quaternionf
 
 object ViewModel {
 

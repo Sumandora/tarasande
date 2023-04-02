@@ -1,9 +1,9 @@
 package su.mandora.tarasande.injection.mixin.feature.module;
 
 import net.minecraft.client.gui.screen.ConfirmScreen;
-import su.mandora.tarasande.injection.accessor.IConfirmScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import su.mandora.tarasande.injection.accessor.IConfirmScreen;
 
 @Mixin(ConfirmScreen.class)
 public class MixinConfirmScreen implements IConfirmScreen {

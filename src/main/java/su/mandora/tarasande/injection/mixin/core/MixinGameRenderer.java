@@ -4,15 +4,15 @@ import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.HitResult;
-import su.mandora.tarasande.injection.accessor.IGameRenderer;
-import su.mandora.tarasande.system.base.grabbersystem.ManagerGrabber;
-import su.mandora.tarasande.system.base.grabbersystem.impl.GrabberReach;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import su.mandora.tarasande.injection.accessor.IGameRenderer;
+import su.mandora.tarasande.system.base.grabbersystem.ManagerGrabber;
+import su.mandora.tarasande.system.base.grabbersystem.impl.GrabberReach;
 
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer implements IGameRenderer {

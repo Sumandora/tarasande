@@ -1,9 +1,9 @@
 package su.mandora.tarasande_serverpinger.injection.mixin;
 
-import su.mandora.tarasande_serverpinger.injection.accessor.IClickableWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import su.mandora.tarasande_serverpinger.injection.accessor.IClickableWidget;
 
 @Mixin(ClickableWidget.class)
 public class MixinClickableWidget implements IClickableWidget {

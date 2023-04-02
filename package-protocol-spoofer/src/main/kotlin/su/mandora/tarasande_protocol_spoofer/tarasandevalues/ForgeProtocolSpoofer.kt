@@ -1,16 +1,11 @@
 package su.mandora.tarasande_protocol_spoofer.tarasandevalues
 
-import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerInfo
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.ForgeCreator
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.IForgeNetClientHandler
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForgePayload
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.modern.ModernForgePayload
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.ui.ScreenBetterSlotListForgeInformation
 import io.netty.buffer.Unpooled
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
 import net.minecraft.text.Text
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventConnectServer
 import su.mandora.tarasande.event.impl.EventPacket
@@ -20,7 +15,12 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
-import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerInfo
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.ForgeCreator
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.IForgeNetClientHandler
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForgePayload
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.modern.ModernForgePayload
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.ui.ScreenBetterSlotListForgeInformation
 import java.net.InetSocketAddress
 
 object ForgeProtocolSpoofer {

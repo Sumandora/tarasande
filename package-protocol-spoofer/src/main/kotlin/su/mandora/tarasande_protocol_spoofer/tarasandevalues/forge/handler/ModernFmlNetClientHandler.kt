@@ -1,7 +1,5 @@
 package su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.handler
 
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.IForgeNetClientHandler
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.legacy.ModStruct
 import io.netty.buffer.Unpooled
 import net.minecraft.network.ClientConnection
 import net.minecraft.network.PacketByteBuf
@@ -10,6 +8,8 @@ import net.minecraft.network.packet.c2s.login.LoginQueryResponseC2SPacket
 import net.minecraft.network.packet.s2c.login.LoginQueryRequestS2CPacket
 import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.IForgeNetClientHandler
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.legacy.ModStruct
 
 enum class ModernFmlState {
     FML_2,

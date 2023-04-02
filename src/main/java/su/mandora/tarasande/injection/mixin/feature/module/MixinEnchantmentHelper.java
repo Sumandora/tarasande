@@ -2,8 +2,6 @@ package su.mandora.tarasande.injection.mixin.feature.module;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
-import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
-import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModuleAntiBindingCurse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

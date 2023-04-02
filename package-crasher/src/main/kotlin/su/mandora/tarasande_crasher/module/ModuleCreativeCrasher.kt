@@ -1,6 +1,5 @@
 package su.mandora.tarasande_crasher.module
 
-import su.mandora.tarasande_crasher.forcePacket
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket
@@ -11,6 +10,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande_crasher.forcePacket
 
 class ModuleCreativeCrasher : Module("Creative crasher", "Crashes the server by spamming items", "Crasher") {
     private val dummy = ItemStack(Items.STONE, 64)

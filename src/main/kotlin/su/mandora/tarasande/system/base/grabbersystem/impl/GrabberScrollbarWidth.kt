@@ -1,9 +1,9 @@
 package su.mandora.tarasande.system.base.grabbersystem.impl
 
-import su.mandora.tarasande.system.base.grabbersystem.Grabber
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.IntInsnNode
+import su.mandora.tarasande.system.base.grabbersystem.Grabber
 
 class GrabberScrollbarWidth : Grabber("net.minecraft.client.gui.widget.EntryListWidget", 6) {
     override fun transform(classNode: ClassNode) {

@@ -5,12 +5,12 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "forgefaker.MixinMultiplayerServerListPinger_1",
+    "forgefaker.MixinPacketByteBuf",
     "forgefaker.MixinServerInfo",
     "forgefaker.MixinServerMetadata",
     "haproxyhack.MixinClientConnection_1",
-    "vivecraftfaker.MixinClientPlayNetworkHandler",
-    "forgefaker.MixinPacketByteBuf",
-    "teslaclientfaker.MixinLoginHelloC2SPacket"
+    "teslaclientfaker.MixinLoginHelloC2SPacket",
+    "vivecraftfaker.MixinClientPlayNetworkHandler"
   ],
   "injectors": {
     "defaultRequire": 1

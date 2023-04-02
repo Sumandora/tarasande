@@ -11,9 +11,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import su.mandora.tarasande.injection.accessor.IEntity;
-import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
-import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleTrueSight;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.mandora.tarasande.injection.accessor.IEntity;
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleTrueSight;
 

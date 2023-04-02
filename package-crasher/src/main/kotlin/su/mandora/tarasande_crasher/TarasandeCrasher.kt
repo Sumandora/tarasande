@@ -1,24 +1,24 @@
 package su.mandora.tarasande_crasher
 
-import su.mandora.tarasande_crasher.command.CommandItemFrameCrasher
-import su.mandora.tarasande_crasher.crasher.ManagerCrasher
 import net.fabricmc.api.ClientModInitializer
-import su.mandora.tarasande.event.impl.EventSuccessfulLoad
-import su.mandora.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.minecraft.client.network.ServerAddress
 import net.minecraft.network.packet.Packet
 import net.minecraft.util.Formatting
+import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.event.EventDispatcher
+import su.mandora.tarasande.event.impl.EventSuccessfulLoad
 import su.mandora.tarasande.feature.statusrenderer.StatusRenderer
+import su.mandora.tarasande.injection.accessor.IClientConnection
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.feature.commandsystem.ManagerCommand
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
+import su.mandora.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import su.mandora.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
 import su.mandora.tarasande.util.player.chat.CustomChat
-import org.lwjgl.glfw.GLFW
-import su.mandora.tarasande.event.EventDispatcher
-import su.mandora.tarasande.injection.accessor.IClientConnection
+import su.mandora.tarasande_crasher.command.CommandItemFrameCrasher
+import su.mandora.tarasande_crasher.crasher.ManagerCrasher
 import su.mandora.tarasande_crasher.module.*
 
 fun errorMessage(text: String) {

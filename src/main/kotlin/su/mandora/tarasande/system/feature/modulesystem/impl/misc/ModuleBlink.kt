@@ -14,11 +14,14 @@ import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket
 import net.minecraft.network.packet.c2s.play.PlayPongC2SPacket
 import net.minecraft.network.packet.s2c.play.*
 import net.minecraft.util.math.Vec3d
-import su.mandora.tarasande.event.*
+import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.event.impl.EventPollEvents
 import su.mandora.tarasande.event.impl.EventRender3D
 import su.mandora.tarasande.event.impl.EventTick
+import su.mandora.tarasande.injection.accessor.IClientConnection
+import su.mandora.tarasande.injection.accessor.ILivingEntity
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.*
 import su.mandora.tarasande.system.feature.modulesystem.Module
@@ -30,9 +33,6 @@ import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil
-import org.lwjgl.glfw.GLFW
-import su.mandora.tarasande.injection.accessor.IClientConnection
-import su.mandora.tarasande.injection.accessor.ILivingEntity
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 

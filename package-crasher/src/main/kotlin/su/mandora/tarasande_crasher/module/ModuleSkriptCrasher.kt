@@ -1,6 +1,5 @@
 package su.mandora.tarasande_crasher.module
 
-import su.mandora.tarasande_crasher.forcePacket
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket
 import net.minecraft.util.Hand
 import su.mandora.tarasande.event.impl.EventDisconnect
@@ -9,6 +8,7 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande_crasher.forcePacket
 
 class ModuleSkriptCrasher : Module("Skript crasher", "Crashes the Skript plugin", "Crasher") {
     private val delay = ValueNumber(this, "Delay", 5.0, 50.0, 100.0, 5.0)

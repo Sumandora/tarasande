@@ -4,7 +4,6 @@ import net.minecraft.client.network.Address;
 import net.minecraft.client.network.AllowedAddressResolver;
 import net.minecraft.client.network.BlockListChecker;
 import net.minecraft.client.network.ServerAddress;
-import su.mandora.tarasande.feature.tarasandevalue.impl.NetworkValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

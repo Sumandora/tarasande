@@ -5,6 +5,7 @@ import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.system.base.valuesystem.Value
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueColor
@@ -13,7 +14,6 @@ import su.mandora.tarasande.util.extension.javaruntime.withAlpha
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.DragInfo
-import org.lwjgl.glfw.GLFW
 import java.awt.Color
 import kotlin.math.PI
 import kotlin.math.atan2

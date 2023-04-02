@@ -1,6 +1,5 @@
 package su.mandora.tarasande_crasher.module
 
-import su.mandora.tarasande_crasher.forcePacket
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
@@ -15,6 +14,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.string.StringUtil
+import su.mandora.tarasande_crasher.forcePacket
 import java.util.concurrent.ThreadLocalRandom
 
 class ModuleZeroSmasher : Module("Zero smasher", "Crashes the server using block interactions", "Crasher") {

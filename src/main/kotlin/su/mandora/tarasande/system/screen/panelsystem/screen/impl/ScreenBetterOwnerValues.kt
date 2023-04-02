@@ -3,6 +3,7 @@ package su.mandora.tarasande.system.screen.panelsystem.screen.impl
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.ManagerValue
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
@@ -11,7 +12,6 @@ import su.mandora.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import su.mandora.tarasande.system.screen.panelsystem.api.PanelElements
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.screen.ScreenBetter
-import org.lwjgl.glfw.GLFW
 import java.util.*
 
 class ScreenBetterOwnerValues(title: String, parent: Screen, val owner: Any) : ScreenBetter(title, parent) {

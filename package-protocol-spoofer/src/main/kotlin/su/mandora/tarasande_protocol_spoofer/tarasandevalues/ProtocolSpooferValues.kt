@@ -1,6 +1,5 @@
 package su.mandora.tarasande_protocol_spoofer.tarasandevalues
 
-import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
 import io.netty.buffer.Unpooled
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
@@ -11,6 +10,7 @@ import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
+import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
 
 val quiltHandshake = Identifier("registry_sync/handshake")
 object ProtocolSpooferValues {

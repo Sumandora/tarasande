@@ -6,6 +6,7 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.ArmorItem
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.Vec2f
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.impl.EventScreenInput
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -16,7 +17,6 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.kotlinruntime.nullOr
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.player.container.ContainerUtil
-import org.lwjgl.glfw.GLFW
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.sqrt
 

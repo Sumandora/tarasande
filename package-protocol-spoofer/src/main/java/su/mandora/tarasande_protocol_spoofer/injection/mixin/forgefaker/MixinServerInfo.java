@@ -1,10 +1,10 @@
 package su.mandora.tarasande_protocol_spoofer.injection.mixin.forgefaker;
 
-import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerInfo;
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForgePayload;
 import net.minecraft.client.network.ServerInfo;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerInfo;
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForgePayload;
 
 @Mixin(ServerInfo.class)
 public class MixinServerInfo implements IServerInfo {

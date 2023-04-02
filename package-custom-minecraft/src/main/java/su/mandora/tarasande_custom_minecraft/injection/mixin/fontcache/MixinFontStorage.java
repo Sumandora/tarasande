@@ -1,6 +1,5 @@
 package su.mandora.tarasande_custom_minecraft.injection.mixin.fontcache;
 
-import su.mandora.tarasande_custom_minecraft.BuiltinEmptyGlyph1_12_2;
 import net.minecraft.client.font.Font;
 import net.minecraft.client.font.FontStorage;
 import net.minecraft.client.font.GlyphRenderer;
@@ -12,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.mandora.tarasande_custom_minecraft.BuiltinEmptyGlyph1_12_2;
 
 import java.util.List;
 

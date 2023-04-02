@@ -1,10 +1,5 @@
 package su.mandora.tarasande_protocol_spoofer.injection.mixin.forgefaker;
 
-import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer;
-import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerInfo;
-import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerMetadata;
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.ForgeProtocolSpoofer;
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForgePayload;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.packet.Packet;
@@ -16,6 +11,11 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer;
+import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerInfo;
+import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerMetadata;
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.ForgeProtocolSpoofer;
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForgePayload;
 
 import java.net.InetSocketAddress;
 

@@ -2,7 +2,10 @@ package su.mandora.tarasande.system.feature.modulesystem
 
 import net.minecraft.network.packet.s2c.play.HealthUpdateS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
-import su.mandora.tarasande.event.*
+import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.Manager
+import su.mandora.tarasande.event.Event
+import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.*
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
@@ -18,10 +21,7 @@ import su.mandora.tarasande.system.feature.modulesystem.impl.render.*
 import su.mandora.tarasande.system.feature.modulesystem.panel.element.PanelElementsCategory
 import su.mandora.tarasande.system.feature.modulesystem.panel.fixed.PanelArrayList
 import su.mandora.tarasande.system.screen.panelsystem.ManagerPanel
-import org.lwjgl.glfw.GLFW
-import su.mandora.tarasande.Manager
 import java.util.function.Consumer
-import su.mandora.tarasande.system.feature.modulesystem.Module
 
 object ManagerModule : Manager<Module>() {
 

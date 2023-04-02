@@ -1,7 +1,6 @@
 package su.mandora.tarasande_viafabricplus
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import su.mandora.tarasande_viafabricplus.tarasande.EveryItemOnArmor
 import de.florianmichael.viafabricplus.event.SkipIdlePacketCallback
 import de.florianmichael.viafabricplus.settings.groups.DebugSettings
 import de.florianmichael.vialoadingbase.ViaLoadingBase
@@ -14,6 +13,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModuleTickBaseManipulation
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleInventoryMove
+import su.mandora.tarasande_viafabricplus.tarasande.EveryItemOnArmor
 
 class TarasandeViaFabricPlus : ClientModInitializer {
 

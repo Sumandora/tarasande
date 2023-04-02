@@ -3,14 +3,14 @@ package su.mandora.tarasande.injection.mixin.event.connection.invalidgamemode;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.world.GameMode;
-import su.mandora.tarasande.event.EventDispatcher;
-import su.mandora.tarasande.event.impl.EventInvalidGameMode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande.event.EventDispatcher;
+import su.mandora.tarasande.event.impl.EventInvalidGameMode;
 
 @Mixin(PlayerListS2CPacket.Action.class)
 public class MixinPlayerListS2CPacket_Action {

@@ -1,8 +1,8 @@
 package su.mandora.tarasande_crasher.crasher.impl
 
-import su.mandora.tarasande_crasher.crasher.Crasher
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.util.extension.javaruntime.Thread
+import su.mandora.tarasande_crasher.crasher.Crasher
 import java.io.DataOutputStream
 import java.net.Socket
 

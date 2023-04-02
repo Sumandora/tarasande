@@ -1,9 +1,9 @@
 package su.mandora.tarasande_viafabricplus.injection.mixin;
 
-import su.mandora.tarasande_viafabricplus.injection.accessor.IEventScreenInput;
-import su.mandora.tarasande.event.impl.EventScreenInput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import su.mandora.tarasande.event.impl.EventScreenInput;
+import su.mandora.tarasande_viafabricplus.injection.accessor.IEventScreenInput;
 
 @Mixin(value = EventScreenInput.class, remap = false)
 public class MixinEventScreenInput implements IEventScreenInput {

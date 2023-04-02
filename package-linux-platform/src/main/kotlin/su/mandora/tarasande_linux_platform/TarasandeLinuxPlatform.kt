@@ -3,10 +3,10 @@ package su.mandora.tarasande_linux_platform
 import net.fabricmc.api.ClientModInitializer
 import net.minecraft.util.Util
 import su.mandora.tarasande.TARASANDE_NAME
+import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventShutdown
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
-import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande_linux_platform.information.InformationNowPlaying
 import su.mandora.tarasande_linux_platform.information.InformationPortage
 import java.util.logging.Logger

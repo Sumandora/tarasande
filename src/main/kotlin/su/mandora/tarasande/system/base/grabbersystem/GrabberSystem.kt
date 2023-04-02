@@ -1,9 +1,9 @@
 package su.mandora.tarasande.system.base.grabbersystem
 
-import su.mandora.tarasande.system.base.grabbersystem.impl.*
-import su.mandora.tarasande.system.base.grabbersystem.mapping.TinyMappings
 import org.objectweb.asm.tree.*
 import su.mandora.tarasande.Manager
+import su.mandora.tarasande.system.base.grabbersystem.impl.*
+import su.mandora.tarasande.system.base.grabbersystem.mapping.TinyMappings
 
 object ManagerGrabber : Manager<Grabber>() {
 

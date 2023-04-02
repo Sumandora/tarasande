@@ -2,6 +2,7 @@ package su.mandora.tarasande.system.feature.modulesystem.impl.misc
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.hit.EntityHitResult
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.impl.EventMouse
 import su.mandora.tarasande.feature.friend.Friends
 import su.mandora.tarasande.mc
@@ -10,7 +11,6 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.isEntityHitResult
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
-import org.lwjgl.glfw.GLFW
 
 class ModuleMidClick : Module("Mid click", "Friends mid-clicked players", ModuleCategory.MISC) {
 

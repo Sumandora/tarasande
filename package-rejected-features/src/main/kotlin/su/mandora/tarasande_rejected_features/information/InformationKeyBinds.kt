@@ -1,10 +1,10 @@
 package su.mandora.tarasande_rejected_features.information
 
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.util.render.RenderUtil
-import org.lwjgl.glfw.GLFW
 
 class InformationKeyBinds : Information("KeyBinds", "Modules") {
     private val onlyBound = ValueBoolean(this, "Only bound", true)

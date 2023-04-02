@@ -1,12 +1,12 @@
 package su.mandora.tarasande_protocol_spoofer.injection.mixin.haproxyhack;
 
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.HAProxyProtocol;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.haproxy.HAProxyMessageEncoder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.HAProxyProtocol;
 
 @Mixin(targets = "net.minecraft.network.ClientConnection$1")
 public class MixinClientConnection_1 {

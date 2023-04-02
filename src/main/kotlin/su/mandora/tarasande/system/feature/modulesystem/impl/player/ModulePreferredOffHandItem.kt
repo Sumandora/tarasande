@@ -7,6 +7,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.screen.slot.SlotActionType
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.impl.EventScreenInput
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -19,7 +20,6 @@ import su.mandora.tarasande.util.extension.kotlinruntime.nullOr
 import su.mandora.tarasande.util.extension.kotlinruntime.prefer
 import su.mandora.tarasande.util.extension.minecraft.safeCount
 import su.mandora.tarasande.util.player.container.ContainerUtil
-import org.lwjgl.glfw.GLFW
 
 class ModulePreferredOffHandItem : Module("Preferred off-hand item", "Equips your preferred item in the off-hand slot", ModuleCategory.PLAYER) {
     private val openInventory = ValueBoolean(this, "Open inventory", true)

@@ -6,6 +6,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.screen.slot.Slot
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.math.Vec2f
+import org.apache.commons.lang3.ArrayUtils
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.impl.EventScreenInput
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -19,8 +21,6 @@ import su.mandora.tarasande.util.extension.minecraft.safeCount
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.player.container.ContainerUtil
 import su.mandora.tarasande.util.string.StringUtil
-import org.apache.commons.lang3.ArrayUtils
-import org.lwjgl.glfw.GLFW
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.sqrt
 

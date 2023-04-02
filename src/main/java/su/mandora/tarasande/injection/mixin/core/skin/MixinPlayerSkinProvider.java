@@ -1,10 +1,10 @@
 package su.mandora.tarasande.injection.mixin.core.skin;
 
-import su.mandora.tarasande.injection.accessor.IPlayerSkinProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import su.mandora.tarasande.injection.accessor.IPlayerSkinProvider;
 
 import java.util.UUID;
 

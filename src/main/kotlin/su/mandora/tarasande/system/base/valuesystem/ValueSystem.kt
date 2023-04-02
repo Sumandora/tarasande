@@ -2,11 +2,11 @@ package su.mandora.tarasande.system.base.valuesystem
 
 import com.google.gson.JsonElement
 import su.mandora.tarasande.Manager
+import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
 import su.mandora.tarasande.system.base.filesystem.ManagerFile
 import su.mandora.tarasande.system.base.valuesystem.file.FileValues
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
-import su.mandora.tarasande.event.EventDispatcher
 
 object ManagerValue : Manager<Value>() {
 

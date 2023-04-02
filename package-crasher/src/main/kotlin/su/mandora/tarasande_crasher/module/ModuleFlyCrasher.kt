@@ -1,12 +1,12 @@
 package su.mandora.tarasande_crasher.module
 
-import su.mandora.tarasande_crasher.forcePacket
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import su.mandora.tarasande.event.impl.EventMovement
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
+import su.mandora.tarasande_crasher.forcePacket
 import java.util.concurrent.ThreadLocalRandom
 
 class ModuleFlyCrasher : Module("Fly crasher", "Crashes the server using big motions", "Crasher") {

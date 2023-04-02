@@ -1,12 +1,12 @@
 package su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl
 
 import net.minecraft.client.util.math.MatrixStack
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.system.base.valuesystem.Value
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.ElementWidthValueComponentFocusable
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
-import org.lwjgl.glfw.GLFW
 import java.awt.Color
 
 class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueComponentFocusable<ValueBind>(value) {

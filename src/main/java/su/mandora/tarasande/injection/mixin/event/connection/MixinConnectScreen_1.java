@@ -1,11 +1,11 @@
 package su.mandora.tarasande.injection.mixin.event.connection;
 
 import net.minecraft.network.ClientConnection;
-import su.mandora.tarasande.event.EventDispatcher;
-import su.mandora.tarasande.event.impl.EventConnectServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import su.mandora.tarasande.event.EventDispatcher;
+import su.mandora.tarasande.event.impl.EventConnectServer;
 
 import java.net.InetSocketAddress;
 

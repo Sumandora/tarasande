@@ -1,10 +1,8 @@
 package su.mandora.tarasande_custom_minecraft.injection.mixin;
 
-import su.mandora.tarasande_custom_minecraft.tarasandevalues.DesignValues;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import su.mandora.tarasande.util.render.RenderUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -12,6 +10,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.mandora.tarasande.util.render.RenderUtil;
+import su.mandora.tarasande_custom_minecraft.tarasandevalues.DesignValues;
 
 @Mixin(EntryListWidget.class)
 public abstract class MixinEntryListWidget {

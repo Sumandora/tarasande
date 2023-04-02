@@ -6,6 +6,7 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.system.screen.accountmanager.account.Account
 import su.mandora.tarasande.system.screen.accountmanager.account.ManagerAccount
 import su.mandora.tarasande.system.screen.accountmanager.account.api.AccountInfo
@@ -16,7 +17,6 @@ import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.screen.ScreenBetter
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholder
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholderPassword
-import org.lwjgl.glfw.GLFW
 import java.util.function.Consumer
 
 class ScreenBetterAccount(

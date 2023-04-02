@@ -5,14 +5,14 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.realms.gui.screen.RealmsNotificationsScreen;
 import net.minecraft.client.util.math.MatrixStack;
-import su.mandora.tarasande.event.EventDispatcher;
-import su.mandora.tarasande.event.impl.EventChildren;
-import su.mandora.tarasande.event.impl.EventScreenRender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande.event.EventDispatcher;
+import su.mandora.tarasande.event.impl.EventChildren;
+import su.mandora.tarasande.event.impl.EventScreenRender;
 
 import java.util.ArrayList;
 

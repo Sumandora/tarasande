@@ -2,7 +2,6 @@ package su.mandora.tarasande.injection.mixin.feature.tarasandevalue;
 
 import net.minecraft.network.ClientConnection;
 import net.minecraft.text.Text;
-import su.mandora.tarasande.feature.tarasandevalue.impl.NetworkValues;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

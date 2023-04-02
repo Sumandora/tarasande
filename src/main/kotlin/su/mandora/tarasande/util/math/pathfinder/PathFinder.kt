@@ -5,7 +5,6 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.util.extension.minecraft.BlockPos
-import java.util.*
 import kotlin.math.abs
 
 /**

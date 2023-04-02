@@ -6,6 +6,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.feature.statusrenderer.StatusRenderer
 import su.mandora.tarasande.util.connection.Proxy
 import su.mandora.tarasande.util.connection.ProxyAuthentication
@@ -17,7 +18,6 @@ import su.mandora.tarasande.util.screen.ScreenBetter
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholder
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholderPassword
 import su.mandora.tarasande.util.threading.ThreadRunnableExposed
-import org.lwjgl.glfw.GLFW
 import java.awt.Color
 import java.io.IOException
 import java.net.InetSocketAddress

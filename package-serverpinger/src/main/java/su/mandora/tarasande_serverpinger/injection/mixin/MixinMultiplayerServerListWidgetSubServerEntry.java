@@ -1,6 +1,5 @@
 package su.mandora.tarasande_serverpinger.injection.mixin;
 
-import su.mandora.tarasande_serverpinger.injection.accessor.IMultiplayerServerListWidgetSubServerEntry;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
@@ -13,6 +12,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande_serverpinger.injection.accessor.IMultiplayerServerListWidgetSubServerEntry;
 
 @Mixin(MultiplayerServerListWidget.ServerEntry.class)
 public class MixinMultiplayerServerListWidgetSubServerEntry implements IMultiplayerServerListWidgetSubServerEntry {

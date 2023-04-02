@@ -8,6 +8,7 @@ import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventChangeScreen
 import su.mandora.tarasande.event.impl.EventUpdate
@@ -21,7 +22,6 @@ import su.mandora.tarasande.system.screen.panelsystem.ManagerPanel
 import su.mandora.tarasande.system.screen.panelsystem.screen.panelscreen.particle.Particle
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
 import su.mandora.tarasande.util.render.RenderUtil
-import org.lwjgl.glfw.GLFW
 import kotlin.math.floor
 import kotlin.math.round
 

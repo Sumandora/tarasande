@@ -6,8 +6,6 @@ import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
-import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleNoMiningTrace;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

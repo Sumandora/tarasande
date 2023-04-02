@@ -2,7 +2,6 @@ package su.mandora.tarasande.injection.mixin.feature.tarasandevalue.antirdi;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
-import su.mandora.tarasande.feature.tarasandevalue.impl.debug.MinecraftDebugger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

@@ -1,8 +1,8 @@
 package su.mandora.tarasande_custom_minecraft.tarasandevalues.optimization
 
-import su.mandora.tarasande_custom_minecraft.tarasandevalues.optimization.scoreboard.ScoreboardValues
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
+import su.mandora.tarasande_custom_minecraft.tarasandevalues.optimization.scoreboard.ScoreboardValues
 
 object OptimizationValues {
 

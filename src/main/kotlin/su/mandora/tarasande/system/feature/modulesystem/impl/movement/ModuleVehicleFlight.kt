@@ -1,13 +1,13 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.movement
 
 import net.minecraft.util.math.Direction
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.impl.EventMovement
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
-import org.lwjgl.glfw.GLFW
 
 class ModuleVehicleFlight : Module("Vehicle flight", "Makes you fly with vehicles (e.g. boat, horses)", ModuleCategory.MOVEMENT) {
 

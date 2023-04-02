@@ -1,6 +1,8 @@
 package su.mandora.tarasande.feature.tarasandevalue
 
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TARASANDE_NAME
+import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
 import su.mandora.tarasande.feature.rotation.Rotations
 import su.mandora.tarasande.feature.tarasandevalue.impl.*
@@ -16,8 +18,6 @@ import su.mandora.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueBu
 import su.mandora.tarasande.system.feature.commandsystem.ManagerCommand
 import su.mandora.tarasande.system.screen.blursystem.ManagerBlur
 import su.mandora.tarasande.system.screen.panelsystem.ManagerPanel
-import org.lwjgl.glfw.GLFW
-import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.util.extension.javaruntime.Thread
 
 object TarasandeValues {

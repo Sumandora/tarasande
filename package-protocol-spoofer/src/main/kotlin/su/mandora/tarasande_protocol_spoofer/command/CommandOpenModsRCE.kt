@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions
 import com.google.common.io.Closer
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
 import io.netty.buffer.ByteBufOutputStream
 import io.netty.buffer.Unpooled
 import net.minecraft.command.CommandSource
@@ -13,6 +12,7 @@ import net.minecraft.world.GameMode
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.feature.commandsystem.Command
 import su.mandora.tarasande.util.player.chat.CustomChat
+import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
 import java.io.*
 import java.util.zip.GZIPOutputStream
 

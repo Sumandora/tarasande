@@ -9,11 +9,11 @@ import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
+import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.times
 import su.mandora.tarasande.util.player.prediction.PredictionEngine
 import su.mandora.tarasande.util.player.prediction.with
-import su.mandora.tarasande.system.feature.modulesystem.Module
 
 class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory.MOVEMENT) {
 

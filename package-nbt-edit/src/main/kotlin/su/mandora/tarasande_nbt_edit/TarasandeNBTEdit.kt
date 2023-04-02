@@ -8,11 +8,11 @@ import net.fabricmc.api.ClientModInitializer
 import net.minecraft.command.CommandSource
 import net.minecraft.command.argument.NbtCompoundArgumentType
 import net.minecraft.nbt.NbtCompound
+import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.feature.commandsystem.Command
 import su.mandora.tarasande.system.feature.commandsystem.ManagerCommand
-import su.mandora.tarasande.event.EventDispatcher
 
 class TarasandeNBTEdit : ClientModInitializer {
 

@@ -8,9 +8,6 @@ import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import su.mandora.tarasande.feature.rotation.Rotations;
-import su.mandora.tarasande.injection.accessor.ILivingEntity;
-import su.mandora.tarasande.util.math.rotation.Rotation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -19,6 +16,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande.feature.rotation.Rotations;
+import su.mandora.tarasande.injection.accessor.ILivingEntity;
+import su.mandora.tarasande.util.math.rotation.Rotation;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity implements ILivingEntity {

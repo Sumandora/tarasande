@@ -1,12 +1,12 @@
 package su.mandora.tarasande_litematica
 
-import su.mandora.tarasande_litematica.screenextension.ScreenExtensionButtonListGuiMainMenu
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
 import su.mandora.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
+import su.mandora.tarasande_litematica.screenextension.ScreenExtensionButtonListGuiMainMenu
 import java.util.logging.Logger
 
 class TarasandeLitematica : ClientModInitializer {

@@ -1,8 +1,5 @@
 package su.mandora.tarasande_serverpinger.base
 
-import su.mandora.tarasande_serverpinger.base.panel.PanelServerInformation
-import su.mandora.tarasande_serverpinger.base.panel.copy
-import su.mandora.tarasande_serverpinger.base.panel.emptyServer
 import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.util.math.MatrixStack
 import su.mandora.tarasande.event.EventDispatcher
@@ -15,6 +12,9 @@ import su.mandora.tarasande.system.screen.screenextensionsystem.ScreenExtension
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
+import su.mandora.tarasande_serverpinger.base.panel.PanelServerInformation
+import su.mandora.tarasande_serverpinger.base.panel.copy
+import su.mandora.tarasande_serverpinger.base.panel.emptyServer
 import kotlin.math.ceil
 
 class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvider: () -> String, private val finish: (server: ServerInfo) -> Unit) {

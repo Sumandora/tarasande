@@ -1,15 +1,15 @@
 package su.mandora.tarasande_rejected_features.injection.mixin;
 
-import su.mandora.tarasande_rejected_features.tarasandevalues.ClosedInventory;
-import su.mandora.tarasande.event.impl.EventRotation;
-import su.mandora.tarasande.feature.rotation.Rotations;
-import su.mandora.tarasande.util.math.rotation.Rotation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import su.mandora.tarasande.event.impl.EventRotation;
+import su.mandora.tarasande.feature.rotation.Rotations;
+import su.mandora.tarasande.util.math.rotation.Rotation;
+import su.mandora.tarasande_rejected_features.tarasandevalues.ClosedInventory;
 
 @Mixin(value = Rotations.class, remap = false)
 public class MixinRotations {

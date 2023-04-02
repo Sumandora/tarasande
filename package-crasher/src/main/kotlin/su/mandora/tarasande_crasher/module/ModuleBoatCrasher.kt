@@ -1,7 +1,5 @@
 package su.mandora.tarasande_crasher.module
 
-import su.mandora.tarasande_crasher.errorMessage
-import su.mandora.tarasande_crasher.forcePacket
 import net.minecraft.entity.vehicle.BoatEntity
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket
 import su.mandora.tarasande.event.impl.EventDisconnect
@@ -9,6 +7,8 @@ import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
+import su.mandora.tarasande_crasher.errorMessage
+import su.mandora.tarasande_crasher.forcePacket
 
 class ModuleBoatCrasher : Module("Boat crasher", "Weird exploit that crashes vanilla servers", "Crasher") {
 

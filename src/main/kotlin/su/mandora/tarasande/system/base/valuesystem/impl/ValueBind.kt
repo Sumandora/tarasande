@@ -2,13 +2,13 @@ package su.mandora.tarasande.system.base.valuesystem.impl
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventKey
 import su.mandora.tarasande.event.impl.EventMouse
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.Value
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl.ElementWidthValueComponentFocusableBind
-import org.lwjgl.glfw.GLFW
-import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.system.feature.modulesystem.Module
 
 open class ValueBind(

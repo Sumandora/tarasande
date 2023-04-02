@@ -1,11 +1,11 @@
 package su.mandora.tarasande_custom_minecraft.tarasandevalues.debug
 
-import su.mandora.tarasande_custom_minecraft.TarasandeCustomMinecraft
-import su.mandora.tarasande_custom_minecraft.viaversion.ViaVersionUtil
 import su.mandora.tarasande.feature.statusrenderer.StatusRenderer
 import su.mandora.tarasande.feature.tarasandevalue.impl.DebugValues
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
+import su.mandora.tarasande_custom_minecraft.TarasandeCustomMinecraft
+import su.mandora.tarasande_custom_minecraft.viaversion.ViaVersionUtil
 
 object DetailedConnectionStatus {
 

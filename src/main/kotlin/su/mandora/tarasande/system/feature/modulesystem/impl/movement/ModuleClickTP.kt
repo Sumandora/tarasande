@@ -8,6 +8,7 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.PositionAndOnGr
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.impl.EventRender3D
 import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.mc
@@ -26,7 +27,6 @@ import su.mandora.tarasande.util.math.pathfinder.PathFinder
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil
-import org.lwjgl.glfw.GLFW
 import java.awt.Color
 import kotlin.math.sqrt
 

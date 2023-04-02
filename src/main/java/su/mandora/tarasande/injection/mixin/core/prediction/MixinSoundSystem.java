@@ -3,12 +3,12 @@ package su.mandora.tarasande.injection.mixin.core.prediction;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.sound.SoundSystem;
 import net.minecraft.client.sound.TickableSoundInstance;
-import su.mandora.tarasande.injection.accessor.prediction.ISoundSystem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande.injection.accessor.prediction.ISoundSystem;
 
 @Mixin(SoundSystem.class)
 public class MixinSoundSystem implements ISoundSystem {

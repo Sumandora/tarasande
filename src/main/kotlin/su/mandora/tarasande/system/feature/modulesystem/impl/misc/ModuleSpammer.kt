@@ -2,6 +2,7 @@ package su.mandora.tarasande.system.feature.modulesystem.impl.misc
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
+import org.apache.commons.lang3.RandomStringUtils
 import su.mandora.tarasande.event.impl.EventChat
 import su.mandora.tarasande.event.impl.EventPollEvents
 import su.mandora.tarasande.mc
@@ -14,7 +15,6 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.player.PlayerUtil
-import org.apache.commons.lang3.RandomStringUtils
 import kotlin.math.round
 import kotlin.math.sqrt
 

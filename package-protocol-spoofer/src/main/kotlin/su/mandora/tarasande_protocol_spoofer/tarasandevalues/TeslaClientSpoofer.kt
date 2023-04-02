@@ -1,6 +1,5 @@
 package su.mandora.tarasande_protocol_spoofer.tarasandevalues
 
-import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket
 import net.minecraft.network.packet.c2s.login.LoginHelloC2SPacket
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
@@ -13,6 +12,7 @@ import su.mandora.tarasande.logger
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
 import su.mandora.tarasande.util.player.chat.CustomChat
+import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
 import java.nio.charset.StandardCharsets
 
 object TeslaClientSpoofer {

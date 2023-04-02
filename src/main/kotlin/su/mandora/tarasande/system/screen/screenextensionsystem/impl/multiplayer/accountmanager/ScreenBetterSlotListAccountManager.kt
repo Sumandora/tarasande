@@ -14,9 +14,11 @@ import net.minecraft.network.encryption.SignatureVerifier
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Util
+import org.apache.commons.lang3.RandomStringUtils
 import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
+import su.mandora.tarasande.injection.accessor.IRealmsPeriodicCheckers
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.filesystem.ManagerFile
 import su.mandora.tarasande.system.screen.accountmanager.account.Account
@@ -33,8 +35,6 @@ import su.mandora.tarasande.util.extension.minecraft.ButtonWidget
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.screen.EntryScreenBetterSlotList
 import su.mandora.tarasande.util.screen.ScreenBetterSlotList
-import org.apache.commons.lang3.RandomStringUtils
-import su.mandora.tarasande.injection.accessor.IRealmsPeriodicCheckers
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max

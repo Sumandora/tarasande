@@ -1,7 +1,7 @@
 package su.mandora.tarasande_crasher.module
 
-import su.mandora.tarasande_crasher.forcePacket
 import net.minecraft.network.packet.c2s.play.RequestCommandCompletionsC2SPacket
+import org.apache.commons.lang3.RandomStringUtils
 import su.mandora.tarasande.event.impl.EventDisconnect
 import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -10,7 +10,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.player.PlayerUtil
-import org.apache.commons.lang3.RandomStringUtils
+import su.mandora.tarasande_crasher.forcePacket
 import java.util.concurrent.ThreadLocalRandom
 
 val mvCommands = mutableListOf(

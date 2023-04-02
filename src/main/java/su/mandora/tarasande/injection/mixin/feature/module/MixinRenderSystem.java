@@ -2,8 +2,6 @@ package su.mandora.tarasande.injection.mixin.feature.module;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
-import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleFog;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

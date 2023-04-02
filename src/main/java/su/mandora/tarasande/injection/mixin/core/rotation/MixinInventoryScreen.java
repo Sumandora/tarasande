@@ -3,12 +3,12 @@ package su.mandora.tarasande.injection.mixin.core.rotation;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
-import su.mandora.tarasande.injection.accessor.ILivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande.injection.accessor.ILivingEntity;
 
 @Mixin(InventoryScreen.class)
 public class MixinInventoryScreen {

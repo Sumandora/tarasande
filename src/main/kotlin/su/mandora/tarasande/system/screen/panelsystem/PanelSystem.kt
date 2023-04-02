@@ -5,6 +5,8 @@ import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
+import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.Manager
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventRender2D
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
@@ -24,8 +26,6 @@ import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
 import su.mandora.tarasande.util.render.helper.DragInfo
 import su.mandora.tarasande.util.render.helper.IElement
-import org.lwjgl.glfw.GLFW
-import su.mandora.tarasande.Manager
 import java.awt.Color
 import kotlin.math.abs
 import kotlin.math.min

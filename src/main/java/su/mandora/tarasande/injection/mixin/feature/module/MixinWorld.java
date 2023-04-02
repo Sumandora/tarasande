@@ -5,8 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import su.mandora.tarasande.feature.tarasandevalue.impl.DebugValues;
-import su.mandora.tarasande.feature.tarasandevalue.impl.debug.BlockChangeTracker;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

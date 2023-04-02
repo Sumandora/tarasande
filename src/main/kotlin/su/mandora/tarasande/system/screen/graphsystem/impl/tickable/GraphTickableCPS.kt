@@ -1,11 +1,11 @@
 package su.mandora.tarasande.system.screen.graphsystem.impl.tickable
 
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventMouse
 import su.mandora.tarasande.event.impl.EventSwing
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.screen.graphsystem.GraphTickable
-import org.lwjgl.glfw.GLFW
 
 class GraphTickableCPS : GraphTickable("Player", "CPS", 200, true) {
 

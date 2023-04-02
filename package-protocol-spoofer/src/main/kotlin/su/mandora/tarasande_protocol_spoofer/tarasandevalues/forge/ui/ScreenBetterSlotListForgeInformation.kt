@@ -1,15 +1,15 @@
 package su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.ui
 
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForgePayload
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.legacy.ModStruct
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.modern.ChannelStruct
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.modern.ModernForgePayload
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.screen.EntryScreenBetterSlotList
 import su.mandora.tarasande.util.screen.ScreenBetterSlotList
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForgePayload
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.legacy.ModStruct
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.modern.ChannelStruct
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.modern.ModernForgePayload
 
 class ScreenBetterSlotListForgeInformation(title: String, parent: Screen, private val type: Type, private val struct: IForgePayload) : ScreenBetterSlotList(title, parent, 46, -46) {
 

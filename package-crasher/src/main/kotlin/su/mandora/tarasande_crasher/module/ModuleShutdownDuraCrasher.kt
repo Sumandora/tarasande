@@ -1,6 +1,5 @@
 package su.mandora.tarasande_crasher.module
 
-import su.mandora.tarasande_crasher.forcePacket
 import net.minecraft.block.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
@@ -15,6 +14,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande_crasher.forcePacket
 import java.util.concurrent.CompletableFuture
 
 class ModuleShutdownDuraCrasher : Module("Shutdown dura crasher", "Crashes the server using weird packets", "Crasher") {

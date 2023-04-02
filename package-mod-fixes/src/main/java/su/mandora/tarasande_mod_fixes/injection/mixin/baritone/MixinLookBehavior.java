@@ -1,7 +1,6 @@
 package su.mandora.tarasande_mod_fixes.injection.mixin.baritone;
 
 import net.minecraft.client.MinecraftClient;
-import su.mandora.tarasande.util.math.rotation.Rotation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
@@ -9,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande.util.math.rotation.Rotation;
 
 @Pseudo
 @Mixin(targets = "baritone.behavior.LookBehavior", remap = false)

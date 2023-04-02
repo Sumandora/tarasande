@@ -1,9 +1,9 @@
 package su.mandora.tarasande.system.base.grabbersystem.impl
 
-import su.mandora.tarasande.system.base.grabbersystem.Grabber
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.LdcInsnNode
+import su.mandora.tarasande.system.base.grabbersystem.Grabber
 
 class GrabberMaxPlayerMove : Grabber("net.minecraft.server.network.ServerPlayNetworkHandler", 100.0F) {
 

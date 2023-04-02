@@ -3,7 +3,6 @@ package su.mandora.tarasande.injection.mixin.feature.tarasandevalue;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.debug.DebugRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import su.mandora.tarasande.feature.tarasandevalue.impl.debug.MinecraftDebugger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

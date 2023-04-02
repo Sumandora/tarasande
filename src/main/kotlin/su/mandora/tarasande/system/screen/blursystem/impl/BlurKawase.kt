@@ -2,13 +2,13 @@ package su.mandora.tarasande.system.screen.blursystem.impl
 
 import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.gl.Framebuffer
+import org.lwjgl.opengl.GL11
+import org.lwjgl.opengl.GL13
+import org.lwjgl.opengl.GL20
 import su.mandora.tarasande.system.screen.blursystem.Blur
 import su.mandora.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import su.mandora.tarasande.util.render.shader.Program
 import su.mandora.tarasande.util.render.shader.Shader
-import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL13
-import org.lwjgl.opengl.GL20
 
 class BlurKawase : Blur("Kawase") {
     private val upsample = Program(Shader("blur/kawase/upsample.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))

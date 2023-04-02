@@ -6,10 +6,6 @@ import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.listener.PacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.text.Text;
-import su.mandora.tarasande.event.EventDispatcher;
-import su.mandora.tarasande.event.impl.EventDisconnect;
-import su.mandora.tarasande.event.impl.EventPacket;
-import su.mandora.tarasande.injection.accessor.IClientConnection;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +14,10 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande.event.EventDispatcher;
+import su.mandora.tarasande.event.impl.EventDisconnect;
+import su.mandora.tarasande.event.impl.EventPacket;
+import su.mandora.tarasande.injection.accessor.IClientConnection;
 
 import java.util.ArrayList;
 

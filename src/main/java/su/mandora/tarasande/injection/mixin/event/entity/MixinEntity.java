@@ -5,10 +5,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;
-import su.mandora.tarasande.event.EventDispatcher;
-import su.mandora.tarasande.event.impl.*;
-import su.mandora.tarasande.injection.accessor.IEntity;
-import su.mandora.tarasande.util.extension.minecraft.Vec3dKt;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,6 +13,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.mandora.tarasande.event.EventDispatcher;
+import su.mandora.tarasande.event.impl.*;
+import su.mandora.tarasande.injection.accessor.IEntity;
+import su.mandora.tarasande.util.extension.minecraft.Vec3dKt;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity implements IEntity {

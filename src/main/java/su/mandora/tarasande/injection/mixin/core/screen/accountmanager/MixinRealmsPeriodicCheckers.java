@@ -2,12 +2,12 @@ package su.mandora.tarasande.injection.mixin.core.screen.accountmanager;
 
 import net.minecraft.client.realms.RealmsClient;
 import net.minecraft.client.realms.RealmsPeriodicCheckers;
-import su.mandora.tarasande.injection.accessor.IRealmsPeriodicCheckers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande.injection.accessor.IRealmsPeriodicCheckers;
 
 @Mixin(RealmsPeriodicCheckers.class)
 public class MixinRealmsPeriodicCheckers implements IRealmsPeriodicCheckers {

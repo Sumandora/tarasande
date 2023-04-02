@@ -2,7 +2,9 @@ package su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl.focusab
 
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
+import su.mandora.tarasande.injection.accessor.ITextFieldWidget
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.Value
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueTextList
@@ -10,8 +12,6 @@ import su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl.focusabl
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholder
-import org.lwjgl.glfw.GLFW
-import su.mandora.tarasande.injection.accessor.ITextFieldWidget
 import java.awt.Color
 
 class ElementWidthValueComponentFocusableTextList(value: Value) : ElementWidthValueComponentFocusable<ValueTextList>(value) {

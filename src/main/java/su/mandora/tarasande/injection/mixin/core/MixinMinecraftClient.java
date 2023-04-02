@@ -5,8 +5,6 @@ import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
-import su.mandora.tarasande.TarasandeMain;
-import su.mandora.tarasande.util.render.RenderUtil;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,6 +13,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande.TarasandeMain;
+import su.mandora.tarasande.util.render.RenderUtil;
 
 @Mixin(MinecraftClient.class)
 public abstract class MixinMinecraftClient {

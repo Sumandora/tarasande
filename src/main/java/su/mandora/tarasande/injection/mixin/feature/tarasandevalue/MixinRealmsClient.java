@@ -3,12 +3,11 @@ package su.mandora.tarasande.injection.mixin.feature.tarasandevalue;
 import net.minecraft.client.realms.RealmsClient;
 import net.minecraft.client.realms.Request;
 import net.minecraft.client.realms.exception.RealmsServiceException;
-import su.mandora.tarasande.TarasandeMainKt;
-import su.mandora.tarasande.feature.tarasandevalue.impl.PrivacyValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.mandora.tarasande.TarasandeMainKt;
 import su.mandora.tarasande.feature.tarasandevalue.impl.PrivacyValues;
 
 import java.util.logging.Level;

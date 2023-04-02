@@ -8,17 +8,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.util.math.Vec3d;
-import su.mandora.tarasande.event.EventDispatcher;
-import su.mandora.tarasande.event.impl.EventInvalidPlayerInfo;
-import su.mandora.tarasande.event.impl.EventRotationSet;
-import su.mandora.tarasande.event.impl.EventShowsDeathScreen;
-import su.mandora.tarasande.event.impl.EventVelocity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import su.mandora.tarasande.event.EventDispatcher;
+import su.mandora.tarasande.event.impl.EventInvalidPlayerInfo;
+import su.mandora.tarasande.event.impl.EventRotationSet;
+import su.mandora.tarasande.event.impl.EventShowsDeathScreen;
+import su.mandora.tarasande.event.impl.EventVelocity;
 
 import java.util.Iterator;
 

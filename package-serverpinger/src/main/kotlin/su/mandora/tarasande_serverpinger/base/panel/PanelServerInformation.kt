@@ -1,6 +1,5 @@
 package su.mandora.tarasande_serverpinger.base.panel
 
-import su.mandora.tarasande_serverpinger.injection.accessor.IMultiplayerServerListWidgetSubServerEntry
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget.ServerEntry
@@ -15,6 +14,7 @@ import su.mandora.tarasande.system.base.grabbersystem.impl.GrabberServerInformat
 import su.mandora.tarasande.system.screen.panelsystem.Panel
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
+import su.mandora.tarasande_serverpinger.injection.accessor.IMultiplayerServerListWidgetSubServerEntry
 
 var emptyServer = ServerInfo("", "", false).apply {
     ping = 0L

@@ -2,12 +2,12 @@ package su.mandora.tarasande.injection.mixin.core.prediction;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
-import su.mandora.tarasande.injection.accessor.prediction.IParticleManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import su.mandora.tarasande.injection.accessor.prediction.IParticleManager;
 
 @Mixin(ParticleManager.class)
 public class MixinParticleManager implements IParticleManager {

@@ -1,7 +1,5 @@
 package su.mandora.tarasande_custom_minecraft.injection.mixin.detailedconnectionstatus;
 
-import su.mandora.tarasande_custom_minecraft.tarasandevalues.debug.ConnectionState;
-import su.mandora.tarasande_custom_minecraft.tarasandevalues.debug.DetailedConnectionStatus;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
 import net.minecraft.text.Text;

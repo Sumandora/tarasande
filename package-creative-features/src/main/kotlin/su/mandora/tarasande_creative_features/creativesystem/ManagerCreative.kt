@@ -1,9 +1,5 @@
 package su.mandora.tarasande_creative_features.creativesystem
 
-import su.mandora.tarasande_creative_features.creativesystem.impl.*
-import su.mandora.tarasande_creative_features.creativesystem.panel.PanelElementsCreative
-import su.mandora.tarasande_creative_features.creativesystem.valuecomponent.meta.ValueButtonItem
-import su.mandora.tarasande_creative_features.tarasandevalues.CreativeValues
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
@@ -15,6 +11,10 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.screen.panelsystem.ManagerPanel
 import su.mandora.tarasande.util.player.chat.CustomChat
 import su.mandora.tarasande.util.string.StringUtil
+import su.mandora.tarasande_creative_features.creativesystem.impl.*
+import su.mandora.tarasande_creative_features.creativesystem.panel.PanelElementsCreative
+import su.mandora.tarasande_creative_features.creativesystem.valuecomponent.meta.ValueButtonItem
+import su.mandora.tarasande_creative_features.tarasandevalues.CreativeValues
 
 object ManagerCreative : Manager<ExploitCreative>() {
 

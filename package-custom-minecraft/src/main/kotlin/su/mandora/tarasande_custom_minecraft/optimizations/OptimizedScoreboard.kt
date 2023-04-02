@@ -1,7 +1,6 @@
 package su.mandora.tarasande_custom_minecraft.optimizations
 
 import com.mojang.datafixers.util.Pair
-import su.mandora.tarasande_custom_minecraft.tarasandevalues.optimization.scoreboard.ScoreboardValues
 import net.minecraft.client.gui.hud.InGameHud
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.scoreboard.ScoreboardObjective
@@ -13,6 +12,7 @@ import net.minecraft.util.Formatting
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.blursystem.ManagerBlur
 import su.mandora.tarasande.util.render.RenderUtil
+import su.mandora.tarasande_custom_minecraft.tarasandevalues.optimization.scoreboard.ScoreboardValues
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.max

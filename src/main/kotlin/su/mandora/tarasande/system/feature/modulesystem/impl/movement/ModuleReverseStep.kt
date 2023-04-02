@@ -6,9 +6,9 @@ import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumberRange
+import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.player.PlayerUtil
-import su.mandora.tarasande.system.feature.modulesystem.Module
 
 class ModuleReverseStep : Module("Reverse step", "Allows you to step down blocks", ModuleCategory.MOVEMENT) {
 

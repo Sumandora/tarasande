@@ -1,9 +1,5 @@
 package su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.handler
 
-import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerInfo
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.ForgeProtocolSpoofer
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.IForgeNetClientHandler
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.legacy.ModStruct
 import io.netty.buffer.Unpooled
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import net.minecraft.client.network.MultiplayerServerListPinger
@@ -16,6 +12,10 @@ import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import su.mandora.tarasande.TARASANDE_NAME
+import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerInfo
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.ForgeProtocolSpoofer
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.IForgeNetClientHandler
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.legacy.ModStruct
 import java.net.InetSocketAddress
 
 class Fml1NetClientHandler(private val connection: ClientConnection) : IForgeNetClientHandler {

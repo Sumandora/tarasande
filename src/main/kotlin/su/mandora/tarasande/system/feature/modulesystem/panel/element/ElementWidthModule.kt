@@ -5,17 +5,17 @@ import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.RotationAxis
 import net.minecraft.util.math.Vec2f
+import org.lwjgl.opengl.GL11
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.system.base.valuesystem.ManagerValue
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
+import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.RenderUtil.isHovered
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.element.ElementWidth
-import org.lwjgl.opengl.GL11
 import java.awt.Color
 import kotlin.math.min
-import su.mandora.tarasande.system.feature.modulesystem.Module
 
 class ElementWidthModule(private val module: Module, width: Double) : ElementWidth(width) {
 

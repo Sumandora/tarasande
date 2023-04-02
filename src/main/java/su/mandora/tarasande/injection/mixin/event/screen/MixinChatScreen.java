@@ -1,14 +1,14 @@
 package su.mandora.tarasande.injection.mixin.event.screen;
 
 import net.minecraft.client.gui.screen.ChatScreen;
-import su.mandora.tarasande.event.EventDispatcher;
-import su.mandora.tarasande.event.impl.EventChat;
-import su.mandora.tarasande.injection.accessor.IChatScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import su.mandora.tarasande.event.EventDispatcher;
+import su.mandora.tarasande.event.impl.EventChat;
+import su.mandora.tarasande.injection.accessor.IChatScreen;
 
 @Mixin(ChatScreen.class)
 public class MixinChatScreen implements IChatScreen {

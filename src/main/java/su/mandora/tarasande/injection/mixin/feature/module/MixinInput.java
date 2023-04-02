@@ -1,11 +1,11 @@
 package su.mandora.tarasande.injection.mixin.feature.module;
 
 import net.minecraft.client.input.Input;
-import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
-import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
+import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
 
 @Mixin(Input.class)
 public class MixinInput {

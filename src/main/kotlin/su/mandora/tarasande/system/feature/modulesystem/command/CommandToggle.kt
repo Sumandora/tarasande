@@ -3,9 +3,9 @@ package su.mandora.tarasande.system.feature.modulesystem.command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.minecraft.command.CommandSource
+import su.mandora.tarasande.system.feature.commandsystem.Command
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.util.player.chat.CustomChat
-import su.mandora.tarasande.system.feature.commandsystem.Command
 
 class CommandToggle : Command("toggle") {
 

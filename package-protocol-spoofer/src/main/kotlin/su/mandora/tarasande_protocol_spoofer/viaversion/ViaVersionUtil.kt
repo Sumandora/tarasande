@@ -5,9 +5,9 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import com.viaversion.viaversion.api.type.Type
 import com.viaversion.viaversion.protocols.protocol1_12to1_11_1.ServerboundPackets1_12
 import com.viaversion.viaversion.protocols.protocol1_13to1_12_2.Protocol1_13To1_12_2
-import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
 import de.florianmichael.viafabricplus.protocolhack.ProtocolHack
 import de.florianmichael.vialoadingbase.ViaLoadingBase
+import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
 
 object ViaVersionUtil {
 

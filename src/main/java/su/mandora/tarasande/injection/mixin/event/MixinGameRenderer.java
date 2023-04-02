@@ -5,15 +5,15 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import su.mandora.tarasande.event.EventDispatcher;
-import su.mandora.tarasande.event.impl.EventRender2D;
-import su.mandora.tarasande.event.impl.EventScreenRender;
-import su.mandora.tarasande.event.impl.EventUpdateTargetedEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import su.mandora.tarasande.event.EventDispatcher;
+import su.mandora.tarasande.event.impl.EventRender2D;
+import su.mandora.tarasande.event.impl.EventScreenRender;
+import su.mandora.tarasande.event.impl.EventUpdateTargetedEntity;
 
 @SuppressWarnings("DataFlowIssue")
 @Mixin(GameRenderer.class)

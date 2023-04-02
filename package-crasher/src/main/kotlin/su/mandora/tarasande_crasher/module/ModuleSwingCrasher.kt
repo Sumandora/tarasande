@@ -1,6 +1,5 @@
 package su.mandora.tarasande_crasher.module
 
-import su.mandora.tarasande_crasher.forcePacket
 import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket
 import net.minecraft.util.Hand
 import su.mandora.tarasande.event.impl.EventDisconnect
@@ -10,6 +9,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.string.StringUtil
+import su.mandora.tarasande_crasher.forcePacket
 
 class ModuleSwingCrasher : Module("Swing crasher", "Crashes the server with spamming swing packets", "Crasher") {
 

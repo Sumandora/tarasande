@@ -2,9 +2,6 @@ package su.mandora.tarasande.injection.mixin.feature.module.norender;
 
 import net.minecraft.item.map.MapIcon;
 import net.minecraft.item.map.MapState;
-import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
-import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleNoRender;
-import su.mandora.tarasande.util.dummy.IteratorDummy;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

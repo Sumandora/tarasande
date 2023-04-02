@@ -18,6 +18,8 @@ import net.minecraft.text.ClickEvent
 import net.minecraft.text.Text
 import net.minecraft.text.Texts
 import net.minecraft.util.Formatting
+import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.Manager
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventChat
 import su.mandora.tarasande.event.impl.EventInputSuggestions
@@ -28,8 +30,6 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
 import su.mandora.tarasande.system.feature.commandsystem.impl.*
 import su.mandora.tarasande.system.feature.modulesystem.command.CommandToggle
 import su.mandora.tarasande.util.player.chat.CustomChat
-import org.lwjgl.glfw.GLFW
-import su.mandora.tarasande.Manager
 import kotlin.math.max
 
 object ManagerCommand : Manager<Command>() {

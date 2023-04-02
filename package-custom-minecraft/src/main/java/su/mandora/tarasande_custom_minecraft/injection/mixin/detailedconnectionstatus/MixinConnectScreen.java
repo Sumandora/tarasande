@@ -1,19 +1,14 @@
 package su.mandora.tarasande_custom_minecraft.injection.mixin.detailedconnectionstatus;
 
-import su.mandora.tarasande_custom_minecraft.tarasandevalues.debug.ConnectionState;
-import su.mandora.tarasande_custom_minecraft.tarasandevalues.debug.DetailedConnectionStatus;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.ConnectScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande_custom_minecraft.tarasandevalues.debug.ConnectionState;
 import su.mandora.tarasande_custom_minecraft.tarasandevalues.debug.DetailedConnectionStatus;

@@ -9,14 +9,14 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
-import su.mandora.tarasande.TARASANDE_NAME
-import su.mandora.tarasande.mc
-import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
-import su.mandora.tarasande.util.extension.minecraft.minus
 import org.joml.Matrix4f
 import org.joml.Vector4f
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11.*
+import su.mandora.tarasande.TARASANDE_NAME
+import su.mandora.tarasande.mc
+import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
+import su.mandora.tarasande.util.extension.minecraft.minus
 import java.awt.Color
 import kotlin.math.*
 

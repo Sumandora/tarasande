@@ -1,7 +1,7 @@
 package su.mandora.tarasande_crasher.crasher.impl
 
-import su.mandora.tarasande_crasher.crasher.Crasher
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
+import su.mandora.tarasande_crasher.crasher.Crasher
 import java.io.DataOutputStream
 import java.net.Socket
 

@@ -7,14 +7,13 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import su.mandora.tarasande.feature.tarasandevalue.impl.debug.camera.ViewModel;
-import su.mandora.tarasande.util.extension.minecraft.HandKt;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.feature.tarasandevalue.impl.debug.camera.ViewModel;
+import su.mandora.tarasande.util.extension.minecraft.HandKt;
 
 import java.util.HashMap;
 

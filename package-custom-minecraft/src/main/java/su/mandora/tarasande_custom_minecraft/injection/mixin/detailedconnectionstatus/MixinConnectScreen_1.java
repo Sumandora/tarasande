@@ -1,7 +1,5 @@
 package su.mandora.tarasande_custom_minecraft.injection.mixin.detailedconnectionstatus;
 
-import su.mandora.tarasande_custom_minecraft.tarasandevalues.debug.ConnectionState;
-import su.mandora.tarasande_custom_minecraft.tarasandevalues.debug.DetailedConnectionStatus;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

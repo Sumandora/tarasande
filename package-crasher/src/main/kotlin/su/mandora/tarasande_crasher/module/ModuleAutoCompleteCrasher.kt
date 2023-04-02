@@ -1,6 +1,5 @@
 package su.mandora.tarasande_crasher.module
 
-import su.mandora.tarasande_crasher.forcePacket
 import net.minecraft.network.packet.c2s.play.RequestCommandCompletionsC2SPacket
 import su.mandora.tarasande.event.impl.EventDisconnect
 import su.mandora.tarasande.event.impl.EventUpdate
@@ -9,6 +8,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande_crasher.forcePacket
 
 class ModuleAutoCompleteCrasher : Module("Auto complete crasher", "Crashes the server by spamming auto completions", "Crasher") {
     private val playerCompletion = RequestCommandCompletionsC2SPacket(0, " ")

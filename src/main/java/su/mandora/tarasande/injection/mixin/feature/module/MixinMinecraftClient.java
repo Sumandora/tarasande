@@ -2,8 +2,6 @@ package su.mandora.tarasande.injection.mixin.feature.module;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
-import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
-import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleESP;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

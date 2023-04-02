@@ -15,19 +15,19 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.RaycastContext
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.RaycastContext.ShapeType
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventInput
 import su.mandora.tarasande.event.impl.EventIsEntityAttackable
 import su.mandora.tarasande.feature.rotation.Rotations
+import su.mandora.tarasande.injection.accessor.IChatScreen
+import su.mandora.tarasande.injection.accessor.IGameRenderer
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
 import su.mandora.tarasande.util.extension.minecraft.isBlockHitResult
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
-import org.lwjgl.glfw.GLFW
-import su.mandora.tarasande.injection.accessor.IChatScreen
-import su.mandora.tarasande.injection.accessor.IGameRenderer
 
 object PlayerUtil {
 

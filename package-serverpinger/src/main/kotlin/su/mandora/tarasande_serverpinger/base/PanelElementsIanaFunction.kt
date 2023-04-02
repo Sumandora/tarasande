@@ -1,6 +1,5 @@
 package su.mandora.tarasande_serverpinger.base
 
-import su.mandora.tarasande_serverpinger.util.IPAPI
 import net.minecraft.client.util.math.MatrixStack
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -9,6 +8,7 @@ import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthV
 import su.mandora.tarasande.system.screen.panelsystem.api.PanelElements
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
+import su.mandora.tarasande_serverpinger.util.IPAPI
 import kotlin.math.max
 
 class PanelElementsIanaFunction : PanelElements<ElementWidthValueComponent<*>>("Iana function", 200.0, 20.0) {

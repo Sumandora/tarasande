@@ -2,8 +2,6 @@ package su.mandora.tarasande.injection.mixin.feature.module;
 
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.option.Perspective;
-import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
-import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleFreeCam;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

@@ -3,8 +3,8 @@ package su.mandora.tarasande.event.impl
 import net.minecraft.entity.Entity
 import net.minecraft.text.Text
 import su.mandora.tarasande.event.Event
-import java.awt.Color
 import su.mandora.tarasande.system.feature.modulesystem.Module
+import java.awt.Color
 
 class EventIsEntityAttackable(val entity: Entity, var attackable: Boolean) : Event(false)
 class EventTagName(var entity: Entity, var displayName: Text) : Event(false)

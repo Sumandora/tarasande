@@ -1,19 +1,19 @@
 package su.mandora.tarasande_serverpinger.screenextension.directconnect
 
-import su.mandora.tarasande_serverpinger.base.panel.PanelServerInformation
-import su.mandora.tarasande_serverpinger.base.panel.copy
-import su.mandora.tarasande_serverpinger.base.panel.emptyServer
-import su.mandora.tarasande_serverpinger.injection.accessor.IClickableWidget
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.DirectConnectScreen
+import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventKey
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.graphsystem.panel.PanelGraph
 import su.mandora.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import su.mandora.tarasande.system.screen.screenextensionsystem.ScreenExtension
-import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande_serverpinger.base.*
+import su.mandora.tarasande_serverpinger.base.panel.PanelServerInformation
+import su.mandora.tarasande_serverpinger.base.panel.copy
+import su.mandora.tarasande_serverpinger.base.panel.emptyServer
+import su.mandora.tarasande_serverpinger.injection.accessor.IClickableWidget
 
 class ScreenExtensionDirectConnectScreen : ScreenExtension<DirectConnectScreen>(DirectConnectScreen::class.java) {
 

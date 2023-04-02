@@ -1,8 +1,5 @@
 package su.mandora.tarasande_protocol_spoofer
 
-import su.mandora.tarasande_protocol_spoofer.command.CommandOpenModsRCE
-import su.mandora.tarasande_protocol_spoofer.tarasandevalues.ProtocolSpooferValues
-import su.mandora.tarasande_protocol_spoofer.viaversion.ViaVersionUtil
 import io.netty.buffer.Unpooled
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.loader.api.FabricLoader
@@ -17,6 +14,9 @@ import su.mandora.tarasande.event.impl.EventSuccessfulLoad
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import su.mandora.tarasande.system.feature.commandsystem.ManagerCommand
+import su.mandora.tarasande_protocol_spoofer.command.CommandOpenModsRCE
+import su.mandora.tarasande_protocol_spoofer.tarasandevalues.ProtocolSpooferValues
+import su.mandora.tarasande_protocol_spoofer.viaversion.ViaVersionUtil
 
 class TarasandeProtocolSpoofer : ClientModInitializer {
 

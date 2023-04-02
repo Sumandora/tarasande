@@ -1,9 +1,9 @@
 package su.mandora.tarasande.system.base.grabbersystem.impl
 
-import su.mandora.tarasande.system.base.grabbersystem.Grabber
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.IntInsnNode
+import su.mandora.tarasande.system.base.grabbersystem.Grabber
 
 class GrabberOffHandSlot : Grabber("net.minecraft.screen.PlayerScreenHandler", Pair(45, 40)) {
     private val offhandSlotQuickMoveCode = arrayOf(

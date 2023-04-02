@@ -1,10 +1,10 @@
 package su.mandora.tarasande_litematica.screenextension
 
-import su.mandora.tarasande_litematica.generator.ManagerGenerator
 import fi.dy.masa.litematica.gui.GuiMainMenu
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import su.mandora.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
+import su.mandora.tarasande_litematica.generator.ManagerGenerator
 
 class ScreenExtensionButtonListGuiMainMenu : ScreenExtensionButtonList<GuiMainMenu>(GuiMainMenu::class.java) {
 
