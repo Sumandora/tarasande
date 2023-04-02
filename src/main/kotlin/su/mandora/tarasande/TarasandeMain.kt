@@ -27,29 +27,8 @@ import java.util.logging.Logger
  * TODO | Base:
  *  - User configs
  *  - Crystal Aura
- *  - Change Name/Skin/Cape in Account Manager
  *  - Anti vanish: Tab completion
- *  - Render Profiler
- *  - Dump Items/Blocks/Player
- *  - Re-add Wiki
  *  - Add Rotation RL
- *  - AccountMicrosoft: Change Name on login & Remove Get&Post Methods
- *  - Refactor AccessWidener
- *  - Try out layered maps
- *
- * TODO | Protocol Spoofer:
- *  - Add basic exploits from bash for Forge
- *  - Crayfish Fill and Nuker
- *
- * TODO | Dupe Exploits:
- *  - https://youtu.be/2lUK-2yo_zo
- *
- * TODO | Litematica:
- *  - Implement PixelArt generator
- *  - Implement head and skin generator
- *
- * TODO | Creative Features:
- *  - rewrite most parts of the system
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
