@@ -31,6 +31,8 @@ dependencies {
 
     implementation project(":")
 
+    implementation 'com.github.EvilCodeZ:Mazes:71c28854dd'
+
     modImplementation "curse.maven:litematica-308892:4162847"
     modImplementation "curse.maven:malilib-303119:4147598"
     include "com.google.zxing:core:3.3.1"

@@ -1,7 +1,6 @@
 package su.mandora.tarasande_litematica.generator.impl
 
 import de.evilcodez.mazes.generator.MazeGeneratorType
-import de.evilcodez.mazes.utils.DimensionUtils
 import de.evilcodez.mazes.utils.TileExporter
 import net.minecraft.block.Block
 import net.minecraft.registry.Registries
@@ -12,8 +11,6 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueRegistry
 import su.mandora.tarasande_litematica.generator.Generator
 import su.mandora.tarasande_litematica.util.LitematicaGenerator
 import java.util.*
-
-val random = Random()
 
 class GeneratorMazes : Generator("Mazes") {
 
@@ -29,9 +26,16 @@ class GeneratorMazes : Generator("Mazes") {
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
 
+    private fun toMinecraftDimension(width: Int, height: Int, scale: Int): IntArray {
+        return intArrayOf(
+            (width / 2 - 1) / scale,
+            (height / 2 - 1) / scale
+        )
+    }
+
     override fun perform() {
         (if (algorithm.anySelected()) MazeGeneratorType.byName(algorithm.getSelected()) else MazeGeneratorType.BACKTRACKING).factory.get().apply {
-            val mcDimension = DimensionUtils.toMinecraftDimension(width.value.toInt(), length.value.toInt(), scale.value.toInt())
+            val mcDimension = toMinecraftDimension(width.value.toInt(), length.value.toInt(), scale.value.toInt())
             if (mcDimension[0] < 1 || mcDimension[1] < 1) {
                 mcDimension[0] = 1
                 mcDimension[1] = 1
