@@ -201,12 +201,12 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
             var bestWay: List<Node>? = null
             val begin = System.currentTimeMillis()
             for (outsider in outsiders) {
-                if (System.currentTimeMillis() - begin > maxProcessingTime) break
+                if (System.currentTimeMillis() - begin > maxProcessingTime) return null
 
                 val bestBed = beds.minByOrNull { it.getSquaredDistance(outsider) } ?: continue
                 val beginNode = Node(outsider.x, outsider.y, outsider.z)
                 val endNode = Node(bestBed.x, bestBed.y, bestBed.z)
-                val way = pathFinder.findPath(beginNode, endNode, maxProcessingTime) ?: break // timeout
+                val way = pathFinder.findPath(beginNode, endNode, maxProcessingTime) ?: return null // timeout
                 if (bestWay == null)
                     bestWay = way
                 else {
