@@ -1,5 +1,4 @@
 # tarasande
-### This is a private project. The absence of a LICENSE file is intended.
 
 ## Goals
 - Provide easy usable interfaces
