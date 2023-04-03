@@ -44,12 +44,14 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
             if (mc.world == null)
                 return@registerEvent
 
-            event.string = replaceName(event.string, mc.session.profile.name, protectedName.value)
+            val protectedNames =
+                if(protectEveryone.value)
+                    (mc.networkHandler?.playerList ?: return@registerEvent).map { it.profile.name }.sortedByDescending { it.length }
+                else
+                    listOf(mc.session.profile.name)
 
-            if(protectEveryone.value) {
-                for(player in mc.networkHandler?.playerList ?: return@registerEvent)
-                    event.string = replaceName(event.string, player.profile.name, protectedName.value)
-            }
+            for(player in protectedNames)
+                event.string = replaceName(event.string, player, protectedName.value)
 
             for (pair in Friends.names()) {
                 event.string = replaceName(event.string, pair.key, pair.value)
