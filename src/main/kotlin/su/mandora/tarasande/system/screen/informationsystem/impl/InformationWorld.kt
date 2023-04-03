@@ -107,7 +107,7 @@ class InformationTextRadar : Information("World", "Text radar") {
         val closestPlayers = (mc.world?.players ?: return null)
             .map { it to (mc.player?.distanceTo(it)?.toDouble() ?: 0.0) }
             .sortedBy { it.second }
-            .filter { ManagerModule.get(ModuleESP::class.java).shouldRender(it.first) }
+            .filter { it.first != mc.player && ManagerModule.get(ModuleESP::class.java).shouldRender(it.first) }
             .let { it.subList(0, min(amount.value.toInt(), it.size)) }
         if (closestPlayers.isEmpty()) return null
         return "\n" + closestPlayers.joinToString("\n") { Formatting.strip(it.first.gameProfile.name) + " (" + StringUtil.round(it.second, decimalPlaces.value.toInt()) + ")" }
