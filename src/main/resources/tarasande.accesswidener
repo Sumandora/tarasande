@@ -12,7 +12,6 @@ accessible field net/minecraft/client/network/ClientPlayerEntity field_3938 I
 accessible field net/minecraft/client/network/ClientPlayerEntity autoJumpEnabled Z
 accessible field net/minecraft/client/network/ClientPlayerEntity ticksToNextAutojump I
 accessible field net/minecraft/client/network/ClientPlayerInteractionManager currentBreakingProgress F
-accessible field net/minecraft/network/packet/c2s/play/CustomPayloadC2SPacket data Lnet/minecraft/network/PacketByteBuf;
 accessible field net/minecraft/entity/Entity random Lnet/minecraft/util/math/random/Random;
 accessible field net/minecraft/entity/Entity SNEAKING_FLAG_INDEX I
 accessible field net/minecraft/entity/Entity SPRINTING_FLAG_INDEX I
@@ -88,7 +87,6 @@ accessible method net/minecraft/client/gui/widget/EntryListWidget clearEntries (
 accessible method net/minecraft/client/gui/widget/EntryListWidget addEntry (Lnet/minecraft/client/gui/widget/EntryListWidget$Entry;)I
 accessible method net/minecraft/client/gui/hud/InGameHud renderHotbarItem (Lnet/minecraft/client/util/math/MatrixStack;IIFLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;I)V
 
-mutable field net/minecraft/network/packet/c2s/play/CustomPayloadC2SPacket data Lnet/minecraft/network/PacketByteBuf;
 mutable field net/minecraft/entity/Entity random Lnet/minecraft/util/math/random/Random;
 mutable field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/util/Session;
 mutable field net/minecraft/client/MinecraftClient socialInteractionsManager Lnet/minecraft/client/network/SocialInteractionsManager;

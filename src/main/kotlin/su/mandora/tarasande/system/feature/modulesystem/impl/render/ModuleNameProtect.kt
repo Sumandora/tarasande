@@ -4,6 +4,7 @@ import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.event.impl.EventTextVisit
 import su.mandora.tarasande.feature.friend.Friends
 import su.mandora.tarasande.mc
+import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
@@ -11,10 +12,14 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 class ModuleNameProtect : Module("Name protect", "Hides your in-game name", ModuleCategory.RENDER) {
 
     private val protectedName = ValueText(this, "Protected name", TARASANDE_NAME)
+    private val protectEveryone = ValueBoolean(this, "Protect everyone", false)
+    private val checkForBoundary = ValueBoolean(this, "Check for boundary (slow)", true)
 
     private val border = "( |[^a-z]|\\b)"
 
     private fun replaceName(str: String, substring: String, replacement: String): String {
+        if(!checkForBoundary.value)
+            return str.replace(substring, replacement)
         val regex = Regex(border + substring + border)
         return regex.replace(str) {
             var newStr = ""
@@ -38,7 +43,13 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
         registerEvent(EventTextVisit::class.java) { event ->
             if (mc.world == null)
                 return@registerEvent
+
             event.string = replaceName(event.string, mc.session.profile.name, protectedName.value)
+
+            if(protectEveryone.value) {
+                for(player in mc.networkHandler?.playerList ?: return@registerEvent)
+                    event.string = replaceName(event.string, player.profile.name, protectedName.value)
+            }
 
             for (pair in Friends.names()) {
                 event.string = replaceName(event.string, pair.key, pair.value)

@@ -12,6 +12,7 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBot
+import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleESP
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 import su.mandora.tarasande.util.string.StringUtil
@@ -103,9 +104,11 @@ class InformationTextRadar : Information("World", "Text radar") {
     private val decimalPlaces = ValueNumber(this, "Decimal places", 0.0, 1.0, 5.0, 1.0)
 
     override fun getMessage(): String? {
-        var closestPlayers = mc.world?.players?.map { it to (mc.player?.distanceTo(it)?.toDouble() ?: 0.0) }?.sortedBy { it.second } ?: return null
-        closestPlayers = closestPlayers.filter { it.first != mc.player }.filter { !ManagerModule.get(ModuleAntiBot::class.java).isBot(it.first) }
-        closestPlayers = closestPlayers.subList(0, min(amount.value.toInt(), closestPlayers.size))
+        val closestPlayers = (mc.world?.players ?: return null)
+            .map { it to (mc.player?.distanceTo(it)?.toDouble() ?: 0.0) }
+            .sortedBy { it.second }
+            .filter { ManagerModule.get(ModuleESP::class.java).shouldRender(it.first) }
+            .let { it.subList(0, min(amount.value.toInt(), it.size)) }
         if (closestPlayers.isEmpty()) return null
         return "\n" + closestPlayers.joinToString("\n") { Formatting.strip(it.first.gameProfile.name) + " (" + StringUtil.round(it.second, decimalPlaces.value.toInt()) + ")" }
     }

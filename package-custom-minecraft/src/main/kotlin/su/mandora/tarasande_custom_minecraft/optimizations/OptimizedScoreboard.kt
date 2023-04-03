@@ -23,6 +23,9 @@ object OptimizedScoreboard {
     private val joinerWidth = mc.textRenderer.getWidth(SCOREBOARD_JOINER)
 
     fun renderScoreboardSidebar(inGameHud: InGameHud, matrices: MatrixStack?, objective: ScoreboardObjective) {
+        if(ScoreboardValues.disableScoreboard.value)
+            return
+
         val scoreboard = objective.scoreboard
         var playerScores = scoreboard.getAllPlayerScores(objective)
             .filter { it.playerName != null && !it.playerName.startsWith("#") }

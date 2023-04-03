@@ -1,5 +1,6 @@
 package su.mandora.tarasande.injection.mixin.core.skin;
 
+import net.minecraft.client.texture.PlayerSkinProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -8,7 +9,7 @@ import su.mandora.tarasande.injection.accessor.IPlayerSkinProvider;
 
 import java.util.UUID;
 
-@Mixin(targets = "net.minecraft.client.texture.PlayerSkinProvider")
+@Mixin(PlayerSkinProvider.class)
 public class MixinPlayerSkinProvider implements IPlayerSkinProvider {
 
     @Unique

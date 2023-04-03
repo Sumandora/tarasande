@@ -11,27 +11,27 @@ import su.mandora.tarasande.util.render.font.FontWrapper
 import java.util.concurrent.ConcurrentHashMap
 
 object StatusRenderer {
-    private val renderer = ConcurrentHashMap<Screen, Pair<String, TimeUtil>>()
+    private val pendingStatuses = ConcurrentHashMap<Screen, Pair<String, TimeUtil>>()
 
     fun setStatus(screen: Screen, text: String) {
         if (text.isEmpty()) return
-        if (renderer.containsKey(screen)) renderer.remove(screen)
-        renderer[screen] = text to TimeUtil()
+        if (pendingStatuses.containsKey(screen)) pendingStatuses.remove(screen)
+        pendingStatuses[screen] = text to TimeUtil()
     }
 
     init {
         EventDispatcher.add(EventScreenRender::class.java) { event ->
-            if (event.state == EventScreenRender.State.POST) {
-                renderer.forEach {
+            if (event.state == EventScreenRender.State.PRE) {
+                pendingStatuses.forEach {
                     if (it.value.second.hasReached(AccessibilityValues.statusRenderTime.value.toLong())) {
-                        renderer.remove(it.key)
+                        pendingStatuses.remove(it.key)
                         return@forEach
                     }
 
                     if (mc.currentScreen!! == it.key) {
                         FontWrapper.textShadow(event.matrices, it.value.first, mc.window.scaledWidth / 2F, 3F, TarasandeValues.accentColor.getColor().rgb, centered = true)
                     } else {
-                        renderer.remove(it.key)
+                        pendingStatuses.remove(it.key)
                     }
                 }
             }

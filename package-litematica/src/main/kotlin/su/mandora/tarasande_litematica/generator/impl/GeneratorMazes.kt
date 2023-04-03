@@ -10,7 +10,6 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueRegistry
 import su.mandora.tarasande_litematica.generator.Generator
 import su.mandora.tarasande_litematica.util.LitematicaGenerator
-import java.util.*
 
 class GeneratorMazes : Generator("Mazes") {
 

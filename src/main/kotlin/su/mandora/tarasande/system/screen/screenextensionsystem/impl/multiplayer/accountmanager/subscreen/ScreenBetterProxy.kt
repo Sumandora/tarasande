@@ -81,9 +81,11 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
 
         addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50, 100, 20, Text.of("Done")) {
             if (ipTextField?.text?.isEmpty()!! || portTextField?.text?.isEmpty()!!) {
-                StatusRenderer.setStatus(this, Formatting.RED.toString() + if (ipTextField?.text?.isEmpty()!! && portTextField?.text?.isEmpty()!!) "IP and port are empty"
-                else if (ipTextField?.text?.isEmpty()!!) "IP is empty"
-                else if (portTextField?.text?.isEmpty()!!) "Port is empty" else "")
+                StatusRenderer.setStatus(this,
+                    Formatting.RED.toString() + if (ipTextField?.text?.isEmpty()!! && portTextField?.text?.isEmpty()!!) "IP and port are empty"
+                    else if (ipTextField?.text?.isEmpty()!!) "IP is empty"
+                    else if (portTextField?.text?.isEmpty()!!) "Port is empty" else ""
+                )
             } else {
                 try {
                     val port = portTextField?.text?.toInt()!!
@@ -119,7 +121,7 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
 
         addDrawableChild(ButtonWidget(width / 2 - 50, height / 2 + 50 + 25, 100, 20, Text.of("Disable")) {
             this.proxy = null
-            StatusRenderer.setStatus(this, "Disabled")
+            StatusRenderer.setStatus(this, Formatting.RED.toString() + "Disabled")
         })
 
         tick()
@@ -143,7 +145,7 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
     override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(matrices, mouseX, mouseY, delta)
         proxy?.socketAddress?.apply {
-            FontWrapper.textShadow(matrices, address.hostAddress + ":" + port + if (proxy?.ping != null) " (" + proxy?.ping + "ms)" else "", 6F, 27F)
+            FontWrapper.textShadow(matrices, address.hostAddress + ":" + port + if (proxy?.ping != null) " (" + proxy?.ping + "ms)" else "", width / 2.0F, height / 2.0F - 100, centered = true)
         }
     }
 

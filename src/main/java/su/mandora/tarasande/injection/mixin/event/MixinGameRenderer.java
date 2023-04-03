@@ -15,7 +15,6 @@ import su.mandora.tarasande.event.impl.EventRender2D;
 import su.mandora.tarasande.event.impl.EventScreenRender;
 import su.mandora.tarasande.event.impl.EventUpdateTargetedEntity;
 
-@SuppressWarnings("DataFlowIssue")
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 
@@ -35,10 +34,5 @@ public class MixinGameRenderer {
     @Inject(method = "updateTargetedEntity", at = @At("TAIL"))
     public void hookEventUpdateTargetedEntityPost(float tickDelta, CallbackInfo ci) {
         EventDispatcher.INSTANCE.call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.POST));
-    }
-
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderWithTooltip(Lnet/minecraft/client/util/math/MatrixStack;IIF)V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILHARD)
-    public void hookEventScreenRenderPost(float tickDelta, long startTime, boolean tick, CallbackInfo ci, int i, int j, MatrixStack matrixStack2) {
-        EventDispatcher.INSTANCE.call(new EventScreenRender(matrixStack2, MinecraftClient.getInstance().currentScreen, EventScreenRender.State.POST));
     }
 }
