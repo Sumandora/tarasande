@@ -16,7 +16,7 @@ import su.mandora.tarasande.system.feature.commandsystem.ManagerCommand
 
 class TarasandeNBTEdit : ClientModInitializer {
 
-    private fun editNBT(tag: NbtCompound) {
+    private fun openTree(tag: NbtCompound) {
         RenderSystem.recordRenderCall {
             mc.setScreen(GuiEditNBTTree(mc.player!!.id, tag))
         }
@@ -31,20 +31,19 @@ class TarasandeNBTEdit : ClientModInitializer {
                     builder.then(literal("self").executes {
                         val nbt = NbtCompound()
                         mc.player!!.writeNbt(nbt)
-                        editNBT(nbt)
+                        openTree(nbt)
                         return@executes SUCCESS
                     })
 
                     builder.then(literal("nbt").then(argument("nbt", NbtCompoundArgumentType.nbtCompound())!!.executes {
-                        editNBT(it.getArgument("nbt", NbtCompound::class.java))
+                        openTree(it.getArgument("nbt", NbtCompound::class.java))
                         return@executes SUCCESS
                     }))
 
                     return builder.executes {
                         mc.player!!.inventory.mainHandStack?.apply {
-                            if (this.nbt != null) editNBT(this.nbt!!)
+                            if (this.nbt != null) openTree(this.nbt!!)
                         }
-                        editNBT(NbtCompound())
                         return@executes SUCCESS
                     }
                 }

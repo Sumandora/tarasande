@@ -54,7 +54,7 @@ public class GuiSaveSlotButton extends DrawableHelper {
 		if (xVisible) {
 			textColor = ((inBoundsOfX(mx, my))) ? 16777120 : 0xffffff;
 			renderVanillaButton(matrices, mx, my, leftBoundOfX(), topBoundOfX(), 0, 66, X_SIZE, X_SIZE);
-			drawCenteredTextWithShadow(matrices, mc.textRenderer, "x", x - GAP - X_SIZE / 2, y + 6, textColor);
+			drawCenteredTextWithShadow(matrices, mc.textRenderer, "x", x - GAP - X_SIZE / 2, y + X_SIZE / 2 - mc.textRenderer.fontHeight / 2, textColor);
 		}
 	}
 
@@ -71,7 +71,7 @@ public class GuiSaveSlotButton extends DrawableHelper {
 	}
 
 	private int topBoundOfX() {
-		return y + (HEIGHT - X_SIZE) / 2;
+		return y;
 	}
 
 	public boolean inBoundsOfX(int mx, int my) {

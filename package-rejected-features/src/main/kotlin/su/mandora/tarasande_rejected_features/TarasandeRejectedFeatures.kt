@@ -11,7 +11,6 @@ import su.mandora.tarasande_rejected_features.command.CommandSparkyHeal
 import su.mandora.tarasande_rejected_features.information.*
 import su.mandora.tarasande_rejected_features.module.ModuleAutoRescuePlatform
 import su.mandora.tarasande_rejected_features.module.ModuleDropper
-import su.mandora.tarasande_rejected_features.module.ModuleRoundedMovement
 import su.mandora.tarasande_rejected_features.tarasandevalues.ClosedInventory
 
 class TarasandeRejectedFeatures : ClientModInitializer {
@@ -19,7 +18,6 @@ class TarasandeRejectedFeatures : ClientModInitializer {
     override fun onInitializeClient() {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
             ManagerModule.add(
-                ModuleRoundedMovement(),
                 ModuleAutoRescuePlatform(),
                 ModuleDropper()
             )
