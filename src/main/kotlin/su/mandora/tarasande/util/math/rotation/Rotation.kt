@@ -8,7 +8,6 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit
-import su.mandora.tarasande.util.extension.kotlinruntime.prefer
 import su.mandora.tarasande.util.render.RenderUtil
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.*
@@ -66,10 +65,14 @@ class Rotation {
         val cursorDeltas = approximateCursorDeltas(deltaRotation)
         val newRotations = cursorDeltas.map { calculateNewRotation(prevRotation, it) }
 
-        return if (preference == null)
-            newRotations.minBy { fov(it) }
-        else
-            newRotations.prefer(preference)
+        if (preference != null) {
+            // In case a module prefers a specific rotation, like the one intersecting with an object, we return that one.
+            val preferred = newRotations.firstOrNull(preference)
+            if(preferred != null)
+                return preferred
+        }
+
+        return newRotations.minBy { fov(it) }
     }
 
     fun smoothedTurn(target: Rotation, aimSpeed: ValueNumberRange): Rotation {

@@ -68,7 +68,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val counterBlocking = ValueMode(this, "Counter blocking", false, "Off", "Wait for block", "Immediately")
     private val guaranteeHit = ValueBoolean(this, "Guarantee hit", false)
     private val rotations = ValueMode(this, "Rotations", true, "Around walls", "Randomized")
-    private val precision = ValueNumber(this, "Precision", 0.0, 0.01, 1.0, 0.01, isEnabled = { rotations.anySelected() })
+    private val precision = ValueNumber(this, "Precision", 0.0, 0.1, 1.0, 0.01, isEnabled = { rotations.anySelected() })
     private val flex = ValueBoolean(this, "Flex", false)
     private val flexTurn = ValueNumber(this, "Flex turn", 1.0, 90.0, 180.0, 1.0, isEnabled = { flex.value })
     private val flexHurtTime = ValueNumber(this, "Flex hurt time", 0.1, 0.5, 0.9, 0.1, isEnabled = { flex.value })
