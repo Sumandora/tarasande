@@ -62,7 +62,7 @@ Windows and Linux are supported. I do not own MacOS hardware, so there is no off
 ## Download
 I am not offering binary downloads. You can compile it yourself, trust me.
 
-Download the repository using `git clone https://github.com/Sumandora/tarasande.git`
+Download the repository using `git clone https://github.com/Sumandora/tarasande.git`  
 Updates can be downloaded by running `git pull` in the cloned repository.
 
 ### IDEs
