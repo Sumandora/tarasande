@@ -147,8 +147,8 @@ Also note that the rendering code is largely inefficient and was made to be easy
 
 ## Accomplishments
 - This cheat managed to get to the top of Hypixels Sumo PvP leaderboard.  
-- This cheat beat several other cheats (some with prices of up to 100€), while the cheaters usually don't even see that they were killed by a cheat.
-- Bypassed killaura checks of anticheats with many years work put into them.
+- This cheat beat several other cheats (some with prices of up to 100€, except Augustus), while the cheaters usually don't even see that they were killed by a cheat.
+- Bypassed killaura checks of anticheats with many years work put into them (except Intave, Polar).
 - The cheat was used as a ghost cheat in many high-rank games. Many modules were used (e. g. Kill aura and Scaffold walk) but the cheating went unnoticed for months and years.
 
 ## Contribution
