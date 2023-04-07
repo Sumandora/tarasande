@@ -29,6 +29,7 @@ If it doesn't, the panel does not have any values.
 
 #### Key binds
 - Using the `alt` key, you can align panels with each other
+- Using the `shift` key, you can make sliders ignore their min and max boundaries
 - Using the `arrow` keys, you can adjust hovered sliders in small steps. (The handle which you are changing on range sliders is the side the mouse is on)
 - Using the `ctrl+v` shortcut in text field screens, will automatically fill in the clipboard content into the text fields, as long as no text field is focused and the clipboard content is in the common colon-separated format
 

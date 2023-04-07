@@ -89,7 +89,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     init {
         ValueButtonOwnerValues(this, "Random rotations", RandomRotations, isEnabled = { rotations.isSelected(1) })
     }
-    private val precision = ValueNumber(this, "Precision", 0.0, 0.1, 1.0, 0.01, isEnabled = { rotations.anySelected() })
+    private val precision = ValueNumber(this, "Precision", 0.01, 0.1, 1.0, 0.01, isEnabled = { rotations.anySelected() })
     private val flex = ValueBoolean(this, "Flex", false)
     private val flexTurn = ValueNumber(this, "Flex turn", 1.0, 90.0, 180.0, 1.0, isEnabled = { flex.value })
     private val flexHurtTime = ValueNumber(this, "Flex hurt time", 0.1, 0.5, 0.9, 0.1, isEnabled = { flex.value })
@@ -491,7 +491,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
                     aimPoint = best
                 }
-            } else {
+            } else if(reach.maxValue > reach.minValue) {
                 distToBest = (sqrt(distToBest) - reach.minValue) / (reach.maxValue - reach.minValue)
                 aimPoint = aimPoint.add(
                     (best.x - aimPoint.x) * (1 - distToBest),
