@@ -24,7 +24,6 @@ include "package-protocol-spoofer"
 include "package-litematica"
 include "package-custom-minecraft"
 include "package-crasher"
-include "package-nbt-edit"
 include "package-creative-features"
 include "package-serverpinger"
 include 'package-viafabricplus'
