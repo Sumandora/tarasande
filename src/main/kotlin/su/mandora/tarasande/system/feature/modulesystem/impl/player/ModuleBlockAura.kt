@@ -34,13 +34,18 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
 
     private val delay = ValueNumber(this, "Delay", 0.0, 200.0, 1000.0, 50.0)
     private val reach = ValueNumber(this, "Reach", 0.1, 4.5, 6.0, 0.1)
-    private val block = object : ValueRegistry<Block>(this, "Blocks", Registries.BLOCK, true, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST) {
-        override fun filter(key: Block) = !key.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN).isEmpty
+    private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registries.BLOCK, true, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST) {
+        override fun filter(key: Block) = !key.defaultState.getOutlineShape(mc.world, BlockPos.ORIGIN).isEmpty
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey
     }
     private val closedInventory = ValueBoolean(this, "Closed inventory", false)
     private val autoCloseScreens = ValueBoolean(this, "Auto close screens", false)
     private val throughWalls = ValueBoolean(this, "Through walls", true)
+    private val interactOnce = object : ValueBoolean(this, "Interact once", true) {
+        override fun onChange(oldValue: Boolean?, newValue: Boolean) {
+            interactedBlocks.clearAndGC()
+        }
+    }
 
     private var interactedBlocks = ArrayList<BlockPos>()
     private val timeUtil = TimeUtil()
@@ -66,9 +71,9 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
             for (x in -rad..rad) for (y in -rad..rad) for (z in -rad..rad) {
                 val blockPos = BlockPos(mc.player?.eyePos!!).add(x, y, z)
                 val blockState = mc.world?.getBlockState(blockPos) ?: continue
-                if (!block.isSelected(blockState.block)) continue
+                if (!blocks.isSelected(blockState.block)) continue
 
-                val collisionShape = blockState.getCollisionShape(mc.world, blockPos)
+                val collisionShape = blockState.getOutlineShape(mc.world, blockPos)
 
                 if (collisionShape != null && !collisionShape.isEmpty) {
                     val pos = collisionShape.boundingBox.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble()).center
@@ -96,7 +101,8 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
 
             if (focusedBlock != null) {
                 PlayerUtil.placeBlock(focusedBlock!!.second.withBlockPos(focusedBlock!!.first)!!)
-                interactedBlocks.add(focusedBlock!!.first)
+                if(interactOnce.value)
+                    interactedBlocks.add(focusedBlock!!.first)
                 val moduleBlockESP = ManagerModule.get(ModuleBlockESP::class.java)
                 if (moduleBlockESP.enabled.value)
                     moduleBlockESP.list.removeIf { it.first == focusedBlock!!.first }

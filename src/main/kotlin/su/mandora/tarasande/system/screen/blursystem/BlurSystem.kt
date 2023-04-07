@@ -24,7 +24,7 @@ import su.mandora.tarasande.util.render.shader.Shader
 
 object ManagerBlur : Manager<Blur>() {
 
-    var selected: Blur
+    lateinit var selected: Blur
     val mode: ValueMode
     val strength = ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0, exceed = false)
 
@@ -38,7 +38,6 @@ object ManagerBlur : Manager<Blur>() {
             BlurGaussian(),
             BlurKawase()
         )
-        selected = list.first()
 
         EventDispatcher.apply {
             add(EventScreenRender::class.java, 1) {
@@ -56,6 +55,8 @@ object ManagerBlur : Manager<Blur>() {
                     selected = list[index]
             }
         }
+
+        mode.select(2) // Select the best blur as default
     }
 
     fun bind(setViewport: Boolean, screens: Boolean = false) {
