@@ -68,6 +68,27 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val counterBlocking = ValueMode(this, "Counter blocking", false, "Off", "Wait for block", "Immediately")
     private val guaranteeHit = ValueBoolean(this, "Guarantee hit", false)
     private val rotations = ValueMode(this, "Rotations", true, "Around walls", "Randomized")
+
+    object RandomRotations {
+        // I appreciate GPTs help in coming up with names for these
+        val distanceBias = ValueNumber(this, "Distance bias", 0.0, 0.65, 1.0, 0.01)
+
+        val eyeLevelPreference = ValueNumber(this, "Eye level preference", 0.0, 0.8, 1.0, 0.01)
+        val eyeLevelPreferenceBasedOnDistance = ValueBoolean(this, "Eye level preference based on distance", false)
+
+        val baseTemperature = ValueNumber(this, "Base temperature", 0.0, 0.005, 0.01, 0.001)
+        val baseVerticalTemperature = ValueNumber(this, "Base vertical temperature", 0.0, 0.005, 0.01, 0.001)
+        val changeTemperatureOnDistance = ValueBoolean(this, "Change temperature on distance", false)
+        val verticalDistanceMultiplier = ValueNumber(this, "Vertical distance multiplier", 0.0, 0.2, 1.0, 0.01, isEnabled = { changeTemperatureOnDistance.value })
+
+        val aimBehindStrength = ValueNumber(this, "Aim behind strength", 0.0, 0.5, 1.0, 0.01)
+
+        val curving = ValueNumber(this, "Curving", -1.0, 1.0, 1.0, 0.1)
+    }
+
+    init {
+        ValueButtonOwnerValues(this, "Random rotations", RandomRotations, isEnabled = { rotations.isSelected(1) })
+    }
     private val precision = ValueNumber(this, "Precision", 0.0, 0.1, 1.0, 0.01, isEnabled = { rotations.anySelected() })
     private val flex = ValueBoolean(this, "Flex", false)
     private val flexTurn = ValueNumber(this, "Flex turn", 1.0, 90.0, 180.0, 1.0, isEnabled = { flex.value })
@@ -76,11 +97,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val dontWaitWhenEnemyHasShield = ValueBoolean(this, "Don't wait when enemy has shield", true, isEnabled = { waitForCritical.value })
     private val criticalSprint = ValueBoolean(this, "Critical sprint", false, isEnabled = { waitForCritical.value })
     private val forceCritical = ValueBoolean(this, "Force critical", true, isEnabled = { criticalSprint.isEnabled() && criticalSprint.value })
+
     object SmartClickingBehaviour {
         val enableSmartClickingBehaviour = ValueBoolean(this, "Enable smart clicking behaviour", false)
-        val enemyHurtTime = ValueNumber(this, "Enemy hurt time", 0.1, 1.0, 1.0, 0.1)
-        val selfHurtTime = ValueNumber(this, "Self hurt time", 0.1, 0.6,1.0, 0.1)
+        val enemyHurtTime = ValueNumber(this, "Enemy hurt time", 0.1, 1.0, 1.0, 0.1, isEnabled = { enableSmartClickingBehaviour.value })
+        val selfHurtTime = ValueNumber(this, "Self hurt time", 0.1, 0.6,1.0, 0.1, isEnabled = { enableSmartClickingBehaviour.value })
     }
+
     init {
         ValueButtonOwnerValues(this, "Smart clicking behaviour", SmartClickingBehaviour)
     }
@@ -430,27 +453,27 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             // Humans always try to get to the middle
             val center = box.center
-            val dist = 1.0 - MathUtil.getBias(mc.player?.eyePos?.distanceTo(aimPoint)!! / reach.maxValue.coerceAtLeast(reach.minValue + 0.5), 0.65) // I have no idea why this works and looks like it does, but it's good, so why remove it then
-            aimPoint = aimPoint.add((center.x - aimPoint.x) * dist, (center.y - aimPoint.y) * (1.0 - dist) * 0.4 /* Humans dislike aiming up and down */, (center.z - aimPoint.z) * dist)
+            val dist = 1.0 - MathUtil.getBias(mc.player?.eyePos?.distanceTo(aimPoint)!! / reach.maxValue.coerceAtLeast(reach.minValue + 0.5), RandomRotations.distanceBias.value) // I have no idea why this works and looks like it does, but it's good, so why remove it then
+            aimPoint = aimPoint.add((center.x - aimPoint.x) * dist, (center.y - aimPoint.y) * (if(RandomRotations.eyeLevelPreferenceBasedOnDistance.value) (1.0 - dist) else 1.0) * (1.0 - RandomRotations.eyeLevelPreference.value) /* Humans dislike aiming up and down */, (center.z - aimPoint.z) * dist)
 
             // Humans can't hold their hands still
             val actualVelocity = Vec3d(mc.player?.prevX!! - mc.player?.x!!, mc.player?.prevY!! - mc.player?.y!!, mc.player?.prevZ!! - mc.player?.z!!)
-            val diff = actualVelocity.subtract(entity.prevX - entity.x, entity.prevY - entity.y, entity.prevZ - entity.z)!! * -1.0
+            val diff = -actualVelocity.subtract(entity.prevX - entity.x, entity.prevY - entity.y, entity.prevZ - entity.z)!!
             if (diff.lengthSquared() > 0.0) { // either the target or the player has to move otherwise changing the rotation doesn't make sense
-                val horChange = diff.horizontalLength()
+                val horChange = if(RandomRotations.changeTemperatureOnDistance.value) diff.horizontalLength() else 1.0
                 aimPoint = aimPoint.add(
-                    sin(System.currentTimeMillis() * 0.005) * horChange,
-                    cos(System.currentTimeMillis() * 0.005) * (diff.y + horChange * 0.2),
-                    sin(System.currentTimeMillis() * 0.005) * horChange
+                    sin(System.currentTimeMillis() * RandomRotations.baseTemperature.value) * horChange,
+                    cos(System.currentTimeMillis() * RandomRotations.baseVerticalTemperature.value) * (diff.y + horChange * RandomRotations.verticalDistanceMultiplier.value),
+                    sin(System.currentTimeMillis() * RandomRotations.baseTemperature.value) * horChange
                 )
             }
 
             // Human aim is slow
-            aimPoint -= diff * 0.5
+            aimPoint -= diff * RandomRotations.aimBehindStrength.value
 
             // Humans can't move their mouse in a straight line
             val aimDelta = (Rotations.fakeRotation ?: Rotation(mc.player!!)).fov(RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint)) / Rotation.MAXIMUM_DELTA
-            aimPoint = aimPoint.add(0.0, -aimDelta * box.yLength, 0.0)
+            aimPoint = aimPoint.add(0.0, -aimDelta * box.yLength * RandomRotations.curving.value, 0.0)
 
             // Don't aim through walls
             while (visible && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint) && rotations.isSelected(0)) {
