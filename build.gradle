@@ -54,6 +54,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	include "io.netty:netty-handler-proxy:4.1.82.Final"
+	include "com.github.FlorianMichael:RMath:${project.rmath_version}"
 }
 
 processResources {

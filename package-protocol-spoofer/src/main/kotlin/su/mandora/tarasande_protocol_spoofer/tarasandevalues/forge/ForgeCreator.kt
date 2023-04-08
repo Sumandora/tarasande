@@ -27,9 +27,9 @@ object ForgeCreator {
     }
 
     fun createNetHandler(connection: ClientConnection): IForgeNetClientHandler {
-        if (ViaLoadingBase.getClassWrapper().targetVersion.isNewerThan(ProtocolVersion.v1_18_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
-        if (ViaLoadingBase.getClassWrapper().targetVersion.isNewerThan(ProtocolVersion.v1_17_1)) return ModernFmlNetClientHandler(ModernFmlState.FML_3, connection)
-        if (ViaLoadingBase.getClassWrapper().targetVersion.isNewerThan(ProtocolVersion.v1_12_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_2, connection)
+        if (ViaLoadingBase.getInstance().targetVersion.isNewerThan(ProtocolVersion.v1_18_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
+        if (ViaLoadingBase.getInstance().targetVersion.isNewerThan(ProtocolVersion.v1_17_1)) return ModernFmlNetClientHandler(ModernFmlState.FML_3, connection)
+        if (ViaLoadingBase.getInstance().targetVersion.isNewerThan(ProtocolVersion.v1_12_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_2, connection)
 
         return Fml1NetClientHandler(connection)
     }

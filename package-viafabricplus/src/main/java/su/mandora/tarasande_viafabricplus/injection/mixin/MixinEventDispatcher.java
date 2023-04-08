@@ -16,7 +16,7 @@ public class MixinEventDispatcher {
 
     @Inject(method = "call", at = @At("HEAD"), cancellable = true)
     public void cancelOriginalScreenInputEvent(Event event, CallbackInfo ci) {
-        if (event instanceof EventScreenInput && ViaLoadingBase.getClassWrapper().getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_12_2)) {
+        if (event instanceof EventScreenInput && ViaLoadingBase.getInstance().getTargetVersion().isOlderThanOrEqualTo(ProtocolVersion.v1_12_2)) {
             if (((IEventScreenInput) event).tarasande_getOriginal()) {
                 ci.cancel();
             }
