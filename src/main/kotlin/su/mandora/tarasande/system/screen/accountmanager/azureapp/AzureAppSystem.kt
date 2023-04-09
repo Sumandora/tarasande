@@ -8,7 +8,6 @@ object ManagerAzureApp : Manager<AzureAppPreset>() {
     init {
         add(
             AzureAppPresetInGameAccountSwitcher(),
-            AzureAppPresetBashAuth(),
             AzureAppPresetPolyMC(),
             AzureAppPresetMultiMC(),
             AzureAppPresetTechnicLauncher(),

@@ -8,14 +8,6 @@ class AzureAppPresetInGameAccountSwitcher : AzureAppPreset(
     "XboxLive.signin offline_access"
 )
 
-class AzureAppPresetBashAuth : AzureAppPreset(
-    "Bash/Clamp Auth",
-    "841d89e4-7da3-438c-b2c6-8a269e142f69",
-    "XboxLive.signin offline_access",
-    redirectUri = "http://127.0.0.1:",
-    clientSecret = "-1t5cM1-neTZw1aZ01.8uxz..xBC94tHE6"
-)
-
 class AzureAppPresetPolyMC : AzureAppPreset(
     "PolyMC",
     "549033b2-1532-4d4e-ae77-1bbaa46f9d74",
