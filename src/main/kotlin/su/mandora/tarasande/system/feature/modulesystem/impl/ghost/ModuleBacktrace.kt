@@ -40,14 +40,22 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
         return boundingBoxes[entity]?.filter { it.raycast(playerEye, rotationVec).isPresent }?.minByOrNull { playerEye.distanceTo(MathUtil.closestPointToBox(playerEye, it)) }
     }
 
+    override fun onDisable() {
+        boundingBoxes.clear()
+    }
+
     init {
         registerEvent(EventBoundingBoxOverride::class.java) { event ->
             event.boundingBox = computeSelectedBox(event.entity) ?: return@registerEvent
         }
 
         registerEvent(EventTick::class.java) { event ->
-            if (event.state == EventTick.State.PRE && mc.world != null && mc.player != null) {
-                boundingBoxes.entries.removeIf { mc.world!!.entities.contains(it.key) }
+            if (event.state == EventTick.State.PRE) {
+                if(mc.world == null || mc.player == null) {
+                    boundingBoxes.clear()
+                    return@registerEvent
+                }
+                boundingBoxes.entries.removeIf { !mc.world!!.entities.contains(it.key) }
                 for (entity in mc.world!!.entities)
                     if (PlayerUtil.isAttackable(entity))
                         boundingBoxes.computeIfAbsent(entity) { ArrayList() }.also {
