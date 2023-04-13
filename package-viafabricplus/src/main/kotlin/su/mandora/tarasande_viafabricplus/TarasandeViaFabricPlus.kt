@@ -4,7 +4,7 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
 import de.florianmichael.viafabricplus.event.SkipIdlePacketCallback
 import de.florianmichael.viafabricplus.settings.groups.DebugSettings
 import de.florianmichael.vialoadingbase.ViaLoadingBase
-import de.florianmichael.vialoadingbase.platform.ProtocolRange
+import de.florianmichael.vialoadingbase.model.ProtocolRange
 import net.fabricmc.api.ClientModInitializer
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
@@ -23,7 +23,7 @@ class TarasandeViaFabricPlus : ClientModInitializer {
 
     override fun onInitializeClient() {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
-            cancelOpenPacket = ValueBoolean(ManagerModule.get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolRange.andOlder(ProtocolVersion.v1_11_1) + ")", false, isEnabled = { ViaLoadingBase.getClassWrapper().targetVersion.isOlderThanOrEqualTo(ProtocolVersion.v1_11_1) })
+            cancelOpenPacket = ValueBoolean(ManagerModule.get(ModuleInventoryMove::class.java), "Cancel open packet (" + ProtocolRange.andOlder(ProtocolVersion.v1_11_1) + ")", false, isEnabled = { ViaLoadingBase.getInstance().targetVersion.isOlderThanOrEqualTo(ProtocolVersion.v1_11_1) })
 
             EveryItemOnArmor
 
