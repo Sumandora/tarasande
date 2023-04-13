@@ -27,7 +27,7 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
     private val case = ValueMode(this, "Case", false, "Uppercase", "Random", "Lowercase", isEnabled = { !noArbitraryTexts.value && garbage.value })
     private val position = ValueMode(this, "Position", true, "Before", "After", isEnabled = { !noArbitraryTexts.value && garbage.value })
     private val mode = ValueMode(this, "Mode", false, "Custom message", "Position broadcast", isEnabled = { !noArbitraryTexts.value })
-    private val message = ValueText(this, "Message", "", isEnabled = { !noArbitraryTexts.value && mode.isSelected(0) })
+    private val message = ValueText(this, "Message", "github.com/Sumandora/tarasande", isEnabled = { !noArbitraryTexts.value && mode.isSelected(0) })
     private val target = ValueText(this, "Target", "", isEnabled = { !noArbitraryTexts.value && mode.isSelected(1) })
 
     private val timeUtil = TimeUtil()
