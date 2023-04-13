@@ -46,9 +46,9 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
         }
 
         registerEvent(EventTick::class.java) { event ->
-            if (event.state == EventTick.State.PRE) {
-                boundingBoxes.entries.removeIf { mc.world?.entities?.contains(it.key) != true }
-                for (entity in mc.world?.entities!!)
+            if (event.state == EventTick.State.PRE && mc.world != null && mc.player != null) {
+                boundingBoxes.entries.removeIf { mc.world!!.entities.contains(it.key) }
+                for (entity in mc.world!!.entities)
                     if (PlayerUtil.isAttackable(entity))
                         boundingBoxes.computeIfAbsent(entity) { ArrayList() }.also {
                             if (entity.boundingBox != null)
