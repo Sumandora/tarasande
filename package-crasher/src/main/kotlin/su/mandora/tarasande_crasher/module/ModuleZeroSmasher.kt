@@ -14,10 +14,11 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.string.StringUtil
+import su.mandora.tarasande_crasher.CRASHER
 import su.mandora.tarasande_crasher.forcePacket
 import java.util.concurrent.ThreadLocalRandom
 
-class ModuleZeroSmasher : Module("Zero smasher", "Crashes the server using block interactions", "Crasher") {
+class ModuleZeroSmasher : Module("Zero smasher", "Crashes the server using block interactions", CRASHER) {
 
     private val hand = ValueMode(this, "Hand", false, *Hand.values().map { StringUtil.formatEnumTypes(it.name) }.toTypedArray())
     private val randomMultiply = ValueNumber(this, "Random multiply", 1000.0, 30000.0, 1000000.0, 1000.0)

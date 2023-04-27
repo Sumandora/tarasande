@@ -8,10 +8,12 @@
     "MixinEventDispatcher",
     "MixinEventScreenInput",
     "MixinPlayerScreenHandler_1",
-    "MixinProtocolSyncBooleanSetting",
-    "MixinSyncInputExecutor"
+    "MixinProtocolSyncBooleanSetting"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "MixinMinecraftClient"
+  ]
 }

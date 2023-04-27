@@ -77,9 +77,11 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
     }
 
     override fun onDisable() {
-        mc.player?.yaw = beginRotation?.yaw!!
-        mc.player?.pitch = beginRotation?.pitch!!
-        mc.options.perspective = perspective
+        if(beginRotation != null) {
+            mc.player?.yaw = beginRotation?.yaw!!
+            mc.player?.pitch = beginRotation?.pitch!!
+        }
+        mc.options.perspective = perspective ?: Perspective.FIRST_PERSON
         prevCameraPos = null
         firstRealInput = null
         firstInput = null

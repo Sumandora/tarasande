@@ -8,9 +8,10 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande_crasher.CRASHER
 import su.mandora.tarasande_crasher.forcePacket
 
-class ModuleSkriptCrasher : Module("Skript crasher", "Crashes the Skript plugin", "Crasher") {
+class ModuleSkriptCrasher : Module("Skript crasher", "Crashes the Skript plugin", CRASHER) {
     private val delay = ValueNumber(this, "Delay", 5.0, 50.0, 100.0, 5.0)
 
     private val timer = TimeUtil()
@@ -20,12 +21,14 @@ class ModuleSkriptCrasher : Module("Skript crasher", "Crashes the Skript plugin"
             switchState()
         }
 
-        registerEvent(EventUpdate::class.java) {
-            if (timer.hasReached(delay.value.toLong())) {
-                mc.targetedEntity?.apply {
-                    forcePacket(PlayerInteractEntityC2SPacket.interact(this, mc.player!!.isSneaking, Hand.MAIN_HAND))
+        registerEvent(EventUpdate::class.java) { event ->
+            if(event.state == EventUpdate.State.PRE) {
+                if (timer.hasReached(delay.value.toLong())) {
+                    mc.targetedEntity?.apply {
+                        forcePacket(PlayerInteractEntityC2SPacket.interact(this, mc.player!!.isSneaking, Hand.MAIN_HAND))
+                    }
+                    timer.reset()
                 }
-                timer.reset()
             }
         }
     }

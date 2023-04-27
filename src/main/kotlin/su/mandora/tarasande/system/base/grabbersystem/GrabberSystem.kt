@@ -1,9 +1,18 @@
 package su.mandora.tarasande.system.base.grabbersystem
 
+import net.fabricmc.loader.api.FabricLoader
+import org.objectweb.asm.ClassReader
 import org.objectweb.asm.tree.*
 import su.mandora.tarasande.Manager
 import su.mandora.tarasande.system.base.grabbersystem.impl.*
 import su.mandora.tarasande.system.base.grabbersystem.mapping.TinyMappings
+import java.io.ByteArrayInputStream
+import java.io.File
+import java.io.FileInputStream
+import java.util.jar.Attributes
+import java.util.jar.Manifest
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
 
 object ManagerGrabber : Manager<Grabber>() {
 
@@ -21,58 +30,56 @@ object ManagerGrabber : Manager<Grabber>() {
             GrabberSlotRenderSize()
         )
 
-        // Disabled for public release in order to prevent confusion
-        for(constant in list)
-            constant.constant = constant.expected
+        if(!FabricLoader.getInstance().isDevelopmentEnvironment) {
+            for(constant in list)
+                constant.constant = constant.expected
+        } else {
+            // Actually process them in dev environments
+            val minecraftJar = System.getProperty("java.class.path")
+                .split(File.pathSeparatorChar)
+                .map { File(it) }
+                .filter { !it.isDirectory && it.extension == "jar" }
+                .first { f ->
+                    val zis = ZipInputStream(FileInputStream(f))
+                    var entry: ZipEntry?
+                    var correct = false
+                    while (zis.nextEntry.also { entry = it } != null) {
+                        if (entry?.name.equals("META-INF/MANIFEST.MF")) {
+                            val main = Manifest(ByteArrayInputStream(zis.readAllBytes()))
+                                .mainAttributes
+                                .entries
+                                .firstOrNull { it.key == Attributes.Name("Main-Class") }?.value
+                            if (main == "net.minecraft.client.Main") {
+                                correct = true
+                                zis.close()
+                                break
+                            }
+                        }
+                        zis.closeEntry()
+                    }
+                    zis.close()
+                    return@first correct
+                }
 
-//        val minecraftJar = System.getProperty("java.class.path")
-//            .split(File.pathSeparatorChar)
-//            .map { File(it) }
-//            .filter { !it.isDirectory && it.extension == "jar" }
-//            .first { f ->
-//                val zis = ZipInputStream(FileInputStream(f))
-//                var entry: ZipEntry?
-//                var correct = false
-//                while (zis.nextEntry.also { entry = it } != null) {
-//                    if (entry?.name.equals("META-INF/MANIFEST.MF")) {
-//                        val main = Manifest(ByteArrayInputStream(zis.readAllBytes()))
-//                            .mainAttributes
-//                            .entries
-//                            .firstOrNull { it.key == Attributes.Name("Main-Class") }?.value
-//                        if (main == "net.minecraft.client.Main") {
-//                            correct = true
-//                            zis.close()
-//                            break
-//                        }
-//                    }
-//                    zis.closeEntry()
-//                }
-//                zis.close()
-//                return@first correct
-//            }
-//
-//        val zis = ZipInputStream(FileInputStream(minecraftJar)) // We have to read it again, because we don't know at which entry we are, manifest -should- always be the first, but JVM accepts it regardless
-//        var zipEntry: ZipEntry?
-//        while (zis.nextEntry.also { zipEntry = it } != null) {
-//            if (zipEntry!!.name.endsWith(".class")) {
-//                val node = ClassNode()
-//                ClassReader(zis.readAllBytes()).accept(node, ClassReader.EXPAND_FRAMES)
-//                classNodes.add(node)
-//            }
-//            zis.closeEntry()
-//        }
-//        zis.close()
-//
-//        classNodes.forEach { classNode ->
-//            list.forEach { transformer ->
-//                if (System.getProperty("skipGrabberSystem") != null) {
-//                    transformer.constant = transformer.expected
-//                } else {
-//                    if (transformer.resolveClassMapping(classNode.name) == transformer.targetedClass.replace(".", "/"))
-//                        transformer.transform(classNode)
-//                }
-//            }
-//        }
+            val zis = ZipInputStream(FileInputStream(minecraftJar)) // We have to read it again, because we don't know at which entry we are, manifest -should- always be the first, but JVM accepts it regardless
+            var zipEntry: ZipEntry?
+            while (zis.nextEntry.also { zipEntry = it } != null) {
+                if (zipEntry!!.name.endsWith(".class")) {
+                    val node = ClassNode()
+                    ClassReader(zis.readAllBytes()).accept(node, ClassReader.EXPAND_FRAMES)
+                    classNodes.add(node)
+                }
+                zis.closeEntry()
+            }
+            zis.close()
+
+            classNodes.forEach { classNode ->
+                list.forEach { transformer ->
+                    if (transformer.resolveClassMapping(classNode.name) == transformer.targetedClass.replace(".", "/"))
+                        transformer.transform(classNode)
+                }
+            }
+        }
     }
 
     fun getConstant(grabber: Class<out Grabber>): Any {
@@ -91,7 +98,7 @@ abstract class Grabber(val targetedClass: String, val expected: Any) {
         set(value) {
             if (value != expected)
                 error(javaClass.simpleName + " read a different value than expected (Expected: $expected, but received $value)")
-            field = value
+            field = expected
         }
 
     abstract fun transform(classNode: ClassNode)

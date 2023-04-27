@@ -6,10 +6,11 @@ import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
+import su.mandora.tarasande_crasher.CRASHER
 import su.mandora.tarasande_crasher.forcePacket
 import java.util.concurrent.ThreadLocalRandom
 
-class ModuleFlyCrasher : Module("Fly crasher", "Crashes the server using big motions", "Crasher") {
+class ModuleFlyCrasher : Module("Fly crasher", "Crashes the server using big motions", CRASHER) {
 
     private val repeat = ValueNumber(this, "Repeat", 1.0, 3.0, 10.0, 1.0)
 

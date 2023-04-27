@@ -53,7 +53,7 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	include "io.netty:netty-handler-proxy:4.1.91.Final"
+	include "io.netty:netty-handler-proxy:4.1.92.Final"
 }
 
 processResources {

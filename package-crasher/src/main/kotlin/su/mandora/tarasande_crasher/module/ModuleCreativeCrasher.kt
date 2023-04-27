@@ -10,9 +10,10 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande_crasher.CRASHER
 import su.mandora.tarasande_crasher.forcePacket
 
-class ModuleCreativeCrasher : Module("Creative crasher", "Crashes the server by spamming items", "Crasher") {
+class ModuleCreativeCrasher : Module("Creative crasher", "Crashes the server by spamming items", CRASHER) {
     private val dummy = ItemStack(Items.STONE, 64)
 
     private val repeat = ValueBoolean(this, "Repeat", false)
@@ -24,23 +25,24 @@ class ModuleCreativeCrasher : Module("Creative crasher", "Crashes the server by 
         registerEvent(EventDisconnect::class.java) {
             switchState()
         }
-        registerEvent(EventUpdate::class.java) {
-            if (repeat.value) {
-                if (timer.hasReached(repeatDelay.value.toLong())) {
-                    execute()
-                    timer.reset()
+        registerEvent(EventUpdate::class.java) { event ->
+            if(event.state == EventUpdate.State.PRE) {
+                if (repeat.value) {
+                    if (timer.hasReached(repeatDelay.value.toLong())) {
+                        execute()
+                        timer.reset()
+                    }
                 }
             }
         }
     }
 
     override fun onEnable() {
-        super.onEnable()
         if (!repeat.value) execute()
     }
 
     private fun execute() {
-        if (mc.player!!.abilities.creativeMode) {
+        if (mc.player?.abilities?.creativeMode == true) {
             var j = 0.0
             while (j < 10.0) {
 

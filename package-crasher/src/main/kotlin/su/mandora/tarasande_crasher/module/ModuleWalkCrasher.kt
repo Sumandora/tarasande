@@ -4,15 +4,17 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
+import su.mandora.tarasande_crasher.CRASHER
 import su.mandora.tarasande_crasher.forcePacket
 import kotlin.math.cos
 import kotlin.math.sin
 
-class ModuleWalkCrasher : Module("Walk crasher", "Crashes the server by sending random velocity", "Crasher") {
+class ModuleWalkCrasher : Module("Walk crasher", "Crashes the server by sending random velocity", CRASHER) {
     private val speed = ValueNumber(this, "Speed", 0.0, 10.0, 100.0, 1.0)
 
     override fun onEnable() {
-        super.onEnable()
+        if(mc.player == null)
+            return
         mc.player!!.setVelocity(speed.value * cos(Math.toRadians(mc.player!!.yaw + 90.0)), 0.0, speed.value * sin(Math.toRadians(mc.player!!.yaw + 90.0)))
         if (!mc.player!!.isOnGround) {
             forcePacket(PlayerMoveC2SPacket.OnGroundOnly(true))

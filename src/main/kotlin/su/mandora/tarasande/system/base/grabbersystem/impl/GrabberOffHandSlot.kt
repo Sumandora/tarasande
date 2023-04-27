@@ -41,6 +41,7 @@ class GrabberOffHandSlot : Grabber("net.minecraft.screen.PlayerScreenHandler", P
             BIPUSH 40
             BIPUSH 77
             BIPUSH 62
+            ALOAD 3 (added with 1.19.4?)
             INVOKESPECIAL net/minecraft/screen/PlayerScreenHandler$2.<init> (Lnet/minecraft/screen/PlayerScreenHandler;Lnet/minecraft/inventory/Inventory;III)V
             INVOKEVIRTUAL net/minecraft/screen/PlayerScreenHandler.addSlot (Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;
             POP
@@ -53,6 +54,7 @@ class GrabberOffHandSlot : Grabber("net.minecraft.screen.PlayerScreenHandler", P
         Opcodes.BIPUSH,
         Opcodes.BIPUSH,
         Opcodes.BIPUSH,
+        Opcodes.ALOAD,
         Opcodes.INVOKESPECIAL,
         Opcodes.INVOKEVIRTUAL,
         Opcodes.POP

@@ -14,10 +14,11 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande_crasher.CRASHER
 import su.mandora.tarasande_crasher.forcePacket
 import java.util.concurrent.CompletableFuture
 
-class ModuleShutdownDuraCrasher : Module("Shutdown dura crasher", "Crashes the server using weird packets", "Crasher") {
+class ModuleShutdownDuraCrasher : Module("Shutdown dura crasher", "Crashes the server using weird packets", CRASHER) {
 
     private val repeat = ValueBoolean(this, "Repeat", false)
     private val repeatDelay = ValueNumber(this, "Repeat delay", 500.0, 1000.0, 50000.0, 500.0, isEnabled = { repeat.value })
@@ -28,23 +29,25 @@ class ModuleShutdownDuraCrasher : Module("Shutdown dura crasher", "Crashes the s
         registerEvent(EventDisconnect::class.java) {
             switchState()
         }
-        registerEvent(EventUpdate::class.java) {
-            if (repeat.value) {
-                if (timer.hasReached(repeatDelay.value.toLong())) {
-                    execute()
-                    timer.reset()
+        registerEvent(EventUpdate::class.java) { event ->
+            if(event.state == EventUpdate.State.PRE) {
+                if (repeat.value) {
+                    if (timer.hasReached(repeatDelay.value.toLong())) {
+                        execute()
+                        timer.reset()
+                    }
                 }
             }
         }
     }
 
     override fun onEnable() {
-        super.onEnable()
         if (!repeat.value) execute()
     }
 
     private fun execute() {
-        if (mc.isInSingleplayer) return
+        if(mc.player == null)
+            return
 
         CompletableFuture.runAsync {
             ItemStack(Blocks.OAK_PLANKS, 64).apply {

@@ -21,6 +21,8 @@ import su.mandora.tarasande_crasher.command.CommandItemFrameCrasher
 import su.mandora.tarasande_crasher.crasher.ManagerCrasher
 import su.mandora.tarasande_crasher.module.*
 
+const val CRASHER = "Crasher"
+
 fun errorMessage(text: String) {
     @Suppress("NAME_SHADOWING") val text = Formatting.RED.toString() + text
     if (mc.currentScreen == null) {
