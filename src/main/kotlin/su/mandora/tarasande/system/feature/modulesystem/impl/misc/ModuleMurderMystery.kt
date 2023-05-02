@@ -28,7 +28,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadLocalRandom
 
-class ModuleMurderMystery : Module("Murder mystery", "Finds murders based on held items", ModuleCategory.MISC) {
+class ModuleMurderMystery : Module("Murder mystery", "Finds murderers based on held items", ModuleCategory.MISC) {
 
     private val detectionMethod = ValueMode(this, "Detection method", false, "Allow", "Disallow")
     private val allowedItems = object : ValueRegistry<Item>(this, "Allowed items", Registries.ITEM, true, Items.GOLD_INGOT, isEnabled = { detectionMethod.isSelected(0) }) {
