@@ -90,13 +90,13 @@ abstract class CheckSource(private val name: String) : Check(name) {
     protected fun violation(file: File, index: Int, output: String) {
         val content = file.readBytes().decodeToString()
 
-        var qoutes = 0
+        var quotes = 0
         var comment = false
 
         var lineBeginIndex = index
         while(lineBeginIndex > 0 && content[lineBeginIndex - 1] != "\n"[0]) {
             if(content[lineBeginIndex - 1] == '"')
-                qoutes++
+                quotes++
             if(content[lineBeginIndex - 1] == '/') {
                 if(comment)
                     return
@@ -105,7 +105,7 @@ abstract class CheckSource(private val name: String) : Check(name) {
             lineBeginIndex--
         }
 
-        if(qoutes.mod(2) != 0)
+        if(quotes.mod(2) != 0)
             return
 
         var lineEndIndex = index
