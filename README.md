@@ -1,7 +1,5 @@
 # tarasande
 
-## [**Join the discord**](https://discord.gg/CrHvnn6cJd)
-
 ![](media/GUI.png)
 
 ## The story
