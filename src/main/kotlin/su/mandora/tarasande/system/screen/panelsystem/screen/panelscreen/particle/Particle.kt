@@ -1,6 +1,6 @@
 package su.mandora.tarasande.system.screen.panelsystem.screen.panelscreen.particle
 
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.util.math.Vec2f
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
@@ -18,7 +18,7 @@ class Particle(private var x: Double, private var y: Double) {
 
     private var point = Vec2f(ThreadLocalRandom.current().nextDouble(mc.window.scaledWidth.toDouble()).toFloat(), ThreadLocalRandom.current().nextDouble(mc.window.scaledHeight.toDouble()).toFloat())
 
-    fun render(matrices: MatrixStack, mouseX: Double, mouseY: Double, animation: Double) {
+    fun render(context: DrawContext, mouseX: Double, mouseY: Double, animation: Double) {
         val position = Vec2f(x.toFloat(), y.toFloat())
         val dist = (1.0 / sqrt(Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(position)) * 16.0).coerceAtMost(2.0)
 
@@ -32,7 +32,7 @@ class Particle(private var x: Double, private var y: Double) {
         xMotion += newMotionX
         yMotion += newMotionY
 
-        val deltaTime = min(RenderUtil.deltaTime / 144f, 1.0)
+        val deltaTime = min(RenderUtil.deltaTime / 144F, 1.0)
 
         x += xMotion * deltaTime
         y += yMotion * deltaTime
@@ -40,7 +40,7 @@ class Particle(private var x: Double, private var y: Double) {
         xMotion *= 0.98 * deltaTime
         yMotion *= 0.98 * deltaTime
 
-        RenderUtil.fillCircle(matrices, x, y, MathUtil.getBias(animation, 0.95), Color.white.withAlpha((animation * 255).toInt()).rgb)
+        RenderUtil.fillCircle(context.matrices, x, y, MathUtil.getBias(animation, 0.95), Color.white.withAlpha((animation * 255).toInt()).rgb)
     }
 
 }

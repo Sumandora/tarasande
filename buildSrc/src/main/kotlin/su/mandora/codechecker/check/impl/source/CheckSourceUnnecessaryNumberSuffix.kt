@@ -5,14 +5,14 @@ import java.util.regex.Pattern
 
 class CheckSourceUnnecessaryNumberSuffix : CheckSource("Unnecessary Number Suffix") {
 
-    private val doubleRegex = Pattern.compile("[^\\w\\s]([+-]?([0-9]+([.][0-9]*)?|[.][0-9]+))d")
+    private val regex = Pattern.compile("\\b\\d+\\.(\\d+)?([dD])\\b")
 
     override fun run() {
         allSources().forEach {
             if (it.extension == "java" || it.extension == "kt") {
                 read(it).lowercase().also { content ->
-                    val matcher = doubleRegex.matcher(content)
-                    while(matcher.find()) {
+                    val matcher = regex.matcher(content)
+                    while (matcher.find()) {
                         val index = matcher.end() - 1
                         violation(it, index, "Contains a useless number suffix")
                     }

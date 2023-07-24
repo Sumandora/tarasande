@@ -212,7 +212,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murderers based on h
             if (event.type == EventPacket.Type.RECEIVE)
                 when (event.packet) {
                     is PlayerRespawnS2CPacket -> {
-                        if(event.packet.isNewWorld())
+                        if (event.packet.isNewWorld())
                             suspects.clear()
                     }
 

@@ -1,17 +1,16 @@
 package su.mandora.tarasande_serverpinger.base.panel
 
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget.ServerEntry
 import net.minecraft.client.network.ServerInfo
 import net.minecraft.client.option.ServerList
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.text.Text
 import su.mandora.tarasande.mc
-import su.mandora.tarasande.system.base.grabbersystem.ManagerGrabber
-import su.mandora.tarasande.system.base.grabbersystem.impl.GrabberServerInformationOffset
 import su.mandora.tarasande.system.screen.panelsystem.Panel
+import su.mandora.tarasande.util.SERVER_INFORMATION_OFFSET
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande_serverpinger.injection.accessor.IMultiplayerServerListWidgetSubServerEntry
@@ -74,17 +73,15 @@ open class PanelServerInformation(private val owner: Any, private val finish: (s
         }
     }
 
-    private val offset = ManagerGrabber.getConstant(GrabberServerInformationOffset::class.java) as Int /* sick, minecraft simple shifts everything by 5 units */
-
-    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val hovered = RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), x, y + titleBarHeight, panelWidth, panelHeight - titleBarHeight)
-        serverEntry?.render(matrices, 0, y.toInt() + titleBarHeight, x.toInt(), (panelWidth + offset).toInt(), (panelHeight - titleBarHeight).toInt(), mouseX, mouseY, hovered, delta)
+        serverEntry?.render(context, 0, y.toInt() + titleBarHeight, x.toInt(), (panelWidth + SERVER_INFORMATION_OFFSET).toInt(), (panelHeight - titleBarHeight).toInt(), mouseX, mouseY, hovered, delta)
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        super.render(matrices, mouseX, mouseY, delta)
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        super.render(context, mouseX, mouseY, delta)
         if (tooltip != null) {
-            mc.currentScreen?.renderTooltip(matrices, tooltip, mouseX, mouseY)
+            context.drawTooltip(mc.textRenderer, tooltip, mouseX, mouseY)
             tooltip = null
         }
     }

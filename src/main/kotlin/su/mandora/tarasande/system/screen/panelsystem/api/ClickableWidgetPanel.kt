@@ -1,10 +1,10 @@
 package su.mandora.tarasande.system.screen.panelsystem.api
 
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.screen.narration.NarrationPart
 import net.minecraft.client.gui.widget.ClickableWidget
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import su.mandora.tarasande.system.screen.panelsystem.Panel
 import kotlin.math.floor
@@ -54,7 +54,7 @@ open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = 
 
     override fun isFocused() = true
 
-    override fun renderButton(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderButton(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val opened = panel.opened
         panel.opened = true
         val usedInScreen = panel.usedInScreen
@@ -65,8 +65,9 @@ open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = 
             panel.panelWidth = this.width.toDouble()
             panel.panelHeight = this.height.toDouble()
         }
-        if (panel.isVisible())
-            panel.render(matrices, mouseX, mouseY, delta)
+        if (panel.isVisible()) {
+            panel.render(context, mouseX, mouseY, delta)
+        }
         panel.opened = opened
         panel.usedInScreen = usedInScreen
     }

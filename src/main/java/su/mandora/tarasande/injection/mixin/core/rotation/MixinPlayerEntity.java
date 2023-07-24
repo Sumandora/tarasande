@@ -26,8 +26,8 @@ public abstract class MixinPlayerEntity extends LivingEntity {
         float yaw = getYaw();
         float pitch = getPitch();
         //noinspection ConstantValue
-        if((Object) this == MinecraftClient.getInstance().player && rotation != null) {
-            yaw =  rotation.getYaw();
+        if ((Object) this == MinecraftClient.getInstance().player && rotation != null) {
+            yaw = rotation.getYaw();
             pitch = rotation.getPitch();
         }
         ((ILivingEntity) this).tarasande_setHeadYaw(yaw);

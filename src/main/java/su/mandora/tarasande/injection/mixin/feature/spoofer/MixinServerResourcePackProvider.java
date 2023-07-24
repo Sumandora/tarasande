@@ -22,13 +22,16 @@ import java.util.concurrent.locks.ReentrantLock;
 @Mixin(ServerResourcePackProvider.class)
 public abstract class MixinServerResourcePackProvider implements IServerResourcePackProvider {
 
-    @Shadow private @Nullable CompletableFuture<?> downloadTask;
-    @Shadow @Final private ReentrantLock lock;
-
-    @Shadow protected abstract boolean verifyFile(String expectedSha1, File file);
-
+    @Shadow
+    private @Nullable CompletableFuture<?> downloadTask;
+    @Shadow
+    @Final
+    private ReentrantLock lock;
     @Unique
     private boolean tarasande_spoofDownloading = false;
+
+    @Shadow
+    protected abstract boolean verifyFile(String expectedSha1, File file);
 
     @Redirect(method = "download", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;submitAndJoin(Ljava/lang/Runnable;)V"))
     public void closeScreen(MinecraftClient instance, Runnable runnable) {

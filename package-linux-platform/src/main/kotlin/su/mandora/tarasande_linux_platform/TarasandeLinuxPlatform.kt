@@ -16,7 +16,7 @@ class TarasandeLinuxPlatform : ClientModInitializer {
 
     override fun onInitializeClient() {
         val operatingSystem = Util.getOperatingSystem()
-        if(operatingSystem != Util.OperatingSystem.LINUX) {
+        if (operatingSystem != Util.OperatingSystem.LINUX) {
             logger.warning("$TARASANDE_NAME Linux Platform is not designed to run on '" + operatingSystem.getName() + "' systems")
             return
         }

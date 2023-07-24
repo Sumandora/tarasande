@@ -55,7 +55,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
             if (!event.collisionShape.isEmpty)
                 return@registerEvent
             val offset = mc.player?.y!! - event.pos.y
-            if(offset in 0.0..1.0)
+            if (offset in 0.0..1.0)
                 event.collisionShape = VoxelShapes.cuboid(0.0, 0.0, 0.0, 1.0, offset, 1.0)
         }
 

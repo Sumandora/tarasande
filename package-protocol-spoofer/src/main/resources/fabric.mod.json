@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "tarasande-protocol-spoofer",
   "version": "${version}",
-
   "name": "tarasande Protocol Spoofer",
   "description": "tarasande package to provide connection exploits or client spoofers",
   "authors": [
@@ -12,10 +11,8 @@
     "homepage": "https://github.com/Sumandora/",
     "sources": "https://github.com/Sumandora/tarasande"
   },
-
   "license": "GPL-3.0",
   "icon": "assets/tarasande-protocol-spoofer/icon.png",
-
   "environment": "client",
   "entrypoints": {
     "client": [
@@ -28,7 +25,7 @@
   "accessWidener": "tarasande-protocol-spoofer.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.9",
-    "minecraft": "~1.19",
+    "minecraft": "1.20.1",
     "java": ">=17",
     "tarasande": "*"
   },

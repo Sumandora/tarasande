@@ -8,10 +8,11 @@ import su.mandora.tarasande.util.math.rotation.Rotation
 class PacketRotator(rotations: Rotations) {
 
     private var cachedRotation: Rotation? = null
+
     init {
         EventDispatcher.apply {
             add(EventUpdate::class.java, 9999) { event ->
-                if(event.state == EventUpdate.State.PRE_PACKET) { // Last one who changes rotation
+                if (event.state == EventUpdate.State.PRE_PACKET) { // Last one who changes rotation
                     cachedRotation = Rotation(mc.player!!)
                     if (rotations.fakeRotation != null) {
                         mc.player!!.apply {
@@ -24,7 +25,7 @@ class PacketRotator(rotations: Rotations) {
                 }
             }
             add(EventUpdate::class.java, 1) { event ->
-                if(event.state == EventUpdate.State.POST) { // First one to change it back
+                if (event.state == EventUpdate.State.POST) { // First one to change it back
                     mc.player!!.apply {
                         cachedRotation!!.also {
                             yaw = it.yaw

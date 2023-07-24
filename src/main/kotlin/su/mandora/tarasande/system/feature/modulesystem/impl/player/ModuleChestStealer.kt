@@ -10,10 +10,7 @@ import org.apache.commons.lang3.ArrayUtils
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.impl.EventScreenInput
 import su.mandora.tarasande.mc
-import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
-import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
-import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumberRange
-import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
+import su.mandora.tarasande.system.base.valuesystem.impl.*
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.kotlinruntime.nullOr
@@ -32,6 +29,8 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
     private val randomize = ValueNumber(this, "Randomize", 0.0, 0.0, 30.0, 1.0) // used to be called parkinson...
     private val checkTitle = ValueBoolean(this, "Check title", false)
     private val titleSubstring = ValueText(this, "Title substring", "Chest", isEnabled = { checkTitle.value })
+    private val checkType = ValueMode(this, "Check type", false, "Contains", "Equals", isEnabled = { checkTitle.value })
+    private val ignoreCase = ValueBoolean(this, "Ignore case", false, isEnabled = { checkTitle.value })
     private val failChance = ValueNumber(this, "Fail chance", 0.0, 0.0, 100.0, 1.0)
 
     private val intelligent = ValueBoolean(this, "Intelligent", true)
@@ -89,8 +88,17 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
 
             if (checkTitle.value) {
                 val string = StringUtil.extractContent(accessor.title)
-                if (!string.contains(titleSubstring.value))
-                    return@registerEvent
+                when {
+                    checkType.isSelected(0) -> {
+                        if (!string.contains(titleSubstring.value, ignoreCase.value))
+                            return@registerEvent
+                    }
+
+                    checkType.isSelected(1) -> {
+                        if (!string.equals(titleSubstring.value, ignoreCase.value))
+                            return@registerEvent
+                    }
+                }
             }
 
             val screenHandler = (mc.currentScreen as GenericContainerScreen).screenHandler
@@ -99,14 +107,14 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 return@registerEvent
 
             if (mousePos == null) {
-                mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
+                mousePos = Vec2f(mc.window.scaledWidth / 2F, mc.window.scaledHeight / 2F)
             }
 
             var nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list ->
                 slot.hasStack() &&
-                slot.id < screenHandler.inventory.size() &&
-                !hasBetterEquivalent(slot, list) &&
-                canTransfer(slot)
+                        slot.id < screenHandler.inventory.size() &&
+                        !hasBetterEquivalent(slot, list) &&
+                        canTransfer(slot)
             }
 
             if (!timeUtil.hasReached(when {
@@ -123,8 +131,8 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 mc.currentScreen?.close()
             else {
                 val displayPos = ContainerUtil.getDisplayPosition(accessor, nextSlot).add(Vec2f(
-                    if (randomize.value == 0.0) 0.0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat(),
-                    if (randomize.value == 0.0) 0.0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
+                    if (randomize.value == 0.0) 0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat(),
+                    if (randomize.value == 0.0) 0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
                 ))
                 if (ThreadLocalRandom.current().nextInt(100) < failChance.value) {
                     val interpolated = mousePos?.add(displayPos?.add(mousePos?.negate())?.multiply(ThreadLocalRandom.current().nextDouble(0.0, 1.0).toFloat()))!!

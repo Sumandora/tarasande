@@ -1,6 +1,6 @@
 package su.mandora.tarasande.system.feature.espsystem
 
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.RotationAxis
 import su.mandora.tarasande.Manager
@@ -26,8 +26,8 @@ object ManagerESP : Manager<ESPElement>() {
             ValueButtonOwnerValues(this, element.name, element)
     }
 
-    fun renderBox(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
-        list.forEach { if (it.enabled.value) it.draw(matrices, entity, rectangle) }
+    fun renderBox(context: DrawContext, entity: Entity, rectangle: ModuleESP.Rectangle) {
+        list.forEach { if (it.enabled.value) it.draw(context, entity, rectangle) }
     }
 }
 
@@ -35,7 +35,7 @@ abstract class ESPElement(val name: String) {
     @Suppress("LeakingThis")
     var enabled = ValueBoolean(this, name, false)
 
-    abstract fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle)
+    abstract fun draw(context: DrawContext, entity: Entity, rectangle: ModuleESP.Rectangle)
 }
 
 abstract class ESPElementRotatable(name: String, private val forbiddenOrientations: Array<Orientation> = arrayOf()) : ESPElement(name) {
@@ -47,9 +47,9 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
     else
         null
 
-    abstract fun draw(matrices: MatrixStack, entity: Entity, sideWidth: Double, orientation: Orientation)
+    abstract fun draw(context: DrawContext, entity: Entity, sideWidth: Double, orientation: Orientation)
 
-    override fun draw(matrices: MatrixStack, entity: Entity, rectangle: ModuleESP.Rectangle) {
+    override fun draw(context: DrawContext, entity: Entity, rectangle: ModuleESP.Rectangle) {
         val orientation = if (this.orientation != null)
             orientations[this.orientation!!.values.indexOf(this.orientation!!.getSelected())]
         else
@@ -58,33 +58,33 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
             Orientation.TOP, Orientation.BOTTOM -> abs(rectangle.z - rectangle.x)
             Orientation.LEFT, Orientation.RIGHT -> abs(rectangle.w - rectangle.y)
         }
-        matrices.push()
+        context.matrices.push()
         var padding = 2.0
         for (espElement in ManagerESP.list) {
             if (espElement == this) break
             if (espElement.enabled.value && espElement is ESPElementRotatable && espElement.orientations[espElement.orientation?.values?.indexOf(espElement.orientation!!.getSelected()) ?: 0] == orientation)
                 padding += espElement.getHeight(entity, sideWidth)
         }
-        matrices.translate(rectangle.x, rectangle.y, 0.0)
+        context.matrices.translate(rectangle.x, rectangle.y, 0.0)
         if (orientation == Orientation.BOTTOM) {
-            matrices.translate((rectangle.z - rectangle.x) * 0.5, -(rectangle.y - rectangle.w) * 0.5, 0.0)
-            matrices.scale(-1.0F, -1.0F, 1.0F)
-            matrices.translate(-(rectangle.z - rectangle.x) * 0.5, (rectangle.y - rectangle.w) * 0.5, 0.0)
+            context.matrices.translate((rectangle.z - rectangle.x) * 0.5, -(rectangle.y - rectangle.w) * 0.5, 0.0)
+            context.matrices.scale(-1F, -1F, 1F)
+            context.matrices.translate(-(rectangle.z - rectangle.x) * 0.5, (rectangle.y - rectangle.w) * 0.5, 0.0)
         } else if (orientation == Orientation.LEFT || orientation == Orientation.RIGHT) {
-            matrices.translate(-(rectangle.y - rectangle.w) * 0.5, -(rectangle.y - rectangle.w) * 0.5, 0.0)
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-90.0F))
-            matrices.translate((rectangle.y - rectangle.w) * 0.5, (rectangle.y - rectangle.w) * 0.5, 0.0)
+            context.matrices.translate(-(rectangle.y - rectangle.w) * 0.5, -(rectangle.y - rectangle.w) * 0.5, 0.0)
+            context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-90F))
+            context.matrices.translate((rectangle.y - rectangle.w) * 0.5, (rectangle.y - rectangle.w) * 0.5, 0.0)
 
             if (orientation == Orientation.RIGHT) {
-                matrices.translate(-(rectangle.y - rectangle.w) * 0.5, (rectangle.z - rectangle.x) * 0.5, 0.0)
-                matrices.scale(1.0F, -1.0F, 1.0F)
-                matrices.translate((rectangle.y - rectangle.w) * 0.5, -(rectangle.z - rectangle.x) * 0.5, 0.0)
+                context.matrices.translate(-(rectangle.y - rectangle.w) * 0.5, (rectangle.z - rectangle.x) * 0.5, 0.0)
+                context.matrices.scale(1F, -1F, 1F)
+                context.matrices.translate((rectangle.y - rectangle.w) * 0.5, -(rectangle.z - rectangle.x) * 0.5, 0.0)
             }
         }
-        matrices.translate(0.0, -padding, 0.0)
-        matrices.translate(0.0, -getHeight(entity, sideWidth), 0.0)
-        draw(matrices, entity, sideWidth, orientation)
-        matrices.pop()
+        context.matrices.translate(0.0, -padding, 0.0)
+        context.matrices.translate(0.0, -getHeight(entity, sideWidth), 0.0)
+        draw(context, entity, sideWidth, orientation)
+        context.matrices.pop()
     }
 
     abstract fun getHeight(entity: Entity, sideWidth: Double): Double

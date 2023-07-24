@@ -18,17 +18,17 @@ class ModuleAutoLog : Module("Auto log", "Disconnects when death is imminent", M
 
     init {
         registerEvent(EventPacket::class.java, Int.MAX_VALUE /* has to come after everything, to prevent NPEs */) { event ->
-            if(event.type == EventPacket.Type.RECEIVE && event.packet is HealthUpdateS2CPacket) {
-                if(disconnectWhen.isSelected(0) && event.packet.health / mc.player?.maxHealth!! <= health.value)
+            if (event.type == EventPacket.Type.RECEIVE && event.packet is HealthUpdateS2CPacket) {
+                if (disconnectWhen.isSelected(0) && event.packet.health / mc.player?.maxHealth!! <= health.value)
                     PlayerUtil.disconnect()
             }
         }
         registerEvent(EventUpdate::class.java, Int.MAX_VALUE /* has to come after everything, to prevent NPEs */) { event ->
-            if(event.state == EventUpdate.State.PRE_PACKET) {
-                if(disconnectWhen.isSelected(1) && mc.player?.fallDistance!! > fallDistance.value)
+            if (event.state == EventUpdate.State.PRE_PACKET) {
+                if (disconnectWhen.isSelected(1) && mc.player?.fallDistance!! > fallDistance.value)
                     PlayerUtil.disconnect()
 
-                if(disconnectWhen.isSelected(2) && mc.world?.players?.any { PlayerUtil.isAttackable(it) } == true)
+                if (disconnectWhen.isSelected(2) && mc.world?.players?.any { PlayerUtil.isAttackable(it) } == true)
                     PlayerUtil.disconnect()
             }
         }

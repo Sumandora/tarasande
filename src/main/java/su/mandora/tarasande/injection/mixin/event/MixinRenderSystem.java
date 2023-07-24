@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.event.EventDispatcher;
 import su.mandora.tarasande.event.impl.*;
+import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues;
 
 @Mixin(value = RenderSystem.class, remap = false)
 public class MixinRenderSystem {
@@ -49,7 +50,8 @@ public class MixinRenderSystem {
 
     @Inject(method = "flipFrame", at = @At("HEAD"))
     private static void hookEventScreenInputAndPollEvents(long window, CallbackInfo ci) {
-        EventDispatcher.INSTANCE.call(new EventScreenInput(false)); // This one has to track the `doneInput` variable, so we can't merge them :c
+        if (!TarasandeValues.INSTANCE.getExecuteScreenInputsInTicks().getValue()) // Counterpart in MixinMinecraftClient
+            EventDispatcher.INSTANCE.call(new EventScreenInput(false));
 
         EventDispatcher.INSTANCE.call(new EventPollEvents());
     }

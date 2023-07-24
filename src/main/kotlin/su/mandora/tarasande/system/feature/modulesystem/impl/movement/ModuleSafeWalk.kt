@@ -17,6 +17,9 @@ class ModuleSafeWalk : Module("Safe walk", "Prevents falling off blocks", Module
     val sneak = ValueBoolean(this, "Sneak", false)
     private val offGround = ValueMode(this, "Off-ground", false, "Force disable", "Force enable", "Ignore", isEnabled = { sneak.value })
     private val extrapolation = ValueNumber(this, "Extrapolation", 0.0, 1.0, 10.0, 1.0, isEnabled = { sneak.value })
+    private val unsneakDelay = ValueNumber(this, "Unsneak delay", 0.0, 0.0, 10.0, 1.0, isEnabled = { sneak.value })
+
+    private var lastSneak = Int.MIN_VALUE
 
     init {
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
@@ -24,12 +27,17 @@ class ModuleSafeWalk : Module("Safe walk", "Prevents falling off blocks", Module
                 val onEdge = PredictionEngine.predictState(extrapolation.value.toInt(), input = mc.player?.input?.with(sneaking = true)).first.let { prediction ->
                     mc.player?.velocity?.let { prediction.adjustMovementForSneaking(it, MovementType.SELF) != it }!!
                 }
-                event.pressed = event.pressed || when {
+                val forceSneak = when {
                     offGround.isSelected(0) -> mc.player?.isOnGround == true && onEdge
                     offGround.isSelected(1) -> mc.player?.isOnGround == false || onEdge
                     offGround.isSelected(2) -> onEdge
                     else -> true
                 }
+
+                if (forceSneak)
+                    lastSneak = mc.player?.age!!
+
+                event.pressed = event.pressed || forceSneak || (mc.player?.age!! - lastSneak < unsneakDelay.value)
             }
         }
     }

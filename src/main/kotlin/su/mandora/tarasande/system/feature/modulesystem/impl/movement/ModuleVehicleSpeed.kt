@@ -10,7 +10,7 @@ import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
 import kotlin.math.sin
 
-class ModuleVehicleSpeed : Module("Vehicle speed", "Modifies vehicle movement speed", ModuleCategory.MOVEMENT) {
+class ModuleVehicleSpeed : Module("Vehicle speed", "Modifies vehicle movement speeds", ModuleCategory.MOVEMENT) {
 
     private val speed = ValueNumber(this, "Speed", 0.0, 1.0, 3.0, 0.1)
 

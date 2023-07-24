@@ -16,7 +16,7 @@ import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 
-class ModuleAntiFireball : Module("Anti fireball", "Hits fireballs to turn them", ModuleCategory.COMBAT) {
+class ModuleAntiFireball : Module("Anti fireball", "Hits fireballs to reflect them", ModuleCategory.COMBAT) {
 
     private val reach = ValueNumber(this, "Reach", 0.1, 3.0, 6.0, 0.1)
     private val delay = ValueNumber(this, "Delay", 0.0, 200.0, 1000.0, 50.0)

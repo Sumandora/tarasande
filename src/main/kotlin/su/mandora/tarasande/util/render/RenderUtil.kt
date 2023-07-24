@@ -1,6 +1,7 @@
 package su.mandora.tarasande.util.render
 
 import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.*
 import net.minecraft.client.texture.NativeImage
 import net.minecraft.client.texture.NativeImageBackedTexture
@@ -8,14 +9,17 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.Box
+import net.minecraft.util.math.ColorHelper
 import net.minecraft.util.math.Vec3d
 import org.joml.Matrix4f
 import org.joml.Vector4f
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11.*
 import su.mandora.tarasande.TARASANDE_NAME
+import su.mandora.tarasande.injection.accessor.IDrawContext
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
+import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import su.mandora.tarasande.util.extension.minecraft.minus
 import java.awt.Color
 import kotlin.math.*
@@ -29,57 +33,7 @@ object RenderUtil {
         return mouseX > left && mouseY > up && mouseX < right && mouseY < bottom
     }
 
-    fun fill(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, color: Int) {
-        val matrix = matrices.peek().positionMatrix
-        val colors = colorToRGBF(color)
-        val bufferBuilder = Tessellator.getInstance().buffer
-        RenderSystem.enableBlend()
-        
-        RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        
-        RenderSystem.disableBlend()
-    }
-
-    fun roundedFill(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, round: Double, color: Int) {
-        RenderSystem.disableCull()
-        RenderSystem.disableDepthTest()
-        val matrix = matrices.peek().positionMatrix
-        val colors = colorToRGBF(color)
-        val bufferBuilder = Tessellator.getInstance().buffer
-        RenderSystem.enableBlend()
-        
-        RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
-        bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR)
-        var quarterCircle = 0.5F
-        while (quarterCircle <= 0.75F) {
-            bufferBuilder.vertex(matrix, (x1 + round + round * cos(quarterCircle * PI * 2)).toFloat(), (y1 + round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-            quarterCircle += 0.025F
-        }
-        while (quarterCircle <= 1.0F) {
-            bufferBuilder.vertex(matrix, (x2 - round + round * cos(quarterCircle * PI * 2)).toFloat(), (y1 + round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-            quarterCircle += 0.025F
-        }
-        quarterCircle = 0.0F
-        while (quarterCircle <= 0.25F) {
-            bufferBuilder.vertex(matrix, (x2 - round + round * cos(quarterCircle * PI * 2)).toFloat(), (y2 - round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-            quarterCircle += 0.025F
-        }
-        while (quarterCircle <= 0.5F) {
-            bufferBuilder.vertex(matrix, (x1 + round + round * cos(quarterCircle * PI * 2)).toFloat(), (y2 - round + round * sin(quarterCircle * PI * 2)).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-            quarterCircle += 0.025F
-        }
-        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        
-        RenderSystem.disableBlend()
-    }
+    // Those are just the outlined shapes, use the DrawContext extensions for filled ones.
 
     fun outlinedFill(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, width: Float, color: Int) {
         glEnable(GL_LINE_SMOOTH)
@@ -87,21 +41,21 @@ object RenderUtil {
         val lineWidth = glGetFloat(GL_LINE_WIDTH)
         glLineWidth(width)
         val matrix = matrices.peek().positionMatrix
-        val colors = colorToRGBF(color)
+        val colors = colorToRGBA(color)
 
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
-        
+
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0F).color(colors[0], colors[1], colors[2], colors[3]).next()
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        
+
         RenderSystem.disableBlend()
         glLineWidth(lineWidth)
         glDisable(GL_LINE_SMOOTH)
@@ -114,67 +68,25 @@ object RenderUtil {
         glLineWidth(width)
         val matrix = matrices.peek().positionMatrix
 
-        val startColors = colorToRGBF(colorStart)
-        val endColors = colorToRGBF(colorEnd)
+        val startColors = colorToRGBA(colorStart)
+        val endColors = colorToRGBA(colorEnd)
 
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
-        
+
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
-        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
+        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), max(y1, y2).toFloat(), 0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
+        bufferBuilder.vertex(matrix, max(x1, x2).toFloat(), min(y1, y2).toFloat(), 0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), min(y1, y2).toFloat(), 0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
+        bufferBuilder.vertex(matrix, min(x1, x2).toFloat(), max(y1, y2).toFloat(), 0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        
+
         RenderSystem.disableBlend()
         glLineWidth(lineWidth)
         glDisable(GL_LINE_SMOOTH)
-    }
-
-    fun fillHorizontalGradient(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, colorStart: Int, colorEnd: Int) {
-        val matrix = matrices.peek().positionMatrix
-
-        val startColors = colorToRGBF(colorStart)
-        val endColors = colorToRGBF(colorEnd)
-
-        val bufferBuilder = Tessellator.getInstance().buffer
-        RenderSystem.enableBlend()
-        
-        RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
-        bufferBuilder.vertex(matrix, x1.toFloat(), y1.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
-        bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
-        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        
-        RenderSystem.disableBlend()
-    }
-
-    fun fillVerticalGradient(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, colorStart: Int, colorEnd: Int) {
-        val matrix = matrices.peek().positionMatrix
-
-        val startColors = colorToRGBF(colorStart)
-        val endColors = colorToRGBF(colorEnd)
-
-        val bufferBuilder = Tessellator.getInstance().buffer
-        RenderSystem.enableBlend()
-        
-        RenderSystem.defaultBlendFunc()
-        RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR)
-        bufferBuilder.vertex(matrix, x1.toFloat(), y1.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
-        bufferBuilder.vertex(matrix, x1.toFloat(), y2.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        bufferBuilder.vertex(matrix, x2.toFloat(), y2.toFloat(), 0.0F).color(endColors[0], endColors[1], endColors[2], endColors[3]).next()
-        bufferBuilder.vertex(matrix, x2.toFloat(), y1.toFloat(), 0.0F).color(startColors[0], startColors[1], startColors[2], startColors[3]).next()
-        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        
-        RenderSystem.disableBlend()
     }
 
     fun outlinedCircle(matrices: MatrixStack, x: Double, y: Double, radius: Double, width: Float, color: Int) {
@@ -183,20 +95,20 @@ object RenderUtil {
         val lineWidth = glGetFloat(GL_LINE_WIDTH)
         glLineWidth(width)
         val matrix = matrices.peek().positionMatrix
-        val colors = colorToRGBF(color)
+        val colors = colorToRGBA(color)
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
-        
+
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
         var circle = 0.0
         while (circle <= 1.01) {
-            bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+            bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0F).color(colors[0], colors[1], colors[2], colors[3]).next()
             circle += 0.01
         }
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        
+
         RenderSystem.disableBlend()
         glLineWidth(lineWidth)
         glDisable(GL_LINE_SMOOTH)
@@ -206,20 +118,20 @@ object RenderUtil {
         RenderSystem.disableCull()
         RenderSystem.disableDepthTest()
         val matrix = matrices.peek().positionMatrix
-        val colors = colorToRGBF(color)
+        val colors = colorToRGBA(color)
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.enableBlend()
-        
+
         RenderSystem.defaultBlendFunc()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR)
         var circle = 0.0
         while (circle <= 1.01) {
-            bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0.0F).color(colors[0], colors[1], colors[2], colors[3]).next()
+            bufferBuilder.vertex(matrix, (x - sin(circle * PI * 2) * radius).toFloat(), (y + cos(circle * PI * 2) * radius).toFloat(), 0F).color(colors[0], colors[1], colors[2], colors[3]).next()
             circle += 0.01
         }
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-        
+
         RenderSystem.disableBlend()
     }
 
@@ -231,7 +143,7 @@ object RenderUtil {
         glEnable(GL_LINE_SMOOTH)
         RenderSystem.disableDepthTest()
 
-        val colors = colorToRGBF(color)
+        val colors = colorToRGBA(color)
         RenderSystem.setShaderColor(colors[0], colors[1], colors[2], colors[3])
 
         val bufferBuilder = Tessellator.getInstance().buffer
@@ -287,43 +199,48 @@ object RenderUtil {
         glDisable(GL_LINE_SMOOTH)
     }
 
-    private fun colorToRGBF(color: Int): FloatArray {
-        val f = (color shr 24 and 0xFF) / 255.0F
-        val g = (color shr 16 and 0xFF) / 255.0F
-        val h = (color shr 8 and 0xFF) / 255.0F
-        val k = (color and 0xFF) / 255.0F
+    fun colorToRGBA(color: Int): FloatArray {
+        val a = ColorHelper.Argb.getAlpha(color).toFloat() / 255F
+        val r = ColorHelper.Argb.getRed(color).toFloat() / 255F
+        val g = ColorHelper.Argb.getGreen(color).toFloat() / 255F
+        val b = ColorHelper.Argb.getBlue(color).toFloat() / 255F
 
-        return floatArrayOf(g, h, k, f)
+        return floatArrayOf(r, g, b, a)
     }
 
-    fun renderItemStack(matrices: MatrixStack, x: Int, y: Int, tickDelta: Float, item: ItemStack) {
+    fun renderItemStack(context: DrawContext, x: Int, y: Int, tickDelta: Float, item: ItemStack) {
         RenderSystem.enableCull()
         DiffuseLighting.enableGuiDepthLighting()
-        mc.inGameHud.renderHotbarItem(matrices, x, y, tickDelta, mc.player, item, 0)
+        if (mc.currentScreen is ScreenBetterOwnerValues) { // Hack for blur
+            val prev = (context as IDrawContext).tarasande_isGuiItemRendering()
+            (context as IDrawContext).tarasande_setGuiItemRendering(true)
+            mc.inGameHud.renderHotbarItem(context, x, y, tickDelta, mc.player, item, 0)
+            (context as IDrawContext).tarasande_setGuiItemRendering(prev)
+        } else {
+            mc.inGameHud.renderHotbarItem(context, x, y, tickDelta, mc.player, item, 0)
+        }
         DiffuseLighting.disableGuiDepthLighting()
     }
 
     fun colorInterpolate(a: Color, b: Color, t: Double) = colorInterpolate(a, b, t, t, t, t)
 
     fun colorInterpolate(a: Color, b: Color, tR: Double, tG: Double, tB: Double, tA: Double): Color {
-        return Color((a.red + (b.red - a.red) * tR.toFloat()) / 255.0F, (a.green + (b.green - a.green) * tG.toFloat()) / 255.0F, (a.blue + (b.blue - a.blue) * tB.toFloat()) / 255.0F, (a.alpha + (b.alpha - a.alpha) * tA.toFloat()) / 255.0F)
+        return Color((a.red + (b.red - a.red) * tR.toFloat()) / 255F, (a.green + (b.green - a.green) * tG.toFloat()) / 255F, (a.blue + (b.blue - a.blue) * tB.toFloat()) / 255F, (a.alpha + (b.alpha - a.alpha) * tA.toFloat()) / 255F)
     }
-
-    fun createImage(path: String) = NativeImageBackedTexture(NativeImage.read(javaClass.getResourceAsStream("/assets/$TARASANDE_NAME/textures/$path")))
 
     fun formattingByHex(hex: Int): Formatting {
         var bestFormatting: Formatting? = null
         var bestDiff = 0.0
-        val red = (hex shr 16 and 0xFF) / 255.0F
-        val green = (hex shr 8 and 0xFF) / 255.0F
-        val blue = (hex shr 0 and 0xFF) / 255.0F
+        val red = (hex shr 16 and 0xFF) / 255F
+        val green = (hex shr 8 and 0xFF) / 255F
+        val blue = (hex shr 0 and 0xFF) / 255F
 
         for (formatting in Formatting.values()) {
             if (formatting.colorValue == null) continue
 
-            val otherRed = (formatting.colorValue!! shr 16 and 0xFF) / 255.0F
-            val otherGreen = (formatting.colorValue!! shr 8 and 0xFF) / 255.0F
-            val otherBlue = (formatting.colorValue!! shr 0 and 0xFF) / 255.0F
+            val otherRed = (formatting.colorValue!! shr 16 and 0xFF) / 255F
+            val otherGreen = (formatting.colorValue!! shr 8 and 0xFF) / 255F
+            val otherBlue = (formatting.colorValue!! shr 0 and 0xFF) / 255F
 
             val diff = (otherRed - red).toDouble().pow(2.0) * 0.2126 + (otherGreen - green).toDouble().pow(2.0) * 0.7152 + (otherBlue - blue).toDouble().pow(2.0) * 0.0722
 
@@ -345,7 +262,7 @@ object RenderUtil {
         val vec3d = mc.gameRenderer.camera.pos
         matrices.translate(-vec3d.x, -vec3d.y, -vec3d.z)
 
-        val colors = colorToRGBF(color)
+        val colors = colorToRGBA(color)
         RenderSystem.setShaderColor(colors[0], colors[1], colors[2], colors[3])
 
         val bufferBuilder = Tessellator.getInstance().buffer
@@ -367,7 +284,7 @@ object RenderUtil {
 
     fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
         val camPos = vector - mc.gameRenderer.camera.pos
-        val vec1 = Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1.0F).mul(modelView)
+        val vec1 = Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1F).mul(modelView)
         val screenPos = vec1.mul(projection)
 
         if (screenPos.w <= 0.0) return null

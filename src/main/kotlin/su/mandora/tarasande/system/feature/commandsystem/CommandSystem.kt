@@ -27,7 +27,9 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
-import su.mandora.tarasande.system.feature.commandsystem.impl.*
+import su.mandora.tarasande.system.feature.commandsystem.impl.CommandClip
+import su.mandora.tarasande.system.feature.commandsystem.impl.CommandEnchant
+import su.mandora.tarasande.system.feature.commandsystem.impl.CommandGive
 import su.mandora.tarasande.system.feature.modulesystem.command.CommandToggle
 import su.mandora.tarasande.util.player.chat.CustomChat
 import kotlin.math.max
@@ -45,10 +47,8 @@ object ManagerCommand : Manager<Command>() {
 
     init {
         add(
-            CommandSay(),
             CommandGive(),
             CommandEnchant(),
-            CommandFakeGameMode(),
             CommandClip(),
             CommandToggle()
         )

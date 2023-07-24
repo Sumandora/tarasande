@@ -28,7 +28,7 @@ object BlockChangeTracker {
                 if (timeDelta > time.value) {
                     changes.remove(change)
                 } else {
-                    RenderUtil.blockOutline(event.matrices, change.second.getOutlineShape(mc.world, change.first).boundingBox().offset(change.first.x.toDouble(), change.first.y.toDouble(), change.first.z.toDouble()), color.getColor().withAlpha((color.getColor().alpha * (1.0F - timeDelta / time.value)).toInt()).rgb)
+                    RenderUtil.blockOutline(event.matrices, change.second.getOutlineShape(mc.world, change.first).boundingBox().offset(change.first.x.toDouble(), change.first.y.toDouble(), change.first.z.toDouble()), color.getColor().withAlpha((color.getColor().alpha * (1F - timeDelta / time.value)).toInt()).rgb)
                 }
             }
         }

@@ -50,7 +50,7 @@ abstract class Value(var owner: Any, val name: String, val visible: Boolean, val
     abstract fun load(jsonElement: JsonElement)
 
     fun createValueComponent() =
-        if(visible)
+        if (visible)
             valueComponent.getDeclaredConstructor(Value::class.java).newInstance(this)!!
         else
             null

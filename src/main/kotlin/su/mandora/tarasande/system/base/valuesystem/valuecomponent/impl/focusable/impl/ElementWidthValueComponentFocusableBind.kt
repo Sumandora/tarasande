@@ -1,10 +1,11 @@
 package su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl
 
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.system.base.valuesystem.Value
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.ElementWidthValueComponentFocusable
+import su.mandora.tarasande.util.extension.minecraft.fill
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import java.awt.Color
@@ -16,10 +17,10 @@ class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueC
     override fun init() {
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val white = Color.white.let { if (value.isEnabled()) it else it.darker().darker() }
 
-        FontWrapper.textShadow(matrices, value.name, 0.0F, (getHeight() * 0.5F - FontWrapper.fontHeight() * 0.5F * 0.5F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
+        FontWrapper.textShadow(context, value.name, 0F, (getHeight() * 0.5F - FontWrapper.fontHeight() * 0.5F * 0.5F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
 
         var name = RenderUtil.getBindName(value.type, value.button)
         if (waitsForInput) {
@@ -27,8 +28,8 @@ class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueC
         }
         val textWidth = FontWrapper.getWidth(name)
 
-        RenderUtil.fill(matrices, width - textWidth / 2, getHeight() * 0.25, width, getHeight() * 0.75, Int.MIN_VALUE)
-        FontWrapper.textShadow(matrices, name, (width - textWidth / 2).toFloat(), (getHeight() * 0.25F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
+        context.fill(width - textWidth / 2, getHeight() * 0.25, width, getHeight() * 0.75, Int.MIN_VALUE)
+        FontWrapper.textShadow(context, name, (width - textWidth / 2).toFloat(), (getHeight() * 0.25F).toFloat(), white.rgb, scale = 0.5F, offset = 0.5F)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

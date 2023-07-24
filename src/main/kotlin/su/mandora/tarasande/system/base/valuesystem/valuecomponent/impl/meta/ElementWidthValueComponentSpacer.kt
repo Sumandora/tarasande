@@ -1,6 +1,6 @@
 package su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl.meta
 
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import su.mandora.tarasande.system.base.valuesystem.Value
 import su.mandora.tarasande.system.base.valuesystem.impl.meta.ValueSpacer
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
@@ -15,7 +15,7 @@ class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponen
     override fun init() {
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         lines.clear()
         var str = value.name
         while (str.isNotEmpty()) {
@@ -34,9 +34,9 @@ class ElementWidthValueComponentSpacer(value: Value) : ElementWidthValueComponen
 
         val fontScale = FontWrapper.fontHeight() * value.scale
         for ((index, line) in lines.withIndex()) {
-            FontWrapper.textShadow(matrices,
+            FontWrapper.textShadow(context,
                 line,
-                0.0F,
+                0F,
                 (index * fontScale),
                 value.getColor(RenderUtil.isHovered(mouseX.toDouble(), mouseY.toDouble(), 0.0, 0.0, width, getHeight())).rgb,
                 value.scale,

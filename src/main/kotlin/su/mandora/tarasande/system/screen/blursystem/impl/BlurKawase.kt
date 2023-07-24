@@ -45,19 +45,19 @@ class BlurKawase : Blur("Kawase") {
         strengthLevels.add(Pair(5, 8.50F))
 
         for ((index, pair) in strengthLevels.withIndex()) {
-            val passes = Array(pair.first * 2) { Pair(pair.second, 1.0F) }
+            val passes = Array(pair.first * 2) { Pair(pair.second, 1F) }
             @Suppress("NAME_SHADOWING")
             for ((index, pass) in passes.withIndex()) {
                 passes[index] = Pair(pass.first,
                     if (index < passes.size / 2)
                         0.5F
                     else
-                        2.0F
+                        2F
                 )
             }
             if (passes.size % 2 != 0) {
                 val pass = passes.size - 1
-                passes[pass] = passes[pass].copy(second = 1.0F)
+                passes[pass] = passes[pass].copy(second = 1F)
             }
             kawasePasses[index] = passes
         }
@@ -66,7 +66,7 @@ class BlurKawase : Blur("Kawase") {
     override fun render(targetBuffer: Framebuffer, strength: Int): Framebuffer {
         lateinit var last: Framebuffer
 
-        var totalScale = 1.0F
+        var totalScale = 1F
 
         for ((index, kawasePass) in kawasePasses[strength - 1]!!.withIndex()) {
             var read: Framebuffer? = null
@@ -108,7 +108,7 @@ class BlurKawase : Blur("Kawase") {
         GlStateManager._bindTexture(read.colorAttachment)
         GL20.glUniform2f(shader.getUniformLocation("resolution"), read.textureWidth * deltaScale, read.textureHeight * deltaScale)
         GL11.glBegin(GL11.GL_QUADS)
-        val invertedHeight = if (scale == 1.0F) read.textureHeight.toFloat() else read.textureHeight - read.textureHeight * scale
+        val invertedHeight = if (scale == 1F) read.textureHeight.toFloat() else read.textureHeight - read.textureHeight * scale
         GL11.glVertex2f(0F, 0F)
         GL11.glVertex2f(read.textureWidth * scale, 0F)
         GL11.glVertex2f(read.textureWidth * scale, invertedHeight)

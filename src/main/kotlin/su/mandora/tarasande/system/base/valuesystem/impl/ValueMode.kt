@@ -57,7 +57,7 @@ open class ValueMode(owner: Any,
         try {
             gson.fromJson(jsonElement, Array<String>::class.java)!!.forEach {
                 val index = values.indexOf(it)
-                if(index != -1) {
+                if (index != -1) {
                     select(index)
                 }
             }

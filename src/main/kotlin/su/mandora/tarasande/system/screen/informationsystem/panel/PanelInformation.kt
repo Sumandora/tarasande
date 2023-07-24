@@ -1,6 +1,6 @@
 package su.mandora.tarasande.system.screen.informationsystem.panel
 
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.system.base.valuesystem.ManagerValue
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
@@ -11,7 +11,7 @@ import su.mandora.tarasande.system.screen.panelsystem.Panel
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
 
-class PanelInformation(private val informationSystem: ManagerInformation) : Panel("Information", 75.0, FontWrapper.fontHeight().toDouble()) {
+class PanelInformation(private val informationSystem: ManagerInformation) : Panel("Information", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
 
     val map = HashMap<Information, String>()
 
@@ -41,7 +41,7 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
 
     fun isSelected(information: Information) = elements.isSelected(map[information]!!)
 
-    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val text = ArrayList<String>()
         for (owner in informationSystem.getAllOwners()) {
 
@@ -75,9 +75,9 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
 
         for ((index, it) in text.withIndex()) {
             when (alignment) {
-                Alignment.LEFT -> FontWrapper.textShadow(matrices, it, x.toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
-                Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(it).toFloat() / 2.0F, y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
-                Alignment.RIGHT -> FontWrapper.textShadow(matrices, it, x.toFloat() + panelWidth.toFloat() - FontWrapper.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.LEFT -> FontWrapper.textShadow(context, it, x.toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.MIDDLE -> FontWrapper.textShadow(context, it, x.toFloat() + panelWidth.toFloat() / 2F - FontWrapper.getWidth(it).toFloat() / 2F, y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.RIGHT -> FontWrapper.textShadow(context, it, x.toFloat() + panelWidth.toFloat() - FontWrapper.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
             }
         }
     }

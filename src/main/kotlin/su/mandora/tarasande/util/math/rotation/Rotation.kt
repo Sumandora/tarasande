@@ -43,7 +43,7 @@ class Rotation {
             val rotationChange = Rotation((cursorDeltas.first * gcd).toFloat() * 0.15F, (cursorDeltas.second * gcd).toFloat() * 0.15F)
             var newRotation = prevRotation + rotationChange
             if (!ManagerModule.get(ModuleNoPitchLimit::class.java).enabled.value)
-                newRotation = newRotation.withPitch(newRotation.pitch.coerceIn(-90.0F, 90.0F))
+                newRotation = newRotation.withPitch(newRotation.pitch.coerceIn(-90F, 90F))
             return newRotation
         }
 
@@ -68,7 +68,7 @@ class Rotation {
         if (preference != null) {
             // In case a module prefers a specific rotation, like the one intersecting with an object, we return that one.
             val preferred = newRotations.firstOrNull(preference)
-            if(preferred != null)
+            if (preferred != null)
                 return preferred
         }
 

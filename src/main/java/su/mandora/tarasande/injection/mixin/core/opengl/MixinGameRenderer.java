@@ -27,6 +27,6 @@ public class MixinGameRenderer {
         glOrtho(0.0, MinecraftClient.getInstance().getWindow().getScaledWidth(), MinecraftClient.getInstance().getWindow().getScaledHeight(), 0.0, 1000.0, 3000.0);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        glTranslatef(0.0F, 0.0F, -2000.0F);
+        glTranslatef(0F, 0F, -2000F);
     }
 }

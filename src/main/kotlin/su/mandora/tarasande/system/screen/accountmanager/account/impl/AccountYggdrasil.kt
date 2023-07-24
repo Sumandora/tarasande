@@ -5,10 +5,10 @@ import com.mojang.authlib.Agent
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication
 import net.minecraft.client.util.Session
+import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.accountmanager.account.Account
 import su.mandora.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import su.mandora.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
-import java.net.Proxy
 import java.util.*
 
 @AccountInfo(name = "Yggdrasil")
@@ -21,7 +21,7 @@ class AccountYggdrasil : Account() {
     var password = ""
 
     override fun logIn() {
-        val authenticationService = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment)
+        val authenticationService = YggdrasilAuthenticationService(mc.networkProxy, "", environment)
         val userAuthentication = YggdrasilUserAuthentication(authenticationService, "", Agent.MINECRAFT, environment)
         userAuthentication.setUsername(username)
         userAuthentication.setPassword(password)

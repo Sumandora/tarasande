@@ -13,7 +13,7 @@ public class MixinClientPlayNetworkHandler {
 
     @Redirect(method = "onPlayerRespawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasReducedDebugInfo()Z"))
     public boolean forceHasReducedDebugInfo(ClientPlayerEntity instance) {
-        if(MinecraftDebugger.INSTANCE.getIgnoreRDI().getValue() && instance == MinecraftClient.getInstance().player)
+        if (MinecraftDebugger.INSTANCE.getIgnoreRDI().getValue() && instance == MinecraftClient.getInstance().player)
             return instance.reducedDebugInfo; // The source of my suffering may be the invalidity of data. Invalidity of data may cause destruction, sadness or massive aggression. May the data be correct this time.
         return instance.hasReducedDebugInfo();
     }

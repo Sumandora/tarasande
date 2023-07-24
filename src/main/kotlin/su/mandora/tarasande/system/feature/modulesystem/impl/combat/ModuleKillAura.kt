@@ -89,6 +89,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     init {
         ValueButtonOwnerValues(this, "Random rotations", RandomRotations, isEnabled = { rotations.isSelected(1) })
     }
+
     private val precision = ValueNumber(this, "Precision", 0.01, 0.1, 1.0, 0.01, isEnabled = { rotations.anySelected() })
     private val flex = ValueBoolean(this, "Flex", false)
     private val flexTurn = ValueNumber(this, "Flex turn", 1.0, 90.0, 180.0, 1.0, isEnabled = { flex.value })
@@ -101,12 +102,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     object SmartClickingBehaviour {
         val enableSmartClickingBehaviour = ValueBoolean(this, "Enable smart clicking behaviour", false)
         val enemyHurtTime = ValueNumber(this, "Enemy hurt time", 0.1, 1.0, 1.0, 0.1, isEnabled = { enableSmartClickingBehaviour.value })
-        val selfHurtTime = ValueNumber(this, "Self hurt time", 0.1, 0.6,1.0, 0.1, isEnabled = { enableSmartClickingBehaviour.value })
+        val selfHurtTime = ValueNumber(this, "Self hurt time", 0.1, 0.6, 1.0, 0.1, isEnabled = { enableSmartClickingBehaviour.value })
     }
 
     init {
         ValueButtonOwnerValues(this, "Smart clicking behaviour", SmartClickingBehaviour)
     }
+
     private val aimTargetColor = ValueColor(this, "Aim target color", 0.0, 1.0, 1.0, 1.0)
 
     var targets = CopyOnWriteArrayList<Pair<Entity, Vec3d>>()
@@ -191,7 +193,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
                 if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(fovRotation()) > fov.value) continue
                 var aimPoint =
-                    if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0.0F) {
+                    if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0F) {
                         mc.player?.eyePos!! + currentRot.forwardVector() * 0.01
                     } else {
                         // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
@@ -298,7 +300,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 (waitForCritical.value && mc.player?.isOnGround != true && willPerformCritical(criticalSprint = false, fallDistance = false) && !willPerformCritical(criticalSprint.value, true) && (!dontWaitWhenEnemyHasShield.value || allAttackedLivingEntities { !hasShield(it) })))
                 validEntities.clear()
 
-            var attacked = false
+            var everAttacked = false
 
             if (validEntities.isNotEmpty() && !event.dirty) {
                 var clicks = clickSpeedUtil.getClicks()
@@ -311,11 +313,11 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                     if (unblock())
                         return@registerEvent
                 }
-
                 if (!mc.player?.isUsingItem!! || (autoBlock.isSelected(1) && !needUnblock.value)) {
                     val previousPos = mc.player?.pos!!
                     teleportPath = ArrayList()
                     val maxTeleportTime = (mc.renderTickCounter.tickTime / targets.size.toDouble()).toLong()
+                    var attacked = false
                     for (pair in validEntities) {
                         val target = pair.first
                         val aimPoint = pair.second
@@ -336,6 +338,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                         if (mode.isSelected(0))
                             break
                     }
+                    if (attacked)
+                        everAttacked = true
                     if (!attacked && swingInAir.value) {
                         if (PlayerUtil.getTargetedEntity(reach.minValue, Rotations.fakeRotation ?: Rotation(mc.player!!), false)?.isMissHitResult() == true) {
                             attack(null, clicks)
@@ -357,7 +361,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 waitForHit = false
             }
 
-            if (!blocking && targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && (validEntities.isEmpty() || attacked) && !mc.player?.isUsingItem!! && !autoBlock.isSelected(0)) {
+            if (!blocking && targets.isNotEmpty() && targets.any { it.first !is PassiveEntity } && (validEntities.isEmpty() || everAttacked) && !mc.player?.isUsingItem!! && !autoBlock.isSelected(0)) {
                 block()
             }
         }
@@ -454,13 +458,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             // Humans always try to get to the middle
             val center = box.center
             val dist = 1.0 - MathUtil.getBias(mc.player?.eyePos?.distanceTo(aimPoint)!! / reach.maxValue.coerceAtLeast(reach.minValue + 0.5), RandomRotations.distanceBias.value) // I have no idea why this works and looks like it does, but it's good, so why remove it then
-            aimPoint = aimPoint.add((center.x - aimPoint.x) * dist, (center.y - aimPoint.y) * (if(RandomRotations.eyeLevelPreferenceBasedOnDistance.value) (1.0 - dist) else 1.0) * (1.0 - RandomRotations.eyeLevelPreference.value) /* Humans dislike aiming up and down */, (center.z - aimPoint.z) * dist)
+            aimPoint = aimPoint.add((center.x - aimPoint.x) * dist, (center.y - aimPoint.y) * (if (RandomRotations.eyeLevelPreferenceBasedOnDistance.value) (1.0 - dist) else 1.0) * (1.0 - RandomRotations.eyeLevelPreference.value) /* Humans dislike aiming up and down */, (center.z - aimPoint.z) * dist)
 
             // Humans can't hold their hands still
             val actualVelocity = Vec3d(mc.player?.prevX!! - mc.player?.x!!, mc.player?.prevY!! - mc.player?.y!!, mc.player?.prevZ!! - mc.player?.z!!)
             val diff = -actualVelocity.subtract(entity.prevX - entity.x, entity.prevY - entity.y, entity.prevZ - entity.z)!!
             if (diff.lengthSquared() > 0.0) { // either the target or the player has to move otherwise changing the rotation doesn't make sense
-                val horChange = if(RandomRotations.changeTemperatureOnDistance.value) diff.horizontalLength() else 1.0
+                val horChange = if (RandomRotations.changeTemperatureOnDistance.value) diff.horizontalLength() else 1.0
                 aimPoint = aimPoint.add(
                     sin(System.currentTimeMillis() * RandomRotations.baseTemperature.value) * horChange,
                     cos(System.currentTimeMillis() * RandomRotations.baseVerticalTemperature.value) * (diff.y + horChange * RandomRotations.verticalDistanceMultiplier.value),
@@ -491,7 +495,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 if (hitResult == null || hitResult !is EntityHitResult || hitResult.entity == null) {
                     aimPoint = best
                 }
-            } else if(reach.maxValue > reach.minValue) {
+            } else if (reach.maxValue > reach.minValue) {
                 distToBest = (sqrt(distToBest) - reach.minValue) / (reach.maxValue - reach.minValue)
                 aimPoint = aimPoint.add(
                     (best.x - aimPoint.x) * (1 - distToBest),
@@ -510,9 +514,9 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         if (preventBlockCooldown.value && !allAttackedLivingEntities { !it.disablesShield() })
             return
         val usedStack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return) ?: return
-        if(usedStack.useAction != UseAction.BLOCK && !(expectSwordBlocking.value && usedStack.item is SwordItem))
+        if (usedStack.useAction != UseAction.BLOCK && !(expectSwordBlocking.value && usedStack.item is SwordItem))
             return
-        if(mc.player?.itemCooldownManager?.isCoolingDown(usedStack.item)!!)
+        if (mc.player?.itemCooldownManager?.isCoolingDown(usedStack.item)!!)
             return // rip :c
 
         var hasTarget = false
@@ -565,13 +569,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             }
         }
 
-        if(SmartClickingBehaviour.enableSmartClickingBehaviour.value && entity is LivingEntity) {
+        if (SmartClickingBehaviour.enableSmartClickingBehaviour.value && entity is LivingEntity) {
             val otherHurtTime = entity.smoothedHurtTime()
             // Is the enemy attackable?
-            if(otherHurtTime >= SmartClickingBehaviour.enemyHurtTime.value) {
+            if (otherHurtTime >= SmartClickingBehaviour.enemyHurtTime.value) {
                 // If not, have we just been attacked?
                 val selfHurtTime = mc.player?.smoothedHurtTime()!!
-                if(selfHurtTime <= SmartClickingBehaviour.selfHurtTime.value)
+                if (selfHurtTime <= SmartClickingBehaviour.selfHurtTime.value)
                     return false // Have we received damage lately? If yes, ignore this opportunity, because we need to reduce our knock-back
             }
         }
@@ -584,7 +588,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             mc.player?.isTouchingWater != true &&
             !(mc.player as ILivingEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) &&
             mc.player?.hasVehicle() == false)
-            if (!fallDistance || mc.player?.fallDistance!! > 0.0F)
+            if (!fallDistance || mc.player?.fallDistance!! > 0F)
                 if (!criticalSprint || !mc.player?.isSprinting!!)
                     return true
         return false

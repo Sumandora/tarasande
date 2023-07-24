@@ -1,6 +1,7 @@
 package su.mandora.tarasande.event.impl
 
 import net.minecraft.block.BlockState
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.minecraft.client.network.PlayerListEntry
@@ -14,9 +15,9 @@ import org.joml.Matrix4f
 import su.mandora.tarasande.event.Event
 
 class EventResolutionUpdate(val prevWidth: Double, val prevHeight: Double, val width: Double, val height: Double) : Event(false)
-class EventRender2D(val matrices: MatrixStack) : Event(false)
+class EventRender2D(val context: DrawContext) : Event(false)
 
-class EventScreenRender(val matrices: MatrixStack, val screen: Screen, val state: State) : Event(false) {
+class EventScreenRender(val context: DrawContext, val screen: Screen, val state: State) : Event(false) {
     enum class State {
         PRE, POST
     }
@@ -28,7 +29,7 @@ class EventColorCorrection(var red: Int, var green: Int, var blue: Int) : Event(
 class EventCameraOverride(val camera: Camera) : Event(false)
 class EventRenderBlockModel(val state: BlockState, val pos: BlockPos) : Event(true)
 class EventTextVisit(var string: String) : Event(false)
-class EventRenderMultiplayerEntry(val matrices: MatrixStack, val x: Int, val y: Int, val entryWidth: Int, val entryHeight: Int, val mouseX: Int, val mouseY: Int, val server: ServerInfo, val multiplayerScreen: MultiplayerScreen) : Event(false)
+class EventRenderMultiplayerEntry(val context: DrawContext, val x: Int, val y: Int, val entryWidth: Int, val entryHeight: Int, val mouseX: Int, val mouseY: Int, val server: ServerInfo, val multiplayerScreen: MultiplayerScreen) : Event(false)
 
 class EventFogStart(var distance: Float) : Event(false)
 class EventFogEnd(var distance: Float) : Event(false)

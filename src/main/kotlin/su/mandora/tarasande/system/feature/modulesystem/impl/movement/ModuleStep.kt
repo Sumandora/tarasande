@@ -42,9 +42,9 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
 
         val neededMotions = ArrayList<Double>()
         var last: Double? = null
-        for(motion in motions) {
-            if(last != null) {
-                if(last > 1 && motion <= 1)
+        for (motion in motions) {
+            if (last != null) {
+                if (last > 1 && motion <= 1)
                     break
             }
             neededMotions.add(motion)
@@ -64,7 +64,7 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
                 EventStep.State.POST -> {
                     if (event.stepHeight in mc.player?.stepHeight!!..stepHeight.value.toFloat() && mc.player?.isOnGround == true && mc.player?.velocity?.y!! < 0.0) {
                         if (mode.isSelected(1)) {
-                            for(motion in predictMotions()) {
+                            for (motion in predictMotions()) {
                                 mc.networkHandler?.sendPacket(PositionAndOnGround(mc.player?.pos?.x!!, mc.player?.pos?.y?.plus(event.stepHeight * motion)!!, mc.player?.pos?.z!!, false))
                             }
                         }

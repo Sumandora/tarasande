@@ -21,7 +21,7 @@ import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
 import kotlin.math.sin
 
-class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a circle", ModuleCategory.MOVEMENT) {
+class ModuleTargetStrafe : Module("Target strafe", "Circle-strafes around targets", ModuleCategory.MOVEMENT) {
 
     private val radius = ValueNumber(this, "Radius", 0.0, 1.0, 6.0, 0.1)
     private val maximumFallDistance = ValueNumber(this, "Maximum fall distance", 0.0, 5.0, 15.0, 0.1)
@@ -62,7 +62,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
                     moduleKillAura.targets[0].first
                 else if (mc.crosshairTarget.isEntityHitResult()) {
                     val entity = (mc.crosshairTarget as EntityHitResult).entity
-                    if(!PlayerUtil.isAttackable(entity))
+                    if (!PlayerUtil.isAttackable(entity))
                         null
                     else
                         entity
@@ -72,7 +72,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
             if (enemy == null)
                 return@registerEvent
 
-            val selfSpeed = if(event.dirty) event.velocity.horizontalLength() else PlayerUtil.calcBaseSpeed()
+            val selfSpeed = if (event.dirty) event.velocity.horizontalLength() else PlayerUtil.calcBaseSpeed()
 
             val curPos = mc.player?.pos!!
             val center = enemy.pos
@@ -88,7 +88,7 @@ class ModuleTargetStrafe : Module("Target strafe", "Strafes around a target in a
                 newPos = calculateNextPosition(selfSpeed, curPos, center)
             }
 
-            val rotation = RotationUtil.getRotations(curPos, newPos).withPitch(0.0F)
+            val rotation = RotationUtil.getRotations(curPos, newPos).withPitch(0F)
             var forward = rotation.forwardVector() * selfSpeed
 
             forward = forward.withAxis(Direction.Axis.Y,

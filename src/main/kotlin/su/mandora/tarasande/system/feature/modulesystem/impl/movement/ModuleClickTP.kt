@@ -12,14 +12,13 @@ import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.impl.EventRender3D
 import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.mc
-import su.mandora.tarasande.system.base.grabbersystem.ManagerGrabber
-import su.mandora.tarasande.system.base.grabbersystem.impl.GrabberMaxPlayerMove
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.feature.commandsystem.Command
 import su.mandora.tarasande.system.feature.commandsystem.ManagerCommand
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
+import su.mandora.tarasande.util.MAX_PLAYER_MOVE
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
 import su.mandora.tarasande.util.extension.minecraft.BlockPos
 import su.mandora.tarasande.util.extension.minecraft.Box
@@ -28,7 +27,6 @@ import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil
 import java.awt.Color
-import kotlin.math.sqrt
 
 class ModuleClickTP : Module("Click tp", "Teleports you to the position you click at", ModuleCategory.MOVEMENT) {
 
@@ -43,11 +41,8 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
     private var path: List<Vec3d>? = null
     private var goal: BlockPos? = null
 
-    private val maxMove = sqrt(ManagerGrabber.getConstant(GrabberMaxPlayerMove::class.java) as Float)
-
     init {
         ManagerCommand.add(object : Command("teleport", "tp") {
-
             override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
                 return builder.then(argument("position", BlockPosArgumentType.blockPos())?.executes {
                     ManagerModule.get(ModuleClickTP::class.java).teleportToPosition(it.getArgument("position", PosArgument::class.java).toAbsoluteBlockPos(createServerCommandSource()))
@@ -66,7 +61,7 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
         registerEvent(EventUpdate::class.java) { event ->
             if (event.state == EventUpdate.State.PRE) {
                 repeat(teleportKey.wasPressed()) {
-                    val hitResult = PlayerUtil.getTargetedEntity(mc.gameRenderer.method_32796().toDouble(), Rotation(mc.player!!), false)
+                    val hitResult = PlayerUtil.getTargetedEntity(mc.gameRenderer.farPlaneDistance.toDouble(), Rotation(mc.player!!), false)
                     if (hitResult != null) {
                         val blockPos =
                             if (hitResult is BlockHitResult)
@@ -114,7 +109,7 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
     private fun optimizePath(path: ArrayList<Vec3d>) {
         val iterator = path.iterator()
 
-        if(iterator.hasNext()) {
+        if (iterator.hasNext()) {
             iterator.next()
             iterator.remove() // Remove the first position, because that is what we are standing on.
         }
@@ -126,7 +121,7 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
                 return // Leave the last position standing no matter what, we want to get there and not just a position which is really close to it
 
             if (previous != null) {
-                if (PlayerUtil.canVectorBeSeen(previous, current) && previous.squaredDistanceTo(current) < maxMove) {
+                if (PlayerUtil.canVectorBeSeen(previous, current) && previous.squaredDistanceTo(current) < MAX_PLAYER_MOVE) {
                     iterator.remove()
                     continue
                 }

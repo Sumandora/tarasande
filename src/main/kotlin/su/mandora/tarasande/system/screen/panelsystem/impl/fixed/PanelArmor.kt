@@ -1,6 +1,6 @@
 package su.mandora.tarasande.system.screen.panelsystem.impl.fixed
 
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import su.mandora.tarasande.mc
@@ -11,7 +11,7 @@ import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import kotlin.math.roundToInt
 
-class PanelArmor : Panel("Armor", 75.0, FontWrapper.fontHeight().toDouble()) {
+class PanelArmor : Panel("Armor", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
 
     private val itemDimension = 20
 
@@ -26,25 +26,25 @@ class PanelArmor : Panel("Armor", 75.0, FontWrapper.fontHeight().toDouble()) {
 
     private fun getEnchantmentName(enchantment: Enchantment) =
         enchantment.getName(0).string.let {
-            if(it.length > maxLength.value)
+            if (it.length > maxLength.value)
                 it.substring(0, maxLength.value.toInt())
             else
                 it
         }
 
-    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         var m = 0
         for (i in mc.player!!.inventory.armor.size - 1 downTo 0) {
             val armor = mc.player!!.inventory.armor[i]
             if (armor.isEmpty && allocateSpaceForEmptySlots.value)
                 continue
 
-            RenderUtil.renderItemStack(matrices, (x + m).roundToInt(), (y + titleBarHeight).roundToInt(), delta, armor)
+            RenderUtil.renderItemStack(context, (x + m).roundToInt(), (y + titleBarHeight).roundToInt(), delta, armor)
 
             if (showEnchantments.value) {
                 EnchantmentHelper.get(armor).onEachIndexed { index, entry ->
                     FontWrapper.textShadow(
-                        matrices,
+                        context,
                         getEnchantmentName(entry.key) + " " + entry.value,
                         (x + m.toFloat() + itemDimension / 2).toFloat(), (y + (titleBarHeight / 2) + itemDimension + (index * titleBarHeight / 2)).toFloat(),
                         scale = scale.value.toFloat(),

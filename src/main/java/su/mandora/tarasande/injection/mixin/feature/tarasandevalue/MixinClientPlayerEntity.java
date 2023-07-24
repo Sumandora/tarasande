@@ -11,9 +11,9 @@ import su.mandora.tarasande.feature.tarasandevalue.impl.DebugValues;
 @Mixin(ClientPlayerEntity.class)
 public class MixinClientPlayerEntity {
 
-    @Inject(method = "getPermissionLevel",at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getPermissionLevel", at = @At("HEAD"), cancellable = true)
     public void forcePermissions(CallbackInfoReturnable<Integer> cir) {
-        if(DebugValues.INSTANCE.getForcePermissionLevel().getValue())
+        if (DebugValues.INSTANCE.getForcePermissionLevel().getValue())
             cir.setReturnValue((int) DebugValues.INSTANCE.getPermissionLevel().getValue() - EntityStatuses.SET_OP_LEVEL_0);
     }
 

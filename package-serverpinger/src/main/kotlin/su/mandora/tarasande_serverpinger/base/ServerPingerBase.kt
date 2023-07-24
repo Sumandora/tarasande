@@ -1,7 +1,7 @@
 package su.mandora.tarasande_serverpinger.base
 
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.network.ServerInfo
-import net.minecraft.client.util.math.MatrixStack
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventTick
 import su.mandora.tarasande.mc
@@ -22,15 +22,15 @@ class ServerPingerBase(val parent: ScreenExtension<*>, private val addressProvid
     val pingTask = TimeUtil()
 
     private val clickableWidgetPanel = ClickableWidgetPanel(object : PanelServerInformation(parent, finish) {
-        override fun renderTitleBar(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-            super.renderTitleBar(matrices, mouseX, mouseY, delta)
+        override fun renderTitleBar(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+            super.renderTitleBar(context, mouseX, mouseY, delta)
             if (showProgress.value && autoPing.value) {
                 ceil((delay.value - (System.currentTimeMillis() - pingTask.time)) / 1000.0).toInt().toString().also {
                     FontWrapper.textShadow(
-                        matrices,
+                        context,
                         it,
                         (x + panelWidth - FontWrapper.getWidth(it) * 0.75F - 1.0).toFloat(),
-                        y.toFloat() + titleBarHeight / 2.0F - FontWrapper.fontHeight() / 2.0F * 0.75F,
+                        y.toFloat() + titleBarHeight / 2F - FontWrapper.fontHeight() / 2F * 0.75F,
                         scale = 0.75F
                     )
                 }

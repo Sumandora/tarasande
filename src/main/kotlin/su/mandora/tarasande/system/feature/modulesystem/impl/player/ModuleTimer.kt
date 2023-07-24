@@ -9,7 +9,7 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 
-class ModuleTimer : Module("Timer", "Changes the clientside ticks per second", ModuleCategory.PLAYER) {
+class ModuleTimer : Module("Timer", "Changes the clientside tick-rate", ModuleCategory.PLAYER) {
 
     private val mode = ValueMode(this, "Mode", false, "Constant", "Random", "Ground")
     private val ticksPerSecond = ValueNumber(this, "Ticks per second", 1.0, 20.0, 100.0, 1.0, isEnabled = { mode.isSelected(0) || mode.isSelected(1) })
@@ -18,7 +18,7 @@ class ModuleTimer : Module("Timer", "Changes the clientside ticks per second", M
     private val offGroundTicksPerSecond = ValueNumber(this, "Off ground ticks per second", 1.0, 20.0, 100.0, 1.0, isEnabled = { mode.isSelected(2) })
 
     override fun onDisable() {
-        mc.renderTickCounter.tickTime = (1000.0 / 20.0F).toFloat()
+        mc.renderTickCounter.tickTime = (1000.0 / 20F).toFloat()
     }
 
     init {

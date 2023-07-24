@@ -1,11 +1,12 @@
 package su.mandora.tarasande.util.render.font
 
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexConsumerProvider
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import su.mandora.tarasande.mc
+import su.mandora.tarasande.util.extension.minecraft.drawText
 import su.mandora.tarasande.util.string.StringUtil
 import java.awt.Color
 
@@ -13,40 +14,23 @@ object FontWrapper {
 
     private val mcInternal = mc.textRenderer
 
-    fun textOutline(matrices: MatrixStack, text: String, x: Float, y: Float, color: Int = -1, outlineColor: Int = Color.black.rgb, scale: Float = 1F, centered: Boolean = false) {
-        val immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().buffer)
-
-        matrices.push()
-
-        if (scale != 1.0F) {
-            matrices.translate(x.toDouble(), y.toDouble(), 0.0)
-            matrices.scale(scale, scale, 1F)
-            matrices.translate(-(x.toDouble()), -y.toDouble(), 0.0)
-        }
-
-        mcInternal.drawWithOutline(Text.of(text).asOrderedText(), (if (centered) x - getWidth(text) * 0.5F else x), y, color, outlineColor, matrices.peek()?.positionMatrix, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE)
-        matrices.pop()
-
-        immediate.draw()
+    fun textShadow(context: DrawContext, text: String, x: Float, y: Float, color: Int = -1, scale: Float = 1F, offset: Float = 1F, centered: Boolean = false) {
+        text(context, StringUtil.stripColors(text), x + offset, y + offset, Color(color, true).darker().darker().darker().darker().rgb, scale, centered)
+        text(context, text, x, y, color, scale, centered)
     }
 
-    fun textShadow(matrices: MatrixStack, text: String, x: Float, y: Float, color: Int = -1, scale: Float = 1F, offset: Float = 1.0F, centered: Boolean = false) {
-        text(matrices, StringUtil.stripColors(text), x + offset, y + offset, Color(color, true).darker().darker().darker().darker().rgb, scale, centered)
-        text(matrices, text, x, y, color, scale, centered)
-    }
+    fun text(context: DrawContext, text: String, x: Float, y: Float, color: Int = -1, scale: Float = 1F, centered: Boolean = false) {
+        context.matrices.push()
 
-    fun text(matrices: MatrixStack, text: String, x: Float, y: Float, color: Int = -1, scale: Float = 1F, centered: Boolean = false) {
-        matrices.push()
-
-        if (scale != 1.0F) {
-            matrices.translate(x.toDouble(), y.toDouble(), 0.0)
-            matrices.scale(scale, scale, 1F)
-            matrices.translate(-(x.toDouble()), -y.toDouble(), 0.0)
+        if (scale != 1F) {
+            context.matrices.translate(x.toDouble(), y.toDouble(), 0.0)
+            context.matrices.scale(scale, scale, 1F)
+            context.matrices.translate(-(x.toDouble()), -y.toDouble(), 0.0)
         }
 
-        mcInternal.draw(matrices, text, (if (centered) x - (getWidth(text) * 0.5F) else x), y, color)
+        context.drawText(mcInternal, text, (if (centered) x - (getWidth(text) * 0.5F) else x), y, color, false)
 
-        matrices.pop()
+        context.matrices.pop()
     }
 
     fun getWidth(text: String) = mcInternal.getWidth(text)

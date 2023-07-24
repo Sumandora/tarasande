@@ -36,7 +36,7 @@ import su.mandora.tarasande.util.render.RenderUtil
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
-class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
+class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MISC) {
 
     private val affectedPackets = ValueMode(this, "Affected packets", true, "Serverbound", "Clientbound")
     private val mode = object : ValueMode(this, "Mode", false, "State-dependent", "Pulse blink", "Latency", "Automatic") {
@@ -54,7 +54,7 @@ class ModuleBlink : Module("Blink", "Delays packets", ModuleCategory.MISC) {
     }
     private val reach = ValueNumber(this, "Reach", 0.1, 3.0, 6.0, 0.1, isEnabled = { mode.isSelected(3) })
     private val cancelKey = ValueBind(this, "Cancel key", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN, isEnabled = { mode.isSelected(0) && affectedPackets.isSelected(0) })
-    private val restrictPackets = ValueMode(this, "Restrict packets", true, "Keep alive", "Ping", isEnabled =  { affectedPackets.anySelected() })
+    private val restrictPackets = ValueMode(this, "Restrict packets", true, "Keep alive", "Ping", isEnabled = { affectedPackets.anySelected() })
     private val hitBoxColor = ValueColor(this, "Hit box color", 0.0, 1.0, 1.0, 1.0, isEnabled = { affectedPackets.isSelected(1) })
     private val ignoreChunks = ValueBoolean(this, "Ignore chunks", true)
 

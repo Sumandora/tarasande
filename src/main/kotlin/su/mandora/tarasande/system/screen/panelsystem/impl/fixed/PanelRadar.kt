@@ -1,6 +1,6 @@
 package su.mandora.tarasande.system.screen.panelsystem.impl.fixed
 
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.util.math.MathHelper
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -16,7 +16,7 @@ class PanelRadar : Panel("Radar", 100.0, 100.0, true) {
 
     private val scale = ValueNumber(this, "Scale", 0.0, 1.0, 3.0, 0.1)
 
-    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         if (mc.player == null)
             return
 
@@ -37,7 +37,7 @@ class PanelRadar : Panel("Radar", 100.0, 100.0, true) {
             val x = -sin(yawDelta / 360.0 * PI * 2) * dist
             val y = cos(yawDelta / 360.0 * PI * 2) * dist
 
-            RenderUtil.fillCircle(matrices, this.x + panelWidth / 2 + x, this.y + panelHeight / 2 + y, 2.0, Color(entity.teamColorValue).rgb /* alpha ignore */)
+            RenderUtil.fillCircle(context.matrices, this.x + panelWidth / 2F + x, this.y + panelHeight / 2F + y, 2.0, Color(entity.teamColorValue).rgb /* alpha ignore */)
         }
     }
 }

@@ -2,6 +2,7 @@ package su.mandora.tarasande.injection.mixin.event;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.Window;
@@ -18,6 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.event.EventDispatcher;
 import su.mandora.tarasande.event.impl.*;
+import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues;
+import su.mandora.tarasande.feature.tarasandevalue.impl.TargetingValues;
 
 @Mixin(MinecraftClient.class)
 public abstract class MixinMinecraftClient {
@@ -29,7 +32,9 @@ public abstract class MixinMinecraftClient {
     @Shadow
     @Nullable
     public ClientPlayerEntity player;
-
+    @Shadow
+    @Nullable
+    public Screen currentScreen;
     @Shadow
     @Final
     private Window window;
@@ -69,6 +74,9 @@ public abstract class MixinMinecraftClient {
 
     @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;doAttack()Z")))
     public void hookEventAttack(CallbackInfo ci) {
+        if (TargetingValues.INSTANCE.getClosedInventory().getValue() && currentScreen instanceof HandledScreen<?>)
+            return;
+
         EventDispatcher.INSTANCE.call(new EventAttack());
     }
 
@@ -107,5 +115,12 @@ public abstract class MixinMinecraftClient {
         EventDispatcher.INSTANCE.call(eventDoAttack);
         if (eventDoAttack.getCancelled())
             cir.setReturnValue(false);
+    }
+
+    @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;currentScreen:Lnet/minecraft/client/gui/screen/Screen;",
+            ordinal = 4, shift = At.Shift.BEFORE))
+    public void injectTick(CallbackInfo ci) {
+        if (TarasandeValues.INSTANCE.getExecuteScreenInputsInTicks().getValue()) // Counterpart in MixinRenderSystem
+            EventDispatcher.INSTANCE.call(new EventScreenInput(false));
     }
 }

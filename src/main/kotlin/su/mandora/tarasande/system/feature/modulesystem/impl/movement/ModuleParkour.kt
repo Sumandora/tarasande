@@ -9,7 +9,7 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.player.PlayerUtil
 
-class  ModuleParkour : Module("Parkour", "Jumps when falling off ledges", ModuleCategory.MOVEMENT) {
+class ModuleParkour : Module("Parkour", "Jumps before falling off ledges", ModuleCategory.MOVEMENT) {
 
     private val detectionMethod = ValueMode(this, "Detection method", false, "Extrapolation", "Ground")
     private val extrapolation = ValueNumber(this, "Extrapolation", 0.0, 1.0, 10.0, 1.0, isEnabled = { detectionMethod.isSelected(0) })

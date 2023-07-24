@@ -63,7 +63,7 @@ public class MixinBannerBlockEntityRenderer {
         matrixStack.push();
         BlockState blockState = bannerBlockEntity.getCachedState();
         matrixStack.translate(0.5, 0.5, 0.5);
-        float h = (float) (-(Integer) blockState.get(BannerBlock.ROTATION) * 360) / 16.0F;
+        float h = (float) (-(Integer) blockState.get(BannerBlock.ROTATION) * 360) / 16F;
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(h));
         matrixStack.push();
         matrixStack.scale(0.6666667F, -0.6666667F, -0.6666667F);

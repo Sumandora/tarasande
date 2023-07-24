@@ -7,9 +7,11 @@ import su.mandora.tarasande_serverpinger.injection.accessor.IClickableWidget;
 
 @Mixin(ClickableWidget.class)
 public class MixinClickableWidget implements IClickableWidget {
-    @Shadow private int x;
+    @Shadow
+    private int x;
 
-    @Shadow private int y;
+    @Shadow
+    private int y;
 
     @Override
     public void tarasande_init(int x, int y) {

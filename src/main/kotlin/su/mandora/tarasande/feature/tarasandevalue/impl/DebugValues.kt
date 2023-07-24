@@ -29,10 +29,12 @@ object DebugValues {
     val eliminateHitDelay = ValueBoolean(this, "Eliminate hit delay", false)
     val chat = ValueButtonOwnerValues(this, "Chat", Chat)
     val forcePermissionLevel = ValueBoolean(this, "Force permission level", false)
+
     // TODO Auto Update
     val permissionLevel = ValueNumber(this, "Permission level", EntityStatuses.SET_OP_LEVEL_0.toDouble(), EntityStatuses.SET_OP_LEVEL_4.toDouble(), EntityStatuses.SET_OP_LEVEL_4.toDouble(), 1.0, isEnabled = { forcePermissionLevel.value })
     val alwaysAllowToOpenCommandBlocks = ValueBoolean(this, "Always allow to open command blocks", false)
     val visualizeSlotIds = ValueBoolean(this, "Visualize slot ids", false)
+    val forceCreativeInventory = ValueBoolean(this, "Force creative inventory", false)
 
     init {
         EventDispatcher.add(EventPacket::class.java) { event ->

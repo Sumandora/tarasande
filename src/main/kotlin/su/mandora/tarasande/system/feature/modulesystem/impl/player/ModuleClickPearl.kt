@@ -9,7 +9,7 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.isMissHitResult
 import su.mandora.tarasande.util.player.container.ContainerUtil
 
-class ModuleClickPearl : Module("Click pearl", "Auto switches to a ender pearl", ModuleCategory.PLAYER) {
+class ModuleClickPearl : Module("Click pearl", "Auto switches to an ender pearl", ModuleCategory.PLAYER) {
 
     private var prevSlot: Int? = null
     private var state = State.IDLE
@@ -42,7 +42,7 @@ class ModuleClickPearl : Module("Click pearl", "Auto switches to a ender pearl",
                     return@registerEvent
                 }
                 if (state == State.IDLE && mc.options.useKey.pressed && mc.crosshairTarget.isMissHitResult() && mc.player?.isUsingItem == false) {
-                    if(mc.player?.inventory?.mainHandStack?.isOf(Items.ENDER_PEARL) == true)
+                    if (mc.player?.inventory?.mainHandStack?.isOf(Items.ENDER_PEARL) == true)
                         return@registerEvent
                     prevSlot = mc.player?.inventory?.selectedSlot
                     mc.player?.inventory?.selectedSlot = pearlSlot
@@ -60,7 +60,7 @@ class ModuleClickPearl : Module("Click pearl", "Auto switches to a ender pearl",
                 event.pressed = true
         }
         registerEvent(EventDisconnect::class.java) { event ->
-            if(event.connection == mc.player?.networkHandler?.connection) {
+            if (event.connection == mc.player?.networkHandler?.connection) {
                 state = State.IDLE // Abort
             }
         }

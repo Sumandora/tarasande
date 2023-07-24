@@ -16,7 +16,7 @@ class CodeChecker(private val sources: SourceSet) {
         val sources = ArrayList<File>()
         this.sources.allSource.srcDirs.forEach {
             it.walk().forEach { file ->
-                if(!file.isDirectory && ignoreList.none { file.path.contains(it) })
+                if (!file.isDirectory && ignoreList.none { file.path.contains(it) })
                     sources.add(file)
             }
         }
@@ -26,7 +26,7 @@ class CodeChecker(private val sources: SourceSet) {
         val classNodes = ArrayList<ClassNode>()
         this.sources.output.classesDirs.forEach {
             it.walk().forEach { file ->
-                if(!file.isDirectory && file.extension == "class" && ignoreList.none { file.path.contains(it) }) {
+                if (!file.isDirectory && file.extension == "class" && ignoreList.none { file.path.contains(it) }) {
                     val node = ClassNode()
                     val reader = ClassReader(file.readBytes())
                     reader.accept(node, ClassReader.EXPAND_FRAMES)

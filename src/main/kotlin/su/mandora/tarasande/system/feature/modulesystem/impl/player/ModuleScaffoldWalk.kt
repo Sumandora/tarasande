@@ -37,7 +37,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
     private val goalYaw = ValueNumber(this, "Goal yaw", 0.0, 0.0, 60.0, 1.0)
     private val offsetGoalYaw = ValueBoolean(this, "Offset goal yaw", true)
     private val edgeDistance = ValueNumber(this, "Edge distance", 0.0, 0.5, 1.0, 0.05)
-    private val edgeIncrement = ValueBoolean(this, "Edge increment", true)
+    private val edgeIncrement = ValueBoolean(this, "Edge increment", false)
     private val increment = ValueNumber(this, "Increment", 0.0, 0.15, 0.5, 0.05, isEnabled = { edgeIncrement.value })
     private val preventImpossibleEdge = ValueBoolean(this, "Prevent impossible edge", true, isEnabled = { edgeIncrement.value })
     private val rotateAtEdgeMode = ValueMode(this, "Rotate at edge mode", false, "Off", "Distance", "Extrapolated position")
@@ -101,10 +101,10 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 
         ManagerInformation.add(object : Information(name, "Blocks") {
             override fun getMessage(): String? {
-                if(!enabled.value)
+                if (!enabled.value)
                     return null
                 val blocks = ContainerUtil.getHotbarSlots().filter { it.item is BlockItem && isBlockItemValid(it.item as BlockItem) }.sumOf { it.safeCount() }
-                if(blocks <= 0) // Checking for negative amounts of blocks, sounds like an awesome idea
+                if (blocks <= 0) // Checking for negative amounts of blocks, sounds like an awesome idea
                     return "WARNING: No blocks in hotbar"
                 return blocks.toString()
             }
@@ -234,10 +234,10 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 if (offsetGoalYaw.value) {
                                     val possibleGoals = ArrayList<Vec3d>()
                                     for (moveDir in 0 until 8) {
-                                        val targetRot = mc.player?.yaw!! - moveDir * 45.0F
+                                        val targetRot = mc.player?.yaw!! - moveDir * 45F
                                         possibleGoals.add(intersection( // adjust our target
                                             Vec2f(sideBegin.x.toFloat(), sideBegin.z.toFloat()), Vec2f(sideEnd.x.toFloat(), sideEnd.z.toFloat()),
-                                            Vec2f(eye.x.toFloat(), eye.z.toFloat()), (eye + Rotation(targetRot, 0.0F).forwardVector() * mc.interactionManager?.reachDistance?.toDouble()!!).let { Vec2f(it.x.toFloat(), it.z.toFloat()) }
+                                            Vec2f(eye.x.toFloat(), eye.z.toFloat()), (eye + Rotation(targetRot, 0F).forwardVector() * mc.interactionManager?.reachDistance?.toDouble()!!).let { Vec2f(it.x.toFloat(), it.z.toFloat()) }
                                         ).let { Vec3d(it.x.toDouble(), point.y, it.y.toDouble()) })
                                     }
                                     goalAim = possibleGoals.minBy { goalAim.distanceTo(it) }
@@ -254,9 +254,9 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
 
                                 val closest = sideBegin + (sideEnd - sideBegin) * MathHelper.clamp(t.toDouble(), padding, 1.0 - padding)
 
-                                if (t in padding..1.0F - padding) {
+                                if (t in padding..1F - padding) {
                                     val dist = (eye - closest).horizontalLength()
-                                    val a = sin(Math.toRadians(-goalYaw.value * (60 / 45f /* those are triangles bitch */))) * dist
+                                    val a = sin(Math.toRadians(-goalYaw.value * (60 / 45F /* those are triangles bitch */))) * dist
                                     if (preferredSide == null) {
                                         val solutions = listOf(t + a.toFloat(), t - a.toFloat())
                                         val bestSolution = solutions.minBy { abs(it - 0.5) }
@@ -274,13 +274,15 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                     }
                                 }
 
-                                sideBegin + (sideEnd - sideBegin) * MathHelper.clamp(t.toDouble(), padding, 1.0F - padding)
+                                sideBegin + (sideEnd - sideBegin) * MathHelper.clamp(t.toDouble(), padding, 1F - padding)
                             }
 
                             aimTarget = finalPoint
                             rerotated = true
 
                             rotation = RotationUtil.getRotations(eye, finalPoint)
+                        } else {
+                            rerotated = false
                         }
                     }
                 } else {
@@ -357,7 +359,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                                 }
                             }
 
-                            if(hasBlock) {
+                            if (hasBlock) {
                                 PlayerUtil.placeBlock(hitResult)
                                 event.dirty = true
 
@@ -428,8 +430,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if(event.keyBinding == mc.options.jumpKey && autoJump.value && mc.player?.isOnGround == true && PlayerUtil.isPlayerMoving())
-                if(!waitForSprint.value || mc.player?.isSprinting == true)
+            if (event.keyBinding == mc.options.jumpKey && autoJump.value && mc.player?.isOnGround == true && PlayerUtil.isPlayerMoving())
+                if (!waitForSprint.value || mc.player?.isSprinting == true)
                     event.pressed = true
         }
     }
@@ -440,7 +442,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         return if (cubeShape.value) {
             val block = blockItem.block
             val shape = block.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN)
-            !shape.isEmpty && shape.boundingBox.xLength == 1.0 && shape.boundingBox.yLength == 1.0 && shape.boundingBox.zLength == 1.0 && block.defaultState.material.isSolid
+            !shape.isEmpty && shape.boundingBox.xLength == 1.0 && shape.boundingBox.yLength == 1.0 && shape.boundingBox.zLength == 1.0 && block.defaultState.isSolidBlock(mc.world, BlockPos.ORIGIN)
         } else true
     }
 

@@ -9,6 +9,7 @@ import su.mandora.tarasande.util.extension.minecraft.packet.evaluateNewRotation
 class PreventRotationLeak(rotations: Rotations) {
 
     private var disableNext = false
+
     init {
         EventDispatcher.apply {
             add(EventPacket::class.java, 9999) {

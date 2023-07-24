@@ -18,7 +18,7 @@ import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import java.util.concurrent.ThreadLocalRandom
 
-class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MOVEMENT) {
+class ModuleVelocity : Module("Velocity", "Reduces knock-back", ModuleCategory.MOVEMENT) {
 
     private val packets = ValueMode(this, "Packets", true, "Velocity", "Explosion")
     private val mode = ValueMode(this, "Mode", false, "Cancel", "Custom", "Jump")
@@ -33,6 +33,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
     private val facingThreshold = ValueNumber(this, "Facing threshold", 0.0, 60.0, 360.0, 15.0, isEnabled = { onlyWhenFacing.value })
 
     init {
+        packets.select(0)
         addition.select(1) // Default, that's the most normal one
     }
 
@@ -45,15 +46,15 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
         registerEvent(EventVelocity::class.java) { event ->
             if (ThreadLocalRandom.current().nextInt(100) > chance.value) return@registerEvent
             if (!packets.isSelected(event.packet.ordinal)) return@registerEvent
-            if(event.cancelled) return@registerEvent
+            if (event.cancelled) return@registerEvent
 
             val velocityVector = Vec3d(event.velocityX, event.velocityY, event.velocityZ)
-            if(velocityVector.horizontalLengthSquared() <= ignoreTinyVelocity.value * ignoreTinyVelocity.value)
+            if (velocityVector.horizontalLengthSquared() <= ignoreTinyVelocity.value * ignoreTinyVelocity.value)
                 return@registerEvent
 
-            if(onlyWhenFacing.value) {
+            if (onlyWhenFacing.value) {
                 val deltaRotation = RotationUtil.getYaw(velocityVector) - PlayerUtil.getMoveDirection()
-                if(deltaRotation > facingThreshold.value)
+                if (deltaRotation > facingThreshold.value)
                     return@registerEvent
             }
 
@@ -68,8 +69,8 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                     } else {
                         val newVelocity =
                             if (changeDirection.value)
-                                    (Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0F).forwardVector() * velocityVector.horizontalLength())
-                                        .withAxis(Direction.Axis.Y, velocityVector.y)
+                                (Rotation(PlayerUtil.getMoveDirection().toFloat(), 0F).forwardVector() * velocityVector.horizontalLength())
+                                    .withAxis(Direction.Axis.Y, velocityVector.y)
                             else
                                 velocityVector
                         event.velocityX = newVelocity.x * horizontal.value
@@ -93,7 +94,7 @@ class ModuleVelocity : Module("Velocity", "Reduces knockback", ModuleCategory.MO
                     if (triple.second <= mc.player?.age!!) {
                         val newVelocity =
                             if (changeDirection.value && PlayerUtil.isPlayerMoving())
-                                Rotation(PlayerUtil.getMoveDirection().toFloat(), 0.0F).forwardVector() * triple.first.horizontalLength()
+                                Rotation(PlayerUtil.getMoveDirection().toFloat(), 0F).forwardVector() * triple.first.horizontalLength()
                             else
                                 triple.first
                         mc.player?.velocity =

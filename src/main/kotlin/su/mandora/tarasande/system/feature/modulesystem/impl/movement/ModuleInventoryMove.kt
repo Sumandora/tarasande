@@ -14,7 +14,6 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.feature.modulesystem.panel.element.PanelElementsCategory
 import su.mandora.tarasande.system.screen.panelsystem.ManagerPanel
-import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterFileChooser
 import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import su.mandora.tarasande.system.screen.panelsystem.screen.panelscreen.ScreenPanel
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -62,5 +61,5 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         }
     }
 
-    private fun isPassingEvents() = (mc.currentScreen is ScreenPanel || mc.currentScreen is ScreenBetterOwnerValues || mc.currentScreen is ScreenBetterFileChooser) && !textBoxFocused || (if(onlyInPlayerInventory.value) mc.currentScreen is AbstractInventoryScreen<*> else mc.currentScreen is HandledScreen<*>)
+    private fun isPassingEvents() = (mc.currentScreen is ScreenPanel || mc.currentScreen is ScreenBetterOwnerValues) && !textBoxFocused || (if (onlyInPlayerInventory.value) mc.currentScreen is AbstractInventoryScreen<*> else mc.currentScreen is HandledScreen<*>)
 }

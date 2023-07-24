@@ -6,7 +6,7 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 
-class ModuleNoHunger : Module("No hunger", "Prevents sprinting packets", ModuleCategory.PLAYER) {
+class ModuleNoHunger : Module("No hunger", "Prevent serverside sprinting", ModuleCategory.PLAYER) {
 
     override fun onEnable() {
         if (mc.player?.isSprinting == true) {

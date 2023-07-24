@@ -19,7 +19,7 @@ import su.mandora.tarasande.system.feature.modulesystem.impl.combat.ModuleHealin
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.container.ContainerUtil
 
-class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a block", ModuleCategory.PLAYER) {
+class ModuleAutoTool : Module("Auto tool", "Selects the best tool when breaking a block", ModuleCategory.PLAYER) {
 
     val mode = ValueMode(this, "Mode", true, "Blocks", "Entities")
 
@@ -61,12 +61,12 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool for breaking a
 
                 var hotbar: Iterable<IndexedValue<ItemStack>> = ContainerUtil.getHotbarSlots().withIndex()
 
-                if(useAxeToCounterBlocking.value && event.entity is PlayerEntity && event.entity.isBlocking) {
-                    if(hotbar.any { it.value.item is AxeItem })
+                if (useAxeToCounterBlocking.value && event.entity is PlayerEntity && event.entity.isBlocking) {
+                    if (hotbar.any { it.value.item is AxeItem })
                         hotbar = hotbar.filter { it.value.item is AxeItem }
                 }
-                if(despiseAxes.value)
-                    if(hotbar.any { it.value.item is SwordItem })
+                if (despiseAxes.value)
+                    if (hotbar.any { it.value.item is SwordItem })
                         hotbar = hotbar.filter { it.value.item is SwordItem }
 
                 hotbar = hotbar.filter { it.value.item is ToolItem }

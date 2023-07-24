@@ -5,6 +5,5 @@ import su.mandora.tarasande.system.screen.informationsystem.Information
 
 
 class InformationTickDelta : Information("Game", "Tick delta") {
-
     override fun getMessage() = mc.tickDelta.toString()
 }

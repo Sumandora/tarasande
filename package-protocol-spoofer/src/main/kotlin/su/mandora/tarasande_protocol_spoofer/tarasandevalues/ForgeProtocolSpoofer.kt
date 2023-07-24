@@ -71,7 +71,7 @@ object ForgeProtocolSpoofer {
                         val text = FontWrapper.trimToWidth("Forge/FML Server", it.x)
                         val endWidth = FontWrapper.getWidth(text) + 4
 
-                        FontWrapper.textShadow(it.matrices, text, (-endWidth).toFloat(), yPos, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
+                        FontWrapper.textShadow(it.context, text, (-endWidth).toFloat(), yPos, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
 
                         if (RenderUtil.isHovered(it.mouseX.toDouble(), it.mouseY.toDouble(), it.x - endWidth.toDouble(), it.y + yPos.toDouble(), it.x - 4.0, it.y + yPos + fontHeight.toDouble())) {
                             val tooltip = ArrayList<Text>()

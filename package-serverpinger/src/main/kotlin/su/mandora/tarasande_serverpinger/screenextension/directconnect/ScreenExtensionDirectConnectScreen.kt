@@ -9,10 +9,13 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.graphsystem.panel.PanelGraph
 import su.mandora.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import su.mandora.tarasande.system.screen.screenextensionsystem.ScreenExtension
-import su.mandora.tarasande_serverpinger.base.*
+import su.mandora.tarasande_serverpinger.base.GraphPing
+import su.mandora.tarasande_serverpinger.base.GraphPlayers
+import su.mandora.tarasande_serverpinger.base.ServerPingerBase
 import su.mandora.tarasande_serverpinger.base.panel.PanelServerInformation
 import su.mandora.tarasande_serverpinger.base.panel.copy
 import su.mandora.tarasande_serverpinger.base.panel.emptyServer
+import su.mandora.tarasande_serverpinger.base.update
 import su.mandora.tarasande_serverpinger.injection.accessor.IClickableWidget
 
 class ScreenExtensionDirectConnectScreen : ScreenExtension<DirectConnectScreen>(DirectConnectScreen::class.java) {
@@ -28,13 +31,10 @@ class ScreenExtensionDirectConnectScreen : ScreenExtension<DirectConnectScreen>(
         if (lastAddress != it.address) {
             GraphPlayers.clear()
             GraphPing.clear()
-            panelElementsIanaFunction.update(it.address)
         }
         lastAddress = it.address
         update(it)
     }
-
-    private val panelElementsIanaFunction = PanelElementsIanaFunction()
 
     private val graphPlayers = PanelGraph(GraphPlayers)
     private val graphPing = PanelGraph(GraphPing)
@@ -62,9 +62,6 @@ class ScreenExtensionDirectConnectScreen : ScreenExtension<DirectConnectScreen>(
         }), ClickableWidgetPanel(graphPing.apply {
             x = screen.width - panelWidth - 5.0
             y = graphPlayers.y - panelHeight - 5.0
-        }), ClickableWidgetPanel(panelElementsIanaFunction.apply {
-            x = 5.0
-            y = screen.height - panelHeight - 5.0
         }))
     }
 }

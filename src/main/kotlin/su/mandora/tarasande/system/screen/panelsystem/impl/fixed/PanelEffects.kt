@@ -1,8 +1,8 @@
 package su.mandora.tarasande.system.screen.panelsystem.impl.fixed
 
 import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.resource.language.I18n
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffectUtil
@@ -19,14 +19,14 @@ import su.mandora.tarasande.util.render.helper.Alignment
 import su.mandora.tarasande.util.string.StringUtil
 import java.awt.Color
 
-class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble()) {
+class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
 
     private val animations = HashMap<StatusEffect, Double>()
     private val prevInstances = HashMap<StatusEffect, StatusEffectInstance>()
 
     private val animator = Animator(this)
 
-    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val activeStatusEffects = ArrayList<Triple<StatusEffect, String, Int>>()
 
         for (statusEffect in Registries.STATUS_EFFECT) {
@@ -40,7 +40,7 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble())
                         if (statusEffectInstance.amplifier in 1..9) {
                             string += " " + I18n.translate("enchantment.level." + (statusEffectInstance.amplifier + 1))
                         }
-                        string += ": " + Formatting.GRAY.toString() + StringUtil.extractContent(StatusEffectUtil.durationToString(statusEffectInstance, 1.0F))
+                        string += ": " + Formatting.GRAY.toString() + StringUtil.extractContent(StatusEffectUtil.getDurationText(statusEffectInstance, 1F))
                         activeStatusEffects.add(Triple(statusEffect, string, statusEffect.color))
                     }
                 }
@@ -55,9 +55,9 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble())
                 RenderSystem.enableBlend()
                 val animatedPosition = animator.easing.ease(animation)
                 when (alignment) {
-                    Alignment.LEFT -> FontWrapper.textShadow(matrices, it.second, (x - (FontWrapper.getWidth(it.second) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
-                    Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it.second, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(it.second).toFloat() / 2.0F, (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
-                    Alignment.RIGHT -> FontWrapper.textShadow(matrices, it.second, (x + panelWidth - FontWrapper.getWidth(it.second) * animatedPosition).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                    Alignment.LEFT -> FontWrapper.textShadow(context, it.second, (x - (FontWrapper.getWidth(it.second) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                    Alignment.MIDDLE -> FontWrapper.textShadow(context, it.second, x.toFloat() + panelWidth.toFloat() / 2F - FontWrapper.getWidth(it.second).toFloat() / 2F, (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                    Alignment.RIGHT -> FontWrapper.textShadow(context, it.second, (x + panelWidth - FontWrapper.getWidth(it.second) * animatedPosition).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
                 }
                 index += animatedPosition
             }

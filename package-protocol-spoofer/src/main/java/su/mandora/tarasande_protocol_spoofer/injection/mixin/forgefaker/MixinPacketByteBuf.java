@@ -21,9 +21,12 @@ import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForg
 @Mixin(PacketByteBuf.class)
 public abstract class MixinPacketByteBuf {
 
-    @Shadow @Final private static Gson GSON;
+    @Shadow
+    @Final
+    private static Gson GSON;
 
-    @Shadow public abstract String readString();
+    @Shadow
+    public abstract String readString();
 
     /**
      * @author Mojang, Johannes

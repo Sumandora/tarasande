@@ -12,8 +12,13 @@ public class MixinClientPlayerInteractionManager {
 
     @Inject(method = "hasLimitedAttackSpeed", at = @At("HEAD"), cancellable = true)
     public void removeDelay(CallbackInfoReturnable<Boolean> cir) {
-        if(DebugValues.INSTANCE.getEliminateHitDelay().getValue())
+        if (DebugValues.INSTANCE.getEliminateHitDelay().getValue())
             cir.setReturnValue(false); // rofl kartoffel
+    }
+
+    @Inject(method = "hasCreativeInventory", at = @At("HEAD"), cancellable = true)
+    public void forceCreativeInventory(CallbackInfoReturnable<Boolean> cir) {
+        cir.setReturnValue(DebugValues.INSTANCE.getForceCreativeInventory().getValue());
     }
 
 }

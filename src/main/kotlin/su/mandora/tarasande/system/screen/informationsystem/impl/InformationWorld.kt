@@ -11,7 +11,6 @@ import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
-import su.mandora.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBot
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleESP
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
@@ -47,9 +46,7 @@ class InformationWorldTime : Information("World", "World Time") {
     }
 
     override fun getMessage(): String? {
-        if (mc.world == null)
-            return null
-        if (lastUpdate == null)
+        if (mc.world == null || lastUpdate == null)
             return null
         return lastUpdate?.first.toString() + "/" + lastUpdate?.second
     }

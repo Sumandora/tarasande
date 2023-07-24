@@ -26,7 +26,7 @@ public class MixinHeldItemRenderer {
     @Inject(method = "renderFirstPersonItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;applyEquipOffset(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/Arm;F)V"))
     public void applyViewModelValues(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         Boolean blocked = tarasande_skipNext.get(hand);
-        if(blocked != null && blocked) {
+        if (blocked != null && blocked) {
             tarasande_skipNext.put(hand, false);
             return;
         }

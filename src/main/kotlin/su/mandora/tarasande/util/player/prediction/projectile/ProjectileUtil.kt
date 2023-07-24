@@ -23,20 +23,20 @@ object ProjectileUtil {
 
     val projectileItems = arrayOf(ProjectileItem(Items.BOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
         val velocity = BowItem.getPullProgress(if (mc.player?.isUsingItem!!) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
-        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0F, (velocity * 3.0).toFloat(), 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0F, (velocity * 3.0).toFloat(), 1F)
     }, ProjectileItem(Items.SNOWBALL.javaClass, EntityType.SNOWBALL, false) { _, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0F, 1.5F, 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0F, 1.5F, 1F)
     }, ProjectileItem(Items.EGG.javaClass, EntityType.EGG, false) { _, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0F, 1.5F, 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0F, 1.5F, 1F)
     }, ProjectileItem(Items.ENDER_PEARL.javaClass, EntityType.ENDER_PEARL, false) { _, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0F, 1.5F, 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0F, 1.5F, 1F)
     }, ProjectileItem(Items.EXPERIENCE_BOTTLE.javaClass, EntityType.EXPERIENCE_BOTTLE, false) { _, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, -20.0F, 0.7F, 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, -20F, 0.7F, 1F)
     }, ProjectileItem(Items.SPLASH_POTION.javaClass, EntityType.POTION, false) { _, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, -20.0F, 0.5F, 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, -20F, 0.5F, 1F)
     }, ProjectileItem(Items.TRIDENT.javaClass, EntityType.TRIDENT, true) { item, persistentProjectileEntity ->
         val riptide = EnchantmentHelper.getRiptide(item)
-        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0F, 2.5F + riptide.toFloat() * 0.5F, 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0F, 2.5F + riptide.toFloat() * 0.5F, 1F)
     }, ProjectileItem(Items.FISHING_ROD.javaClass, EntityType.FISHING_BOBBER, false) { _, persistentProjectileEntity ->
         val f = mc.player?.pitch!!
         val g = mc.player?.yaw!!
@@ -47,7 +47,7 @@ object ProjectileUtil {
 
         persistentProjectileEntity.refreshPositionAndAngles(persistentProjectileEntity.x - i.toDouble() * 0.3, persistentProjectileEntity.y + 0.1, persistentProjectileEntity.z - h.toDouble() * 0.3, f, g)
 
-        var vec3d = Vec3d(-i.toDouble(), MathHelper.clamp(-(k / j), -5.0F, 5.0F).toDouble(), -h.toDouble())
+        var vec3d = Vec3d(-i.toDouble(), MathHelper.clamp(-(k / j), -5F, 5F).toDouble(), -h.toDouble())
         val m = vec3d.length()
         vec3d = vec3d.multiply(0.6 / m + persistentProjectileEntity.random.nextTriangular(0.5, 0.0103365), 0.6 / m + persistentProjectileEntity.random.nextTriangular(0.5, 0.0103365), 0.6 / m + persistentProjectileEntity.random.nextTriangular(0.5, 0.0103365))
 
@@ -61,7 +61,7 @@ object ProjectileUtil {
             it.prevPitch = rotation.pitch
         }
     }, ProjectileItem(Items.CROSSBOW.javaClass, EntityType.ARROW, true) { stack, persistentProjectileEntity ->
-        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0.0F, CrossbowItem.getSpeed(stack), 1.0F)
+        persistentProjectileEntity.setVelocity(mc.player, mc.player?.pitch!!, mc.player?.yaw!!, 0F, CrossbowItem.getSpeed(stack), 1F)
     })
 
     fun predict(itemStack: ItemStack, rotation: Rotation?, predictVelocity: Boolean): ArrayList<Vec3d> {
@@ -142,7 +142,7 @@ object ProjectileUtil {
             }
 
             override fun nextFloat(): Float {
-                return 0.0F
+                return 0F
             }
 
             override fun nextDouble(): Double {

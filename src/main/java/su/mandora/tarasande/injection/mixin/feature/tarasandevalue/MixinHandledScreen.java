@@ -1,8 +1,8 @@
 package su.mandora.tarasande.injection.mixin.feature.tarasandevalue;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,10 +19,10 @@ public class MixinHandledScreen extends Screen {
     }
 
     @Inject(method = "drawSlot", at = @At("TAIL"))
-    public void visualizeId(MatrixStack matrices, Slot slot, CallbackInfo ci) {
-        if(DebugValues.INSTANCE.getVisualizeSlotIds().getValue()) {
-            textRenderer.draw(matrices, String.valueOf(slot.id), slot.x, slot.y, -1);
-            textRenderer.draw(matrices, String.valueOf(slot.getIndex()), slot.x, slot.y + textRenderer.fontHeight, -1);
+    public void visualizeId(DrawContext context, Slot slot, CallbackInfo ci) {
+        if (DebugValues.INSTANCE.getVisualizeSlotIds().getValue()) {
+            context.drawText(textRenderer, String.valueOf(slot.id), slot.x, slot.y, -1, false);
+            context.drawText(textRenderer, String.valueOf(slot.getIndex()), slot.x, slot.y + textRenderer.fontHeight, -1, false);
         }
     }
 

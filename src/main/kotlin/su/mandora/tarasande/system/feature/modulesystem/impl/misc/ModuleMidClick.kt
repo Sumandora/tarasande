@@ -17,7 +17,7 @@ class ModuleMidClick : Module("Mid click", "Friends mid-clicked players", Module
     init {
         registerEvent(EventMouse::class.java) { event ->
             if (event.action == GLFW.GLFW_PRESS && event.button == 2 && mc.currentScreen == null) {
-                val hitResult = PlayerUtil.getTargetedEntity(mc.gameRenderer.method_32796().toDouble(), Rotation(mc.player!!), true)
+                val hitResult = PlayerUtil.getTargetedEntity(mc.gameRenderer.farPlaneDistance.toDouble(), Rotation(mc.player!!), true)
                 if (hitResult.isEntityHitResult()) {
                     hitResult as EntityHitResult
                     if (hitResult.entity is PlayerEntity)

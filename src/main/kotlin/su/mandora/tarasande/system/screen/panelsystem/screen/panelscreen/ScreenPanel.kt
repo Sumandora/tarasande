@@ -2,12 +2,10 @@ package su.mandora.tarasande.system.screen.panelsystem.screen.panelscreen
 
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.render.GameRenderer
-import net.minecraft.client.texture.NativeImageBackedTexture
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventChangeScreen
@@ -15,13 +13,12 @@ import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
-import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
+import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.screen.blursystem.ManagerBlur
 import su.mandora.tarasande.system.screen.panelsystem.ManagerPanel
 import su.mandora.tarasande.system.screen.panelsystem.screen.panelscreen.particle.Particle
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
-import su.mandora.tarasande.util.render.RenderUtil
 import kotlin.math.floor
 import kotlin.math.round
 
@@ -32,27 +29,23 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
         override fun filter(type: Type, bind: Int) = bind != GLFW.GLFW_KEY_UNKNOWN
     }
     private val animationLength = ValueNumber(this, "Animation length", 0.0, 100.0, 500.0, 1.0)
-    private val imageValue = object : ValueMode(this, "Image", false, "Off", "Rimuru", "Shuya's girl", "Nanakusa", "Jannick", "Azusa") {
-        override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
-            nativeImage = null
-        }
-    }
+    private val ichHabEinfachDenBESTEN = ValueBoolean(this, "Ich hab einfach den BESTEN!", false)
 
     private var screenChangeTime = System.currentTimeMillis()
     private var isClosing = false
 
-    var nativeImage: NativeImageBackedTexture? = null
+    private val imageIdentifier = Identifier("tarasande", "textures/jannick.png")
     private val particles = ArrayList<Particle>()
 
     private var wasClosed = true
 
     init {
-        passEvents = false
         EventDispatcher.apply {
             add(EventChangeScreen::class.java) { event ->
                 if (client?.currentScreen is ScreenPanel && event.newScreen == null) {
                     panelSystem.list.forEach { it.onClose() }
-                    wasClosed = true // Sad, but true. this cancels our smooth animation, but we can't afford to leave a screen open :c
+                    wasClosed =
+                        true // Sad, but true. this cancels our smooth animation, but we can't afford to leave a screen open :c
                 }
             }
             add(EventUpdate::class.java) { event ->
@@ -76,7 +69,7 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
         particles.clear()
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         var animation = ((System.currentTimeMillis() - screenChangeTime) / animationLength.value).coerceAtMost(1.0)
         if (isClosing) animation = 1.0 - animation
 
@@ -91,58 +84,63 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
         val strength = round(animation * ManagerBlur.strength.value).toInt()
         if (strength > 0) {
             ManagerBlur.bind(true)
-            RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
+            context.fill(
+                0,
+                0,
+                client!!.window.scaledWidth,
+                client!!.window.scaledHeight,
+                -1
+            )
             client?.framebuffer?.beginWrite(true)
 
             ManagerBlur.blurScene(strength)
         }
 
-        matrices.push()
+        context.matrices.push()
 
-        if (!imageValue.isSelected(0)) {
-            if (nativeImage == null)
-                nativeImage = RenderUtil.createImage(imageValue.getSelected().lowercase().replace(" ", "").replace("'", "") + ".png")
-
-            matrices.push()
-            RenderSystem.setShader { GameRenderer.getPositionTexProgram() }
-            RenderSystem.setShaderTexture(0, nativeImage!!.glId)
-            @Suppress("NAME_SHADOWING")
-            val color = color.brighter().brighter()
-            RenderSystem.setShaderColor(color.red / 255f, color.green / 255f, color.blue / 255f, (animation * animation * animation).toFloat())
-            RenderSystem.enableBlend()
-            RenderSystem.defaultBlendFunc()
-            RenderSystem.enableDepthTest()
-
-            val aspect = nativeImage!!.image!!.width / nativeImage!!.image!!.height.toDouble()
+        if (ichHabEinfachDenBESTEN.value) {
+            context.matrices.push()
+            val aspect = 581.0 / 418.0
 
             val height = client?.window?.scaledHeight!! * 0.85
             val width = height * aspect
 
-            DrawableHelper.drawTexture(matrices, (client?.window?.scaledWidth!! - animation * width).toInt(), (client?.window?.scaledHeight!! - height).toInt(), 0, 0.0F, 0.0F, width.toInt(), height.toInt(), width.toInt(), height.toInt())
-            matrices.pop()
+            context.drawTexture(
+                imageIdentifier,
+                (client?.window?.scaledWidth!! - animation * width).toInt(),
+                (client?.window?.scaledHeight!! - height).toInt(),
+                0,
+                0F,
+                0F,
+                width.toInt(),
+                height.toInt(),
+                width.toInt(),
+                height.toInt()
+            )
+            context.matrices.pop()
         }
 
-        matrices.push()
+        context.matrices.push()
         val numPoints = 100
         if (particles.size < numPoints)
             particles.add(Particle(width / 2.0, height / 2.0))
-        matrices.pop()
+        context.matrices.pop()
 
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
+        RenderSystem.setShaderColor(1F, 1F, 1F, 1F)
 
-        matrices.push()
-        DrawableHelper.fill(matrices, 0, 0, width, height, color.withAlpha((animation * 255 * 0.66).toInt()).rgb)
-        matrices.pop()
+        context.matrices.push()
+        context.fill(0, 0, width, height, color.withAlpha((animation * 255 * 0.66).toInt()).rgb)
+        context.matrices.pop()
 
-        particles.forEach { it.render(matrices, mouseX.toDouble(), mouseY.toDouble(), animation) }
+        particles.forEach { it.render(context, mouseX.toDouble(), mouseY.toDouble(), animation) }
 
         panelSystem.list.reversed().forEach {
-            matrices.push()
+            context.matrices.push()
             val panelHeight = it.effectivePanelHeight()
             if (!it.fixed || !(it.isVisible() && it.opened)) {
-                matrices.translate(it.x + it.panelWidth / 2.0, it.y + panelHeight / 2.0, 0.0)
-                matrices.scale(animation.toFloat(), animation.toFloat(), 1.0F)
-                matrices.translate(-(it.x + it.panelWidth / 2.0), -(it.y + panelHeight / 2.0), 0.0)
+                context.matrices.translate(it.x + it.panelWidth / 2.0, it.y + panelHeight / 2.0, 0.0)
+                context.matrices.scale(animation.toFloat(), animation.toFloat(), 1F)
+                context.matrices.translate(-(it.x + it.panelWidth / 2.0), -(it.y + panelHeight / 2.0), 0.0)
             }
             val x = it.x + it.panelWidth * (1 - animation) / 2.0
             val y = it.y + panelHeight - panelHeight * (1 - animation) / 2.0 - 1
@@ -150,16 +148,21 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
             val height = (panelHeight - panelHeight * (1 - animation) - 1)
             if (it.opened && !it.fixed && animation > 0.0) {
                 GlStateManager._enableScissorTest()
-                GlStateManager._scissorBox(round(x * client?.window?.scaleFactor!!).toInt(), round(client?.window?.height!! - y * client?.window?.scaleFactor!!).toInt(), round(width * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1), round(height * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1))
+                GlStateManager._scissorBox(
+                    round(x * client?.window?.scaleFactor!!).toInt(),
+                    round(client?.window?.height!! - y * client?.window?.scaleFactor!!).toInt(),
+                    round(width * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1),
+                    round(height * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1)
+                )
             }
             if (it.fixed || animation > 0.0) {
-                it.render(matrices, mouseX, mouseY, delta)
+                it.render(context, mouseX, mouseY, delta)
             }
             GlStateManager._disableScissorTest()
-            matrices.pop()
+            context.matrices.pop()
         }
 
-        matrices.pop()
+        context.matrices.pop()
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

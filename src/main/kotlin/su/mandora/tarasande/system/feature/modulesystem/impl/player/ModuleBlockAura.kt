@@ -101,7 +101,7 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
 
             if (focusedBlock != null) {
                 PlayerUtil.placeBlock(focusedBlock!!.second.withBlockPos(focusedBlock!!.first)!!)
-                if(interactOnce.value)
+                if (interactOnce.value)
                     interactedBlocks.add(focusedBlock!!.first)
                 val moduleBlockESP = ManagerModule.get(ModuleBlockESP::class.java)
                 if (moduleBlockESP.enabled.value)

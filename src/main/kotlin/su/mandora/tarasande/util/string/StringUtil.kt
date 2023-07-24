@@ -84,7 +84,7 @@ object StringUtil {
         var newString = ""
         var newWord = true
         for ((index, c) in string.withIndex()) {
-            if(c.isUpperCase())
+            if (c.isUpperCase())
                 newWord = true
             newString +=
                 when {

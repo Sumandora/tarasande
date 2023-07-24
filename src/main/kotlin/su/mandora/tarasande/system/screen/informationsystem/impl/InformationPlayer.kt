@@ -92,7 +92,7 @@ class InformationRotation : Information("Player", "Rotation") {
     override fun getMessage(): String? {
         val player = mc.player ?: return null
 
-        val yaw = if(wrapYaw.value) MathHelper.wrapDegrees(player.yaw) else player.yaw
+        val yaw = if (wrapYaw.value) MathHelper.wrapDegrees(player.yaw) else player.yaw
 
         return StringUtil.round(yaw.toDouble(), this.decimalPlacesYaw.value.toInt()) + " " + StringUtil.round(player.pitch.toDouble(), this.decimalPlacesPitch.value.toInt())
     }
@@ -106,7 +106,7 @@ class InformationFakeRotation : Information("Player", "Fake Rotation") {
 
     override fun getMessage(): String? {
         return Rotations.fakeRotation?.let {
-            val yaw = if(wrapYaw.value) MathHelper.wrapDegrees(it.yaw) else it.yaw
+            val yaw = if (wrapYaw.value) MathHelper.wrapDegrees(it.yaw) else it.yaw
             StringUtil.round(yaw.toDouble(), this.decimalPlacesYaw.value.toInt()) + " " + StringUtil.round(it.pitch.toDouble(), this.decimalPlacesPitch.value.toInt())
         }
     }
@@ -119,7 +119,7 @@ class InformationReach : Information("Player", "Reach") {
         EventDispatcher.apply {
             add(EventAttackEntity::class.java) {
                 if (it.state == EventAttackEntity.State.PRE) {
-                    reach = mc.player?.getCameraPosVec(1.0F)?.distanceTo(mc.crosshairTarget?.pos)
+                    reach = mc.player?.getCameraPosVec(1F)?.distanceTo(mc.crosshairTarget?.pos)
                 }
             }
             add(EventDisconnect::class.java) {

@@ -34,7 +34,7 @@ public class MixinHeldItemRenderer {
     public float hookNoSwing(ClientPlayerEntity instance, float v) {
         ModuleNoSwing moduleNoSwing = ManagerModule.INSTANCE.get(ModuleNoSwing.class);
         if (moduleNoSwing.getEnabled().getValue() && moduleNoSwing.getDisableEquipProgress().getValue()) {
-            return 1.0F;
+            return 1F;
         }
         return instance.getAttackCooldownProgress(v);
     }

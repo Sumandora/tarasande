@@ -3,10 +3,10 @@ package su.mandora.tarasande.system.screen.accountmanager.account.impl
 import com.google.gson.JsonArray
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
+import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.accountmanager.account.Account
 import su.mandora.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import su.mandora.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
-import java.net.Proxy
 import java.util.*
 
 
@@ -31,7 +31,7 @@ class AccountSession : Account() {
 
     override fun logIn() {
         uuid = UUID.randomUUID().toString()
-        service = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment).createMinecraftSessionService()
+        service = YggdrasilAuthenticationService(mc.networkProxy, "", environment).createMinecraftSessionService()
         session = Session(username, uuid, accessToken, Optional.ofNullable(xUid), Optional.ofNullable(clientUid), if (xUid.isNotEmpty() || clientUid.isNotEmpty()) Session.AccountType.MSA else Session.AccountType.MOJANG)
     }
 

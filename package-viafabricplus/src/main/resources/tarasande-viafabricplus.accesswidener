@@ -1,4 +1,0 @@
-accessWidener v1 named
-
-accessible field net/minecraft/client/MinecraftClient renderTickCounter Lnet/minecraft/client/render/RenderTickCounter;
-accessible field net/minecraft/client/render/RenderTickCounter tickTime F

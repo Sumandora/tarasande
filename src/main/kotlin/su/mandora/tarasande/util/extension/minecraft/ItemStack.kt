@@ -8,5 +8,5 @@ fun ItemStack.safeCount(): Int {
     // to this day, I'm pretty sure that by hacking in Items, it will be possible
     // Lets use this function, to make sure, we don't break at such moments
 
-    return if(count <= 0) Int.MAX_VALUE else count
+    return if (count <= 0) Int.MAX_VALUE else count
 }

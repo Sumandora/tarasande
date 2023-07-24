@@ -40,15 +40,16 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Shadow
     protected double serverPitch;
-
+    @Shadow
+    protected double serverHeadYaw;
+    @Shadow
+    protected int headTrackingIncrements;
     @Unique
     private Vec3d tarasande_oldServerPos;
-
     @Unique
     private float tarasande_headPitch;
     @Unique
     private float tarasande_prevHeadPitch;
-
     @Unique
     private float tarasande_headYaw;
     @Unique
@@ -61,28 +62,24 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Shadow
     public abstract float getYaw(float tickDelta);
 
-    @Shadow protected double serverHeadYaw;
-
-    @Shadow protected int headTrackingIncrements;
-
     @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;bodyTrackingIncrements:I"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateTrackedPosition(DDD)V"), to = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;serverX:D")))
     public void leakRotations(CallbackInfo ci) {
         Rotation rotation = Rotations.INSTANCE.getFakeRotation();
         //noinspection ConstantValue
         if (this.bodyTrackingIncrements > 0 && (Object) this == MinecraftClient.getInstance().player && rotation != null) {
             Rotations.INSTANCE.setFakeRotation(new Rotation(
-                    (rotation.getYaw() + (float) MathHelper.wrapDegrees(this.serverYaw - (double) rotation.getYaw()) / (float) this.bodyTrackingIncrements) % 360.0F,
-                    (rotation.getPitch() + (float) (this.serverPitch - (double) rotation.getPitch()) / (float) this.bodyTrackingIncrements) % 360.0F
+                    (rotation.getYaw() + (float) MathHelper.wrapDegrees(this.serverYaw - (double) rotation.getYaw()) / (float) this.bodyTrackingIncrements) % 360F,
+                    (rotation.getPitch() + (float) (this.serverPitch - (double) rotation.getPitch()) / (float) this.bodyTrackingIncrements) % 360F
             ));
         }
     }
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getYaw()F"), slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;prevStepBobbingAmount:F"), to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;turnHead(FF)F")))
     public float replaceYaw_tick(LivingEntity instance) {
-        if(Rotations.INSTANCE.getAdjustThirdPersonModel().getValue()) {
+        if (Rotations.INSTANCE.getAdjustThirdPersonModel().getValue()) {
             Rotation rotation = Rotations.INSTANCE.getFakeRotation();
             //noinspection ConstantValue
-            if((Object) this == MinecraftClient.getInstance().player && rotation != null) {
+            if ((Object) this == MinecraftClient.getInstance().player && rotation != null) {
                 return rotation.getYaw();
             }
         }
@@ -91,10 +88,10 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Redirect(method = "turnHead", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getYaw()F"))
     public float replaceYaw_turnHead(LivingEntity instance) {
-        if(Rotations.INSTANCE.getAdjustThirdPersonModel().getValue()) {
+        if (Rotations.INSTANCE.getAdjustThirdPersonModel().getValue()) {
             Rotation rotation = Rotations.INSTANCE.getFakeRotation();
             //noinspection ConstantValue
-            if((Object) this == MinecraftClient.getInstance().player && rotation != null) {
+            if ((Object) this == MinecraftClient.getInstance().player && rotation != null) {
                 return rotation.getYaw();
             }
         }
@@ -103,7 +100,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
 
     @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;headTrackingIncrements:I", ordinal = 2))
     public void respectServerHeadYaw(CallbackInfo ci) {
-        tarasande_headYaw += (float)MathHelper.wrapDegrees(this.serverHeadYaw - (double)this.tarasande_headYaw) / (float)this.headTrackingIncrements;
+        tarasande_headYaw += (float) MathHelper.wrapDegrees(this.serverHeadYaw - (double) this.tarasande_headYaw) / (float) this.headTrackingIncrements;
     }
 
     @Inject(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;headYaw:F"))

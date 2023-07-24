@@ -1,7 +1,7 @@
 package su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.ui
 
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.screen.EntryScreenBetterSlotList
@@ -33,8 +33,8 @@ class ScreenBetterSlotListForgeInformation(title: String, parent: Screen, privat
             return Text.of(text)
         }
 
-        override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
-            FontWrapper.text(matrices, text, entryWidth / 2F, entryHeight / 2F - FontWrapper.fontHeight() /* Scale cancels the division out */, scale = 2F, centered = true)
+        override fun renderEntry(context: DrawContext, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
+            FontWrapper.text(context, text, entryWidth / 2F, entryHeight / 2F - FontWrapper.fontHeight() /* Scale cancels the division out */, scale = 2F, centered = true)
         }
     }
 

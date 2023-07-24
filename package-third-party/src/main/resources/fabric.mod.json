@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "tarasande-third-party",
   "version": "${version}",
-
   "name": "tarasande Third Party",
   "description": "tarasande package to provide features for certain servers and platforms",
   "authors": [
@@ -12,20 +11,17 @@
     "homepage": "https://github.com/Sumandora/",
     "sources": "https://github.com/Sumandora/tarasande"
   },
-
   "license": "GPL-3.0",
   "icon": "assets/tarasande-third-party/icon.png",
-
   "environment": "client",
   "entrypoints": {
     "client": [
       "su.mandora.tarasande_third_party.TarasandeThirdParty"
     ]
   },
-
   "depends": {
     "fabricloader": ">=0.14.9",
-    "minecraft": "~1.19",
+    "minecraft": "1.20.1",
     "java": ">=17",
     "tarasande": "*"
   },

@@ -51,7 +51,7 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
 
         registerEvent(EventTick::class.java) { event ->
             if (event.state == EventTick.State.PRE) {
-                if(mc.world == null || mc.player == null) {
+                if (mc.world == null || mc.player == null) {
                     boundingBoxes.clear()
                     return@registerEvent
                 }

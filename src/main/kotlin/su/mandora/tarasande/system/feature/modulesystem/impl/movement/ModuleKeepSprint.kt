@@ -6,13 +6,12 @@ import su.mandora.tarasande.event.impl.EventAttackEntity
 import su.mandora.tarasande.event.impl.EventKeepSprint
 import su.mandora.tarasande.event.impl.EventVelocity
 import su.mandora.tarasande.mc
-import su.mandora.tarasande.system.base.grabbersystem.ManagerGrabber
-import su.mandora.tarasande.system.base.grabbersystem.impl.GrabberSpeedReduction
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
+import su.mandora.tarasande.util.UNSPRINT_SPEED_REDUCTION
 
 class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attacking", ModuleCategory.MOVEMENT) {
 
@@ -21,7 +20,7 @@ class ModuleKeepSprint : Module("Keep sprint", "Prevents unsprinting by attackin
 
     private val knockbackAware = ValueBoolean(this, "Knockback-aware", false)
     private val packets = ValueMode(this, "Packets", true, "Velocity", "Explosion", isEnabled = { knockbackAware.value })
-    private val reducingSpeedMultiplier = ValueNumber(this, "Reducing speed multiplier", 0.0, ManagerGrabber.getConstant(GrabberSpeedReduction::class.java) as Double, 1.0, 0.1, isEnabled = { knockbackAware.value })
+    private val reducingSpeedMultiplier = ValueNumber(this, "Reducing speed multiplier", 0.0, UNSPRINT_SPEED_REDUCTION, 1.0, 0.1, isEnabled = { knockbackAware.value })
     private val unsprintWhenReducing = ValueBoolean(this, "Unsprint when reducing", true, isEnabled = { knockbackAware.value })
 
     private var prevVelocity: Vec3d? = null

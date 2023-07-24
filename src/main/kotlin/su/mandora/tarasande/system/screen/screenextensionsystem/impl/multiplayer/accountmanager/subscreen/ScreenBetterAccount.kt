@@ -1,10 +1,10 @@
 package su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen
 
 import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.system.screen.accountmanager.account.Account
@@ -45,7 +45,7 @@ class ScreenBetterAccount(
         val fields = implementationClass.declaredFields.toMutableList()
 
         var myClass = implementationClass
-        if(implementationClass.getAnnotation(AccountInfo::class.java).inherit) {
+        if (implementationClass.getAnnotation(AccountInfo::class.java).inherit) {
             while (myClass.superclass != null) {
                 fields.addAll(myClass.superclass.declaredFields)
                 @Suppress("UNCHECKED_CAST")
@@ -109,9 +109,9 @@ class ScreenBetterAccount(
         }.also { submitButton = it })
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        super.render(matrices, mouseX, mouseY, delta)
-        FontWrapper.textShadow(matrices, title.string, width / 2.0F, 8 - FontWrapper.fontHeight() / 2.0F, -1, centered = true)
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        super.render(context, mouseX, mouseY, delta)
+        FontWrapper.textShadow(context, title.string, width / 2F, 8 - FontWrapper.fontHeight() / 2F, -1, centered = true)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

@@ -1,8 +1,8 @@
 import su.mandora.codechecker.CodeChecker
 
 plugins {
-	id "fabric-loom"
-	id "org.jetbrains.kotlin.jvm"
+    id "fabric-loom"
+    id "org.jetbrains.kotlin.jvm"
 }
 
 archivesBaseName = "tarasande"
@@ -10,113 +10,79 @@ version = tarasande_version
 group = "su.mandora"
 
 loom {
-	accessWidenerPath = file("src/main/resources/tarasande.accesswidener")
-}
-
-configurations {
-	include
-
-	implementation.extendsFrom include
-	api.extendsFrom include
-}
-
-allprojects {
-	repositories {
-		maven {
-			url = "https://oss.sonatype.org/content/repositories/snapshots"
-		}
-		maven {
-			url = "https://repo.viaversion.com"
-		}
-		maven {
-			url = "https://jitpack.io"
-		}
-		maven {
-			url = "https://maven.lenni0451.net/releases"
-		}
-		maven {
-			url = "https://maven.lenni0451.net/snapshots"
-		}
-		maven {
-			url = "https://repo.opencollab.dev/maven-snapshots/"
-		}
-		mavenCentral()
-	}
-}
-
-subprojects {
-	apply plugin: "java"
+    accessWidenerPath = file("src/main/resources/tarasande.accesswidener")
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	include "io.netty:netty-handler-proxy:4.1.92.Final"
+    implementation "io.netty:netty-handler-proxy:4.1.82.Final" // Match with mc version
 }
 
 processResources {
-	inputs.property "version", project.version
+    inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+    it.options.release.set(17)
 }
 
 java {
-	withSourcesJar()
+    withSourcesJar()
 }
 
 jar {
-	dependsOn configurations.include
-	from {
-		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-		configurations.include.collect {
-			zipTree(it)
-		}
-	} {
-		exclude "META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA"
-	}
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
-	}
+    from {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        configurations.runtimeClasspath
+                .filter { it.getName().contains("netty-handler-proxy") }
+                .collect {
+                    zipTree(it)
+                }
+    } {
+        exclude "META-INF/**"
+    }
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}" }
+    }
 }
 
 compileKotlin.kotlinOptions.jvmTarget = "17"
 
 tasks.register('checkCode') {
-	group archivesBaseName
-	dependsOn "build"
-	doLast {
-		CodeChecker codeChecker = new CodeChecker(sourceSets.main)
-		codeChecker.check()
-	}
+    group archivesBaseName
+    dependsOn "build"
+    doLast {
+        CodeChecker codeChecker = new CodeChecker(sourceSets.main)
+        codeChecker.check()
+    }
 }
 
 tasks.register('installPackages') {
-	group archivesBaseName
-	dependsOn "build"
-	doLast {
-		File base = file(".")
-		base.listFiles().each {
-			if (it.name.startsWith("package") && it.isDirectory()) {
-				String packageName = it.name + "-" + project(it.name).version + ".jar"
-				File build = new File(it, "build" + File.separator + "libs" + File.separator + packageName)
-				File modDest = new File(base, "run" + File.separator + "mods" + File.separator + packageName)
-				if(build.exists()) {
-					if (modDest.delete())
-						println "Deleted old $packageName"
-					else
-						println "Failed to delete old $packageName version"
-					if (build.renameTo(modDest))
-						println "Copied $packageName"
-				}
-			}
-		}
-	}
+    group archivesBaseName
+    dependsOn "build"
+    doLast {
+        File base = file(".")
+        base.listFiles().each {
+            if (it.name.startsWith("package") && it.isDirectory()) {
+                String packageName = it.name + "-" + project(it.name).version + ".jar"
+                File build = new File(it, "build" + File.separator + "libs" + File.separator + packageName)
+                File modDest = new File(base, "run" + File.separator + "mods" + File.separator + packageName)
+                if (build.exists()) {
+                    if (modDest.delete())
+                        println "Deleted old $packageName"
+                    else
+                        println "Failed to delete old $packageName version"
+                    if (build.renameTo(modDest))
+                        println "Copied $packageName"
+                }
+            }
+        }
+    }
 }

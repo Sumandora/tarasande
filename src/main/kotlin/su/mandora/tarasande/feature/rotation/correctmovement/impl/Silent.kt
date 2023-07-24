@@ -17,10 +17,10 @@ class Silent(rotations: Rotations) {
             if (event.input != mc.player?.input)
                 return@add
 
-            if(!rotations.correctMovement.isSelected(3))
+            if (!rotations.correctMovement.isSelected(3))
                 return@add
 
-            if (event.movementForward == 0.0F && event.movementSideways == 0.0F)
+            if (event.movementForward == 0F && event.movementSideways == 0F)
                 return@add
 
             val realYaw = mc.player!!.yaw

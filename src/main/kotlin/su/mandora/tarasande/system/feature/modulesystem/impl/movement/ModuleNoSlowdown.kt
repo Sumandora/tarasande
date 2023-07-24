@@ -17,7 +17,7 @@ import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.string.StringUtil
 import java.util.concurrent.ThreadLocalRandom
 
-class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking etc... slowdowns", ModuleCategory.MOVEMENT) {
+class ModuleNoSlowdown : Module("No slowdown", "Removes slowdowns when using items", ModuleCategory.MOVEMENT) {
 
     private val useActions = HashMap<UseAction, String>()
 
@@ -74,6 +74,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
                                 var slot = mc.player?.inventory?.selectedSlot!!
                                 while (slot == mc.player?.inventory?.selectedSlot!!) slot = ThreadLocalRandom.current().nextInt(0, 8)
                                 mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(slot))
+                                mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
                             }
                         }
                     }
@@ -96,7 +97,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes blocking/eating/drinking
 
         registerEvent(EventItemCooldown::class.java) { event ->
             if (interacting)
-                event.cooldown = 1.0F
+                event.cooldown = 1F
         }
     }
 }

@@ -31,14 +31,16 @@ abstract class ValueRegistry<T>(
         @Suppress("UNCHECKED_CAST")
         add(wrappedKey.key as T)
     }
+
     fun add(key: T) {
-        if(!multiSelection) {
+        if (!multiSelection) {
             list.forEach(::remove)
         }
         list.add(key)
         onAdd(key)
 
     }
+
     fun remove(key: Any?) {
         list.remove(key)
         @Suppress("UNCHECKED_CAST")

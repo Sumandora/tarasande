@@ -1,7 +1,7 @@
 package su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl
 
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
@@ -11,6 +11,7 @@ import su.mandora.tarasande.system.base.valuesystem.Value
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
+import su.mandora.tarasande.util.extension.minecraft.fillHorizontalGradient
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.DragInfo
@@ -64,7 +65,7 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
     override fun init() {
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         lastMousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
         if (minDragInfo.dragging) {
             val mousePos = mouseX - (width - 50)
@@ -93,14 +94,14 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
             otherColor = otherColor.darker().darker()
         }
 
-        FontWrapper.textShadow(matrices, value.name, 0.0F, (getHeight() * 0.5F - FontWrapper.fontHeight() * 0.5F * 0.5F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F, offset = 0.5F)
+        FontWrapper.textShadow(context, value.name, 0F, (getHeight() * 0.5F - FontWrapper.fontHeight() * 0.5F * 0.5F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F, offset = 0.5F)
 
         if (minSliderPos == maxSliderPos) {
-            RenderUtil.fillHorizontalGradient(matrices, max(width - (1.0 - minSliderPos) * 50 - 1, width - 50), getHeight() * 0.25, min(width - (1.0 - maxSliderPos) * 50 + 1, width), getHeight() * 0.75, otherColor.rgb, color.rgb)
+            context.fillHorizontalGradient(max(width - (1.0 - minSliderPos) * 50 - 1, width - 50), getHeight() * 0.25, min(width - (1.0 - maxSliderPos) * 50 + 1, width), getHeight() * 0.75, otherColor.rgb, color.rgb)
         } else {
-            RenderUtil.fillHorizontalGradient(matrices, width - (1.0 - minSliderPos) * 50, getHeight() * 0.25, width - (1.0 - maxSliderPos) * 50, getHeight() * 0.75, otherColor.rgb, color.rgb)
+            context.fillHorizontalGradient(width - (1.0 - minSliderPos) * 50, getHeight() * 0.25, width - (1.0 - maxSliderPos) * 50, getHeight() * 0.75, otherColor.rgb, color.rgb)
         }
-        RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, white.rgb, accentColor.rgb)
+        RenderUtil.outlinedHorizontalGradient(context.matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2F, white.rgb, accentColor.rgb)
 
         val redColor =
             if (value.isEnabled()) {
@@ -109,12 +110,12 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
                 Formatting.DARK_RED
             }
 
-        FontWrapper.textShadow(matrices,
+        FontWrapper.textShadow(context,
             (if (value.minValue !in this.value.min..this.value.max) redColor.toString() else "") + value.minValue.toString() +
                     Formatting.RESET.toString() + "-" +
                     (if (value.maxValue !in this.value.min..this.value.max) redColor.toString() else "") + value.maxValue.toString(),
-            (width - 50 / 2.0F).toFloat(),
-            (getHeight() / 2.0F - FontWrapper.fontHeight() * 0.25F).toFloat(),
+            (width - 50 / 2F).toFloat(),
+            (getHeight() / 2F - FontWrapper.fontHeight() * 0.25F).toFloat(),
             white.rgb,
             centered = true,
             scale = 0.5F,

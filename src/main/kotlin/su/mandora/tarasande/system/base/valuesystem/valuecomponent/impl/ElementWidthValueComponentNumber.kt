@@ -1,7 +1,7 @@
 package su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl
 
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
@@ -11,6 +11,7 @@ import su.mandora.tarasande.system.base.valuesystem.Value
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
+import su.mandora.tarasande.util.extension.minecraft.fillHorizontalGradient
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.DragInfo
@@ -44,7 +45,7 @@ class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponen
     override fun init() {
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         lastMousePos = Vec2f(mouseX.toFloat(), mouseY.toFloat())
 
         if (dragInfo.dragging) {
@@ -67,23 +68,23 @@ class ElementWidthValueComponentNumber(value: Value) : ElementWidthValueComponen
             otherColor = otherColor.darker().darker()
         }
 
-        FontWrapper.textShadow(matrices, value.name, 0.0F, (getHeight() * 0.5F - FontWrapper.fontHeight() * 0.5F * 0.5F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F, offset = 0.5F)
+        FontWrapper.textShadow(context, value.name, 0F, (getHeight() * 0.5F - FontWrapper.fontHeight() * 0.5F * 0.5F).toFloat(), Color.white.let { if (value.isEnabled()) it else it.darker().darker() }.rgb, scale = 0.5F, offset = 0.5F)
 
-        RenderUtil.fillHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width - (1.0 - sliderPos) * 50, getHeight() * 0.75, otherColor.rgb, color.rgb)
-        RenderUtil.outlinedHorizontalGradient(matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2.0F, white.rgb, accentColor.rgb)
+        context.fillHorizontalGradient(width - 50, getHeight() * 0.25, width - (1.0 - sliderPos) * 50, getHeight() * 0.75, otherColor.rgb, color.rgb)
+        RenderUtil.outlinedHorizontalGradient(context.matrices, width - 50, getHeight() * 0.25, width, getHeight() * 0.75, 2F, white.rgb, accentColor.rgb)
 
-        FontWrapper.textShadow(matrices,
+        FontWrapper.textShadow(context,
             (if (value.value !in this.value.min..this.value.max)
-                        (if (value.isEnabled()) {
-                            Formatting.RED
-                        } else {
-                            Formatting.DARK_RED
-                        }).toString()
-                    else
-                        ""
+                (if (value.isEnabled()) {
+                    Formatting.RED
+                } else {
+                    Formatting.DARK_RED
+                }).toString()
+            else
+                ""
                     ) + value.value.toString(),
-            (width - 50 / 2.0F).toFloat(),
-            (getHeight() / 2.0F - FontWrapper.fontHeight() * 0.25F).toFloat(),
+            (width - 50 / 2F).toFloat(),
+            (getHeight() / 2F - FontWrapper.fontHeight() * 0.25F).toFloat(),
             white.rgb,
             centered = true,
             scale = 0.5F,

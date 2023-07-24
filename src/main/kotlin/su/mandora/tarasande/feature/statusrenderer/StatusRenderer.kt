@@ -29,7 +29,7 @@ object StatusRenderer {
                     }
 
                     if (mc.currentScreen!! == it.key) {
-                        FontWrapper.textShadow(event.matrices, it.value.first, mc.window.scaledWidth / 2F, 3F, TarasandeValues.accentColor.getColor().rgb, centered = true)
+                        FontWrapper.textShadow(event.context, it.value.first, mc.window.scaledWidth / 2F, 3F, TarasandeValues.accentColor.getColor().rgb, centered = true)
                     } else {
                         pendingStatuses.remove(it.key)
                     }

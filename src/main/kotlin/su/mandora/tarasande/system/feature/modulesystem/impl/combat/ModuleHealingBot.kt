@@ -63,7 +63,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
             when (state) {
                 State.THROW -> {
                     if (intendedItem?.item is SplashPotionItem) {
-                        event.rotation = Rotation(mc.player!!).withPitch(90.0F).correctSensitivity()
+                        event.rotation = Rotation(mc.player!!).withPitch(90F).correctSensitivity()
                         targetRotation = event.rotation
                     }
                     mc.player?.inventory?.selectedSlot = intendedSlot
@@ -148,7 +148,7 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
             }
         }
         registerEvent(EventDisconnect::class.java) { event ->
-            if(event.connection == mc.player?.networkHandler?.connection) {
+            if (event.connection == mc.player?.networkHandler?.connection) {
                 state = State.IDLE // Abort
             }
         }

@@ -52,7 +52,7 @@ class ModuleAutoArmor : Module("Auto armor", "Equips armor if none is equipped",
                 return@registerEvent
 
             if (mousePos == null) {
-                mousePos = Vec2f(mc.window.scaledWidth / 2f, mc.window.scaledHeight / 2f)
+                mousePos = Vec2f(mc.window.scaledWidth / 2F, mc.window.scaledHeight / 2F)
             }
 
             val bestArmors = EquipmentSlot.values()
@@ -81,8 +81,8 @@ class ModuleAutoArmor : Module("Auto armor", "Equips armor if none is equipped",
 
             if (nextSlot != null) {
                 val displayPos = ContainerUtil.getDisplayPosition(accessor, nextSlot).add(Vec2f(
-                    if (randomize.value == 0.0) 0.0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat(),
-                    if (randomize.value == 0.0) 0.0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
+                    if (randomize.value == 0.0) 0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat(),
+                    if (randomize.value == 0.0) 0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
                 ))
                 val distance = mousePos?.distanceSquared(displayPos)!!
                 mousePos = displayPos

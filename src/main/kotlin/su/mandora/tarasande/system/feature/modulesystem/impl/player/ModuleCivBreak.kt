@@ -35,8 +35,8 @@ class ModuleCivBreak : Module("Civ break", "Breaks blocks multiple times", Modul
 
     init {
         registerEvent(EventTick::class.java) { event ->
-            if(event.state == EventTick.State.POST) {
-                if(queriedBlock != null) {
+            if (event.state == EventTick.State.POST) {
+                if (queriedBlock != null) {
                     sendPackets(startBreaking = true, stopBreaking = true, queriedBlock!!.first, queriedBlock!!.second)
                     queriedBlock = null
                 }
@@ -53,7 +53,7 @@ class ModuleCivBreak : Module("Civ break", "Breaks blocks multiple times", Modul
 
                     PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK -> {
                         if (packets.isSelected(1)) {
-                            if(!packets.isSelected(0)) {
+                            if (!packets.isSelected(0)) {
                                 sendPackets(startBreaking = false, stopBreaking = true, event.packet.pos, event.packet.direction)
                             } else {
                                 queriedBlock = Pair(event.packet.pos, event.packet.direction)

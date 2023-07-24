@@ -48,7 +48,7 @@ object PredictionEngine {
             }
 
             override fun tickMovement() {
-                fallDistance = 0.0F
+                fallDistance = 0F
                 super.tickMovement()
             }
 
@@ -128,12 +128,12 @@ object PredictionEngine {
         val prevParticlesEnabled = (mc.particleManager as IParticleManager).tarasande_isParticlesEnabled() // race conditions :c
         (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
 
-        for(i in 0 until count) {
+        for (i in 0 until count) {
             playerEntity.resetPosition()
             playerEntity.age++
             playerEntity.tick()
             list.add(playerEntity.pos)
-            if(abortWhen.invoke(playerEntity))
+            if (abortWhen.invoke(playerEntity))
                 break
         }
 
@@ -158,14 +158,14 @@ object PredictionEngine {
 
 
     private fun getClosestInput(baseEntity: PlayerEntity): Input {
-        val prevServerPos = (baseEntity as ILivingEntity).tarasande_prevServerPos() ?: return Input(0.0F, 0.0F)
+        val prevServerPos = (baseEntity as ILivingEntity).tarasande_prevServerPos() ?: return Input(0F, 0F)
         val velocity = Vec3d(baseEntity.serverX, baseEntity.serverY, baseEntity.serverZ) - prevServerPos
 
         var best: Pair<Input, Double>? = null
         for (input in allInputs) {
             @Suppress("NAME_SHADOWING")
             val input = input.with(!baseEntity.isOnGround, baseEntity.isSneaking)
-            val standStill = input.movementForward == 0.0F && input.movementSideways == 0.0F
+            val standStill = input.movementForward == 0F && input.movementSideways == 0F
             if (velocity.horizontalLengthSquared() > 0.0 && standStill)
                 continue
 
@@ -173,7 +173,7 @@ object PredictionEngine {
                 if (standStill)
                     Vec3d(0.0, 0.0, 0.0)
                 else
-                    Entity.movementInputToVelocity(input.movementInput.let { Vec3d(it.x.toDouble(), 0.0, it.y.toDouble()) }, 1.0F, baseEntity.serverYaw.toFloat())
+                    Entity.movementInputToVelocity(input.movementInput.let { Vec3d(it.x.toDouble(), 0.0, it.y.toDouble()) }, 1F, baseEntity.serverYaw.toFloat())
 
             val distance = velocity.distanceTo(nextPos)
             if (best == null || best.second > distance)

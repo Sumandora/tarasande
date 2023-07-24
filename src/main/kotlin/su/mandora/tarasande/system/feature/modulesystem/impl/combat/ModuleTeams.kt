@@ -7,7 +7,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 
-class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCategory.COMBAT) {
+class ModuleTeams : Module("Teams", "Prevents targeting of teammates", ModuleCategory.COMBAT) {
 
     private val mode = ValueMode(this, "Mode", true, "Vanilla team", "Display name")
     private val displayNameMode = ValueMode(this, "Display name mode", true, "Sibling styles", "Paragraph symbols", isEnabled = { mode.isSelected(1) })
@@ -71,7 +71,7 @@ class ModuleTeams : Module("Teams", "Prevents targeting teammates", ModuleCatego
             if (!event.attackable) return@registerEvent
             if (event.entity !is PlayerEntity) return@registerEvent
 
-            if(isTeammate(event.entity))
+            if (isTeammate(event.entity))
                 event.attackable = false
         }
     }

@@ -52,7 +52,7 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                 val selfColliding = (entityPosition - prevPosition).horizontalLength() > (entityPosition - currentPosition).horizontalLength()
                 val otherColliding = (currentPosition - prevEntityPosition).horizontalLength() > (currentPosition - entityPosition).horizontalLength()
 
-                if(selfColliding && otherColliding) // Are the duellists running into each other?
+                if (selfColliding && otherColliding) // Are the duellists running into each other?
                     changeBinds = true
             }
         }
@@ -62,13 +62,13 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                 if (changeBinds) {
                     when {
                         mode.isSelected(0) -> {
-                            event.movementForward = 0.0F
-                            event.movementSideways = 0.0F
+                            event.movementForward = 0F
+                            event.movementSideways = 0F
                         }
 
                         mode.isSelected(1) -> {
-                            event.movementForward *= -1.0F
-                            event.movementSideways *= -1.0F
+                            event.movementForward *= -1F
+                            event.movementSideways *= -1F
                         }
                     }
                 }

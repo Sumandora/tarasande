@@ -8,19 +8,19 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
-import su.mandora.tarasande.system.base.grabbersystem.ManagerGrabber;
-import su.mandora.tarasande.system.base.grabbersystem.impl.GrabberDefaultFlightSpeed;
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
 import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModulePortalScreen;
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleFlight;
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleNoSlowdown;
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
+import su.mandora.tarasande.util.MinecraftConstantsKt;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity {
@@ -69,7 +69,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
     public boolean hookFlight(PlayerAbilities instance) {
         tarasande_flight = false;
         if ((Object) this == MinecraftClient.getInstance().player) {
-            tarasande_flightSpeed = (float) ManagerGrabber.INSTANCE.getConstant(GrabberDefaultFlightSpeed.class);
+            tarasande_flightSpeed = MinecraftConstantsKt.DEFAULT_FLIGHT_SPEED;
             ModuleFlight moduleFlight = ManagerModule.INSTANCE.get(ModuleFlight.class);
             if (moduleFlight.getEnabled().getValue() && moduleFlight.getMode().isSelected(0)) {
                 tarasande_flight = true;
@@ -127,5 +127,15 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
                 return instance.getMovementInput().length();
         }
         return instance.movementForward;
+    }
+
+    @Redirect(method = "canSprint", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;getFoodLevel()I"))
+    public int hookSprint(HungerManager instance) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
+            ModuleSprint moduleSprint = ManagerModule.INSTANCE.get(ModuleSprint.class);
+            if (moduleSprint.getEnabled().getValue() && moduleSprint.getIgnoreHunger().getValue())
+                return MinecraftConstantsKt.MAX_FOOD_LEVEL;
+        }
+        return instance.getFoodLevel();
     }
 }

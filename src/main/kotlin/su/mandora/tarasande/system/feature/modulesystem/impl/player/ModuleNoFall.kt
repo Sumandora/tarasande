@@ -18,7 +18,7 @@ class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", Module
     private val fallDistance = ValueNumber(this, "Fall distance", 0.0, 3.0, 10.0, 0.1, isEnabled = { !(mode.isSelected(0) && groundSpoofMode.isSelected(1)) })
     private val resetFallDistance = ValueBoolean(this, "Reset fall distance", true, isEnabled = { (mode.isSelected(0) && groundSpoofMode.isSelected(0)) || mode.isSelected(1) })
 
-    private var prevFallDistance = 0.0F
+    private var prevFallDistance = 0F
 
     init {
         registerEvent(EventPacket::class.java) { event ->
@@ -26,7 +26,7 @@ class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", Module
                 if (mc.player?.fallDistance!! >= fallDistance.value || groundSpoofMode.isSelected(1)) {
                     event.packet.onGround = groundSpoofMode.isSelected(0)
                     if (groundSpoofMode.isSelected(0) && resetFallDistance.value)
-                        mc.player?.fallDistance = 0.0F
+                        mc.player?.fallDistance = 0F
                 }
             }
         }
@@ -36,7 +36,7 @@ class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", Module
                 if (mode.isSelected(1) && mc.player?.fallDistance!! >= fallDistance.value && !mc.player?.lastOnGround!!) {
                     mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.OnGroundOnly(true))
                     if (resetFallDistance.value)
-                        mc.player?.fallDistance = 0.0F
+                        mc.player?.fallDistance = 0F
                 }
                 prevFallDistance = mc.player?.fallDistance!!
             }

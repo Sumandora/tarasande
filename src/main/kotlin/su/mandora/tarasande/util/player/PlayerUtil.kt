@@ -46,7 +46,7 @@ object PlayerUtil {
         }
     }
 
-    fun isPlayerMoving() = mc.player!!.input.movementInput.lengthSquared() != 0.0F
+    fun isPlayerMoving() = mc.player!!.input.movementInput.lengthSquared() != 0F
 
     fun isAttackable(entity: Entity?): Boolean {
         if (entity == null) return false
@@ -85,9 +85,9 @@ object PlayerUtil {
         Rotations.fakeRotation = null // prevent rotationvec override by mixin
 
         val prevTickDelta = renderTickCounter.tickDelta
-        renderTickCounter.tickDelta = 1.0F
+        renderTickCounter.tickDelta = 1F
 
-        gameRenderer.updateTargetedEntity(1.0F)
+        gameRenderer.updateTargetedEntity(1F)
         val hitResult = mc.crosshairTarget
 
         renderTickCounter.tickDelta = prevTickDelta
@@ -116,7 +116,7 @@ object PlayerUtil {
     }
 
     fun getMoveDirection(): Double {
-        return RotationUtil.getYaw(input.movementInput) + (if (input.movementInput.lengthSquared() != 0.0F) 0.0 else 90.0) + mc.player!!.yaw
+        return RotationUtil.getYaw(input.movementInput) + (if (input.movementInput.lengthSquared() != 0F) 0.0 else 90.0) + mc.player!!.yaw
     }
 
     fun isOnEdge(extrapolation: Double) = mc.player!!.let {
@@ -188,7 +188,7 @@ object PlayerUtil {
     }
 
     fun getBreakSpeed(blockPos: BlockPos, item: Int): Float {
-        val state = mc.world?.getBlockState(blockPos) ?: return 0.0F
+        val state = mc.world?.getBlockState(blockPos) ?: return 0F
 
         val origSlot = mc.player?.inventory?.selectedSlot
         mc.player?.inventory?.selectedSlot = item
@@ -197,7 +197,7 @@ object PlayerUtil {
 
         mc.player?.inventory?.selectedSlot = origSlot
 
-        return 1.0F - speed
+        return 1F - speed
     }
 
     fun predictFallDistance(position: BlockPos = mc.player?.blockPos!!): Int? {
@@ -209,7 +209,7 @@ object PlayerUtil {
     }
 
     fun disconnect() {
-        if(mc.world != null)
+        if (mc.world != null)
             GameMenuScreen(true).also {
                 it.init(mc, mc.window.scaledWidth, mc.window.scaledHeight)
                 it.exitButton!!.onPress()
@@ -219,7 +219,7 @@ object PlayerUtil {
     fun attack(entity: Entity?, position: Vec3d? = null) {
         val original = mc.crosshairTarget
         if (entity != null) {
-            mc.crosshairTarget = if(position == null) EntityHitResult(entity) else EntityHitResult(entity, position)
+            mc.crosshairTarget = if (position == null) EntityHitResult(entity) else EntityHitResult(entity, position)
         } else {
             mc.crosshairTarget = object : HitResult(null) {
                 override fun getType() = Type.MISS

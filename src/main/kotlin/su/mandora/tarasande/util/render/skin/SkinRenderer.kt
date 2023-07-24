@@ -1,11 +1,10 @@
 package su.mandora.tarasande.util.render.skin
 
 import com.mojang.authlib.GameProfile
-import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.PlayerSkinDrawer
 import net.minecraft.client.network.PlayerListEntry
-import net.minecraft.client.util.math.MatrixStack
 import su.mandora.tarasande.injection.accessor.IPlayerSkinProvider
 import java.util.*
 
@@ -17,8 +16,7 @@ class SkinRenderer(val uuid: UUID?, val name: String) {
         playerListHud.skinTexture // force-load
     }
 
-    fun draw(matrices: MatrixStack, x: Int, y: Int, size: Int) {
-        RenderSystem.setShaderTexture(0, playerListHud.skinTexture)
-        PlayerSkinDrawer.draw(matrices, x, y, size)
+    fun draw(context: DrawContext, x: Int, y: Int, size: Int) {
+        PlayerSkinDrawer.draw(context, playerListHud.skinTexture, x, y, size)
     }
 }

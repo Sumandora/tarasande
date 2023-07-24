@@ -1,10 +1,10 @@
 package su.mandora.tarasande.util.render.helper
 
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 
 interface IElement {
     fun init()
-    fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float)
+    fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float)
     fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean
     fun mouseReleased(mouseX: Double, mouseY: Double, button: Int)
     fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean

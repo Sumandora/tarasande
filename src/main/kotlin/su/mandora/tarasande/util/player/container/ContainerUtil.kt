@@ -6,24 +6,18 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.*
+import net.minecraft.screen.PlayerScreenHandler
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.util.math.Vec2f
 import su.mandora.tarasande.mc
-import su.mandora.tarasande.system.base.grabbersystem.ManagerGrabber
-import su.mandora.tarasande.system.base.grabbersystem.impl.GrabberOffHandSlot
-import su.mandora.tarasande.system.base.grabbersystem.impl.GrabberSlotRenderSize
+import su.mandora.tarasande.util.SLOT_RENDER_SIZE
 import su.mandora.tarasande.util.extension.minecraft.safeCount
 
 object ContainerUtil {
 
-    @Suppress("UNCHECKED_CAST")
-    val offHandIndex = ManagerGrabber.getConstant(GrabberOffHandSlot::class.java) as Pair<Int /* Client ID */, Int /* Networked ID */>
-
-    private val slotWidthAndHeight = ManagerGrabber.getConstant(GrabberSlotRenderSize::class.java) as Int
-
     fun getDisplayPosition(original: HandledScreen<*>, slot: Slot): Vec2f {
-        val halfSize = slotWidthAndHeight / 2
+        val halfSize = SLOT_RENDER_SIZE / 2
         return Vec2f(original.x + slot.x.toFloat() + halfSize, original.y + slot.y.toFloat() + halfSize)
     }
 
@@ -50,8 +44,8 @@ object ContainerUtil {
             is SwordItem -> (stack.item as SwordItem).material.attackDamage
             is ToolItem -> (stack.item as ToolItem).material.durability.toFloat()
             is ArmorItem -> (stack.item as ArmorItem).protection.toFloat()
-            else -> 0.0F
-        }.times(if (durability) (1.0F - stack.damage / stack.maxDamage.toFloat()) else 1.0F)
+            else -> 0F
+        }.times(if (durability) (1F - stack.damage / stack.maxDamage.toFloat()) else 1F)
     }
 
     private fun isSameItemType(stack: ItemStack, otherStack: ItemStack): Boolean {
@@ -80,7 +74,7 @@ object ContainerUtil {
 
         for (otherStack in list) {
             if (isSameItemType(stack, otherStack)) {
-                if(stack.isOf(Items.TURTLE_HELMET) != otherStack.isOf(Items.TURTLE_HELMET))
+                if (stack.isOf(Items.TURTLE_HELMET) != otherStack.isOf(Items.TURTLE_HELMET))
                     continue // Turtle helmets grant water breathing, this is something unique to the turtle helmet, this behaviour is hardcoded into the game, im going to commit arson
 
                 val otherEnchantments = EnchantmentHelper.get(otherStack)
@@ -91,7 +85,6 @@ object ContainerUtil {
 //                    if (otherStack.damage > stack.damage * durability)
 //                        continue
 
-                    //println("$stack $otherStack $materialScore > $otherMaterialScore ${1.0F - stack.damage / stack.maxDamage.toFloat()} ${1.0F - otherStack.damage / otherStack.maxDamage.toFloat()} ${enchantments.isEmpty() && otherEnchantments.isNotEmpty()} ${((materialScore == null || otherMaterialScore == null) || (if (keepSameMaterial) otherMaterialScore > materialScore else otherMaterialScore >= materialScore))}")
                     return true
                 }
             }
@@ -104,14 +97,14 @@ object ContainerUtil {
         return when (stack.item) {
             is SwordItem -> (stack.item as SwordItem).material.attackDamage
             is ToolItem -> (stack.item as ToolItem).material.attackDamage
-            else -> 0.0F
+            else -> 0F
         }
     }
 
     fun getHotbarSlots() = mc.player?.inventory?.main?.subList(0, PlayerInventory.getHotbarSize())!!
 
     fun isInHotbar(index: Int): Boolean {
-        return index in (offHandIndex.second - 1).let { it - PlayerInventory.getHotbarSize() .. it }
+        return index in (getOffHandSlot(mc.player?.playerScreenHandler!!).id - 1).let { it - PlayerInventory.getHotbarSize()..it }
     }
 
     fun findSlot(filter: (IndexedValue<ItemStack>) -> Boolean): Int? {
@@ -120,5 +113,9 @@ object ContainerUtil {
 
     fun getProperEnchantments(stack: ItemStack): Map<Enchantment, Int> {
         return EnchantmentHelper.get(stack).filter { it.key.isAcceptableItem(stack) }
+    }
+
+    fun getOffHandSlot(screenHandler: ScreenHandler): Slot {
+        return screenHandler.slots.first { it.backgroundSprite?.second == PlayerScreenHandler.EMPTY_OFFHAND_ARMOR_SLOT }
     }
 }

@@ -75,11 +75,13 @@ class InformationTimers : Information("Badlion", "Timers") {
     inner class Timer {
         var id: Long? = null
         private var name: String? = null
+
         @Suppress("unused")
         var item: Item? = null
 
         @Suppress("MemberVisibilityCanBePrivate")
         var repeating: Boolean? = null
+
         @Suppress("unused")
         var time: Long? = null
 
@@ -95,8 +97,8 @@ class InformationTimers : Information("Badlion", "Timers") {
         }
 
         private fun calcInterpolatedTime(): Long {
-            val timeDelta = (System.currentTimeMillis() - lastUpdated!!) / 50f
-            return ((currentTime!! - timeDelta) / 20f * 1000F).toLong()
+            val timeDelta = (System.currentTimeMillis() - lastUpdated!!) / 50F
+            return ((currentTime!! - timeDelta) / 20F * 1000F).toLong()
         }
 
         fun isHidden(): Boolean {

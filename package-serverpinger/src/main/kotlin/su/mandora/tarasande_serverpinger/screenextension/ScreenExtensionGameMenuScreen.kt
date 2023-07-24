@@ -23,7 +23,7 @@ class ScreenExtensionGameMenuScreen : ScreenExtension<GameMenuScreen>(GameMenuSc
             mc.setScreen(DirectConnectScreen(screen, {
                 if (it) {
                     PlayerUtil.disconnect()
-                    ConnectScreen.connect(MultiplayerScreen(TitleScreen()), mc, ServerAddress.parse(serverEntry.address), serverEntry)
+                    ConnectScreen.connect(MultiplayerScreen(TitleScreen()), mc, ServerAddress.parse(serverEntry.address), serverEntry, false)
                 } else {
                     mc.setScreen(screen)
                 }

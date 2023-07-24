@@ -1,10 +1,12 @@
 package su.mandora.tarasande.feature.rotation
 
+import net.minecraft.client.gui.screen.ingame.HandledScreen
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventPollEvents
 import su.mandora.tarasande.event.impl.EventRotation
 import su.mandora.tarasande.event.impl.EventTick
 import su.mandora.tarasande.feature.rotation.correctmovement.CorrectMovement
+import su.mandora.tarasande.feature.tarasandevalue.impl.TargetingValues
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
@@ -25,6 +27,7 @@ object Rotations {
     val adjustThirdPersonModel = ValueBoolean(this, "Adjust third person model", true)
 
     private var rotated = false
+
     init {
         EventDispatcher.apply {
             add(EventPollEvents::class.java) {
@@ -61,7 +64,10 @@ object Rotations {
         if (mc.player != null && mc.interactionManager != null) {
             val realRotation = Rotation(mc.player!!)
             val eventRotation = EventRotation(realRotation)
-            EventDispatcher.call(eventRotation)
+
+            if (!TargetingValues.closedInventory.value || mc.currentScreen !is HandledScreen<*>) // Play it off like nobody modified the event
+                EventDispatcher.call(eventRotation)
+
             if (eventRotation.dirty) {
                 fakeRotation = eventRotation.rotation
             } else if (fakeRotation != null) {
@@ -83,7 +89,7 @@ object Rotations {
                 }
             }
 
-            if(visualizeFakeRotation.value)
+            if (visualizeFakeRotation.value)
                 fakeRotation?.also {
                     mc.player!!.apply {
                         yaw = it.yaw

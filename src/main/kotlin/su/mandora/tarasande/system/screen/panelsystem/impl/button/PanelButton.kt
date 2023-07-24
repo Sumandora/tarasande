@@ -1,7 +1,7 @@
 package su.mandora.tarasande.system.screen.panelsystem.impl.button
 
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.sound.PositionedSoundInstance
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.sound.SoundEvents
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.panelsystem.Panel
@@ -22,17 +22,17 @@ class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val t
         }
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         panelWidth = width.toDouble()
         panelHeight = height.toDouble()
-        super.render(matrices, mouseX, mouseY, delta)
+        super.render(context, mouseX, mouseY, delta)
     }
 
-    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val middleX = x + panelWidth / 2.0
         val middleY = y + titleBarHeight + (panelHeight - titleBarHeight) / 2.0
 
-        FontWrapper.textShadow(matrices,
+        FontWrapper.textShadow(context,
             text,
             middleX.toFloat(),
             (middleY - FontWrapper.fontHeight() * 0.25F).toFloat(),
@@ -43,7 +43,7 @@ class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val t
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         return if (RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)) {
-            mc.soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F))
+            mc.soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1F))
             pressAction(button)
             true
         } else

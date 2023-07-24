@@ -12,6 +12,7 @@ import su.mandora.tarasande.util.player.PlayerUtil
 class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MOVEMENT) {
 
     val allowBackwards = ValueBoolean(this, "Allow backwards", false, isEnabled = { !Rotations.correctMovement.isSelected(1) })
+    val ignoreHunger = ValueBoolean(this, "Ignore hunger", false)
 
     init {
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->

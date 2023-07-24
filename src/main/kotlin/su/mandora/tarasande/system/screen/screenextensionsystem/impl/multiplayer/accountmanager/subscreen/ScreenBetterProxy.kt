@@ -1,9 +1,9 @@
 package su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen
 
 import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import org.lwjgl.glfw.GLFW
@@ -142,10 +142,10 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
         super.tick()
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        super.render(matrices, mouseX, mouseY, delta)
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        super.render(context, mouseX, mouseY, delta)
         proxy?.socketAddress?.apply {
-            FontWrapper.textShadow(matrices, address.hostAddress + ":" + port + if (proxy?.ping != null) " (" + proxy?.ping + "ms)" else "", width / 2.0F, height / 2.0F - 100, centered = true)
+            FontWrapper.textShadow(context, address.hostAddress + ":" + port + if (proxy?.ping != null) " (" + proxy?.ping + "ms)" else "", width / 2F, height / 2F - 100, centered = true)
         }
     }
 

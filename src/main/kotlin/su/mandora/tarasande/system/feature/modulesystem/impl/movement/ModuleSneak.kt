@@ -11,7 +11,7 @@ import su.mandora.tarasande.util.player.PlayerUtil
 
 class ModuleSneak : Module("Sneak", "Automatically sneaks", ModuleCategory.MOVEMENT) {
 
-    private val activation = ValueMode(this, "Activation", false, "Manual", "When standing still", "Permanent")
+    private val activation = ValueMode(this, "Activation", false, "Manually", "When standing still", "Permanently")
 
     private val dontSlowdown = ValueBoolean(this, "Don't slowdown", false)
 

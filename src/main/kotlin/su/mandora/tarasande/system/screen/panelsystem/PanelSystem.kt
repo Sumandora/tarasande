@@ -2,8 +2,8 @@ package su.mandora.tarasande.system.screen.panelsystem
 
 import com.mojang.blaze3d.platform.GlConst
 import com.mojang.blaze3d.platform.GlStateManager
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.MathHelper
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.Manager
@@ -21,6 +21,7 @@ import su.mandora.tarasande.system.screen.panelsystem.impl.fixed.*
 import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import su.mandora.tarasande.system.screen.panelsystem.screen.panelscreen.ScreenPanel
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
+import su.mandora.tarasande.util.extension.minecraft.fill
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
@@ -83,7 +84,7 @@ open class Panel(
 ) : IElement {
 
     // Fixed panels
-    constructor(title: String, width: Double, height: Double, background: Boolean = false) : this(title, width, height, null, null, background, false, true, background)
+    constructor(title: String, width: Double, height: Double, background: Boolean = false, resizable: Boolean = true) : this(title, width, height, null, null, background, resizable, true, background)
 
     // Sidebar panels
     constructor(title: String, width: Double) : this(title, width, 0.0, null, null, true, false, false, true)
@@ -112,9 +113,9 @@ open class Panel(
                 add(EventRender2D::class.java) {
                     if (isVisible() && opened)
                         if (mc.currentScreen != ManagerPanel.screenPanel) {
-                            it.matrices.push()
-                            render(it.matrices, -1, -1, mc.tickDelta)
-                            it.matrices.pop()
+                            it.context.matrices.push()
+                            render(it.context, -1, -1, mc.tickDelta)
+                            it.context.matrices.pop()
                         }
                 }
 
@@ -176,7 +177,7 @@ open class Panel(
         }
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         if (fixed) {
             when {
                 x + panelWidth / 2 <= mc.window.scaledWidth * 0.33 -> alignment = Alignment.LEFT
@@ -190,15 +191,15 @@ open class Panel(
 
         if (opened) {
             if (background) {
-                matrices.push()
+                context.matrices.push()
                 val previousFramebuffer = GlStateManager.getBoundFramebuffer()
                 ManagerBlur.bind(true, usedInScreen)
-                RenderUtil.fill(matrices, x, y, x + panelWidth, y + effectivePanelHeight(), -1)
+                context.fill(x, y, x + panelWidth, y + effectivePanelHeight(), -1)
                 GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, previousFramebuffer)
 
                 val accent = TarasandeValues.accentColor.getColor()
-                RenderUtil.fill(matrices, x, y + titleBarHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 0.7).rgb)
-                matrices.pop()
+                context.fill(x, y + titleBarHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 0.7).rgb)
+                context.matrices.pop()
             }
 
             if (scissor) {
@@ -212,17 +213,17 @@ open class Panel(
                 )
             }
 
-            matrices.push()
-            matrices.translate(0.0, scrollOffset, 0.0)
-            renderContent(matrices, mouseX, mouseY, delta)
-            matrices.pop()
+            context.matrices.push()
+            context.matrices.translate(0.0, scrollOffset, 0.0)
+            renderContent(context, mouseX, mouseY, delta)
+            context.matrices.pop()
 
             if (scissor) {
                 GlStateManager._disableScissorTest()
             }
         }
 
-        renderTitleBar(matrices, mouseX, mouseY, delta)
+        renderTitleBar(context, mouseX, mouseY, delta)
 
         if (dragInfo.dragging) {
             x = round(mouseX - dragInfo.xOffset)
@@ -243,16 +244,16 @@ open class Panel(
         panelHeight = MathHelper.clamp(panelHeight, minHeight, maxHeight ?: mc.window.scaledHeight.toDouble())
     }
 
-    open fun renderTitleBar(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        RenderUtil.fill(matrices, x, y, x + panelWidth, y + titleBarHeight, TarasandeValues.accentColor.getColor().rgb)
+    open fun renderTitleBar(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        context.fill(x, y, x + panelWidth, y + titleBarHeight, TarasandeValues.accentColor.getColor().rgb)
         when (alignment) {
-            Alignment.LEFT -> FontWrapper.textShadow(matrices, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
-            Alignment.MIDDLE -> FontWrapper.textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(title).toFloat() / 2.0F, y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
-            Alignment.RIGHT -> FontWrapper.textShadow(matrices, title, x.toFloat() + panelWidth.toFloat() - FontWrapper.getWidth(title).toFloat(), y.toFloat() + titleBarHeight / 2f - FontWrapper.fontHeight() / 2f, -1)
+            Alignment.LEFT -> FontWrapper.textShadow(context, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2F - FontWrapper.fontHeight() / 2F, -1)
+            Alignment.MIDDLE -> FontWrapper.textShadow(context, title, x.toFloat() + panelWidth.toFloat() / 2F - FontWrapper.getWidth(title).toFloat() / 2F, y.toFloat() + titleBarHeight / 2F - FontWrapper.fontHeight() / 2F, -1)
+            Alignment.RIGHT -> FontWrapper.textShadow(context, title, x.toFloat() + panelWidth.toFloat() - FontWrapper.getWidth(title).toFloat(), y.toFloat() + titleBarHeight / 2F - FontWrapper.fontHeight() / 2F, -1)
         }
     }
 
-    open fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    open fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

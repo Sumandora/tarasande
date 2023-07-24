@@ -15,9 +15,9 @@ public class MixinRenderSystem {
     private static void hookFog(float red, float green, float blue, float alpha) {
         ModuleFog moduleFog = ManagerModule.INSTANCE.get(ModuleFog.class);
         if (moduleFog.getEnabled().getValue()) {
-            red = moduleFog.getColor().getColor().getRed() / 255.0F;
-            green = moduleFog.getColor().getColor().getGreen() / 255.0F;
-            blue = moduleFog.getColor().getColor().getBlue() / 255.0F;
+            red = moduleFog.getColor().getColor().getRed() / 255F;
+            green = moduleFog.getColor().getColor().getGreen() / 255F;
+            blue = moduleFog.getColor().getColor().getBlue() / 255F;
         }
         GlStateManager._clearColor(red, green, blue, alpha);
     }

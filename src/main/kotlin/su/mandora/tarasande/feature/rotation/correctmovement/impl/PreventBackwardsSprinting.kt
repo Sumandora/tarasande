@@ -13,7 +13,7 @@ class PreventBackwardsSprinting(rotations: Rotations) {
         EventDispatcher.add(EventCanSprint::class.java) {
             val fakeRotation = rotations.fakeRotation ?: return@add
             if (rotations.correctMovement.isSelected(1)) {
-                if (abs(MathHelper.wrapDegrees(fakeRotation.yaw - mc.player?.yaw!!)) > 45.0F)
+                if (abs(MathHelper.wrapDegrees(fakeRotation.yaw - mc.player?.yaw!!)) > 45F)
                     it.canSprint = false // oof
             }
         }

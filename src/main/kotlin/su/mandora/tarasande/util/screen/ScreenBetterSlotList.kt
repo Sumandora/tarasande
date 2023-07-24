@@ -1,20 +1,17 @@
 package su.mandora.tarasande.util.screen
 
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.screen.narration.NarrationPart
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import su.mandora.tarasande.feature.tarasandevalue.impl.AccessibilityValues
 import su.mandora.tarasande.mc
-import su.mandora.tarasande.system.base.grabbersystem.ManagerGrabber
-import su.mandora.tarasande.system.base.grabbersystem.impl.GrabberScrollbarWidth
+import su.mandora.tarasande.util.SCROLLBAR_WIDTH
 import su.mandora.tarasande.util.extension.minecraft.ButtonWidget
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
-
-private val scrollbarWidth by lazy { ManagerGrabber.getConstant(GrabberScrollbarWidth::class.java) as Int }
 
 private typealias ListProvider = () -> List<EntryScreenBetterSlotList>
 private typealias SlotListWidget = AlwaysSelectedEntryListWidgetScreenBetterSlotList // Yarn names are way too long for my taste
@@ -31,12 +28,6 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
     }
 
     override fun init() {
-        if (prevScreen != null) {
-            this.addDrawableChild(ButtonWidget(3, height - 20 - 3, 20, 20, Text.literal("<-")) {
-                mc.setScreen(prevScreen)
-            })
-        }
-
         val entries = ArrayList<SlotListEntry>()
         for (entry in listProvider!!()) {
             entries.add(entry)
@@ -47,16 +38,22 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
             slotList = it
         })
 
+        if (prevScreen != null) {
+            this.addDrawableChild(ButtonWidget(3, height - 20 - 3, 20, 20, Text.literal("<-")) {
+                mc.setScreen(prevScreen)
+            })
+        }
+
         reload()
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        super.render(matrices, mouseX, mouseY, delta)
-        FontWrapper.textShadow(matrices, title.string, width / 2F, top / 2 - (FontWrapper.fontHeight() / 2F), scale = 2F, centered = true)
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        super.render(context, mouseX, mouseY, delta)
+        FontWrapper.textShadow(context, title.string, width / 2F, top / 2 - (FontWrapper.fontHeight() / 2F), scale = 2F, centered = true)
     }
 
     fun reload() {
-        if(slotList == null || listProvider == null)
+        if (slotList == null || listProvider == null)
             return
         val slotList = slotList!!
 
@@ -66,7 +63,7 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
         for (entry in listProvider!!()) {
             entries.add(entry)
         }
-        if(entries.isNotEmpty()) {
+        if (entries.isNotEmpty()) {
             val entryWidth = entries.maxOf { it.width }
             val entryHeight = entries.maxOf { it.height }
 
@@ -82,7 +79,7 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
             slotList.itemHeight = 1
         }
 
-        if(slotList.scrollAmount > slotList.maxScroll)
+        if (slotList.scrollAmount > slotList.maxScroll)
             slotList.scrollAmount = slotList.maxScroll.toDouble()
     }
 }
@@ -92,7 +89,7 @@ class AlwaysSelectedEntryListWidgetScreenBetterSlotList(val parent: ScreenBetter
 
     override fun getRowWidth() = entryWidth
 
-    override fun getScrollbarPositionX() = this.width / 2 + (this.entryWidth / 2) + scrollbarWidth
+    override fun getScrollbarPositionX() = this.width / 2 + (this.entryWidth / 2) + SCROLLBAR_WIDTH
 
     override fun appendNarrations(builder: NarrationMessageBuilder?) {
         builder?.put(NarrationPart.TITLE, parent.title + " List")
@@ -111,7 +108,7 @@ abstract class EntryScreenBetterSlotList(val width: Int, val height: Int, privat
         return this.parentList.parent.selected == index
     }
 
-    open fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
+    open fun renderEntry(context: DrawContext, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
     }
 
     open fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
@@ -132,13 +129,13 @@ abstract class EntryScreenBetterSlotList(val width: Int, val height: Int, privat
         return super.mouseClicked(mouseX, mouseY, button)
     }
 
-    override fun render(matrices: MatrixStack, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
+    override fun render(context: DrawContext, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
         this.index = index
 
-        matrices.push()
-        matrices.translate(x.toDouble(), y.toDouble(), 0.0)
-        this.renderEntry(matrices, index, entryWidth, entryHeight, mouseX, mouseY, hovered)
-        matrices.pop()
+        context.matrices.push()
+        context.matrices.translate(x.toDouble(), y.toDouble(), 0.0)
+        this.renderEntry(context, index, entryWidth, entryHeight, mouseX, mouseY, hovered)
+        context.matrices.pop()
 
         if (this.isSelected())
             this.parentList.setSelected(this)

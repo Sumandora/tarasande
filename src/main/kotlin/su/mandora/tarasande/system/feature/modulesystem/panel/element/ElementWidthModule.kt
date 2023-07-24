@@ -1,8 +1,8 @@
 package su.mandora.tarasande.system.feature.modulesystem.panel.element
 
 import com.mojang.blaze3d.systems.RenderSystem
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.*
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.RotationAxis
 import net.minecraft.util.math.Vec2f
 import org.lwjgl.opengl.GL11
@@ -10,6 +10,7 @@ import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.system.base.valuesystem.ManagerValue
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import su.mandora.tarasande.system.feature.modulesystem.Module
+import su.mandora.tarasande.util.extension.minecraft.fill
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.RenderUtil.isHovered
 import su.mandora.tarasande.util.render.font.FontWrapper
@@ -33,22 +34,22 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
         components.forEach(ElementWidthValueComponent<*>::init)
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        RenderUtil.fill(matrices, 0.0, 0.0, this.width, this.getHeight(), Int.MIN_VALUE)
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        context.fill(0.0, 0.0, this.width, this.getHeight(), Int.MIN_VALUE)
 
         val white = Color.white
 
-        FontWrapper.textShadow(matrices,
+        FontWrapper.textShadow(context,
             module.name,
-            2.0F,
+            2F,
             (this.defaultHeight * 0.25F - FontWrapper.fontHeight() * 0.25F).toFloat(),
             white.rgb,
             scale = 0.75F,
             offset = 0.5F
         )
-        FontWrapper.textShadow(matrices,
+        FontWrapper.textShadow(context,
             this.module.description,
-            2.0F,
+            2F,
             (this.defaultHeight * 0.75F - FontWrapper.fontHeight() * 0.25F).toFloat(),
             Color.lightGray.rgb,
             scale = 0.5F,
@@ -57,47 +58,47 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
 
         val toggleAnimation = min((System.currentTimeMillis() - toggleTime) / 100.0, 1.0)
         val radius = if (module.enabled.value) toggleAnimation else 1.0 - toggleAnimation
-        RenderUtil.fillCircle(matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeValues.accentColor.getColor().rgb)
-        RenderUtil.outlinedCircle(matrices, width - 7, defaultHeight / 2, 4.0, 2.0F, RenderUtil.colorInterpolate(TarasandeValues.accentColor.getColor(), Color.white, radius).rgb)
+        RenderUtil.fillCircle(context.matrices, width - 7, defaultHeight / 2, radius * 4.0, TarasandeValues.accentColor.getColor().rgb)
+        RenderUtil.outlinedCircle(context.matrices, width - 7, defaultHeight / 2, 4.0, 2F, RenderUtil.colorInterpolate(TarasandeValues.accentColor.getColor(), Color.white, radius).rgb)
 
         if (components.isNotEmpty()) {
             val expansionAnimation = min((System.currentTimeMillis() - expansionTime) / 100.0, 1.0)
             val expansion = if (expanded) expansionAnimation else 1.0 - expansionAnimation
 
-            matrices.push()
+            context.matrices.push()
             GL11.glEnable(GL11.GL_LINE_SMOOTH)
             GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST)
             val lineWidth = GL11.glGetFloat(GL11.GL_LINE_WIDTH)
-            GL11.glLineWidth(2.0F)
-            val matrix = matrices.peek()?.positionMatrix!!
+            GL11.glLineWidth(2F)
+            val matrix = context.matrices.peek()?.positionMatrix!!
             val bufferBuilder = Tessellator.getInstance().buffer
             RenderSystem.enableBlend()
-            
+
             RenderSystem.defaultBlendFunc()
             RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
-            matrices.translate(this.width - 16, this.defaultHeight / 2, 0.0)
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((expansion * 90.0).toFloat()))
-            matrices.translate(-(this.width - 16), -(this.defaultHeight / 2), 0.0)
+            context.matrices.translate(this.width - 16, this.defaultHeight / 2, 0.0)
+            context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((expansion * 90.0).toFloat()))
+            context.matrices.translate(-(this.width - 16), -(this.defaultHeight / 2), 0.0)
             val accentColor = TarasandeValues.accentColor.getColor()
             bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
-            bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 - 2).toFloat(), 0.0F).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
-            bufferBuilder.vertex(matrix, (this.width - 16 + 1).toFloat(), (this.defaultHeight / 2).toFloat(), 0.0F).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
-            bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 + 2).toFloat(), 0.0F).color(accentColor.red / 255f, accentColor.green / 255f, accentColor.blue / 255f, accentColor.alpha / 255f).next()
+            bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 - 2).toFloat(), 0F).color(accentColor.red / 255F, accentColor.green / 255F, accentColor.blue / 255F, accentColor.alpha / 255F).next()
+            bufferBuilder.vertex(matrix, (this.width - 16 + 1).toFloat(), (this.defaultHeight / 2).toFloat(), 0F).color(accentColor.red / 255F, accentColor.green / 255F, accentColor.blue / 255F, accentColor.alpha / 255F).next()
+            bufferBuilder.vertex(matrix, (this.width - 16 - 1).toFloat(), (this.defaultHeight / 2 + 2).toFloat(), 0F).color(accentColor.red / 255F, accentColor.green / 255F, accentColor.blue / 255F, accentColor.alpha / 255F).next()
             BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-            
+
             RenderSystem.disableBlend()
             GL11.glLineWidth(lineWidth)
             GL11.glDisable(GL11.GL_LINE_SMOOTH)
-            matrices.pop()
+            context.matrices.pop()
         }
         if (expanded) {
             var yOffset = 0.0
             for (component in components) {
-                matrices.push()
-                matrices.translate(5.0, this.defaultHeight + yOffset, 0.0)
+                context.matrices.push()
+                context.matrices.translate(5.0, this.defaultHeight + yOffset, 0.0)
                 component.width = width - 10.0
-                component.render(matrices, mouseX - 5, (mouseY - defaultHeight - yOffset).toInt(), delta)
-                matrices.pop()
+                component.render(context, mouseX - 5, (mouseY - defaultHeight - yOffset).toInt(), delta)
+                context.matrices.pop()
                 yOffset += component.getHeight()
             }
         }
@@ -115,7 +116,7 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
         }
         if (button == 0) {
             if (isHovered(mouseX, mouseY, 0.0, 0.0, width, getHeight())) {
-                if (Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((width - 7).toFloat(), (defaultHeight / 2).toFloat())) < 16.0F) {
+                if (Vec2f(mouseX.toFloat(), mouseY.toFloat()).distanceSquared(Vec2f((width - 7).toFloat(), (defaultHeight / 2).toFloat())) < 16F) {
                     module.switchState()
                     toggleTime = System.currentTimeMillis()
                 }

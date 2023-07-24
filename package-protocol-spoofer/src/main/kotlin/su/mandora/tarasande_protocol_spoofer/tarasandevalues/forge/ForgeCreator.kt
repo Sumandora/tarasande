@@ -1,9 +1,9 @@
 package su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge
 
 import com.google.gson.JsonObject
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion
-import de.florianmichael.vialoadingbase.ViaLoadingBase
+import de.florianmichael.viafabricplus.protocolhack.ProtocolHack
 import net.minecraft.network.ClientConnection
+import net.raphimc.vialoader.util.VersionEnum
 import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.handler.Fml1NetClientHandler
 import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.handler.ModernFmlNetClientHandler
 import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.handler.ModernFmlState
@@ -27,9 +27,9 @@ object ForgeCreator {
     }
 
     fun createNetHandler(connection: ClientConnection): IForgeNetClientHandler {
-        if (ViaLoadingBase.getInstance().targetVersion.isNewerThan(ProtocolVersion.v1_18_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
-        if (ViaLoadingBase.getInstance().targetVersion.isNewerThan(ProtocolVersion.v1_17_1)) return ModernFmlNetClientHandler(ModernFmlState.FML_3, connection)
-        if (ViaLoadingBase.getInstance().targetVersion.isNewerThan(ProtocolVersion.v1_12_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_2, connection)
+        if (ProtocolHack.getTargetVersion().isNewerThan(VersionEnum.r1_18_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_4, connection)
+        if (ProtocolHack.getTargetVersion().isNewerThan(VersionEnum.r1_17_1)) return ModernFmlNetClientHandler(ModernFmlState.FML_3, connection)
+        if (ProtocolHack.getTargetVersion().isNewerThan(VersionEnum.r1_12_2)) return ModernFmlNetClientHandler(ModernFmlState.FML_2, connection)
 
         return Fml1NetClientHandler(connection)
     }

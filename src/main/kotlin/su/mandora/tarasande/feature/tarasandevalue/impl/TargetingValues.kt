@@ -56,4 +56,7 @@ object TargetingValues {
             }
         }
     }
+
+    val closedInventory = ValueBoolean(this, "Closed inventory", false)
+
 }

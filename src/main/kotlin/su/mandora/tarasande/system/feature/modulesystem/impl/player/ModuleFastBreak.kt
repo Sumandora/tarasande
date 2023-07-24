@@ -38,7 +38,7 @@ class ModuleFastBreak : Module("Fast break", "Makes blocks break faster", Module
 
                         mode.isSelected(1) -> {
                             if (mc.interactionManager!!.currentBreakingProgress >= speed.value)
-                                mc.interactionManager!!.currentBreakingProgress = 1.0F
+                                mc.interactionManager!!.currentBreakingProgress = 1F
                         }
                     }
             }

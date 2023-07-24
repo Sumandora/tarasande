@@ -44,7 +44,7 @@ class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of othe
         registerEvent(EventInput::class.java) { event ->
             if (event.input == mc.player?.input)
                 if (move)
-                    event.movementForward = 1.0F
+                    event.movementForward = 1F
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->

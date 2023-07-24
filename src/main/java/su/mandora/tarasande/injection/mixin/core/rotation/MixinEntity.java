@@ -20,9 +20,11 @@ public abstract class MixinEntity {
     @Shadow
     protected abstract Vec3d getRotationVector(float pitch, float yaw);
 
-    @Shadow public abstract float getPitch();
+    @Shadow
+    public abstract float getPitch();
 
-    @Shadow public abstract float getYaw();
+    @Shadow
+    public abstract float getYaw();
 
     @Inject(method = "getRotationVec", at = @At("HEAD"), cancellable = true)
     public void injectFakeRotation(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
@@ -36,7 +38,7 @@ public abstract class MixinEntity {
     @Inject(method = "readNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setBodyYaw(F)V"))
     public void updateHeadRotation(NbtCompound nbt, CallbackInfo ci) {
         //noinspection ConstantValue
-        if((Object) this instanceof LivingEntity) {
+        if ((Object) this instanceof LivingEntity) {
             ILivingEntity accessor = (ILivingEntity) this;
             accessor.tarasande_setHeadYaw(getYaw());
             accessor.tarasande_setHeadPitch(getPitch());

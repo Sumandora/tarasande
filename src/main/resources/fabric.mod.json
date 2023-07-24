@@ -16,7 +16,5 @@
   "mixins": [
     "tarasande.mixins.json"
   ],
-  "accessWidener": "tarasande.accesswidener",
-  "depends": {
-  }
+  "accessWidener": "tarasande.accesswidener"
 }

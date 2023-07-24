@@ -77,7 +77,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
     }
 
     override fun onDisable() {
-        if(beginRotation != null) {
+        if (beginRotation != null) {
             mc.player?.yaw = beginRotation?.yaw!!
             mc.player?.pitch = beginRotation?.pitch!!
         }
@@ -107,7 +107,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         }
 
         registerEvent(EventMouseDelta::class.java, 1) { event ->
-            if(rotation == null)
+            if (rotation == null)
                 onEnable()
             rotation = Rotation.calculateNewRotation(rotation!!, Pair(event.deltaX, event.deltaY)).correctSensitivity() // clamp
             event.deltaX = 0.0
@@ -139,8 +139,8 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
                 onEnable()
             if (event.input == mc.player?.input) {
                 if (!keepMovement.value) {
-                    event.movementForward = 0.0F
-                    event.movementSideways = 0.0F
+                    event.movementForward = 0F
+                    event.movementSideways = 0F
                 }
             } else if (event.input == PlayerUtil.input) {
                 event.cancelled = true
@@ -172,7 +172,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
 
         registerEvent(EventTick::class.java) { event ->
             if (event.state == EventTick.State.PRE && mc.player != null)
-                input.tick(false, 1.0F)
+                input.tick(false, 1F)
         }
 
         registerEvent(EventPacket::class.java) { event ->

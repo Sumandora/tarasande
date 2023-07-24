@@ -2,9 +2,9 @@ package su.mandora.tarasande_serverpinger.injection.mixin;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,7 +17,9 @@ import su.mandora.tarasande_serverpinger.injection.accessor.IMultiplayerServerLi
 @Mixin(MultiplayerServerListWidget.ServerEntry.class)
 public class MixinMultiplayerServerListWidgetSubServerEntry implements IMultiplayerServerListWidgetSubServerEntry {
 
-    @Shadow @Final private ServerInfo server;
+    @Shadow
+    @Final
+    private ServerInfo server;
 
     @Unique
     private Function1<ServerInfo, Unit> tarasande_completionConsumer;
@@ -26,7 +28,7 @@ public class MixinMultiplayerServerListWidgetSubServerEntry implements IMultipla
     private boolean tarasande_isPinged;
 
     @Inject(method = "render", at = @At("RETURN"))
-    public void trackCompletion(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta, CallbackInfo ci) {
+    public void trackCompletion(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta, CallbackInfo ci) {
         if (tarasande_isPinged && this.server.ping != 0L && this.server.ping != -1L && this.server.ping != -2L) {
             if (tarasande_completionConsumer != null) {
                 tarasande_completionConsumer.invoke(server);

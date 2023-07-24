@@ -14,10 +14,10 @@ class InformationHandlers : Information("Connection", "Handlers") {
         val names = (mc.networkHandler?.connection!!.channel ?: return null).pipeline().names()
         if (names.isEmpty()) return null
 
-        return if (displayMode.isSelected(0)) {
-            "\n" + names.subList(0, names.size - 1).joinToString("\n")
-        } else {
-            names.size.toString()
+        return when {
+            displayMode.isSelected(0) -> "\n" + names.subList(0, names.size - 1).joinToString("\n")
+            displayMode.isSelected(1) -> names.size.toString()
+            else -> null
         }
     }
 }

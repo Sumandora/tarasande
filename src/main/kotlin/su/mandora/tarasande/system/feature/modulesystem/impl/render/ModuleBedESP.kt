@@ -23,12 +23,6 @@ import su.mandora.tarasande.util.math.pathfinder.PathFinder
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil
 
-/**
- * This module is pretty cool, but can be extremely processing intensive
- * In theory you should be able to go from the inside to the outside, but trying that resulted in not getting perfect results anymore
- *
- * New update: Was I retarded?
- */
 class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.RENDER) {
 
     private val searchRadius = ValueNumber(this, "Search radius", 1.0, 10.0, 50.0, 1.0)

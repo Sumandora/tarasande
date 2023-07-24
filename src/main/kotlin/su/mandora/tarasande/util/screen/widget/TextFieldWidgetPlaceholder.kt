@@ -1,18 +1,18 @@
 package su.mandora.tarasande.util.screen.widget
 
 import net.minecraft.client.font.TextRenderer
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.widget.TextFieldWidget
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import su.mandora.tarasande.injection.accessor.ITextFieldWidget
 import java.awt.Color
 
 open class TextFieldWidgetPlaceholder(textRenderer: TextRenderer?, x: Int, y: Int, width: Int, height: Int, text: Text?) : TextFieldWidget(textRenderer, x, y, width, height, text) {
 
-    protected var holdingPlace  = false
+    protected var holdingPlace = false
     // We can't use the text replacer, because the text replacement is only invoked when the text isn't empty
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val prevText = text
         val accessor = this as ITextFieldWidget
         if (text.isEmpty() && !isFocused) {
@@ -21,7 +21,7 @@ open class TextFieldWidgetPlaceholder(textRenderer: TextRenderer?, x: Int, y: In
                 accessor.tarasande_setColor(Color.lightGray)
             holdingPlace = true
         }
-        super.render(matrices, mouseX, mouseY, delta)
+        super.render(context, mouseX, mouseY, delta)
         holdingPlace = false
         this.text = prevText
         accessor.tarasande_setColor(null)

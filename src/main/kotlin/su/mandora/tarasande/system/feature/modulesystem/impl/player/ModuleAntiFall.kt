@@ -45,7 +45,7 @@ class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you ar
                                 mc.player?.velocity = mc.player?.velocity?.multiply(boost.value, jumpMultiplier.value, boost.value)
                             }
                         }
-                        mc.player?.fallDistance = 0.0F
+                        mc.player?.fallDistance = 0F
                     }
                     wasOnGround = false
                 }

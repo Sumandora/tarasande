@@ -122,6 +122,9 @@ object ManagerModule : Manager<Module>() {
             ModuleAutoRespawn(),
             ModuleTroubleInTerroristTown(),
             ModuleSpammer(),
+            ModuleAutoRescuePlatform(),
+            ModuleDropper(),
+            ModuleEveryItemOnArmor(),
 
             // Ghost
             ModuleReach(),

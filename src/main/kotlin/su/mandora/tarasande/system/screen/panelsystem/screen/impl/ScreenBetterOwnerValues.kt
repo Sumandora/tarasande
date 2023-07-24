@@ -1,8 +1,8 @@
 package su.mandora.tarasande.system.screen.panelsystem.screen.impl
 
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.util.math.MatrixStack
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.ManagerValue
@@ -10,7 +10,7 @@ import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthV
 import su.mandora.tarasande.system.screen.blursystem.ManagerBlur
 import su.mandora.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import su.mandora.tarasande.system.screen.panelsystem.api.PanelElements
-import su.mandora.tarasande.util.render.RenderUtil
+import su.mandora.tarasande.util.extension.minecraft.fill
 import su.mandora.tarasande.util.screen.ScreenBetter
 import java.util.*
 
@@ -33,14 +33,14 @@ class ScreenBetterOwnerValues(title: String, parent: Screen, val owner: Any) : S
                 this.x = (mc.window.scaledWidth / 2) - 150.0
             }
 
-            override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+            override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
                 this.panelHeight = getMaxScrollOffset() + titleBarHeight + 5.0 /* this is the padding for letting you scroll down a bit more than possible */
                 val max = mc.window.scaledHeight
                 if (this.panelHeight >= max)
                     this.panelHeight = max.toDouble()
                 this.y = mc.window.scaledHeight / 2 - (this.panelHeight / 2)
 
-                super.render(matrices, mouseX, mouseY, delta)
+                super.render(context, mouseX, mouseY, delta)
             }
         }.also { panel = it }).also { clickableWidgetPanel = it })
     }
@@ -55,22 +55,22 @@ class ScreenBetterOwnerValues(title: String, parent: Screen, val owner: Any) : S
         return super.mouseScrolled(mouseX, mouseY, amount)
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-        this.renderBackground(matrices)
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        this.renderBackground(context)
         if (mc.world != null) {
             var prevScreen = prevScreen
             while (prevScreen is ScreenBetterOwnerValues)
                 prevScreen = prevScreen.prevScreen
-            prevScreen?.render(matrices, -1, -1, delta)
+            prevScreen?.render(context, -1, -1, delta)
         }
 
         if (client?.world != null) {
             ManagerBlur.bind(setViewport = true, screens = true)
-            RenderUtil.fill(matrices, 0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
+            context.fill(0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
             client?.framebuffer?.beginWrite(true)
         }
 
-        super.render(matrices, mouseX, mouseY, delta)
+        super.render(context, mouseX, mouseY, delta)
     }
 
     override fun hoveredElement(mouseX: Double, mouseY: Double): Optional<Element> {

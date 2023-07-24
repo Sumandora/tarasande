@@ -43,64 +43,66 @@ class ModuleSpammer : Module("Spammer", "Spams something into the chat", ModuleC
 
     init {
         registerEvent(EventPollEvents::class.java) {
-            if (timeUtil.hasReached(delay.value.toLong())) {
-                if (priorityMessages.isNotEmpty()) {
-                    PlayerUtil.sendChatMessage(priorityMessages.removeFirst(), true)
-                    timeUtil.reset()
-                    return@registerEvent
-                }
-                if (noArbitraryTexts.value) return@registerEvent
-                var text = when {
-                    mode.isSelected(0) -> message.value
-                    mode.isSelected(1) -> {
-                        var target: Entity? = null
-                        for (entity in mc.world?.entities!!) {
-                            if (entity is PlayerEntity && entity.gameProfile.name.equals(this.target.value, true)) {
-                                target = entity
-                                break
-                            }
-                        }
-
-                        if (target != null) {
-                            var closest: PlayerEntity? = null
-                            var dist = 0.0
+            if (mc.player != null) {
+                if (timeUtil.hasReached(delay.value.toLong())) {
+                    if (priorityMessages.isNotEmpty()) {
+                        PlayerUtil.sendChatMessage(priorityMessages.removeFirst(), true)
+                        timeUtil.reset()
+                        return@registerEvent
+                    }
+                    if (noArbitraryTexts.value) return@registerEvent
+                    var text = when {
+                        mode.isSelected(0) -> message.value
+                        mode.isSelected(1) -> {
+                            var target: Entity? = null
                             for (entity in mc.world?.entities!!) {
-                                if (entity is PlayerEntity && target != entity) {
-                                    val dist2 = target.squaredDistanceTo(entity)
-                                    if (closest == null || dist2 < dist) {
-                                        closest = entity
-                                        dist = dist2
-                                    }
+                                if (entity is PlayerEntity && entity.gameProfile.name.equals(this.target.value, true)) {
+                                    target = entity
+                                    break
                                 }
                             }
 
-                            var string = "X: " + (round(target.x * 10) / 10.0) + " Y: " + (round(target.y * 10) / 10.0) + " Z: " + (round(target.z * 10) / 10.0)
-                            if (closest != null) {
-                                string += " " + closest.gameProfile.name + " (" + (round(sqrt(dist) * 10) / 10) + "m)"
-                            }
-                            string
-                        } else {
-                            "Target is not in render distance"
-                        }
-                    }
+                            if (target != null) {
+                                var closest: PlayerEntity? = null
+                                var dist = 0.0
+                                for (entity in mc.world?.entities!!) {
+                                    if (entity is PlayerEntity && target != entity) {
+                                        val dist2 = target.squaredDistanceTo(entity)
+                                        if (closest == null || dist2 < dist) {
+                                            closest = entity
+                                            dist = dist2
+                                        }
+                                    }
+                                }
 
-                    else -> null
-                }
-                if (text != null) {
-                    if (garbage.value) {
-                        if (position.isSelected(0))
-                            text = formatGarbage(RandomStringUtils.randomAlphanumeric(amount.value.toInt())) + " " + text
-                        if (position.isSelected(1))
-                            text = text + " " + formatGarbage(RandomStringUtils.randomAlphanumeric(amount.value.toInt()))
+                                var string = "X: " + (round(target.x * 10) / 10.0) + " Y: " + (round(target.y * 10) / 10.0) + " Z: " + (round(target.z * 10) / 10.0)
+                                if (closest != null) {
+                                    string += " " + closest.gameProfile.name + " (" + (round(sqrt(dist) * 10) / 10) + "m)"
+                                }
+                                string
+                            } else {
+                                "Target is not in render distance"
+                            }
+                        }
+
+                        else -> null
                     }
-                    PlayerUtil.sendChatMessage(text, true)
+                    if (text != null) {
+                        if (garbage.value) {
+                            if (position.isSelected(0))
+                                text = formatGarbage(RandomStringUtils.randomAlphanumeric(amount.value.toInt())) + " " + text
+                            if (position.isSelected(1))
+                                text = text + " " + formatGarbage(RandomStringUtils.randomAlphanumeric(amount.value.toInt()))
+                        }
+                        PlayerUtil.sendChatMessage(text, true)
+                    }
+                    timeUtil.reset()
                 }
-                timeUtil.reset()
             }
         }
 
         registerEvent(EventChat::class.java, 9999) { event ->
-            if(!event.cancelled)
+            if (!event.cancelled)
                 priorityMessages.add(event.chatMessage)
             event.cancelled = true
         }

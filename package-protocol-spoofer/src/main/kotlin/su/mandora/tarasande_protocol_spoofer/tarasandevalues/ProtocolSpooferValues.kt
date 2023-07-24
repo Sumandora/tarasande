@@ -13,6 +13,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueBu
 import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
 
 val quiltHandshake = Identifier("registry_sync/handshake")
+
 object ProtocolSpooferValues {
 
     init {
@@ -26,6 +27,7 @@ object ProtocolSpooferValues {
     }
 
     private val spoofQuiltProtocol = ValueBoolean(this, "Spoof Quilt protocol", false)
+
     init {
         EventDispatcher.add(EventPacket::class.java) {
             if (!spoofQuiltProtocol.value) return@add

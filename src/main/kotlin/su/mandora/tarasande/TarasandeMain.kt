@@ -9,7 +9,6 @@ import su.mandora.tarasande.feature.rotation.Rotations
 import su.mandora.tarasande.feature.statusrenderer.StatusRenderer
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.system.base.filesystem.ManagerFile
-import su.mandora.tarasande.system.base.grabbersystem.ManagerGrabber
 import su.mandora.tarasande.system.base.valuesystem.ManagerValue
 import su.mandora.tarasande.system.feature.commandsystem.ManagerCommand
 import su.mandora.tarasande.system.feature.espsystem.ManagerESP
@@ -27,8 +26,9 @@ import java.util.logging.Logger
  * TODO | Base:
  *  - User configs
  *  - Crystal Aura
+ *  - New Chunks
+ *  - Container saver (Shop saver...)
  *  - Anti vanish: Tab completion
- *  - Add Rotation RL
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
@@ -37,10 +37,10 @@ val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
 val mc: MinecraftClient
     get() = MinecraftClient.getInstance()
 
+
 object TarasandeMain {
 
     init {
-        ManagerGrabber
         ManagerFile
         ManagerValue
     }

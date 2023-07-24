@@ -18,7 +18,7 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
     private val border = "( |[^a-z]|\\b)"
 
     private fun replaceName(str: String, substring: String, replacement: String): String {
-        if(!checkForBoundary.value)
+        if (!checkForBoundary.value)
             return str.replace(substring, replacement)
         val regex = Regex(border + substring + border)
         return regex.replace(str) {
@@ -45,12 +45,12 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
                 return@registerEvent
 
             val protectedNames =
-                if(protectEveryone.value)
+                if (protectEveryone.value)
                     (mc.networkHandler?.playerList ?: return@registerEvent).map { it.profile.name }.sortedByDescending { it.length }
                 else
                     listOf(mc.session.profile.name)
 
-            for(player in protectedNames)
+            for (player in protectedNames)
                 event.string = replaceName(event.string, player, protectedName.value)
 
             for (pair in Friends.names()) {

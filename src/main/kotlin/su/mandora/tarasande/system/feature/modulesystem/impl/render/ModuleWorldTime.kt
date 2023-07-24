@@ -27,7 +27,7 @@ class ModuleWorldTime : Module("World time", "Changes the time of day", ModuleCa
     private val modifyTime = ValueBoolean(this, "Modify time", true)
 
     // I am unsure if this is supposed to be the max time or is just a coincidence to be the same value
-    private val time = ValueNumber(this, "Time", 0.0, World.field_30969 / 2.0, World.field_30969.toDouble(), 1.0, isEnabled = { modifyTime.value })
+    private val time = ValueNumber(this, "Time", 0.0, World.field_30969 / 2.0, World.field_30969.toDouble(), 1000.0, isEnabled = { modifyTime.value })
 
     private val forceMoonPhase = ValueMode(this, "Force moon phase", false, "Off", *moonStates)
 

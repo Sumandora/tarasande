@@ -53,7 +53,7 @@ class ModuleZoot : Module("Zoot", "Removes fire status", ModuleCategory.GHOST) {
                         onEnable()
                         return@registerEvent
                     }
-                    event.rotation = Rotation(mc.player!!).withPitch(90.0F).correctSensitivity()
+                    event.rotation = Rotation(mc.player!!).withPitch(90F).correctSensitivity()
                     targetRotation = event.rotation
                     if (intendedSlot != null && intendedSlot != -1)
                         mc.player?.inventory?.selectedSlot = intendedSlot
@@ -111,7 +111,7 @@ class ModuleZoot : Module("Zoot", "Removes fire status", ModuleCategory.GHOST) {
             }
         }
         registerEvent(EventDisconnect::class.java) { event ->
-            if(event.connection == mc.player?.networkHandler?.connection) {
+            if (event.connection == mc.player?.networkHandler?.connection) {
                 state = State.IDLE // Abort
             }
         }

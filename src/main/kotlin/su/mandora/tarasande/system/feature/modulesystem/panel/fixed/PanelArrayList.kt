@@ -1,7 +1,7 @@
 package su.mandora.tarasande.system.feature.modulesystem.panel.fixed
 
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.util.math.MathHelper
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
@@ -13,12 +13,11 @@ import su.mandora.tarasande.util.render.animation.Animator
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
 
-class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array List", 75.0, FontWrapper.fontHeight().toDouble()) {
+class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array List", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
 
     private val animations = HashMap<Module, Double>()
-    private val animator = Animator(this)
 
-    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val enabledModules = ArrayList<Module>()
 
         for (module in moduleSystem.list) {
@@ -37,14 +36,16 @@ class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array Lis
                 RenderSystem.enableBlend()
                 val animatedPosition = animator.easing.ease(animation)
                 when (alignment) {
-                    Alignment.LEFT -> FontWrapper.textShadow(matrices, it.name, (x - (FontWrapper.getWidth(it.name) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
-                    Alignment.MIDDLE -> FontWrapper.textShadow(matrices, it.name, x.toFloat() + panelWidth.toFloat() / 2.0F - FontWrapper.getWidth(it.name).toFloat() / 2.0F, (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
-                    Alignment.RIGHT -> FontWrapper.textShadow(matrices, it.name, (x + panelWidth - FontWrapper.getWidth(it.name) * animatedPosition).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                    Alignment.LEFT -> FontWrapper.textShadow(context, it.name, (x - (FontWrapper.getWidth(it.name) * (1.0 - animatedPosition))).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                    Alignment.MIDDLE -> FontWrapper.textShadow(context, it.name, x.toFloat() + panelWidth.toFloat() / 2F - FontWrapper.getWidth(it.name).toFloat() / 2F, (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
+                    Alignment.RIGHT -> FontWrapper.textShadow(context, it.name, (x + panelWidth - FontWrapper.getWidth(it.name) * animatedPosition).toFloat(), (y + titleBarHeight + FontWrapper.fontHeight() * index).toFloat(), color.rgb, offset = 0.5F)
                 }
                 index += animatedPosition
             }
         }
     }
+
+    private val animator = Animator(this)
 
     override fun isVisible(): Boolean {
         moduleSystem.list.forEach { module ->

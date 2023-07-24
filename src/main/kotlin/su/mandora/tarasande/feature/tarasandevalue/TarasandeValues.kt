@@ -45,6 +45,7 @@ object TarasandeValues {
 
     val passEventsInScreens = ValueBoolean(this, "Pass events in screens", true)
     val unlockTicksPerFrame = ValueBoolean(this, "Unlock ticks per frame", false)
+    val executeScreenInputsInTicks = ValueBoolean(this, "Execute screen inputs in ticks", false) // <=1.12.2 compat
 
     // Other
     init {

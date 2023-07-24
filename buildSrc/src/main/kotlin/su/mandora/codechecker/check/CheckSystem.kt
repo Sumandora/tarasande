@@ -36,7 +36,7 @@ class CheckManager {
     }
 
     fun runChecks() {
-        for(check in checks) {
+        for (check in checks) {
             when (check) {
                 is CheckSource -> {
                     check.setSources(sources.associateWith { it.readBytes().decodeToString() })
@@ -94,22 +94,22 @@ abstract class CheckSource(private val name: String) : Check(name) {
         var comment = false
 
         var lineBeginIndex = index
-        while(lineBeginIndex > 0 && content[lineBeginIndex - 1] != "\n"[0]) {
-            if(content[lineBeginIndex - 1] == '"')
+        while (lineBeginIndex > 0 && content[lineBeginIndex - 1] != "\n"[0]) {
+            if (content[lineBeginIndex - 1] == '"')
                 quotes++
-            if(content[lineBeginIndex - 1] == '/') {
-                if(comment)
+            if (content[lineBeginIndex - 1] == '/') {
+                if (comment)
                     return
                 comment = true
             }
             lineBeginIndex--
         }
 
-        if(quotes.mod(2) != 0)
+        if (quotes.mod(2) != 0)
             return
 
         var lineEndIndex = index
-        while(content[lineEndIndex] != "\n"[0])
+        while (content[lineEndIndex] != "\n"[0])
             lineEndIndex++
 
         println(file.path + ": $name")

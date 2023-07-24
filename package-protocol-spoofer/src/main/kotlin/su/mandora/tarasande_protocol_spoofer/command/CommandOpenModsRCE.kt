@@ -1,6 +1,5 @@
 package su.mandora.tarasande_protocol_spoofer.command
 
-import com.google.common.base.Preconditions
 import com.google.common.io.Closer
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
@@ -13,7 +12,8 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.feature.commandsystem.Command
 import su.mandora.tarasande.util.player.chat.CustomChat
 import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
-import java.io.*
+import java.io.DataOutput
+import java.io.DataOutputStream
 import java.util.zip.GZIPOutputStream
 
 class CommandOpenModsRCE : Command("openmodsrce") {
@@ -36,30 +36,25 @@ class CommandOpenModsRCE : Command("openmodsrce") {
 
     private fun writeVLI(output: DataOutput, value: Int) {
         var value = value
-        Preconditions.checkArgument(value >= 0, "Value cannot be negative")
-        try {
-            while (true) {
-                var b = value and 0x7F
-                val next = value shr 7
-                if (next > 0) {
-                    b = b or 0x80
-                    output.writeByte(b)
-                    value = next
-                } else {
-                    output.writeByte(b)
-                    break
-                }
+        while (true) {
+            var b = value and 0x7F
+            val next = value shr 7
+            if (next > 0) {
+                b = b or 0x80
+                output.writeByte(b)
+                value = next
+            } else {
+                output.writeByte(b)
+                break
             }
-        } catch (e: IOException) {
-            throw RuntimeException(e)
         }
     }
 
-    private fun execute(worldId: Int = 1, entityId: Int = mc.player?.id?: 0, gameMode: GameMode = GameMode.CREATIVE) {
+    private fun execute(worldId: Int = 1, entityId: Int = mc.player?.id ?: 0, gameMode: GameMode = GameMode.CREATIVE) {
         var payload = Unpooled.buffer()
         val closer = Closer.create()
-        val raw = closer.register(ByteBufOutputStream(payload) as Closeable) as OutputStream
-        val compressed = closer.register(GZIPOutputStream(raw) as Closeable) as OutputStream
+        val raw = closer.register(ByteBufOutputStream(payload))
+        val compressed = closer.register(GZIPOutputStream(raw))
         var output = DataOutputStream(compressed)
 
         output.writeUTF("rpc_methods")

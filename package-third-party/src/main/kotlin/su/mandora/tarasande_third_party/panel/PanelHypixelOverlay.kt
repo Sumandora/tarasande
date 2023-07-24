@@ -3,7 +3,7 @@ package su.mandora.tarasande_third_party.panel
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mojang.authlib.GameProfile
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.gson
 import su.mandora.tarasande.mc
@@ -20,7 +20,7 @@ import kotlin.math.roundToInt
 /*
  * This code is probably worse than it has to be, but I just couldn't think of anything better (sleep deprivation :c)
  */
-class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeight().toDouble()) {
+class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
 
     private val apiKey = ValueText(this, "API Key", "")
     private val fields = ValueMode(this, "Fields", true, "Name", "Playtime", "Age", "Level", "Final-Kill/Death Ratio", "Winstreak", "Achievements", "API response length")
@@ -61,17 +61,17 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
         t.start()
     }
 
-    private fun drawString(matrices: MatrixStack, str: String, x: Double, y: Double) {
+    private fun drawString(context: DrawContext, str: String, x: Double, y: Double) {
         val accent = TarasandeValues.accentColor.getColor()
         val width = FontWrapper.getWidth(str)
         val titleBarHeight = titleBarHeight
         when (alignment) {
             Alignment.LEFT, Alignment.MIDDLE -> {
-                FontWrapper.textShadow(matrices, str, x.toFloat(), (y + titleBarHeight).toFloat(), accent.rgb, offset = 0.5F)
+                FontWrapper.textShadow(context, str, x.toFloat(), (y + titleBarHeight).toFloat(), accent.rgb, offset = 0.5F)
             }
 
             Alignment.RIGHT -> {
-                FontWrapper.textShadow(matrices, str, (x + panelWidth - width).toFloat(), (y + titleBarHeight).toFloat(), accent.rgb, offset = 0.5F)
+                FontWrapper.textShadow(context, str, (x + panelWidth - width).toFloat(), (y + titleBarHeight).toFloat(), accent.rgb, offset = 0.5F)
             }
         }
     }
@@ -93,7 +93,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
         return list
     }
 
-    override fun renderContent(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val list = ArrayList<String>()
         list.add(baseLine)
         playerData.forEach {
@@ -104,14 +104,14 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
         val newList = rowsToColumns(list)
         var xOffset = 0
         for ((colIndex, col) in newList.withIndex()) {
-            if(!fields.isSelected(colIndex))
+            if (!fields.isSelected(colIndex))
                 continue
             var maxWidth = 0
             for ((rowIndex, entry) in col.withIndex()) {
                 val width = FontWrapper.getWidth(entry)
                 if (width > maxWidth)
                     maxWidth = width
-                drawString(matrices, entry, x + xOffset, y + rowIndex * FontWrapper.fontHeight())
+                drawString(context, entry, x + xOffset, y + rowIndex * FontWrapper.fontHeight())
             }
             if (alignment == Alignment.RIGHT)
                 xOffset -= maxWidth + 10

@@ -54,7 +54,6 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
         val enchantmentTableBook = ValueBooleanNoRender(this, "Enchantment table book", false)
         val signText = ValueBooleanNoRender(this, "Sign text", false)
         val blockBreakParticles = ValueBooleanNoRender(this, "Block break particles", false)
-        val skylightUpdates = ValueBooleanNoRender(this, "Skylight updates", false)
         val fallingBlocks = ValueBooleanNoRender(this, "Falling blocks", false)
         val caveCulling = ValueBooleanNoRender(this, "Cave culling", false)
         val mapMarkers = ValueBooleanNoRender(this, "Map markers", false)
@@ -109,13 +108,13 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
         }
 
         registerEvent(EventFogStart::class.java, 9999) {
-            if(world.fog.should()) {
-                it.distance *= 9999.0F
+            if (world.fog.should()) {
+                it.distance *= 9999F
             }
         }
         registerEvent(EventFogEnd::class.java, 9999) {
-            if(world.fog.should()) {
-                it.distance *= 9999.0F
+            if (world.fog.should()) {
+                it.distance *= 9999F
             }
         }
     }

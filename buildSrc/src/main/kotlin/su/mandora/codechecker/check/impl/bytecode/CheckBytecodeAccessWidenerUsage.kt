@@ -24,14 +24,14 @@ class CheckBytecodeAccessWidenerUsage : CheckBytecode("Access Widener Usage") {
                 continue
             if (line.isEmpty())
                 continue
-            if(line.endsWith("# @optimizer:ignore"))
+            if (line.endsWith("# @optimizer:ignore"))
                 continue // manually mark certain lines as useful
 
             val parts = line.split(" ")
 
             when {
                 line.startsWith("accessible field") -> {
-                    if(parts[3].uppercase() == parts[3])
+                    if (parts[3].uppercase() == parts[3])
                         continue // We don't know whether a constant was used, when looking at bytecode
                     if (!allNodes().any {
                             it.methods.any {
@@ -46,6 +46,7 @@ class CheckBytecodeAccessWidenerUsage : CheckBytecode("Access Widener Usage") {
                         })
                         violation("\"$line\" is unnecessary")
                 }
+
                 line.startsWith("accessible method") -> {
                     if (!allNodes().any {
                             it.methods.any {
@@ -60,11 +61,13 @@ class CheckBytecodeAccessWidenerUsage : CheckBytecode("Access Widener Usage") {
                         })
                         violation("\"$line\" is unnecessary")
                 }
+
                 line.startsWith("accessible class") -> {
                     // unsupported :c
                 }
+
                 line.startsWith("mutable field") -> {
-                    if(parts[3].uppercase() == parts[3])
+                    if (parts[3].uppercase() == parts[3])
                         continue // We don't know whether a constant was used, when looking at bytecode
                     if (!allNodes().any {
                             it.methods.any {

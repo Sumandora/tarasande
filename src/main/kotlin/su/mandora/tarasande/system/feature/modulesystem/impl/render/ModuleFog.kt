@@ -15,12 +15,12 @@ class ModuleFog : Module("Fog", "Changes the fog distance and color", ModuleCate
 
     init {
         registerEvent(EventFogStart::class.java) { event -> event.distance *= distance.minValue.toFloat() }
-        registerEvent(EventFogEnd::class.java) { event -> event.distance *= distance.minValue.toFloat() }
+        registerEvent(EventFogEnd::class.java) { event -> event.distance *= distance.maxValue.toFloat() }
         registerEvent(EventFogColor::class.java) { event ->
             color.getColor().also {
-                event.color[0] = it.red / 255.0F
-                event.color[1] = it.green / 255.0F
-                event.color[2] = it.blue / 255.0F
+                event.color[0] = it.red / 255F
+                event.color[1] = it.green / 255F
+                event.color[2] = it.blue / 255F
             }
         }
     }

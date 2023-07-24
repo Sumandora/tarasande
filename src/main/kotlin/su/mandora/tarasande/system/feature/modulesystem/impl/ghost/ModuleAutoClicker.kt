@@ -40,8 +40,9 @@ class ModuleAutoClicker : Module("Auto clicker", "Automatically clicks for you",
                     if (clicks > 0) {
                         when (entry.key) {
                             mc.options.attackKey ->
-                                if(mc.interactionManager?.isBreakingBlock == true)
+                                if (mc.interactionManager?.isBreakingBlock == true)
                                     return@registerEvent
+
                             mc.options.useKey ->
                                 if (mc.player?.isUsingItem == true || PlayerUtil.getUsedHand() != null)
                                     return@registerEvent

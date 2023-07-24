@@ -120,7 +120,7 @@ $errorDescription""".toByteArray())
                 this.msAuthProfile = msAuthProfile.renew() // use refresh token to update the account
             }
         } else {
-            msAuthProfile = if(code != null) {
+            msAuthProfile = if (code != null) {
                 buildFromCode(code!!)
             } else if (email.isNotEmpty() && password.isNotEmpty()) { // We are not going to safe these
                 buildFromCredentials(email, password)
@@ -128,7 +128,7 @@ $errorDescription""".toByteArray())
                 error("No data was supplied")
         }
 
-        service = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", environment).createMinecraftSessionService()
+        service = YggdrasilAuthenticationService(mc.networkProxy, "", environment).createMinecraftSessionService()
         if (msAuthProfile != null) {
             session = msAuthProfile?.asSession()!!
         } else {
@@ -164,7 +164,7 @@ $errorDescription""".toByteArray())
             it["PPFT"] = sFTTag
         }, cookie)
 
-        val matcher = Pattern.compile("[?|&]code=([\\w.-]+)").matcher(URLDecoder.decode(postResponse.second, StandardCharsets.UTF_8.name()));
+        val matcher = Pattern.compile("[?|&]code=([\\w.-]+)").matcher(URLDecoder.decode(postResponse.second, StandardCharsets.UTF_8.name()))
         matcher.find()
         return buildFromCode(matcher.group(1))
     }
@@ -279,7 +279,7 @@ $errorDescription""".toByteArray())
         urlConnection.doInput = true
         urlConnection.setRequestProperty("Content-Type", contentType)
         urlConnection.setRequestProperty("Accept", contentType)
-        if(cookie != null)
+        if (cookie != null)
             urlConnection.setRequestProperty("Cookie", cookie)
         urlConnection.connect()
         urlConnection.outputStream.write(input.toByteArray(StandardCharsets.UTF_8))
@@ -302,7 +302,7 @@ $errorDescription""".toByteArray())
 
         val serverSocket = setupHttpServer(code = {
             code = it
-            if(code != null) {
+            if (code != null) {
                 close.run()
             } else {
                 abort()
@@ -327,10 +327,10 @@ $errorDescription""".toByteArray())
         ))
     }
 
-    override fun getDisplayName() = if (session != null) session?.username!! else if(email.isNotEmpty()) email else "Unnamed Microsoft-account"
+    override fun getDisplayName() = if (session != null) session?.username!! else if (email.isNotEmpty()) email else "Unnamed Microsoft-account"
 
     override fun save(): JsonArray? {
-        if(msAuthProfile == null)
+        if (msAuthProfile == null)
             return null
 
         return JsonArray().apply { add(gson.toJsonTree(msAuthProfile)) }

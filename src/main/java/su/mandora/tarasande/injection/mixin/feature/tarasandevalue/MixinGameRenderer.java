@@ -10,7 +10,7 @@ import su.mandora.tarasande.feature.tarasandevalue.impl.debug.camera.Camera;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 
-    @Redirect(method = "getBasicProjectionMatrix",at = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;setPerspective(FFFF)Lorg/joml/Matrix4f;", remap = false))
+    @Redirect(method = "getBasicProjectionMatrix", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;setPerspective(FFFF)Lorg/joml/Matrix4f;", remap = false))
     public Matrix4f overwriteAspectRatio(Matrix4f instance, float fovy, float aspect, float zNear, float zFar) {
         if (Camera.INSTANCE.getForceAspectRatio().getValue())
             aspect = (float) Camera.INSTANCE.getAspectRatio().getValue();

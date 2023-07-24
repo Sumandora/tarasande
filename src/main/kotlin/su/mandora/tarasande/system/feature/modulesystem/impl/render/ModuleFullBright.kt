@@ -22,10 +22,6 @@ class ModuleFullBright : Module("Full bright", "Makes everything bright", Module
                 green = 255
                 red = 255
             } else {
-                /*
-                 * Yes the fact that blue and red seem to be inverted is intentional
-                 * I don't understand why this is the case, but it seems like minecraft is actually inverting the colors?
-                 */
                 val color = colorModulation.getColor()
                 red = (red * color.red / 255.0).toInt()
                 blue = (blue * color.blue / 255.0).toInt()

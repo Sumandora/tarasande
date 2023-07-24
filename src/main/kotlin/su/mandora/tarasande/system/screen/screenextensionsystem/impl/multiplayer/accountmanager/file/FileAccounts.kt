@@ -9,11 +9,11 @@ import net.minecraft.client.util.Session
 import org.apache.commons.codec.binary.Hex
 import oshi.SystemInfo
 import su.mandora.tarasande.TARASANDE_NAME
+import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.filesystem.File
 import su.mandora.tarasande.system.screen.accountmanager.account.ManagerAccount
 import su.mandora.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.ScreenBetterSlotListAccountManager
-import java.net.Proxy
 import java.util.*
 import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
@@ -112,7 +112,7 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
                         TARASANDE_NAME
                     )
 
-                    accountImplementation.service = YggdrasilAuthenticationService(Proxy.NO_PROXY, "", accountImplementation.environment).createMinecraftSessionService()
+                    accountImplementation.service = YggdrasilAuthenticationService(mc.networkProxy, "", accountImplementation.environment).createMinecraftSessionService()
 
                     accountManager.accounts.add(accountImplementation)
                 }

@@ -1,10 +1,11 @@
 package su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl
 
-import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.injection.accessor.ITextFieldWidget
+import su.mandora.tarasande.injection.accessor.ITextRenderer
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.Value
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
@@ -41,7 +42,7 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
         }
     }
 
-    override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         textFieldWidget.width = (width * (1.0 / scale)).toInt()
         if (textFieldWidget.isFocused && value.isEnabled())
             textFieldAccessor.tarasande_setColor(TarasandeValues.accentColor.getColor())
@@ -53,13 +54,16 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
             textFieldWidget.isFocused = false
         }
 
-        matrices.push()
+        context.matrices.push()
         if (centered)
         // scary multiplication
-            matrices.translate(0.0, getHeight() * scale * scale * 0.5, 0.0)
-        matrices.scale(scale, scale, 1.0F)
-        textFieldWidget.render(matrices, mouseX, mouseY, delta)
-        matrices.pop()
+            context.matrices.translate(0.0, getHeight() * scale * scale * 0.5, 0.0)
+        context.matrices.scale(scale, scale, 1F)
+        val prev = (mc.textRenderer as ITextRenderer).tarasande_isDisableForwardShift()
+        (mc.textRenderer as ITextRenderer).tarasande_setDisableForwardShift(true)
+        textFieldWidget.render(context, mouseX, mouseY, delta)
+        (mc.textRenderer as ITextRenderer).tarasande_setDisableForwardShift(prev)
+        context.matrices.pop()
         textFieldAccessor.tarasande_setColor(null)
     }
 

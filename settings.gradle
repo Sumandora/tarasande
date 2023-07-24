@@ -1,30 +1,20 @@
 pluginManagement {
     repositories {
-        maven {
-            name = "Fabric"
-            url = "https://maven.fabricmc.net/"
-        }
-        mavenCentral()
         gradlePluginPortal()
+        mavenCentral()
+        maven { url = "https://maven.fabricmc.net/" }
     }
 
     plugins {
-        id "fabric-loom" version "1.1-SNAPSHOT"
-        id "org.jetbrains.kotlin.jvm" version "1.8.0"
+        id "fabric-loom" version "1.3-SNAPSHOT"
+        id "org.jetbrains.kotlin.jvm" version "1.9.0"
     }
 }
 
-include "package-chat-exploits"
 include "package-linux-platform"
 include "package-mod-fixes"
-include "package-rejected-features"
 include "package-third-party"
 include "package-dupe-exploits"
 include "package-protocol-spoofer"
-include "package-litematica"
-include "package-custom-minecraft"
-include "package-crasher"
-include "package-creative-features"
 include "package-serverpinger"
-include 'package-viafabricplus'
 

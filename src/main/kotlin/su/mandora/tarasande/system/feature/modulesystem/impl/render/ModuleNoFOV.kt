@@ -16,7 +16,7 @@ class ModuleNoFOV : Module("No FOV", "Limits the dynamic FOV", ModuleCategory.RE
     init {
         registerEvent(EventFovMultiplier::class.java) { event ->
             if (resetWhenIdling.value && !(PlayerUtil.isPlayerMoving() && mc.player?.isSprinting == true))
-                event.movementFovMultiplier = 1.0F
+                event.movementFovMultiplier = 1F
             else
                 event.movementFovMultiplier = event.movementFovMultiplier.coerceIn(limit.minValue.toFloat(), limit.maxValue.toFloat())
         }

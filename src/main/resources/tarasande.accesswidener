@@ -39,7 +39,6 @@ accessible field net/minecraft/client/MinecraftClient renderTickCounter Lnet/min
 accessible field net/minecraft/client/MinecraftClient authenticationService Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;
 accessible field net/minecraft/client/MinecraftClient sessionService Lcom/mojang/authlib/minecraft/MinecraftSessionService;
 accessible field net/minecraft/client/MinecraftClient userApiService Lcom/mojang/authlib/minecraft/UserApiService;
-accessible field net/minecraft/client/MinecraftClient servicesSignatureVerifier Lnet/minecraft/network/encryption/SignatureVerifier;
 accessible field net/minecraft/client/MinecraftClient socialInteractionsManager Lnet/minecraft/client/network/SocialInteractionsManager;
 accessible field net/minecraft/client/MinecraftClient profileKeys Lnet/minecraft/client/util/ProfileKeys;
 accessible field net/minecraft/client/MinecraftClient itemUseCooldown I
@@ -67,6 +66,9 @@ accessible field net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Seria
 accessible field net/minecraft/entity/player/PlayerEntity reducedDebugInfo Z
 accessible field net/minecraft/client/gui/screen/GameMenuScreen exitButton Lnet/minecraft/client/gui/widget/ButtonWidget;
 accessible field net/minecraft/client/gui/widget/EntryListWidget itemHeight I
+accessible field net/minecraft/client/MinecraftClient telemetryManager Lnet/minecraft/client/util/telemetry/TelemetryManager;
+accessible field net/minecraft/client/MinecraftClient abuseReportContext Lnet/minecraft/client/report/AbuseReportContext;
+accessible field net/minecraft/client/MinecraftClient skinProvider Lnet/minecraft/client/texture/PlayerSkinProvider;
 
 accessible class net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized
 
@@ -85,7 +87,8 @@ accessible method net/minecraft/entity/player/PlayerEntity adjustMovementForSnea
 accessible method net/minecraft/client/world/ClientWorld getPendingUpdateManager ()Lnet/minecraft/client/network/PendingUpdateManager;
 accessible method net/minecraft/client/gui/widget/EntryListWidget clearEntries ()V
 accessible method net/minecraft/client/gui/widget/EntryListWidget addEntry (Lnet/minecraft/client/gui/widget/EntryListWidget$Entry;)I
-accessible method net/minecraft/client/gui/hud/InGameHud renderHotbarItem (Lnet/minecraft/client/util/math/MatrixStack;IIFLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;I)V
+accessible method net/minecraft/client/gui/hud/InGameHud renderHotbarItem (Lnet/minecraft/client/gui/DrawContext;IIFLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;I)V
+accessible method net/minecraft/client/gui/DrawContext tryDraw ()V
 
 mutable field net/minecraft/entity/Entity random Lnet/minecraft/util/math/random/Random;
 mutable field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/util/Session;
@@ -94,7 +97,6 @@ mutable field net/minecraft/client/MinecraftClient profileKeys Lnet/minecraft/cl
 mutable field net/minecraft/client/MinecraftClient authenticationService Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;
 mutable field net/minecraft/client/MinecraftClient sessionService Lcom/mojang/authlib/minecraft/MinecraftSessionService;
 mutable field net/minecraft/client/MinecraftClient userApiService Lcom/mojang/authlib/minecraft/UserApiService;
-mutable field net/minecraft/client/MinecraftClient servicesSignatureVerifier Lnet/minecraft/network/encryption/SignatureVerifier;
 mutable field net/minecraft/client/render/RenderTickCounter tickTime F
 mutable field net/minecraft/network/packet/s2c/play/ResourcePackSendS2CPacket hash Ljava/lang/String;
 mutable field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket onGround Z
@@ -109,3 +111,6 @@ mutable field net/minecraft/client/realms/RealmsClient sessionId Ljava/lang/Stri
 mutable field net/minecraft/client/realms/RealmsClient username Ljava/lang/String;
 mutable field net/minecraft/world/World random Lnet/minecraft/util/math/random/Random;
 mutable field net/minecraft/client/gui/widget/EntryListWidget itemHeight I
+mutable field net/minecraft/client/MinecraftClient telemetryManager Lnet/minecraft/client/util/telemetry/TelemetryManager;
+mutable field net/minecraft/client/MinecraftClient abuseReportContext Lnet/minecraft/client/report/AbuseReportContext;
+mutable field net/minecraft/client/MinecraftClient skinProvider Lnet/minecraft/client/texture/PlayerSkinProvider;

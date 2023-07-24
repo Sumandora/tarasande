@@ -18,22 +18,21 @@ import java.nio.charset.StandardCharsets
 object TeslaClientSpoofer {
     val enabled = ValueBoolean(this, "Enabled", false)
 
-    private val username = ValueText(this, "Username", "") // Sumandora
-    private val password = ValueText(this, "Password", "") // helloworld
+    private val username = ValueText(this, "Username", "")
+    private val password = ValueText(this, "Password", "")
     private val teslaBuild = ValueText(this, "Tesla build", "7351A105")
     private val fakeWeCui = ValueBoolean(this, "Fake we-cui", true)
     private val weCuiVersion = ValueText(this, "We-cui version", "v|4")
-    //http://teslacraft.org/launcher/TeslaCraft.jar
 
     private val registerContent = "WECUI\u0000tesla:client".toByteArray(StandardCharsets.US_ASCII)
 
     init {
         EventDispatcher.add(EventPacket::class.java) { event ->
-            if(!enabled.value) return@add
+            if (!enabled.value) return@add
 
             when (event.type) {
                 EventPacket.Type.SEND -> {
-                    when(event.packet) {
+                    when (event.packet) {
                         is CustomPayloadC2SPacket -> {
                             val packet = event.packet as CustomPayloadC2SPacket
                             if (packet.channel.toString() == "minecraft:register")
@@ -51,19 +50,18 @@ object TeslaClientSpoofer {
 
                         is LoginHelloC2SPacket -> {
                             var data: String = username.value
-                            //@formatter:off
                             // These 2 lines are only executed, if we join teslacraft.... who cares about such checks
                             data += "\u0000Tesla\u0000" + teslaBuild.value
                             data += '\u0000' + password.value
-                            //@formatter:on
                             (event.packet as LoginHelloC2SPacket).name = data
                         }
                     }
                 }
+
                 EventPacket.Type.RECEIVE -> {
                     if (event.packet is CustomPayloadS2CPacket) {
                         val packet = (event.packet as CustomPayloadS2CPacket)
-                        if(packet.channel.toString() == "tesla:client") {
+                        if (packet.channel.toString() == "tesla:client") {
                             CustomChat.printChatMessage(MutableText.of(LiteralTextContent(("[Tesla Client Request] " + packet.data.writtenBytes.decodeToString()).also { logger.warning(it) })))
                         }
                     }

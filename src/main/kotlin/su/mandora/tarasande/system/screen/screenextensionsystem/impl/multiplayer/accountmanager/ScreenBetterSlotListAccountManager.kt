@@ -1,23 +1,22 @@
 package su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager
 
-import com.mojang.authlib.minecraft.UserApiService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
-import it.unimi.dsi.fastutil.booleans.BooleanConsumer
-import net.minecraft.client.gui.screen.TitleScreen
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.network.SocialInteractionsManager
-import net.minecraft.client.util.Bans
+import net.minecraft.client.report.AbuseReportContext
+import net.minecraft.client.report.ReporterEnvironment
+import net.minecraft.client.texture.PlayerSkinProvider
 import net.minecraft.client.util.ProfileKeys
 import net.minecraft.client.util.Session
-import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.network.encryption.SignatureVerifier
+import net.minecraft.client.util.telemetry.TelemetryManager
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import net.minecraft.util.Util
 import org.apache.commons.lang3.RandomStringUtils
 import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
+import su.mandora.tarasande.injection.accessor.IMinecraftClient
 import su.mandora.tarasande.injection.accessor.IRealmsPeriodicCheckers
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.filesystem.ManagerFile
@@ -26,7 +25,6 @@ import su.mandora.tarasande.system.screen.accountmanager.account.ManagerAccount
 import su.mandora.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import su.mandora.tarasande.system.screen.accountmanager.account.impl.AccountSession
 import su.mandora.tarasande.system.screen.accountmanager.azureapp.ManagerAzureApp
-import su.mandora.tarasande.system.screen.accountmanager.environment.ManagerEnvironment
 import su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.file.FileAccounts
 import su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterAccount
 import su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterProxy
@@ -35,6 +33,7 @@ import su.mandora.tarasande.util.extension.minecraft.ButtonWidget
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.screen.EntryScreenBetterSlotList
 import su.mandora.tarasande.util.screen.ScreenBetterSlotList
+import java.io.File
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
@@ -54,7 +53,6 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
     private lateinit var randomButton: ButtonWidget
 
     init {
-        ManagerEnvironment
         ManagerAzureApp
         ManagerAccount
     }
@@ -86,10 +84,10 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
     }
 
     private fun generateButtonRow(buttons: Int, width: Int, padding: Int): IntArray {
-        var pos = -(width + padding) * buttons  / 2.0
+        var pos = -(width + padding) * buttons / 2.0
         val ints = IntArray(buttons)
 
-        for(int in ints.indices) {
+        for (int in ints.indices) {
             ints[int] = pos.toInt()
             pos += width + padding
         }
@@ -164,7 +162,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
 
     override fun tick() {
         val slotList = slotList // Allow smart cast
-        if(slotList != null) {
+        if (slotList != null) {
             loginButton.active = slotList.selectedOrNull != null
             removeButton.active = slotList.selectedOrNull != null
             toggleMainButton.active = slotList.selectedOrNull != null
@@ -177,7 +175,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
     inner class EntryScreenBetterSlotListAccount(var account: Account) : EntryScreenBetterSlotList(max(320, (FontWrapper.getWidth(account.getDisplayName()) + 5) * 2), FontWrapper.fontHeight() * 5) {
 
         override fun onDoubleClickEntry(mouseX: Double, mouseY: Double, mouseButton: Int) {
-            if(account.ready())
+            if (account.ready())
                 updateSession(account)
             else
                 logIn(account)
@@ -185,20 +183,20 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
 
         override fun getNarration(): Text = Text.of(account.getDisplayName())
 
-        override fun renderEntry(matrices: MatrixStack, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
+        override fun renderEntry(context: DrawContext, index: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean) {
             val formatting = when {
                 currentAccount == account -> Formatting.GREEN
                 mainAccount == accounts.indexOf(account) -> Formatting.YELLOW
                 else -> Formatting.RESET
             }
-            FontWrapper.textShadow(matrices, formatting.toString() + account.getDisplayName(), entryWidth / 2F, entryHeight / 2F - FontWrapper.fontHeight(), centered = true, scale = 2.0F)
-            if(account.status != null)
-                FontWrapper.textShadow(matrices, account.status!!, entryWidth / 2F, entryHeight / 2F + FontWrapper.fontHeight(), centered = true)
+            FontWrapper.textShadow(context, formatting.toString() + account.getDisplayName(), entryWidth / 2F, entryHeight / 2F - FontWrapper.fontHeight(), centered = true, scale = 2F)
+            if (account.status != null)
+                FontWrapper.textShadow(context, account.status!!, entryWidth / 2F, entryHeight / 2F + FontWrapper.fontHeight(), centered = true)
             if (account.skin != null)
-                account.skin!!.draw(matrices, 5, 5, 32)
+                account.skin!!.draw(context, 5, 5, 32)
 
             val accountInfoName = account.javaClass.getAnnotation(AccountInfo::class.java).name
-            FontWrapper.text(matrices, accountInfoName, entryWidth - FontWrapper.getWidth(accountInfoName).toFloat() - 7F, 5F)
+            FontWrapper.text(context, accountInfoName, entryWidth - FontWrapper.getWidth(accountInfoName).toFloat() - 7F, 5F)
         }
     }
 
@@ -209,42 +207,34 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
     }
 
     private fun updateSession(account: Account) {
-        if(!account.ready())
+        if (!account.ready())
             return
 
-        var updatedUserApiService = true
         // This can't be "client" because it is called from ClientMain means it's null at this point in time
-        with(mc) {
+        val success = with(mc) {
             session = account.session
-            authenticationService = YggdrasilAuthenticationService(java.net.Proxy.NO_PROXY, "", account.environment)
-            sessionService = account.service
-            userApiService = try {
-                authenticationService.createUserApiService(account.session?.accessToken)
-            } catch (ignored: Exception) {
-                updatedUserApiService = false
-                UserApiService.OFFLINE
-            }
-            servicesSignatureVerifier = SignatureVerifier.create(authenticationService.servicesKey)
-            socialInteractionsManager = SocialInteractionsManager(mc, userApiService)
-            (realmsPeriodicCheckers as IRealmsPeriodicCheckers).tarasande_getClient().apply {
-                username = account.session?.username
-                sessionId = account.session?.sessionId
-            }
-            profileKeys = ProfileKeys.create(userApiService, account.session, mc.runDirectory.toPath())
 
-            if (isMultiplayerBanned) { // :sob:
-                setScreen(Bans.createBanScreen(object : BooleanConsumer {
-                    override fun accept(confirmed: Boolean) {
-                        if (confirmed) {
-                            Util.getOperatingSystem().open("https://aka.ms/mcjavamoderation")
-                        }
-                        setScreen(TitleScreen(true))
-                    }
-                }, multiplayerBanDetails))
+            try {
+                authenticationService = YggdrasilAuthenticationService(networkProxy)
+                sessionService = account.service
+                userApiService = authenticationService.createUserApiService(session.accessToken)
+                skinProvider = PlayerSkinProvider(textureManager, File((this as IMinecraftClient).tarasande_getRunArgs().directories.assetDir, "skins"), sessionService)
+                socialInteractionsManager = SocialInteractionsManager(this, userApiService)
+                (realmsPeriodicCheckers as IRealmsPeriodicCheckers).tarasande_getClient().apply {
+                    username = account.session?.username
+                    sessionId = account.session?.sessionId
+                }
+                telemetryManager = TelemetryManager(this, userApiService, session)
+                profileKeys = ProfileKeys.create(userApiService, session, this.runDirectory.toPath())
+                abuseReportContext = AbuseReportContext.create(ReporterEnvironment.ofIntegratedServer(), userApiService)
+                return@with true
+            } catch (t: Throwable) {
+                t.printStackTrace()
+                return@with false
             }
         }
         currentAccount = account
-        account.status = Formatting.GREEN.toString() + "Updated session" + if (!updatedUserApiService) Formatting.RED.toString() + " (failed to update UserApiService)" else ""
+        account.status = Formatting.GREEN.toString() + "Updated session" + if (!success) Formatting.RED.toString() + " (failed to update UserApiService)" else ""
     }
 
     inner class RunnableLogin(private val account: Account) : Runnable {
