@@ -217,13 +217,13 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
             try {
                 authenticationService = YggdrasilAuthenticationService(networkProxy)
                 sessionService = account.service
-                userApiService = authenticationService.createUserApiService(session.accessToken)
                 skinProvider = PlayerSkinProvider(textureManager, File((this as IMinecraftClient).tarasande_getRunArgs().directories.assetDir, "skins"), sessionService)
-                socialInteractionsManager = SocialInteractionsManager(this, userApiService)
                 (realmsPeriodicCheckers as IRealmsPeriodicCheckers).tarasande_getClient().apply {
                     username = account.session?.username
                     sessionId = account.session?.sessionId
                 }
+                userApiService = authenticationService.createUserApiService(session.accessToken)
+                socialInteractionsManager = SocialInteractionsManager(this, userApiService)
                 telemetryManager = TelemetryManager(this, userApiService, session)
                 profileKeys = ProfileKeys.create(userApiService, session, this.runDirectory.toPath())
                 abuseReportContext = AbuseReportContext.create(ReporterEnvironment.ofIntegratedServer(), userApiService)

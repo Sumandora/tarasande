@@ -21,6 +21,14 @@ import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.IForg
 @Mixin(PacketByteBuf.class)
 public abstract class MixinPacketByteBuf {
 
+    /*@Inject(method = "decodeAsJson", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    public <T> void hookForgeFaker(Codec<T> codec, CallbackInfoReturnable<T> cir, JsonElement jsonElement, DataResult<T> dataResult) {
+        if (codec == ServerMetadata.CODEC) {
+            IForgePayload payload = ForgeCreator.INSTANCE.createPayload(jsonElement.getAsJsonObject());
+            if (payload != null) ((IServerMetadata) cir.getReturnValue()).tarasande_setForgePayload(payload);
+        }
+    }*/
+
     @Shadow
     @Final
     private static Gson GSON;

@@ -3,27 +3,27 @@ package su.mandora.tarasande.util.extension.minecraft
 import net.minecraft.util.math.Vec3d
 
 operator fun Vec3d.plus(other: Vec3d): Vec3d {
-    return this.add(other)
+    return Vec3d(x + other.x, y + other.y, z + other.z)
 }
 
 operator fun Vec3d.minus(other: Vec3d): Vec3d {
-    return this.subtract(other)
+    return Vec3d(x - other.x, y - other.y, z - other.z)
 }
 
 operator fun Vec3d.times(other: Vec3d): Vec3d {
-    return this.multiply(other)
+    return Vec3d(x * other.x, y * other.y, z * other.z)
 }
 
 operator fun Vec3d.times(other: Number): Vec3d {
-    return this.multiply(other.toDouble())
+    return Vec3d(x * other.toFloat(), y * other.toFloat(), z * other.toFloat())
 }
 
 operator fun Vec3d.div(other: Vec3d): Vec3d {
-    return this.multiply(Vec3d(1.0, 1.0, 1.0) / other)
+    return Vec3d(x / other.x, y / other.y, z / other.z)
 }
 
 operator fun Vec3d.div(other: Number): Vec3d {
-    return this.multiply(1.0 / other.toDouble())
+    return Vec3d(x / other.toFloat(), y / other.toFloat(), z / other.toFloat())
 }
 
 operator fun Vec3d.unaryMinus(): Vec3d {

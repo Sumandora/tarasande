@@ -31,7 +31,7 @@ public class MixinMultiplayerServerListPinger_1 {
     @Redirect(method = "onResponse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;)V"))
     public void trackForgePayload(ClientConnection instance, Packet<?> packet) {
         if (!TarasandeProtocolSpoofer.Companion.getViaFabricPlusLoaded()) return;
-        final IForgePayload payload = ((IServerMetadata) (Object) tarasande_metadata).tarasande_getForgePayload();
+        IForgePayload payload = ((IServerMetadata) (Object) tarasande_metadata).tarasande_getForgePayload();
 
         if (payload != null) {
             ((IServerInfo) field_3776).tarasande_setForgePayload(payload);

@@ -4,7 +4,6 @@ import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.text.OrderedText
-import net.minecraft.text.Text
 import su.mandora.tarasande.util.render.RenderUtil
 
 // Those are just the filled shapes, use RenderUtil for outlined ones.

@@ -16,9 +16,9 @@ public class MixinClientPlayerInteractionManager {
             cir.setReturnValue(false); // rofl kartoffel
     }
 
-    @Inject(method = "hasCreativeInventory", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "hasCreativeInventory", at = @At("RETURN"), cancellable = true)
     public void forceCreativeInventory(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(DebugValues.INSTANCE.getForceCreativeInventory().getValue());
+        cir.setReturnValue(cir.getReturnValue() || DebugValues.INSTANCE.getForceCreativeInventory().getValue());
     }
 
 }

@@ -11,7 +11,7 @@ import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.legac
 import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.modern.ChannelStruct
 import su.mandora.tarasande_protocol_spoofer.tarasandevalues.forge.payload.modern.ModernForgePayload
 
-class ScreenBetterSlotListForgeInformation(title: String, parent: Screen, private val type: Type, private val struct: IForgePayload) : ScreenBetterSlotList(title, parent, 46, -46) {
+class ScreenBetterSlotListForgeInformation(title: String, parent: Screen, private val type: Type, private val struct: IForgePayload) : ScreenBetterSlotList(title, parent, 46, 10) {
 
     enum class Type {
         MOD_LIST,

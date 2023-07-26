@@ -13,15 +13,13 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.injection.accessor.ILivingEntity;
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleFastClimb;
+import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleStep;
 import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
 import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleNoStatusEffect;
 
@@ -65,7 +63,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     public void hookNoFall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition, CallbackInfo ci) {
         if ((Object) this == MinecraftClient.getInstance().player)
             if (onGround) {
-                final ModuleNoFall moduleNoFall = ManagerModule.INSTANCE.get(ModuleNoFall.class);
+                ModuleNoFall moduleNoFall = ManagerModule.INSTANCE.get(ModuleNoFall.class);
                 if (moduleNoFall.getEnabled().getValue() && moduleNoFall.getMode().isSelected(0) && moduleNoFall.getGroundSpoofMode().isSelected(1))
                     ci.cancel();
             }
@@ -77,7 +75,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
             tarasande_forceHasStatusEffect = false;
         } else {
             if ((Object) this == MinecraftClient.getInstance().player) {
-                final ModuleNoStatusEffect moduleNoStatusEffect = ManagerModule.INSTANCE.get(ModuleNoStatusEffect.class);
+                ModuleNoStatusEffect moduleNoStatusEffect = ManagerModule.INSTANCE.get(ModuleNoStatusEffect.class);
                 if (moduleNoStatusEffect.getEnabled().getValue() && moduleNoStatusEffect.getEffects().isSelected(effect)) {
                     cir.setReturnValue(false);
                 }
@@ -91,12 +89,23 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
             tarasande_forceGetStatusEffect = false;
         } else {
             if ((Object) this == MinecraftClient.getInstance().player) {
-                final ModuleNoStatusEffect moduleNoStatusEffect = ManagerModule.INSTANCE.get(ModuleNoStatusEffect.class);
+                ModuleNoStatusEffect moduleNoStatusEffect = ManagerModule.INSTANCE.get(ModuleNoStatusEffect.class);
                 if (moduleNoStatusEffect.getEnabled().getValue() && moduleNoStatusEffect.getEffects().isSelected(effect)) {
                     cir.setReturnValue(null);
                 }
             }
         }
+    }
+
+    @Redirect(method = "getJumpBoostVelocityModifier", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"))
+    public boolean hookStep(LivingEntity instance, StatusEffect effect) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
+            ModuleStep moduleStep = ManagerModule.INSTANCE.get(ModuleStep.class);
+            if (moduleStep.getEnabled().getValue() && moduleStep.getIgnoreJumpBoost().getValue() && moduleStep.getInPrediction()) {
+                return false;
+            }
+        }
+        return instance.hasStatusEffect(effect);
     }
 
     @Override

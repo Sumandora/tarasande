@@ -1,10 +1,6 @@
 package su.mandora.tarasande.util.render.font
 
 import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.render.LightmapTextureManager
-import net.minecraft.client.render.Tessellator
-import net.minecraft.client.render.VertexConsumerProvider
-import net.minecraft.text.Text
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.util.extension.minecraft.drawText
 import su.mandora.tarasande.util.string.StringUtil

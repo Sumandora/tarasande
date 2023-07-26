@@ -40,7 +40,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murderers based on h
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }
     private val murdererColorOverride = ValueColor(this, "Murderer color override", 0.0, 1.0, 1.0, 1.0)
-    private val highlightDetectives = ValueBoolean(this, "Highlight detectives", false)
+    private val highlightDetectives = ValueBoolean(this, "Highlight detectives", true)
     private val detectiveColorOverride = ValueColor(this, "Bow color override", 0.66, 1.0, 1.0, 1.0, isEnabled = { highlightDetectives.value })
     private val detectiveItems = object : ValueRegistry<Item>(this, "Detective items", Registries.ITEM, true, Items.BOW, isEnabled = { highlightDetectives.value }) {
         override fun filter(key: Item) = key != Items.AIR
@@ -149,7 +149,9 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murderers based on h
     }
 
     private fun isIllegalItem(item: Item) =
-        if (item == Items.AIR || (highlightDetectives.value && detectiveItems.isSelected(item))) false else when {
+        if (item == Items.AIR || (highlightDetectives.value && detectiveItems.isSelected(item)))
+            false
+        else when {
             detectionMethod.isSelected(0) -> !allowedItems.isSelected(item)
             detectionMethod.isSelected(1) -> disallowedItems.isSelected(item)
             else -> false
@@ -205,7 +207,9 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murderers based on h
         }
 
         registerEvent(EventIsEntityAttackable::class.java) { event ->
-            event.attackable = event.attackable && event.entity is PlayerEntity && suspects.containsKey(event.entity.gameProfile) != isMurderer()
+            println(isMurderer())
+            if(!isMurderer())
+                event.attackable = event.attackable && event.entity is PlayerEntity && suspects.containsKey(event.entity.gameProfile)
         }
 
         registerEvent(EventPacket::class.java) { event ->

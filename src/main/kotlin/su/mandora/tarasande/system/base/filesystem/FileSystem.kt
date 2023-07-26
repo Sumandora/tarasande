@@ -8,7 +8,6 @@ import su.mandora.tarasande.event.impl.EventShutdown
 import su.mandora.tarasande.gson
 import su.mandora.tarasande.logger
 import java.io.FileWriter
-import java.nio.file.Files
 import java.util.logging.Level
 
 object ManagerFile : Manager<File>() {
@@ -37,7 +36,7 @@ object ManagerFile : Manager<File>() {
                 fileObj.renameTo(java.io.File(fileObj.path + "_backup"))
 
             val fileWriter = FileWriter(fileObj)
-            fileWriter.write(file.encrypt(gson.toJson(file.save()))!!)
+            fileWriter.write(gson.toJson(file.save()))
             fileWriter.close()
         }
     }
@@ -59,7 +58,7 @@ object ManagerFile : Manager<File>() {
     private fun internalLoad(file: File, backup: Boolean) {
         val fileObj = java.io.File(rootDirectory, file.name + (if (backup) "_backup" else ""))
         if (fileObj.exists()) {
-            val content = file.decrypt(String(Files.readAllBytes(fileObj.toPath()))) ?: error(file.name + "'s content is invalid")
+            val content = fileObj.readBytes().decodeToString()
             val jsonElement = gson.fromJson(content, JsonElement::class.java)
             file.load(jsonElement)
         }
@@ -73,12 +72,4 @@ abstract class File(val name: String) {
 
     abstract fun save(): JsonElement
     abstract fun load(jsonElement: JsonElement)
-
-    open fun encrypt(input: String): String? {
-        return input
-    }
-
-    open fun decrypt(input: String): String? {
-        return input
-    }
 }

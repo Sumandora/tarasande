@@ -19,7 +19,7 @@ private typealias SlotListEntry = EntryScreenBetterSlotList
 
 open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private val top: Int, private val bottom: Int) : ScreenBetter(title, prevScreen) {
 
-    private var listProvider: ListProvider? = null
+    private lateinit var listProvider: ListProvider
     protected var slotList: SlotListWidget? = null
     var selected: Int = 0
 
@@ -29,7 +29,7 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
 
     override fun init() {
         val entries = ArrayList<SlotListEntry>()
-        for (entry in listProvider!!()) {
+        for (entry in listProvider()) {
             entries.add(entry)
         }
         val entryWidth = entries.maxOfOrNull { it.width } ?: 1
@@ -53,14 +53,14 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
     }
 
     fun reload() {
-        if (slotList == null || listProvider == null)
+        if (slotList == null)
             return
         val slotList = slotList!!
 
         slotList.clearEntries() // Force garbage collection
 
         val entries = ArrayList<SlotListEntry>()
-        for (entry in listProvider!!()) {
+        for (entry in listProvider()) {
             entries.add(entry)
         }
         if (entries.isNotEmpty()) {

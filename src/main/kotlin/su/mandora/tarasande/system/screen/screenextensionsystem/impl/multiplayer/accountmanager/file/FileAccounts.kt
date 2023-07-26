@@ -6,8 +6,6 @@ import com.google.gson.JsonObject
 import com.mojang.authlib.Environment
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
-import org.apache.commons.codec.binary.Hex
-import oshi.SystemInfo
 import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.filesystem.File
@@ -15,33 +13,8 @@ import su.mandora.tarasande.system.screen.accountmanager.account.ManagerAccount
 import su.mandora.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.ScreenBetterSlotListAccountManager
 import java.util.*
-import javax.crypto.BadPaddingException
-import javax.crypto.Cipher
-import javax.crypto.spec.SecretKeySpec
 
 class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManager) : File("Accounts") {
-
-    private var encryptCipher: Cipher? = null
-    private var decryptCipher: Cipher? = null
-
-    init {
-        val hwid = SystemInfo().hardware.computerSystem.hardwareUUID
-        if (hwid != null && !hwid.equals("unknown")) { // if the HWID is nonexistent, we just don't encrypt at all
-            var bytes = Base64.getEncoder().encode(String(Hex.encodeHex(hwid.toByteArray())).toByteArray())
-            when {
-                bytes.size > 32 -> bytes = Arrays.copyOfRange(bytes, 0, 32)
-                bytes.size > 24 -> bytes = Arrays.copyOfRange(bytes, 0, 24)
-                bytes.size > 16 -> bytes = Arrays.copyOfRange(bytes, 0, 16)
-            }
-            val keySpec = SecretKeySpec(bytes, 0, bytes.size, "AES")
-            encryptCipher = Cipher.getInstance("AES").also {
-                it.init(Cipher.ENCRYPT_MODE, keySpec)
-            }
-            decryptCipher = Cipher.getInstance("AES").also {
-                it.init(Cipher.DECRYPT_MODE, keySpec)
-            }
-        }
-    }
 
     override fun save(): JsonElement {
         val jsonObject = JsonObject()
@@ -120,18 +93,5 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
         }
         if (jsonObject.has("Main-Account"))
             accountManager.mainAccount = jsonObject["Main-Account"].asInt
-    }
-
-    override fun encrypt(input: String): String {
-        return String(Base64.getEncoder().encode(encryptCipher?.doFinal(input.toByteArray()) ?: return input))
-    }
-
-    override fun decrypt(input: String): String? {
-        return try {
-            String(decryptCipher?.doFinal(Base64.getDecoder().decode(input.toByteArray())) ?: return input)
-        } catch (e: BadPaddingException) {
-            e.printStackTrace()
-            input
-        }
     }
 }

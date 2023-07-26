@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 @Mixin(EntityPredicates.class)
 public class MixinEntityPredicates {
 
-    @Inject(method = "canBePushedBy", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "canBePushedBy", at = @At("HEAD"), cancellable = true)
     private static void hookNoCramming(Entity entity, CallbackInfoReturnable<Predicate<Entity>> cir) {
         if (entity == MinecraftClient.getInstance().player) {
             ModuleNoCramming moduleNoCramming = ManagerModule.INSTANCE.get(ModuleNoCramming.class);

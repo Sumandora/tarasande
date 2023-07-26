@@ -7,6 +7,7 @@ import su.mandora.tarasande.event.impl.EventStep
 import su.mandora.tarasande.event.impl.EventTick
 import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.mc
+import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
@@ -25,10 +26,15 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
     private val slowdownTicks = ValueNumber(this, "Slowdown ticks", 1.0, 1.0, 10.0, 1.0, isEnabled = { slowdown.value < 1.0 })
     private val onGroundTicks = ValueNumber(this, "On-ground ticks", 0.0, 0.0, 10.0, 1.0)
 
+    val ignoreJumpBoost = ValueBoolean(this, "Ignore jump boost", true)
+
     private var stepTick = 0
     private var offGroundTick = 0
 
     private var prevAge = 0
+
+    var inPrediction = false
+        private set
 
     override fun onEnable() {
         stepTick = 0
@@ -37,7 +43,9 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
     }
 
     private fun predictMotions(): List<Double> {
-        val prediction = PredictionEngine.predictState(predictedMotionLimit.value.toInt(), input = mc.player?.input?.with(jumping = true))
+        inPrediction = true
+        val prediction = PredictionEngine.predictState(predictedMotionLimit.value.toInt(), input = mc.player?.input?.with(jumping = true), abortWhen = { it.velocity.y < 0 })
+        inPrediction = false
         val motions = prediction.second.map { it.y - mc.player?.y!! }
 
         val neededMotions = ArrayList<Double>()

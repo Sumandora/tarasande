@@ -6,6 +6,6 @@ public interface IServerInfo {
 
     IForgePayload tarasande_getForgePayload();
 
-    void tarasande_setForgePayload(final IForgePayload forgePayload);
+    void tarasande_setForgePayload(IForgePayload forgePayload);
 
 }

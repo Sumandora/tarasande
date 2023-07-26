@@ -22,7 +22,7 @@ class Program(vararg shaders: Shader) {
     }
 
     fun bindProgram(): Int {
-        val prevProgramId: Int = GL20.glGetInteger(GL20.GL_CURRENT_PROGRAM)
+        val prevProgramId = GL20.glGetInteger(GL20.GL_CURRENT_PROGRAM)
         GL20.glUseProgram(programId)
         return prevProgramId
     }

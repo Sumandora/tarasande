@@ -1,4 +1,4 @@
-package su.mandora.tarasande_serverpinger.screenextension.directconnect
+package su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer
 
 import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.minecraft.client.network.AllowedAddressResolver

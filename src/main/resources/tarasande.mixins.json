@@ -4,8 +4,10 @@
   "package": "su.mandora.tarasande.injection.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "core.MixinDrawContext",
     "core.MixinGameRenderer",
     "core.MixinMinecraftClient",
+    "core.MixinTextRenderer",
     "core.connection.MixinClientConnection",
     "core.connection.MixinClientConnection_1",
     "core.opengl.MixinGameRenderer",
@@ -105,6 +107,7 @@
     "feature.tarasandevalue.MixinClientPlayerEntity",
     "feature.tarasandevalue.MixinClientPlayerInteractionManager",
     "feature.tarasandevalue.MixinCommandBlock",
+    "feature.tarasandevalue.MixinCreativeInventoryScreen",
     "feature.tarasandevalue.MixinDebugRenderer",
     "feature.tarasandevalue.MixinGameRenderer",
     "feature.tarasandevalue.MixinHandledScreen",
@@ -120,10 +123,5 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "core.MixinDrawContext",
-    "core.MixinTextRenderer",
-    "feature.tarasandevalue.MixinCreativeInventoryScreen"
-  ]
+  }
 }
