@@ -129,32 +129,24 @@ Enter the `build/libs` folder of the package folder and move the main jar file t
 The "main" jar file is the one without any suffix other than the version.
 
 ## Features
-
-| Feature                                                                                                                                     | Description                                                                                    |
-|---------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Grabbers                                                                                                                                    | An automatic updating process                                                                  |
-| Event-based system                                                                                                                          | A way for the features to communicate with other features without interfering with them.       |
-| Rotation Leak Prevention                                                                                                                    | A old anticheat check which was discovered a long time ago, yet only few anticheats implement  |
-| it and even less cheats actually fix it.                                                                                                    |                                                                                                |
-| Click method: Dynamic                                                                                                                       | A mathematical formula, which defines the click pattern                                        |
-| Crasher package                                                                                                                             | Contains, at the time of this release, unknown crashers (Made by the other developer)          |
-| Tick base manipulation                                                                                                                      | Allows to manipulate the in-game                                                               |
-| clock <br/> [https://youtu.be/CQq31abCPsg](https://youtu.be/CQq31abCPsg) <br/> [https://youtu.be/2aqbEvrEdJ4](https://youtu.be/2aqbEvrEdJ4) |                                                                                                |
-| Inventory cleaner                                                                                                                           | An approach to inventory cleaners, in which the user chooses between equally good items        |
-| Scaffold walk                                                                                                                               | Rotations, which are nearly impossible to separate from the ones of a legit                    |
-| player <br/> [https://youtu.be/Xus2F-HloWs](https://youtu.be/Xus2F-HloWs)                                                                   |                                                                                                |
-| Bed ESP                                                                                                                                     | A Bed ESP, which calculates the best way to break a bed <br/> ![](media/BedESP%20showcase.png) |
-| Block bot                                                                                                                                   | A griefing module, which moves into other players line of sight in order to annoy them         |
-| Dropper                                                                                                                                     | A module which uses prediction to solve dropper                                                |
-| puzzles <br/> [https://youtu.be/W48PQ_7nDDQ](https://youtu.be/W48PQ_7nDDQ)                                                                  |                                                                                                |
-| Prediction engine                                                                                                                           | Allows prediction of local and other player entities                                           |
-| Protocol spoofers                                                                                                                           | Makes it appear as you are using a different client (Made by both developers)                  |
-| Code checker                                                                                                                                | A tool made to automatically quality control the source code                                   |
-| Kill aura                                                                                                                                   | If not the best multi-version PvP Kill aura (including adjustments for 1.11 shield             |
-| changes) <br/> [https://youtu.be/ntseC-D75HQ](https://youtu.be/ntseC-D75HQ)                                                                 |                                                                                                |
-| Nuker                                                                                                                                       | A nuker, which does not violate badpackets, unlike in a billion other cheats                   |
-| Murder Mystery                                                                                                                              | An over-engineered solution to finding murderers in Murder Mystery                             |
-| Trouble in terrorist town                                                                                                                   | Using assumptions and approximations to generate a hit-log                                     |
+| Feature                   | Description                                                                                                                                                                  |
+|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Event-based system        | A way for the features to communicate with other features without interfering with them.                                                                                     |
+| Rotation Leak Prevention  | A old anticheat check which was discovered a long time ago, yet only few anticheats implement it and even less cheats actually fix it.                                       |
+| Click method: Dynamic     | A mathematical formula, which defines the click pattern                                                                                                                      |
+| Tick base manipulation    | Allows to manipulate the in-game clock <br/> [https://youtu.be/CQq31abCPsg](https://youtu.be/CQq31abCPsg) <br/> [https://youtu.be/2aqbEvrEdJ4](https://youtu.be/2aqbEvrEdJ4) |
+| Inventory cleaner         | An approach to inventory cleaners, in which the user chooses between equally good items                                                                                      |
+| Scaffold walk             | Rotations, which are nearly impossible to separate from the ones of a legit player <br/> [https://youtu.be/Xus2F-HloWs](https://youtu.be/Xus2F-HloWs)                        |
+| Bed ESP                   | A Bed ESP, which calculates the best way to break a bed <br/> ![](media/BedESP%20showcase.png)                                                                               |
+| Block bot                 | A griefing module, which moves into other players line of sight in order to annoy them                                                                                       |
+| Dropper                   | A module which uses prediction to solve dropper puzzles <br/> [https://youtu.be/W48PQ_7nDDQ](https://youtu.be/W48PQ_7nDDQ)                                                   |
+| Prediction engine         | Allows prediction of local and other player entities                                                                                                                         |
+| Protocol spoofers         | Makes it appear as you are using a different client (Made by both developers)                                                                                                |
+| Code checker              | A tool made to automatically quality control the source code                                                                                                                 |
+| Kill aura                 | If not the best multi-version PvP Kill aura (including adjustments for 1.11 shield changes) <br/> [https://youtu.be/ntseC-D75HQ](https://youtu.be/ntseC-D75HQ)               |
+| Nuker                     | A nuker, which does not violate badpackets, unlike in a billion other cheats                                                                                                 |
+| Murder Mystery            | An over-engineered solution to finding murderers in Murder Mystery                                                                                                           |
+| Trouble in terrorist town | Using assumptions and approximations to generate a hit-log                                                                                                                   |
 
 Also note that the rendering code is largely inefficient and was made to be easy not fast.
 

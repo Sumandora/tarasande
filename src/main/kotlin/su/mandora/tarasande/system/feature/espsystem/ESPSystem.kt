@@ -42,7 +42,7 @@ abstract class ESPElementRotatable(name: String, private val forbiddenOrientatio
     val orientations = Orientation.entries.filter { !forbiddenOrientations.contains(it) }
 
     @Suppress("LeakingThis")
-    var orientation: ValueMode? = if (orientations.size > 1)
+    var orientation = if (orientations.size > 1)
         ValueMode(this, "$name: Orientation", false, *orientations.map { it.name.substring(0, 1).uppercase() + it.name.substring(1).lowercase() }.toTypedArray())
     else
         null
