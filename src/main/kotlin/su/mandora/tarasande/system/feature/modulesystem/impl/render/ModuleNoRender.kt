@@ -57,7 +57,6 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
         val fallingBlocks = ValueBooleanNoRender(this, "Falling blocks", false)
         val caveCulling = ValueBooleanNoRender(this, "Cave culling", false)
         val mapMarkers = ValueBooleanNoRender(this, "Map markers", false)
-        val banners = ValueMode(this, "Banners", false, "All", "Pillar", "None")
         val fireworkExplosions = ValueBooleanNoRender(this, "Firework explosions", false)
         val particles = object : ValueRegistry<ParticleType<*>>(this, "Particles", Registries.PARTICLE_TYPE, true) {
             override fun getTranslationKey(key: Any?) = Registries.PARTICLE_TYPE.getId(key as ParticleType<*>?)!!.path

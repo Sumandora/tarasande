@@ -80,7 +80,6 @@
     "feature.module.entity.MixinPlayerEntity",
     "feature.module.item.MixinTridentItem",
     "feature.module.norender.MixinArmorFeatureRenderer",
-    "feature.module.norender.MixinBannerBlockEntityRenderer",
     "feature.module.norender.MixinBossBarHud",
     "feature.module.norender.MixinChunkOcclusionDataBuilder",
     "feature.module.norender.MixinClientWorld",
