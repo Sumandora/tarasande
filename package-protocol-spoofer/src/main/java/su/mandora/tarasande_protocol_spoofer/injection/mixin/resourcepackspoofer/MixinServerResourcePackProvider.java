@@ -1,4 +1,4 @@
-package su.mandora.tarasande.injection.mixin.feature.spoofer;
+package su.mandora.tarasande_protocol_spoofer.injection.mixin.resourcepackspoofer;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.resource.ServerResourcePackProvider;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import su.mandora.tarasande.injection.accessor.IServerResourcePackProvider;
+import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerResourcePackProvider;
 
 import java.io.File;
 import java.net.URL;
