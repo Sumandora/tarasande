@@ -62,7 +62,6 @@
     "feature.module.MixinCamera",
     "feature.module.MixinClientPlayNetworkHandler",
     "feature.module.MixinConfirmScreen",
-    "feature.module.MixinEnchantmentHelper",
     "feature.module.MixinGameRenderer",
     "feature.module.MixinHeldItemRenderer",
     "feature.module.MixinInGameHud",
