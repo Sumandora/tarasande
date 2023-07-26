@@ -1,4 +1,4 @@
-package su.mandora.tarasande.injection.accessor;
+package su.mandora.tarasande_protocol_spoofer.injection.accessor;
 
 public interface IServerResourcePackProvider {
 

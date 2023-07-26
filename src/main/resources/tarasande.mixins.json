@@ -97,7 +97,6 @@
     "feature.module.norender.MixinSignBlockEntityRenderer",
     "feature.module.norender.MixinStatusEffectInstance",
     "feature.module.norender.MixinWorldRenderer",
-    "feature.spoofer.MixinServerResourcePackProvider",
     "feature.tarasandevalue.MixinAllowedAddressResolver",
     "feature.tarasandevalue.MixinChatHud",
     "feature.tarasandevalue.MixinChatScreen",
