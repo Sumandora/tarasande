@@ -4,6 +4,7 @@ accessible field net/minecraft/network/packet/c2s/handshake/HandshakeC2SPacket a
 accessible field net/minecraft/network/packet/c2s/play/CustomPayloadC2SPacket data Lnet/minecraft/network/PacketByteBuf;
 accessible field net/minecraft/network/packet/c2s/login/LoginHelloC2SPacket name Ljava/lang/String;
 accessible field net/minecraft/network/ClientConnection channel Lio/netty/channel/Channel;
+accessible field net/minecraft/network/PacketByteBuf GSON Lcom/google/gson/Gson;
 
 accessible method net/minecraft/client/network/ClientPlayNetworkHandler resolveUrl (Ljava/lang/String;)Ljava/net/URL;
 accessible method net/minecraft/client/network/ClientPlayNetworkHandler feedbackAfterDownload (Ljava/util/concurrent/CompletableFuture;)V

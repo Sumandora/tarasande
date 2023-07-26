@@ -5,7 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "forgefaker.MixinMultiplayerServerListPinger_1",
-    "forgefaker.MixinPacketByteBuf",
+    "forgefaker.MixinQueryResponseS2CPacket",
     "forgefaker.MixinServerInfo",
     "forgefaker.MixinServerMetadata",
     "haproxyhack.MixinClientConnection_1",
