@@ -57,11 +57,11 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
             }
         })
         addDrawableChild(ButtonWidget(width / 2 - 75, height / 2 - 40, 150, 20, Text.of("Proxy Type: ")) {
-            proxyType = ProxyType.values()[(proxyType?.ordinal!! + 1) % ProxyType.values().size]
+            proxyType = ProxyType.entries[(proxyType?.ordinal!! + 1) % ProxyType.entries.size]
             it.message = Text.of("Proxy Type: " + proxyType?.printable!!)
         }.also {
             proxyTypeButtonWidget = it
-            proxyType = proxy?.type ?: ProxyType.values()[0]
+            proxyType = proxy?.type ?: ProxyType.entries[0]
             it.message = Text.of("Proxy Type: " + proxyType?.printable!!)
         })
         addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - 100, height / 2 - 15, 200, 20, Text.of("Username")).also {

@@ -55,7 +55,7 @@ class ModuleAutoArmor : Module("Auto armor", "Equips armor if none is equipped",
                 mousePos = Vec2f(mc.window.scaledWidth / 2F, mc.window.scaledHeight / 2F)
             }
 
-            val bestArmors = EquipmentSlot.values()
+            val bestArmors = EquipmentSlot.entries
                 .filter { it.isArmorSlot }
                 .filter { ContainerUtil.getEquipmentSlot(screenHandler, it)?.hasStack() != true }
                 .mapNotNull { equipmentSlot ->

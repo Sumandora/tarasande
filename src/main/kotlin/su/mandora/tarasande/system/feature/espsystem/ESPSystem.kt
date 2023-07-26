@@ -33,13 +33,13 @@ object ManagerESP : Manager<ESPElement>() {
 
 abstract class ESPElement(val name: String) {
     @Suppress("LeakingThis")
-    var enabled = ValueBoolean(this, name, false)
+    var enabled = ValueBoolean(this, "Enabled", true)
 
     abstract fun draw(context: DrawContext, entity: Entity, rectangle: ModuleESP.Rectangle)
 }
 
 abstract class ESPElementRotatable(name: String, private val forbiddenOrientations: Array<Orientation> = arrayOf()) : ESPElement(name) {
-    val orientations = Orientation.values().filter { !forbiddenOrientations.contains(it) }
+    val orientations = Orientation.entries.filter { !forbiddenOrientations.contains(it) }
 
     @Suppress("LeakingThis")
     var orientation: ValueMode? = if (orientations.size > 1)

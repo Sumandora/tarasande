@@ -22,7 +22,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes slowdowns when using ite
     private val useActions = HashMap<UseAction, String>()
 
     init {
-        for (useAction in UseAction.values())
+        for (useAction in UseAction.entries)
             useActions[useAction] = StringUtil.formatEnumTypes(useAction.name)
     }
 

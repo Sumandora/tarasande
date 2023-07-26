@@ -92,7 +92,7 @@ open class ValueBind(
 
     override fun load(jsonElement: JsonElement) {
         val jsonArray = jsonElement.asJsonArray
-        type = Type.values()[jsonArray.get(0).asInt]
+        type = Type.entries[jsonArray.get(0).asInt]
         button = jsonArray.get(1).asInt
     }
 

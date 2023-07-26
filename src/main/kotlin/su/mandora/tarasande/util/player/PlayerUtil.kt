@@ -124,7 +124,7 @@ object PlayerUtil {
     }
 
     fun getUsedHand(): Hand? {
-        for (hand in Hand.values()) {
+        for (hand in Hand.entries) {
             val stack = mc.player!!.getStackInHand(hand)
             if (!stack.isEmpty) {
                 if (stack.useAction == UseAction.NONE)

@@ -12,55 +12,44 @@ class ModuleTeams : Module("Teams", "Prevents targeting of teammates", ModuleCat
     private val mode = ValueMode(this, "Mode", true, "Vanilla team", "Display name")
     private val displayNameMode = ValueMode(this, "Display name mode", true, "Sibling styles", "Paragraph symbols", isEnabled = { mode.isSelected(1) })
 
-    fun isTeammate(entity: PlayerEntity): Boolean {
+    init {
+        mode.select(0)
+        mode.select(1)
+
+        displayNameMode.select(0)
+        displayNameMode.select(1)
+    }
+
+    private fun isTeammate(entity: PlayerEntity): Boolean {
         if (mode.isSelected(0)) {
             if (entity.isTeammate(mc.player)) {
                 return true
             }
         }
 
-        if (mode.isSelected(1)) {
-            while (displayNameMode.isSelected(0)) {
-                val selfName = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == mc.player?.gameProfile } ?: break)
-                val otherName = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == entity.gameProfile } ?: break)
+        if (mode.isSelected(1)) return run {
+            val selfName = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == mc.player?.gameProfile })
+            val otherName = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == entity.gameProfile })
 
-                if ((selfName.style ?: break) == (otherName.style ?: break) || (selfName.siblings.firstOrNull { it.style.color != null }?.style ?: break) == (otherName.siblings.firstOrNull { it.style.color != null }?.style ?: break)) {
-                    return true
+            if (displayNameMode.isSelected(0)) {
+                if (selfName.style == otherName.style || selfName.siblings.firstOrNull { it.style.color != null }?.style == otherName.siblings.firstOrNull { it.style.color != null }?.style) {
+                    return@run true
                 }
-                break
             }
 
-            while (displayNameMode.isSelected(1)) {
-                var selfTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == mc.player?.gameProfile } ?: break).string ?: break
-                var otherTeam = mc.inGameHud.playerListHud.getPlayerName(mc.networkHandler?.playerList?.firstOrNull { it.profile == entity.gameProfile } ?: break).string ?: break
+            if (displayNameMode.isSelected(1)) {
+                val selfTeam = selfName.string
+                val otherTeam = otherName.string
 
-                if (selfTeam.length <= 2 || !selfTeam.startsWith("§")) break
+                val selfIdx = selfTeam.indexOf('§')
+                val otherIdx = otherTeam.indexOf('§')
 
-                if (otherTeam.length <= 2 || !otherTeam.startsWith("§")) break
-
-                while (selfTeam.length > 2 && selfTeam.startsWith("§")) {
-                    selfTeam = selfTeam.substring(1, selfTeam.length)
-                    selfTeam = if (selfTeam.first() in 'a'..'f') {
-                        selfTeam.first().toString()
-                    } else {
-                        selfTeam.substring(1, selfTeam.length)
-                    }
-                }
-
-                while (otherTeam.length > 2 && otherTeam.startsWith("§")) {
-                    otherTeam = otherTeam.substring(1, otherTeam.length)
-                    otherTeam = if (otherTeam.first() in 'a'..'f') {
-                        otherTeam.first().toString()
-                    } else {
-                        otherTeam.substring(1, otherTeam.length)
-                    }
-                }
-
-                if (selfTeam == otherTeam) {
-                    return true
-                }
-                break
+                if (selfIdx + 1 <= selfTeam.length && otherIdx + 1 <= otherTeam.length)
+                    if (selfTeam[selfIdx + 1] == otherTeam[otherIdx + 1])
+                        return@run true
             }
+
+            return@run false
         }
 
         return false

@@ -10,9 +10,9 @@ class Animator(val owner: Any) {
     val speedOut = ValueNumber(owner, "Speed: out", 0.001, 0.005, 0.02, 0.001)
 
     init {
-        object : ValueMode(owner, "Easing function", false, *EasingFunction.values().map { it.functionName }.toTypedArray()) {
+        object : ValueMode(owner, "Easing function", false, *EasingFunction.entries.map { it.functionName }.toTypedArray()) {
             override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
-                easing = EasingFunction.values().first { it.functionName == getSelected() }
+                easing = EasingFunction.entries.first { it.functionName == getSelected() }
             }
         }
     }

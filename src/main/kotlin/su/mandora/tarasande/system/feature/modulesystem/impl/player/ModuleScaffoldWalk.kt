@@ -341,7 +341,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                         if (timeUtil.hasReached(delay.value.toLong())) {
                             val prevSlot = mc.player?.inventory?.selectedSlot
                             var hasBlock = false
-                            for (hand in Hand.values()) {
+                            for (hand in Hand.entries) {
                                 val stack = mc.player?.getStackInHand(hand)
                                 if (stack != null) {
                                     if (stack.item is BlockItem && isBlockItemValid(stack.item as BlockItem)) {

@@ -232,7 +232,7 @@ object RenderUtil {
         val green = (hex shr 8 and 0xFF) / 255F
         val blue = (hex shr 0 and 0xFF) / 255F
 
-        for (formatting in Formatting.values()) {
+        for (formatting in Formatting.entries) {
             if (formatting.colorValue == null) continue
 
             val otherRed = (formatting.colorValue!! shr 16 and 0xFF) / 255F

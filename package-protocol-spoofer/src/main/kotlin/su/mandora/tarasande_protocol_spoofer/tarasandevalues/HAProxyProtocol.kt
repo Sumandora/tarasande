@@ -20,8 +20,8 @@ object HAProxyProtocol {
     val modifyPort = ValueBoolean(this, "Modify port", false)
     val port = ValueText(this, "Port", "25565", isEnabled = { modifyPort.value })
 
-    val protocolVersion = ValueMode(this, "Protocol version", false, *HAProxyProtocolVersion.values().map { it.name + "(0x" + "%x".format(it.byteValue()) + ")" }.toTypedArray())
-    val tcpVersion = ValueMode(this, "TCP version", false, *HAProxyProxiedProtocol.values().toList().subList(1, 3).map { it.name + "(0x" + "%x".format(it.byteValue()) + ")" }.toTypedArray())
+    val protocolVersion = ValueMode(this, "Protocol version", false, *HAProxyProtocolVersion.entries.map { it.name + "(0x" + "%x".format(it.byteValue()) + ")" }.toTypedArray())
+    val tcpVersion = ValueMode(this, "TCP version", false, *HAProxyProxiedProtocol.entries.subList(1, 3).map { it.name + "(0x" + "%x".format(it.byteValue()) + ")" }.toTypedArray())
 
     fun createHandler() = object : ChannelInboundHandlerAdapter() {
         override fun channelActive(ctx: ChannelHandlerContext) {
@@ -44,9 +44,9 @@ object HAProxyProtocol {
 
             try {
                 val payload = HAProxyMessage(
-                    HAProxyProtocolVersion.values()[protocolVersion.values.indexOf(protocolVersion.getSelected())],
+                    HAProxyProtocolVersion.entries[protocolVersion.values.indexOf(protocolVersion.getSelected())],
                     HAProxyCommand.PROXY,
-                    HAProxyProxiedProtocol.values()[tcpVersion.values.indexOf(tcpVersion.getSelected()) + 1],
+                    HAProxyProxiedProtocol.entries[tcpVersion.values.indexOf(tcpVersion.getSelected()) + 1],
                     sourceIP,
                     remoteAddress.address.hostAddress,
                     sourcePort,

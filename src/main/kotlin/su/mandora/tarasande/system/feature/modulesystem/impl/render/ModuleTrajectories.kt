@@ -17,7 +17,7 @@ class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories
 
     init {
         registerEvent(EventRender3D::class.java) { event ->
-            var stack: ItemStack? = null; Hand.values().forEach { hand ->
+            var stack: ItemStack? = null; Hand.entries.forEach { hand ->
             if (ProjectileUtil.projectileItems.any {
                     mc.player?.getStackInHand(hand)?.item?.let { item ->
                         it.isSame(item)

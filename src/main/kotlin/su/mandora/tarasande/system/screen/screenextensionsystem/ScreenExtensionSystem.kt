@@ -46,7 +46,7 @@ open class ScreenExtensionButtonList<T : Screen>(screen: Class<out T>) : ScreenE
 
     override fun createElements(screen: T): MutableList<Element> {
         val list = ArrayList<Element>()
-        for (value in Direction.values()) {
+        for (value in Direction.entries) {
             var y = 3
             for (button in buttons.filter { it.value.second == value }) {
                 if (!button.value.first()) continue
