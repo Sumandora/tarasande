@@ -7,12 +7,12 @@ import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.injection.accessor.IConfirmScreen
-import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerResourcePackProvider
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
 import su.mandora.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
+import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerResourcePackProvider
 
 object ResourcePackSpoofer {
     private val enabled = ValueBoolean(this, "Enabled", false)

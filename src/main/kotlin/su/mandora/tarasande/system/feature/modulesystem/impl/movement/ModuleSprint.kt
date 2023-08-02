@@ -1,5 +1,6 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.movement
 
+import su.mandora.tarasande.event.impl.EventIsWalkingForward
 import su.mandora.tarasande.event.impl.EventJump
 import su.mandora.tarasande.event.impl.EventKeyBindingIsPressed
 import su.mandora.tarasande.feature.rotation.Rotations
@@ -11,7 +12,7 @@ import su.mandora.tarasande.util.player.PlayerUtil
 
 class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MOVEMENT) {
 
-    val allowBackwards = ValueBoolean(this, "Allow backwards", false, isEnabled = { !Rotations.correctMovement.isSelected(1) })
+    private val allowBackwards = ValueBoolean(this, "Allow backwards", false, isEnabled = { !Rotations.correctMovement.isSelected(1) })
     val ignoreHunger = ValueBoolean(this, "Ignore hunger", false)
 
     init {
@@ -24,6 +25,12 @@ class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MO
             if (event.state == EventJump.State.PRE && allowBackwards.isEnabled() && allowBackwards.value) {
                 event.yaw = PlayerUtil.getMoveDirection().toFloat()
             }
+        }
+
+        registerEvent(EventIsWalkingForward::class.java) { event ->
+            if(allowBackwards.isEnabled() && allowBackwards.value)
+                if(PlayerUtil.isPlayerMoving())
+                    event.walksForward = true
         }
     }
 }

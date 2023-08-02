@@ -74,7 +74,7 @@ object StringUtil {
         return str
     }
 
-    private val colorCodePattern = Pattern.compile("(?i)\u00a7[0-9A-F]")
+    val colorCodePattern: Pattern = Pattern.compile("(?i)\u00a7[0-9A-F]")
 
     fun stripColors(string: String): String {
         return colorCodePattern.matcher(string).replaceAll("")

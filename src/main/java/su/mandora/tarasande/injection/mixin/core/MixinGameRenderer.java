@@ -1,20 +1,27 @@
 package su.mandora.tarasande.injection.mixin.core;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.injection.accessor.IGameRenderer;
 import su.mandora.tarasande.util.MinecraftConstantsKt;
 
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer implements IGameRenderer {
+
+    @Shadow
+    @Final
+    MinecraftClient client;
 
     @Unique
     private boolean tarasande_allowThroughWalls = false;
@@ -23,13 +30,12 @@ public class MixinGameRenderer implements IGameRenderer {
     private boolean tarasande_disableReachExtension = false;
 
     @Unique
-    private double tarasande_reach = MinecraftConstantsKt.MAX_REACH;
+    private double tarasande_reach = MinecraftConstantsKt.DEFAULT_REACH;
 
-    @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"))
-    public HitResult throughWalls(Entity entity, double maxDistance, float tickDelta, boolean includeFluids) {
+    @Inject(method = "updateTargetedEntity", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;crosshairTarget:Lnet/minecraft/util/hit/HitResult;", ordinal = 0, shift = At.Shift.AFTER), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;getReachDistance()F")))
+    public void throughWalls(float tickDelta, CallbackInfo ci) {
         if (tarasande_allowThroughWalls)
-            return null;
-        return entity.raycast(maxDistance, tickDelta, includeFluids);
+            client.crosshairTarget = null;
     }
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;getReachDistance()F"))
@@ -37,9 +43,12 @@ public class MixinGameRenderer implements IGameRenderer {
         return Math.max(clientPlayerInteractionManager.getReachDistance(), (float) tarasande_reach);
     }
 
-    @ModifyConstant(method = "updateTargetedEntity", constant = @Constant(doubleValue = 9.0))
-    public double reach(double original) {
-        return tarasande_reach * tarasande_reach;
+    @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;squaredDistanceTo(Lnet/minecraft/util/math/Vec3d;)D"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/util/hit/EntityHitResult;getPos()Lnet/minecraft/util/math/Vec3d;")))
+    public double reach(Vec3d instance, Vec3d vec) {
+        double dist = instance.squaredDistanceTo(vec);
+        if (dist <= tarasande_reach * tarasande_reach)
+            return Math.min(dist, MinecraftConstantsKt.DEFAULT_REACH * MinecraftConstantsKt.DEFAULT_REACH);
+        return dist;
     }
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;hasExtendedReach()Z"))

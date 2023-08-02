@@ -415,6 +415,8 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         }
 
         registerEvent(EventRender3D::class.java) { event ->
+            if(event.state != EventRender3D.State.POST) return@registerEvent
+
             if (target != null) {
                 val blockPos = target?.first
                 val blockState = mc.world?.getBlockState(target?.first)

@@ -49,7 +49,8 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murderers based on h
     private val broadcast = ValueMode(this, "Broadcast", false, "Disabled", "Explanatory", "Legit", "Custom")
     private val customBroadcastMessage = ValueText(this, "Custom broadcast message", "I'm sure it is %s because he held %s", isEnabled = { broadcast.isSelected(3) })
     private val murdererAssistance = ValueBoolean(this, "Murderer assistance", true)
-    val fakeNews = ValueMode(this, "Fake news", false, "Disabled", "Explanatory", "Legit", "Custom")
+    private val fakeNews = ValueMode(this, "Fake news", false, "Disabled", "Explanatory", "Legit", "Custom")
+    private val fakeNewsDelay = ValueNumberRange(this, "Fake news delay", 0.0, 30.0, 60.0, 90.0, 1.0)
     private val customFakeNewsMessage = ValueText(this, "Custom fake news message", "I'm sure it is %s because he held %s", isEnabled = { fakeNews.isSelected(3) })
     private val fakeNewsItems = object : ValueRegistry<Item>(this, "Fake news items", Registries.ITEM, true, Items.IRON_SWORD, isEnabled = { !fakeNews.isSelected(0) }) {
         override fun filter(key: Item) = key != Items.AIR
@@ -58,7 +59,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murderers based on h
 
     val suspects = ConcurrentHashMap<GameProfile, Array<Item>>()
     val fakeNewsTimer = TimeUtil()
-    var fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
+    var fakeNewsTime = fakeNewsDelay.randomNumber().toLong() * 1000L // DRY
 
     private val messages = ArrayList<String>()
 
@@ -175,16 +176,11 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murderers based on h
             if (event.state == EventUpdate.State.PRE) {
                 if (!fakeNews.isSelected(0) && isMurderer() && murdererAssistance.value) {
                     if (fakeNewsTimer.hasReached(fakeNewsTime)) {
-                        var player: PlayerEntity? = null
                         val realPlayers = mc.world?.players?.filter { PlayerUtil.isAttackable(it) } ?: return@registerEvent
-                        if (realPlayers.size <= 1)
-                            return@registerEvent
-                        while (player == null || player == mc.player) {
-                            player = realPlayers[ThreadLocalRandom.current().nextInt(realPlayers.size)]
-                        }
+                        val player = realPlayers.randomOrNull() ?: return@registerEvent
                         val randomIllegalItem = fakeNewsItems.entries().randomOrNull()
                         accuse(player, randomIllegalItem != null, false, (randomIllegalItem as? Item) ?: Items.AIR, Items.AIR, fakeNews.values.indexOf(fakeNews.getSelected()), customFakeNewsMessage.value)
-                        fakeNewsTime = ThreadLocalRandom.current().nextInt(30, 60) * 1000L
+                        fakeNewsTime = fakeNewsDelay.randomNumber().toLong() * 1000L
                         fakeNewsTimer.reset()
                     }
                 } else {

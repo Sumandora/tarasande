@@ -1,10 +1,8 @@
 package su.mandora.tarasande.system.screen.panelsystem.impl.fixed
 
-import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.gui.DrawContext
 import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
-import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
 import su.mandora.tarasande.system.screen.panelsystem.Panel
@@ -44,19 +42,7 @@ class PanelWatermark : Panel("Watermark", 150.0, 50.0, true) {
 
         val motdWidth = FontWrapper.getWidth(messageOfTheDay.value + " ")
         if (motdWidth > panelWidth - userHostWidth) {
-            context.matrices.push()
-            GlStateManager._enableScissorTest()
-            val scaleFactor = mc.window.scaleFactor.toInt()
-            GlStateManager._scissorBox(
-                (x * scaleFactor).toInt(),
-                (mc.window.height - (y + panelHeight) * scaleFactor).toInt(),
-                ((panelWidth - userHostWidth) * scaleFactor).toInt(),
-                (FontWrapper.fontHeight() * scaleFactor)
-            )
-            context.matrices.translate(-(System.currentTimeMillis() / 50.0) % motdWidth, 0.0, 0.0)
-            FontWrapper.textShadow(context, messageOfTheDay.value + " " + messageOfTheDay.value, (x + 1).toFloat(), (y + panelHeight - FontWrapper.fontHeight()).toFloat(), TarasandeValues.accentColor.getColor().rgb)
-            GlStateManager._disableScissorTest()
-            context.matrices.pop()
+            FontWrapper.textShadow(context, messageOfTheDay.value + " " + messageOfTheDay.value, (x + 1 - (System.currentTimeMillis() / 50.0).mod(motdWidth.toFloat())).toFloat(), (y + panelHeight - FontWrapper.fontHeight()).toFloat(), TarasandeValues.accentColor.getColor().rgb)
         } else {
             FontWrapper.textShadow(context, messageOfTheDay.value, (x + 1).toFloat(), (y + panelHeight - FontWrapper.fontHeight()).toFloat(), TarasandeValues.accentColor.getColor().rgb)
         }

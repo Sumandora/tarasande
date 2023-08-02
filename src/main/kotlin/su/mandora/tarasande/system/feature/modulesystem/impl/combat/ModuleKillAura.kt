@@ -11,6 +11,7 @@ import net.minecraft.item.ShieldItem
 import net.minecraft.item.SwordItem
 import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket
 import net.minecraft.network.packet.s2c.play.EntityDamageS2CPacket
+import net.minecraft.server.network.ServerPlayNetworkHandler
 import net.minecraft.util.UseAction
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.math.Box
@@ -27,10 +28,12 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleClickTP
 import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
+import su.mandora.tarasande.util.DEFAULT_REACH
 import su.mandora.tarasande.util.extension.minecraft.*
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.container.ContainerUtil
 import su.mandora.tarasande.util.render.RenderUtil
@@ -46,7 +49,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     private val priority = ValueMode(this, "Priority", false, "Distance", "Health", "Hurt time", "FOV", "Attack cooldown")
     private val fov = ValueNumber(this, "FOV", 0.0, Rotation.MAXIMUM_DELTA, Rotation.MAXIMUM_DELTA, 1.0)
     private val fakeRotationFov = ValueBoolean(this, "Fake rotation FOV", false)
-    private val reach = ValueNumberRange(this, "Reach", 0.1, 3.0, 4.0, 6.0, 0.1)
+    private val reach = ValueNumberRange(this, "Reach", 0.1, DEFAULT_REACH, 4.0, maxReach, 0.1)
     private val clickSpeedUtil = ClickSpeedUtil(this, { true }) // for setting order
     private val waitForDamageValue = ValueBoolean(this, "Wait for damage", false)
     private val rayTrace = ValueBoolean(this, "Ray trace", false)
@@ -193,7 +196,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
                 if (bestAimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.maxValue * reach.maxValue) continue
                 if (RotationUtil.getRotations(mc.player?.eyePos!!, bestAimPoint).fov(fovRotation()) > fov.value) continue
                 var aimPoint =
-                    if (boundingBox.contains(mc.player?.eyePos) && mc.player?.input?.movementInput?.lengthSquared() != 0F) {
+                    if (boundingBox.contains(mc.player?.eyePos) && PlayerUtil.isPlayerMoving()) {
                         mc.player?.eyePos!! + currentRot.forwardVector() * 0.01
                     } else {
                         // aim point calculation maybe slower, only run it if the range check is actually able to succeed under best conditions
@@ -324,7 +327,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
                         val distance = aimPoint.squaredDistanceTo(mc.player?.eyePos!!)
 
-                        if (distance > 6.0 * 6.0 && distance <= reach.minValue * reach.minValue) {
+                        if (distance > ServerPlayNetworkHandler.MAX_BREAK_SQUARED_DISTANCE && distance <= reach.minValue * reach.minValue) {
                             val path = moduleClickTP.teleportToPosition(BlockPos(target.pos), maxTeleportTime) ?: continue // failed
                             teleportPath!!.addAll(path)
                         }
@@ -401,6 +404,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         }
 
         registerEvent(EventRender3D::class.java) { event ->
+            if(event.state != EventRender3D.State.POST) return@registerEvent
+
             if (Rotations.fakeRotation != null)
                 if (mc.crosshairTarget != null && mc.crosshairTarget?.isEntityHitResult() == true)
                     if (mc.crosshairTarget is EntityHitResult && targets.any { it.first == (mc.crosshairTarget as EntityHitResult).entity })

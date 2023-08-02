@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.injection.accessor.ILivingEntity;
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
+import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleAirJump;
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleFastClimb;
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleStep;
 import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleNoFall;
@@ -106,6 +107,17 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
             }
         }
         return instance.hasStatusEffect(effect);
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE",target = "Lnet/minecraft/entity/LivingEntity;isOnGround()Z", ordinal = 0), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;swimUpward(Lnet/minecraft/registry/tag/TagKey;)V", ordinal = 1)))
+    public boolean hookAirJump(LivingEntity instance) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
+            ModuleAirJump moduleAirJump = ManagerModule.INSTANCE.get(ModuleAirJump.class);
+            if (moduleAirJump.getEnabled().getValue())
+                return true;
+        }
+
+        return instance.isOnGround();
     }
 
     @Override

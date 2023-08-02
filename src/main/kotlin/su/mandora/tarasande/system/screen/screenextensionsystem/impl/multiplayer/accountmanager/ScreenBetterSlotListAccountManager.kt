@@ -35,7 +35,6 @@ import su.mandora.tarasande.util.screen.EntryScreenBetterSlotList
 import su.mandora.tarasande.util.screen.ScreenBetterSlotList
 import java.io.File
 import java.util.*
-import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 
 class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager", null /*set else where*/, 46, 10) {
@@ -137,7 +136,7 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
             updateSession(account)
         }.also { updateSessionButton = it })
         addDrawableChild(ButtonWidget(width / 2 + lowerRow[1], height - 46 + 2 + 20 - 3, 100, 20, Text.of("Direct Login")) { client?.setScreen(ScreenBetterAccount("Direct Login", this) { logIn(it) }) })
-        addDrawableChild(ButtonWidget(width / 2 + lowerRow[2], height - 46 + 2 + 20 - 3, 100, 20, Text.of("Random Account")) { logIn(accounts[ThreadLocalRandom.current().nextInt(accounts.size)]) }.also { randomButton = it })
+        addDrawableChild(ButtonWidget(width / 2 + lowerRow[2], height - 46 + 2 + 20 - 3, 100, 20, Text.of("Random Account")) { accounts.randomOrNull()?.also { logIn(it) } }.also { randomButton = it })
         addDrawableChild(ButtonWidget(width / 2 + lowerRow[3], height - 46 + 2 + 20 - 3, 100, 20, Text.of("Add")) {
             client?.setScreen(ScreenBetterAccount("Add Account", this) { account ->
                 accounts.add(account)

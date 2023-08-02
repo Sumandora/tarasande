@@ -15,19 +15,25 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.player.PlayerUtil
-import su.mandora.tarasande.util.string.StringUtil
 
 class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.PLAYER) {
 
-    private val useActions = arrayOf(UseAction.EAT, UseAction.DRINK, UseAction.BOW, UseAction.SPEAR, UseAction.CROSSBOW)
+    private val useActions = arrayOf(UseAction.EAT, UseAction.DRINK, UseAction.BOW, UseAction.SPEAR, UseAction.CROSSBOW, UseAction.BRUSH)
     private lateinit var actions: ValueMode
     private val values = HashMap<UseAction, ValueNumber>()
 
-    private val nameMap = HashMap<UseAction, String>()
+    private val nameMap = hashMapOf(
+        UseAction.EAT to "Eat",
+        UseAction.DRINK to "Drink",
+        UseAction.BOW to "Bow",
+        UseAction.SPEAR to "Spear",
+        UseAction.CROSSBOW to "Crossbow",
+        UseAction.BRUSH to "Brush"
+    )
 
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
-            actions = ValueMode(this, "Actions", true, *useActions.map { StringUtil.formatEnumTypes(it.name).also { name -> nameMap[it] = name } }.toTypedArray())
+            actions = ValueMode(this, "Actions", true, *useActions.map { nameMap[it]!! }.toTypedArray())
             for (useAction in useActions) {
                 // This when is expressing my hate towards mojang really nicely
                 val longest = when (useAction) {

@@ -68,8 +68,8 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
             context.matrices.push()
             GL11.glEnable(GL11.GL_LINE_SMOOTH)
             GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST)
-            val lineWidth = GL11.glGetFloat(GL11.GL_LINE_WIDTH)
-            GL11.glLineWidth(2F)
+            val lineWidth = RenderSystem.getShaderLineWidth()
+            RenderSystem.lineWidth(2F)
             val matrix = context.matrices.peek()?.positionMatrix!!
             val bufferBuilder = Tessellator.getInstance().buffer
             RenderSystem.enableBlend()
@@ -87,7 +87,7 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
             BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
 
             RenderSystem.disableBlend()
-            GL11.glLineWidth(lineWidth)
+            RenderSystem.lineWidth(lineWidth)
             GL11.glDisable(GL11.GL_LINE_SMOOTH)
             context.matrices.pop()
         }

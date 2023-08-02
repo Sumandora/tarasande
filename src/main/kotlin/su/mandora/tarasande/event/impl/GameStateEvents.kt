@@ -28,7 +28,7 @@ class EventInvalidGameMode(val uuid: UUID) : Event(false)
 class EventScreenInput(var doneInput: Boolean) : Event(true)
 class EventChangeScreen : Event {
     var dirty = false
-    var newScreen: Screen?
+    var newScreen: Screen? = null
         set(value) {
             field = value
             dirty = true
@@ -50,3 +50,4 @@ class EventInputSuggestions(val reader: StringReader) : Event(false) {
 }
 
 class EventDoAttack : Event(true)
+class EventTickRate(var tickRate: Float) : Event(false)

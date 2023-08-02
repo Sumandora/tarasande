@@ -1,6 +1,5 @@
 package su.mandora.tarasande.system.screen.panelsystem.screen.panelscreen
 
-import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
@@ -30,6 +29,8 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
     }
     private val animationLength = ValueNumber(this, "Animation length", 0.0, 100.0, 500.0, 1.0)
     private val ichHabEinfachDenBESTEN = ValueBoolean(this, "Ich hab einfach den BESTEN!", false)
+    private val screenBackgroundOpacity = ValueNumber(this, "Screen background opacity", 0.0, 0.66, 1.0, 0.01)
+    val panelBackgroundOpacity = ValueNumber(this, "Panel background opacity", 0.0, 0.3, 1.0, 0.01)
 
     private var screenChangeTime = System.currentTimeMillis()
     private var isClosing = false
@@ -56,6 +57,13 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
         }
     }
 
+    private fun calculateAnimation(): Double
+    {
+        var animation = ((System.currentTimeMillis() - screenChangeTime) / animationLength.value).coerceAtMost(1.0)
+        if (isClosing) animation = 1.0 - animation
+        return animation
+    }
+
     override fun init() {
         if (!wasClosed) {
             return
@@ -70,9 +78,7 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
     }
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-        var animation = ((System.currentTimeMillis() - screenChangeTime) / animationLength.value).coerceAtMost(1.0)
-        if (isClosing) animation = 1.0 - animation
-
+        val animation = calculateAnimation()
         if (isClosing && animation <= 0.0) {
             RenderSystem.recordRenderCall {
                 super.close()
@@ -93,7 +99,7 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
             )
             client?.framebuffer?.beginWrite(true)
 
-            ManagerBlur.blurScene(strength)
+            ManagerBlur.blurScene(context, strength)
         }
 
         context.matrices.push()
@@ -129,7 +135,7 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F)
 
         context.matrices.push()
-        context.fill(0, 0, width, height, color.withAlpha((animation * 255 * 0.66).toInt()).rgb)
+        context.fill(0, 0, width, height, color.withAlpha((animation * 255 * screenBackgroundOpacity.value).toInt()).rgb)
         context.matrices.pop()
 
         particles.forEach { it.render(context, mouseX.toDouble(), mouseY.toDouble(), animation) }
@@ -146,19 +152,19 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
             val y = it.y + panelHeight - panelHeight * (1 - animation) / 2.0 - 1
             val width = it.panelWidth - it.panelWidth * (1 - animation)
             val height = (panelHeight - panelHeight * (1 - animation) - 1)
-            if (it.opened && !it.fixed && animation > 0.0) {
-                GlStateManager._enableScissorTest()
-                GlStateManager._scissorBox(
-                    round(x * client?.window?.scaleFactor!!).toInt(),
-                    round(client?.window?.height!! - y * client?.window?.scaleFactor!!).toInt(),
-                    round(width * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1),
-                    round(height * client?.window?.scaleFactor!!).toInt().coerceAtLeast(1)
-                )
-            }
+            val scissor = it.opened && !it.fixed && animation > 0.0
             if (it.fixed || animation > 0.0) {
+                if (scissor)
+                    context.enableScissor(
+                        round(x).toInt(),
+                        round(y - height).toInt(),
+                        round(x + width).toInt().coerceAtLeast(1),
+                        round(y).toInt().coerceAtLeast(1)
+                    )
                 it.render(context, mouseX, mouseY, delta)
+                if (scissor)
+                    context.disableScissor()
             }
-            GlStateManager._disableScissorTest()
             context.matrices.pop()
         }
 
@@ -166,10 +172,7 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        var animation = ((System.currentTimeMillis() - screenChangeTime) / animationLength.value).coerceAtMost(1.0)
-        if (isClosing) animation = 1.0 - animation
-
-        if (animation != 1.0) return true
+        if (calculateAnimation() != 1.0) return true
 
         for (it in panelSystem.list) {
             if (it.mouseClicked(floor(mouseX), floor(mouseY), button)) {
@@ -196,8 +199,7 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
         panelSystem.list.forEach {
             if (it.keyPressed(keyCode, scanCode, modifiers)) return false
         }
-        val animation = ((System.currentTimeMillis() - screenChangeTime) / animationLength.value).coerceAtMost(1.0)
-        if (animation != 1.0) return false
+        if (calculateAnimation() != 1.0) return false
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 

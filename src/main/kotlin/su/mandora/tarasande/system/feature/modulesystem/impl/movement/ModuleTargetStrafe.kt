@@ -17,13 +17,14 @@ import su.mandora.tarasande.util.extension.minecraft.isEntityHitResult
 import su.mandora.tarasande.util.extension.minecraft.minus
 import su.mandora.tarasande.util.extension.minecraft.times
 import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
 import kotlin.math.sin
 
 class ModuleTargetStrafe : Module("Target strafe", "Circle-strafes around targets", ModuleCategory.MOVEMENT) {
 
-    private val radius = ValueNumber(this, "Radius", 0.0, 1.0, 6.0, 0.1)
+    private val radius = ValueNumber(this, "Radius", 0.0, 1.0, maxReach, 0.1)
     private val maximumFallDistance = ValueNumber(this, "Maximum fall distance", 0.0, 5.0, 15.0, 0.1)
 
     private var invert = false

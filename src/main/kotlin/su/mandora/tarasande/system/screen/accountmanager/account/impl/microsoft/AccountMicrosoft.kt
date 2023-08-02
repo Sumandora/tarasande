@@ -139,7 +139,7 @@ $errorDescription""".toByteArray())
     private fun buildFromCredentials(email: String, password: String): MSAuthProfile {
         val getResponse = get("$OAUTH_AUTHORIZE_URL?" + buildArguments(HashMap<String, String>().also {
             it["client_id"] = azureApp.clientId
-            it["redirect_uri"] = "https://login.live.com/oauth20_desktop.srf".also { url -> redirectUri = url }
+            it["redirect_uri"] = "https://login.live.com/oauth20_desktop.srf".also { redirectUri = it }
             it["response_type"] = "code"
             it["scope"] = azureApp.scope
         }), 60 * 1000, HashMap())

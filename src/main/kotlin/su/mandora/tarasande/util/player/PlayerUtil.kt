@@ -25,6 +25,7 @@ import su.mandora.tarasande.injection.accessor.IGameRenderer
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
+import su.mandora.tarasande.util.DEFAULT_WALK_SPEED
 import su.mandora.tarasande.util.extension.minecraft.isBlockHitResult
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
@@ -116,7 +117,7 @@ object PlayerUtil {
     }
 
     fun getMoveDirection(): Double {
-        return RotationUtil.getYaw(input.movementInput) + (if (input.movementInput.lengthSquared() != 0F) 0.0 else 90.0) + mc.player!!.yaw
+        return RotationUtil.getYaw(input.movementInput) + (if (isPlayerMoving()) 0.0 else 90.0) + mc.player!!.yaw
     }
 
     fun isOnEdge(extrapolation: Double) = mc.player!!.let {
@@ -136,14 +137,8 @@ object PlayerUtil {
         return null
     }
 
-    const val DEFAULT_WALK_SPEED = 0.28
-
     fun calcBaseSpeed(baseSpeed: Double = DEFAULT_WALK_SPEED): Double {
-        return baseSpeed + 0.03 *
-                if (mc.player?.hasStatusEffect(StatusEffects.SPEED) == true)
-                    mc.player?.getStatusEffect(StatusEffects.SPEED)?.amplifier!!
-                else
-                    0
+        return baseSpeed + 0.03 * (mc.player?.getStatusEffect(StatusEffects.SPEED)?.amplifier ?: 0)
     }
 
     private fun createFakeChat(block: (ChatScreen) -> Unit) {

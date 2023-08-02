@@ -98,6 +98,8 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
         }
 
         registerEvent(EventRender3D::class.java) { event ->
+            if(event.state != EventRender3D.State.POST) return@registerEvent
+
             if (predictedBox != null)
                 RenderUtil.blockOutline(event.matrices, predictedBox!!, predictionColor.getColor().rgb)
         }

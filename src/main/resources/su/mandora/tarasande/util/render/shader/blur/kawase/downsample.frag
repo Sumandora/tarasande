@@ -1,12 +1,12 @@
 // https://github.com/tryone144/dual-kawase-demo/blob/master/src/shaders/dual_kawase_down.frag
 
-#version 400
+#version 150 core
 
 uniform float offset;
 uniform sampler2D tex;
 uniform vec2 resolution;
 
-layout (location = 0) out vec4 fragColor;
+out vec4 fragColor;
 
 void main() {
     vec4 color = texture(tex, gl_FragCoord.xy / resolution) * 4.0;

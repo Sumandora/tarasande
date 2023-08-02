@@ -198,18 +198,16 @@ open class Panel(
                 GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, previousFramebuffer)
 
                 val accent = TarasandeValues.accentColor.getColor()
-                context.fill(x, y + titleBarHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 0.7).rgb)
+                context.fill(x, y + titleBarHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 1.0 - ManagerPanel.screenPanel.panelBackgroundOpacity.value).rgb)
                 context.matrices.pop()
             }
 
             if (scissor) {
-                GlStateManager._enableScissorTest()
-                val scaleFactor = mc.window.scaleFactor.toInt()
-                GlStateManager._scissorBox(
-                    (x * scaleFactor).toInt(),
-                    (mc.window.height - (y + panelHeight) * scaleFactor).toInt(),
-                    (panelWidth * scaleFactor).toInt(),
-                    (panelHeight * scaleFactor).toInt()
+                context.enableScissor(
+                    x.toInt(),
+                    y.toInt(),
+                    (x + panelWidth).toInt(),
+                    (y + panelHeight).toInt()
                 )
             }
 
@@ -219,7 +217,7 @@ open class Panel(
             context.matrices.pop()
 
             if (scissor) {
-                GlStateManager._disableScissorTest()
+                context.disableScissor()
             }
         }
 

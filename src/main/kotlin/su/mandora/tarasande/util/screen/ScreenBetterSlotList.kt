@@ -21,7 +21,7 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
 
     private lateinit var listProvider: ListProvider
     protected var slotList: SlotListWidget? = null
-    var selected: Int = 0
+    var selected = 0
 
     fun provideElements(provider: ListProvider) {
         this.listProvider = provider
@@ -49,7 +49,7 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(context, mouseX, mouseY, delta)
-        FontWrapper.textShadow(context, title.string, width / 2F, top / 2 - (FontWrapper.fontHeight() / 2F), scale = 2F, centered = true)
+        FontWrapper.textShadow(context, (this as Screen).title.string, width / 2F, top / 2 - (FontWrapper.fontHeight() / 2F), scale = 2F, centered = true)
     }
 
     fun reload() {
@@ -99,7 +99,7 @@ class AlwaysSelectedEntryListWidgetScreenBetterSlotList(val parent: ScreenBetter
 abstract class EntryScreenBetterSlotList(val width: Int, val height: Int, private val selectable: Boolean = true) : AlwaysSelectedEntryListWidget.Entry<SlotListEntry>() {
     lateinit var parentList: SlotListWidget
     private val clickTimer = TimeUtil()
-    private var index: Int = 0
+    private var index = 0
 
     open fun isSelected(): Boolean {
         if (!selectable) {

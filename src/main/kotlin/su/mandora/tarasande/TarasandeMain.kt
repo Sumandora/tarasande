@@ -21,14 +21,14 @@ import su.mandora.tarasande.system.screen.screenextensionsystem.ManagerScreenExt
 import java.util.logging.Logger
 
 /**
- * TODO AND BUG TRACKER FOR TARASANDE - (c) Johannes
- *
- * TODO | Base:
+ * TODO:
  *  - User configs
  *  - Crystal Aura
  *  - New Chunks
+ *  - Skin Derp
  *  - Container saver (Shop saver...)
  *  - Anti vanish: Tab completion
+ *  - AirPlace/LiquidInteract
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv

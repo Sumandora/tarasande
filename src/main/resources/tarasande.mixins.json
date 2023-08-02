@@ -8,10 +8,7 @@
     "core.MixinGameRenderer",
     "core.MixinMinecraftClient",
     "core.MixinTextRenderer",
-    "core.connection.MixinClientConnection",
     "core.connection.MixinClientConnection_1",
-    "core.opengl.MixinGameRenderer",
-    "core.opengl.MixinWindow",
     "core.prediction.MixinParticleManager",
     "core.prediction.MixinSoundSystem",
     "core.rotation.MixinEntity",
@@ -23,6 +20,7 @@
     "core.screen.accountmanager.MixinMinecraftClient",
     "core.screen.accountmanager.MixinProfileKeys",
     "core.screen.accountmanager.MixinRealmsPeriodicCheckers",
+    "core.screen.accountmanager.MixinYggdrasilAuthenticationService",
     "core.skin.MixinPlayerSkinProvider",
     "core.widget.MixinTextFieldWidget",
     "event.MixinCamera",
@@ -31,6 +29,7 @@
     "event.MixinDimensionType",
     "event.MixinFramebuffer",
     "event.MixinGameRenderer",
+    "event.MixinInput",
     "event.MixinKeyBinding",
     "event.MixinKeyboard",
     "event.MixinKeyboardInput",
@@ -65,9 +64,9 @@
     "feature.module.MixinGameRenderer",
     "feature.module.MixinHeldItemRenderer",
     "feature.module.MixinInGameHud",
-    "feature.module.MixinInput",
     "feature.module.MixinMinecraftClient",
     "feature.module.MixinPlayerScreenHandler_1",
+    "feature.module.MixinPowderSnowBlock",
     "feature.module.MixinRenderSystem",
     "feature.module.MixinWorld",
     "feature.module.MixinWorldRenderer",
@@ -120,5 +119,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "event.MixinRenderTickCounter"
+  ]
 }

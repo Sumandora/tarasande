@@ -46,7 +46,7 @@ object MysteryModSpoofer {
                             CustomChat.printChatMessage("[MysteryMod] `$messageKey: $message`")
                         }
 
-                        if (messageKey!! == "mysterymod_user_check") {
+                        if (messageKey == "mysterymod_user_check") {
                             val buffer = PacketByteBuf(Unpooled.buffer())
                             buffer.writeString(message)
 
@@ -61,14 +61,14 @@ object MysteryModSpoofer {
         }
     }
 
-    private fun readStringFromBuffer(maxLength: Int, packetBuffer: ByteBuf): String? {
+    private fun readStringFromBuffer(maxLength: Int, packetBuffer: ByteBuf): String {
         val i = readVarIntFromBuffer(packetBuffer)
         return if (i > maxLength * 4) {
             throw DecoderException("The received encoded string buffer length is longer than maximum allowed (" + i + " > " + maxLength * 4 + ")")
         } else if (i < 0) {
             throw DecoderException("The received encoded string buffer length is less than zero! Weird string!")
         } else {
-            val byteBuf: ByteBuf = packetBuffer.readBytes(i)
+            val byteBuf = packetBuffer.readBytes(i)
             val bytes: ByteArray
             if (byteBuf.hasArray()) {
                 bytes = byteBuf.array()

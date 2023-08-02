@@ -1,29 +1,26 @@
 package su.mandora.tarasande.util.render.shader
 
-import org.lwjgl.opengl.GL20.*
-import java.io.IOException
+import com.mojang.blaze3d.platform.GlConst
+import com.mojang.blaze3d.platform.GlStateManager
+import org.lwjgl.opengl.GL20
 
-class Shader(private val source: String, type: Int) {
+class Shader(private val source: String, type: Int): AutoCloseable {
 
-    val id = glCreateShader(type)
+    val id = GlStateManager.glCreateShader(type)
 
     init {
-        try {
-            glShaderSource(id, (Shader::class.java.getResourceAsStream(source) ?: error("Can't acquire shader source")).readAllBytes().decodeToString())
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+        GL20.glShaderSource(id, (Shader::class.java.getResourceAsStream(source) ?: error("Can't acquire shader source")).readAllBytes().decodeToString())
 
-        glCompileShader(id)
-        if (glGetShaderi(id, GL_COMPILE_STATUS) != GL_TRUE)
-            error(source + " " + glGetShaderInfoLog(id))
+        GlStateManager.glCompileShader(id)
+        if (GlStateManager.glGetShaderi(id, GlConst.GL_COMPILE_STATUS) != GlConst.GL_TRUE)
+            error(source + " " + GlStateManager.glGetShaderInfoLog(id, Int.MAX_VALUE))
 
     }
 
-    fun delete() {
-        glDeleteShader(id)
-        if (glGetShaderi(id, GL_DELETE_STATUS) != GL_TRUE)
-            error(source + " " + glGetShaderInfoLog(id))
+    override fun close() {
+        GlStateManager.glDeleteShader(id)
+        if (GlStateManager.glGetShaderi(id, GL20.GL_DELETE_STATUS) != GlConst.GL_TRUE)
+            error(source + " " + GlStateManager.glGetShaderInfoLog(id, Int.MAX_VALUE))
     }
 
 }

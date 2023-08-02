@@ -23,7 +23,12 @@ class EventScreenRender(val context: DrawContext, val screen: Screen, val state:
     }
 }
 
-class EventRender3D(val matrices: MatrixStack, val positionMatrix: Matrix4f) : Event(false)
+class EventRender3D(val matrices: MatrixStack, val positionMatrix: Matrix4f, val state: State) : Event(false) {
+    enum class State {
+        PRE, POST
+    }
+}
+
 class EventGamma(val x: Int, val y: Int, var color: Int) : Event(false)
 class EventColorCorrection(var red: Int, var green: Int, var blue: Int) : Event(false)
 class EventCameraOverride(val camera: Camera) : Event(false)

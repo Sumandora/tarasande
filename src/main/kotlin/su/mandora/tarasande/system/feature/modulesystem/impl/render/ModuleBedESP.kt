@@ -147,6 +147,8 @@ class ModuleBedESP : Module("Bed ESP", "Highlights all beds", ModuleCategory.REN
         }
 
         registerEvent(EventRender3D::class.java) { event ->
+            if(event.state != EventRender3D.State.POST) return@registerEvent
+
             for (bedData in bedDatas) {
                 for (bedPart in bedData.bedParts) {
                     val blockPos = BlockPos(bedPart.x, bedPart.y, bedPart.z)

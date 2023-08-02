@@ -35,8 +35,8 @@ object RenderUtil {
     fun outlinedFill(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, width: Float, color: Int) {
         glEnable(GL_LINE_SMOOTH)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-        val lineWidth = glGetFloat(GL_LINE_WIDTH)
-        glLineWidth(width)
+        val lineWidth = RenderSystem.getShaderLineWidth()
+        RenderSystem.lineWidth(width)
         val matrix = matrices.peek().positionMatrix
         val colors = colorToRGBA(color)
 
@@ -54,15 +54,15 @@ object RenderUtil {
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
 
         RenderSystem.disableBlend()
-        glLineWidth(lineWidth)
+        RenderSystem.lineWidth(lineWidth)
         glDisable(GL_LINE_SMOOTH)
     }
 
     fun outlinedHorizontalGradient(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, width: Float, colorStart: Int, colorEnd: Int) {
         glEnable(GL_LINE_SMOOTH)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-        val lineWidth = glGetFloat(GL_LINE_WIDTH)
-        glLineWidth(width)
+        val lineWidth = RenderSystem.getShaderLineWidth()
+        RenderSystem.lineWidth(width)
         val matrix = matrices.peek().positionMatrix
 
         val startColors = colorToRGBA(colorStart)
@@ -82,15 +82,15 @@ object RenderUtil {
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
 
         RenderSystem.disableBlend()
-        glLineWidth(lineWidth)
+        RenderSystem.lineWidth(lineWidth)
         glDisable(GL_LINE_SMOOTH)
     }
 
     fun outlinedCircle(matrices: MatrixStack, x: Double, y: Double, radius: Double, width: Float, color: Int) {
         glEnable(GL_LINE_SMOOTH)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-        val lineWidth = glGetFloat(GL_LINE_WIDTH)
-        glLineWidth(width)
+        val lineWidth = RenderSystem.getShaderLineWidth()
+        RenderSystem.lineWidth(width)
         val matrix = matrices.peek().positionMatrix
         val colors = colorToRGBA(color)
         val bufferBuilder = Tessellator.getInstance().buffer
@@ -107,7 +107,7 @@ object RenderUtil {
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
 
         RenderSystem.disableBlend()
-        glLineWidth(lineWidth)
+        RenderSystem.lineWidth(lineWidth)
         glDisable(GL_LINE_SMOOTH)
     }
 
@@ -249,7 +249,7 @@ object RenderUtil {
         return bestFormatting!!
     }
 
-    fun renderPath(matrices: MatrixStack, path: List<Vec3d>, color: Int) {
+    fun renderPath(matrices: MatrixStack, path: Iterable<Vec3d>, color: Int) {
         RenderSystem.enableBlend()
         RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         glEnable(GL_LINE_SMOOTH)
@@ -305,32 +305,41 @@ object RenderUtil {
     fun getBindName(type: ValueBind.Type, button: Int): String {
         when (type) {
             ValueBind.Type.KEY -> {
-                var keyName: String?
-                if (button == GLFW.GLFW_KEY_UNKNOWN) keyName = "none"
-                else {
-                    keyName = GLFW.glfwGetKeyName(button, -1)
-                    if (keyName == null) keyName = GLFW.glfwGetKeyName(GLFW.GLFW_KEY_UNKNOWN, GLFW.glfwGetKeyScancode(button))
-                }
+                if(button == GLFW.GLFW_KEY_UNKNOWN)
+                    return "none"
+
+                var keyName = GLFW.glfwGetKeyName(button, -1) ?: GLFW.glfwGetKeyName(GLFW.GLFW_KEY_UNKNOWN, GLFW.glfwGetKeyScancode(button))
 
                 if (keyName == null || keyName.trim().isEmpty() || escapeCharacters.contains(keyName)) {
-                    for (field in GLFW::class.java.declaredFields) {
-                        if (field.name.startsWith("GLFW_KEY_")) {
-                            val content = field.get(GLFW::class.java)
-                            if (content == button) {
-                                keyName = field.name.substring("GLFW_KEY_".length).replace("_", " ").lowercase()
-                            }
+                    GLFW::class.java.declaredFields
+                        .filter { it.name.startsWith("GLFW_KEY_") }
+                        .firstOrNull { it.get(GLFW::class.java) == button }?.also {
+                            keyName = it.name.substring("GLFW_KEY_".length).replace("_", " ").lowercase()
                         }
-                    }
                 }
 
-                if (keyName.isNullOrEmpty()) {
-                    keyName = "Key#$button"
-                }
-                return keyName
+                return if (keyName.isNullOrEmpty()) "Key#$button" else keyName!!
             }
 
             ValueBind.Type.MOUSE -> return "Mouse#$button"
             else -> return "Invalid type"
         }
+    }
+
+    fun quad(context: DrawContext, width: Float = mc.window.framebufferWidth.toFloat(), height: Float = mc.window.framebufferHeight.toFloat()) {
+        // Convert width & height to NDC
+        @Suppress("NAME_SHADOWING")
+        val width = width / mc.window.framebufferWidth.toFloat() * 2F - 1F
+        @Suppress("NAME_SHADOWING")
+        val height = height / mc.window.framebufferHeight.toFloat() * 2F - 1F
+
+        val matrix = context.matrices.peek().positionMatrix
+        val bufferBuilder = Tessellator.getInstance().buffer
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION)
+        bufferBuilder.vertex(matrix, -1F, -1F, 0F).next()
+        bufferBuilder.vertex(matrix, width, -1F, 0F).next()
+        bufferBuilder.vertex(matrix, width, height, 0F).next()
+        bufferBuilder.vertex(matrix, -1F, height, 0F).next()
+        BufferRenderer.draw(bufferBuilder.end())
     }
 }

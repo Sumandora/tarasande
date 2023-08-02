@@ -56,6 +56,8 @@ class ModuleBlockESP : Module("Block ESP", "Highlights blocks through walls", Mo
         }
 
         registerEvent(EventRender3D::class.java) { event ->
+            if(event.state != EventRender3D.State.POST) return@registerEvent
+
             list.removeIf { mc.world?.getBlockState(it.first)?.block != it.second.block }
             for (pair in list) {
                 val pos = pair.first

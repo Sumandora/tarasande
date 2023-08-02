@@ -23,7 +23,7 @@ object ViewModel {
     private val scaleY = ValueNumber(this, "Scale Y", 0.0, 1.0, 2.0, 0.1)
     private val scaleZ = ValueNumber(this, "Scale Z", 0.0, 1.0, 2.0, 0.1)
 
-    private val arms = ValueMode(this, "Arms", true, *Arm.entries.map { StringUtil.formatEnumTypes(it.name) }.toTypedArray())
+    private val arms = ValueMode(this, "Arms", true, *Arm.entries.map { StringUtil.uncoverTranslation(it.translationKey) }.toTypedArray())
     private val emptyHands = ValueBoolean(this, "Empty hands", true)
 
     fun applyTransform(matrices: MatrixStack, emptyHand: Boolean, arm: Arm) {

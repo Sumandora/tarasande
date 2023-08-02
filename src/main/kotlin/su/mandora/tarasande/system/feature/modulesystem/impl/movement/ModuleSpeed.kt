@@ -12,6 +12,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
+import su.mandora.tarasande.util.DEFAULT_WALK_SPEED
 import su.mandora.tarasande.util.extension.minecraft.copy
 import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
@@ -23,12 +24,12 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
     private val jumpHeight = ValueNumber(this, "Jump height", 0.0, 1.0, 2.0, 0.01)
     private val gravity = ValueNumber(this, "Gravity", 0.0, 1.0, 2.0, 0.1)
-    private val speedValue = ValueNumber(this, "Speed", 0.0, PlayerUtil.DEFAULT_WALK_SPEED, 1.0, 0.01)
+    private val speedValue = ValueNumber(this, "Speed", 0.0, DEFAULT_WALK_SPEED, 1.0, 0.01)
     private val airFriction = ValueNumber(this, "Air friction", 1.0, 160.0, 200.0, 1.0)
     private val turnRate = ValueNumber(this, "Turn rate", 0.0, 180.0, 180.0, 1.0)
     private val lowHop = ValueBoolean(this, "Low hop", false)
     private val damageBoost = ValueBoolean(this, "Damage boost", false)
-    private val boostAmount = ValueNumber(this, "Boost amount", 0.0, PlayerUtil.DEFAULT_WALK_SPEED, 1.0, 0.01, isEnabled = { damageBoost.value })
+    private val boostAmount = ValueNumber(this, "Boost amount", 0.0, DEFAULT_WALK_SPEED, 1.0, 0.01, isEnabled = { damageBoost.value })
 
     private var speed = 0.0
     private var moveDir = 0.0
@@ -36,7 +37,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
     override fun onEnable() {
         firstMove = true
-        speed = PlayerUtil.DEFAULT_WALK_SPEED
+        speed = DEFAULT_WALK_SPEED
     }
 
     init {
@@ -104,7 +105,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (!lowHop.value && event.keyBinding == mc.options.jumpKey && PlayerUtil.input.movementInput?.lengthSquared()!! > 0.0)
+            if (!lowHop.value && event.keyBinding == mc.options.jumpKey && PlayerUtil.isPlayerMoving())
                 if (mc.player?.isOnGround!! && jumpHeight.value > 0.0)
                     event.pressed = true
         }

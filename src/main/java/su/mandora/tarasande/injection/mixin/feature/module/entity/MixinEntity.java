@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
 import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit;
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleESP;
+import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleTrueSight;
 
 import java.awt.*;
 
@@ -33,6 +34,12 @@ public class MixinEntity {
             if (ManagerModule.INSTANCE.get(ModuleNoPitchLimit.class).getEnabled().getValue())
                 return value;
         return MathHelper.clamp(value, min, max);
+    }
+
+    @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
+    public void hookTrueSight_render(CallbackInfoReturnable<Boolean> cir) {
+        if (ManagerModule.INSTANCE.get(ModuleTrueSight.class).getEnabled().getValue())
+            cir.setReturnValue(false);
     }
 
 }

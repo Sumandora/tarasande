@@ -28,9 +28,11 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.screen.graphsystem.Graph
 import su.mandora.tarasande.system.screen.graphsystem.ManagerGraph
+import su.mandora.tarasande.util.DEFAULT_REACH
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
+import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil
 import java.util.concurrent.ConcurrentHashMap
@@ -52,7 +54,7 @@ class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MIS
             onDisable()
         }
     }
-    private val reach = ValueNumber(this, "Reach", 0.1, 3.0, 6.0, 0.1, isEnabled = { mode.isSelected(3) })
+    private val reach = ValueNumber(this, "Reach", 0.1, DEFAULT_REACH, maxReach, 0.1, isEnabled = { mode.isSelected(3) })
     private val cancelKey = ValueBind(this, "Cancel key", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN, isEnabled = { mode.isSelected(0) && affectedPackets.isSelected(0) })
     private val restrictPackets = ValueMode(this, "Restrict packets", true, "Keep alive", "Ping", isEnabled = { affectedPackets.anySelected() })
     private val hitBoxColor = ValueColor(this, "Hit box color", 0.0, 1.0, 1.0, 1.0, isEnabled = { affectedPackets.isSelected(1) })
@@ -210,6 +212,8 @@ class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MIS
         }
 
         registerEvent(EventRender3D::class.java) { event ->
+            if(event.state != EventRender3D.State.POST) return@registerEvent
+
             if (affectedPackets.isSelected(1) && !restrictPackets.anySelected()) {
                 if (mode.isSelected(3) && !shouldPulsate())
                     return@registerEvent

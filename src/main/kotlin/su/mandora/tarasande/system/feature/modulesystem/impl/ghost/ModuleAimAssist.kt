@@ -6,17 +6,19 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
+import su.mandora.tarasande.util.DEFAULT_REACH
 import su.mandora.tarasande.util.extension.kotlinruntime.prefer
 import su.mandora.tarasande.util.extension.minecraft.isEntityHitResult
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 
 class ModuleAimAssist : Module("Aim assist", "Helps you aim at enemies", ModuleCategory.GHOST) {
 
     private val fov = ValueNumber(this, "FOV", 0.0, Rotation.MAXIMUM_DELTA, Rotation.MAXIMUM_DELTA, 1.0)
-    private val reach = ValueNumber(this, "Reach", 0.1, 4.0, 6.0, 0.1)
+    private val reach = ValueNumber(this, "Reach", 0.1, DEFAULT_REACH + 1.0, maxReach, 0.1)
     private val aimSpeed = ValueNumberRange(this, "Aim speed", 0.01, 0.02, 0.05, 0.1, 0.01)
     private val maxInfluence = ValueNumber(this, "Max influence", 0.0, 5.0, 20.0, 1.0)
 
@@ -36,7 +38,7 @@ class ModuleAimAssist : Module("Aim assist", "Helps you aim at enemies", ModuleC
             val smoothedRot = selfRotation.smoothedTurn(rotation, aimSpeed).correctSensitivity() // correct wrap
 
             val deltaRotation = smoothedRot.closestDelta(selfRotation)
-            val cursorDeltas = Rotation.approximateCursorDeltas(deltaRotation).prefer { PlayerUtil.getTargetedEntity(3.0 /* TODO*/, Rotation.calculateNewRotation(selfRotation, it), false)?.isEntityHitResult() == true }
+            val cursorDeltas = Rotation.approximateCursorDeltas(deltaRotation).prefer { PlayerUtil.getTargetedEntity(DEFAULT_REACH /* TODO*/, Rotation.calculateNewRotation(selfRotation, it), false)?.isEntityHitResult() == true }
 
             event.deltaX += cursorDeltas.first.coerceIn(-maxInfluence.value..maxInfluence.value)
             event.deltaY += cursorDeltas.second.coerceIn(-maxInfluence.value..maxInfluence.value)

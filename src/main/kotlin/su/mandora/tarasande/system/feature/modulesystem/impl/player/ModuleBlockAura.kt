@@ -20,12 +20,14 @@ import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleBlockESP
+import su.mandora.tarasande.util.DEFAULT_BLOCK_REACH
 import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
 import su.mandora.tarasande.util.extension.minecraft.BlockPos
 import su.mandora.tarasande.util.extension.minecraft.isMissHitResult
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.chat.CustomChat
 import kotlin.math.ceil
@@ -33,7 +35,7 @@ import kotlin.math.ceil
 class ModuleBlockAura : Module("Block aura", "Automatically interacts with blocks", ModuleCategory.PLAYER) {
 
     private val delay = ValueNumber(this, "Delay", 0.0, 200.0, 1000.0, 50.0)
-    private val reach = ValueNumber(this, "Reach", 0.1, 4.5, 6.0, 0.1)
+    private val reach = ValueNumber(this, "Reach", 0.1, DEFAULT_BLOCK_REACH, maxReach, 0.1)
     private val blocks = object : ValueRegistry<Block>(this, "Blocks", Registries.BLOCK, true, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST) {
         override fun filter(key: Block) = !key.defaultState.getOutlineShape(mc.world, BlockPos.ORIGIN).isEmpty
         override fun getTranslationKey(key: Any?) = (key as Block).translationKey

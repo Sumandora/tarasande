@@ -79,6 +79,8 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
         }
 
         registerEvent(EventRender3D::class.java) { event ->
+            if(event.state != EventRender3D.State.POST) return@registerEvent
+
             if (goal != null) {
                 val goal = goal!!
                 RenderUtil.blockOutline(event.matrices, Box().offset(goal.x.toDouble(), goal.y.toDouble(), goal.z.toDouble()), Color.white.withAlpha(50).rgb)

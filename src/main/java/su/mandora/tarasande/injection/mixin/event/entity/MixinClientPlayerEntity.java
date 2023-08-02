@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.event.EventDispatcher;
-import su.mandora.tarasande.event.impl.EventCanSprint;
+import su.mandora.tarasande.event.impl.EventIsWalkingForward;
 import su.mandora.tarasande.event.impl.EventUpdate;
 
 @Mixin(ClientPlayerEntity.class)
@@ -55,13 +55,13 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
         EventDispatcher.INSTANCE.call(new EventUpdate(EventUpdate.State.POST));
     }
 
-    @Inject(method = "canSprint", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "isWalking", at = @At("RETURN"), cancellable = true)
     public void hookEventCanSprint(CallbackInfoReturnable<Boolean> cir) {
         if ((Object) this != MinecraftClient.getInstance().player)
             return;
 
-        EventCanSprint eventCanSprint = new EventCanSprint(cir.getReturnValue());
-        EventDispatcher.INSTANCE.call(eventCanSprint);
-        cir.setReturnValue(eventCanSprint.getCanSprint());
+        EventIsWalkingForward eventIsWalkingForward = new EventIsWalkingForward(cir.getReturnValue());
+        EventDispatcher.INSTANCE.call(eventIsWalkingForward);
+        cir.setReturnValue(eventIsWalkingForward.getWalksForward());
     }
 }

@@ -1,5 +1,6 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.render
 
+import net.minecraft.item.ItemStack
 import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.event.impl.EventSwing
@@ -13,6 +14,19 @@ class ModuleNoSwing : Module("No swing", "Hides the hand swing animation", Modul
     private val mode = ValueMode(this, "Mode", true, "Clientside", "Serverside")
     private val hand = ValueMode(this, "Hand", true, "Main hand", "Off hand", isEnabled = { mode.anySelected() })
     val disableEquipProgress = ValueBoolean(this, "Disable equip progress", true)
+
+    fun canEquipBeIgnored(oldItem: ItemStack?, newItem: ItemStack?): Boolean {
+        if(oldItem == null || newItem == null)
+            return false
+
+        if (oldItem.isEmpty && newItem.isEmpty)
+            return true
+
+        if (oldItem.isEmpty || newItem.isEmpty)
+            return false
+
+        return oldItem.isOf(newItem.item)
+    }
 
     init {
         registerEvent(EventPacket::class.java) { event ->

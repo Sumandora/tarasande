@@ -1,11 +1,10 @@
 package su.mandora.tarasande.system.screen.blursystem.impl
 
-import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.gl.Framebuffer
-import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL13
+import net.minecraft.client.gui.DrawContext
 import org.lwjgl.opengl.GL20
 import su.mandora.tarasande.system.screen.blursystem.Blur
+import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import su.mandora.tarasande.util.render.shader.Program
 import su.mandora.tarasande.util.render.shader.Shader
@@ -63,7 +62,7 @@ class BlurKawase : Blur("Kawase") {
         }
     }
 
-    override fun render(targetBuffer: Framebuffer, strength: Int): Framebuffer {
+    override fun render(context: DrawContext, targetBuffer: Framebuffer, strength: Int): Framebuffer {
         lateinit var last: Framebuffer
 
         var totalScale = 1F
@@ -91,32 +90,25 @@ class BlurKawase : Blur("Kawase") {
 
             totalScale *= kawasePass.second
 
-            last = sample(read!!, write!!, kawasePass.first, totalScale, kawasePass.second)
+            last = sample(context, read!!, write!!, kawasePass.first, totalScale, kawasePass.second)
         }
 
         return last
     }
 
-    private fun sample(read: Framebuffer, write: Framebuffer, offset: Float, scale: Float, deltaScale: Float): Framebuffer {
+    private fun sample(context: DrawContext, read: Framebuffer, write: Framebuffer, offset: Float, scale: Float, deltaScale: Float): Framebuffer {
         val shader = if (deltaScale > 1.0) upsample else downsample
         write.beginWrite(true)
-        val prevProgram = shader.bindProgram()
-        GL20.glUniform1f(shader.getUniformLocation("offset"), offset)
-        GL20.glUniform1i(shader.getUniformLocation("tex"), 0)
-        GL13.glActiveTexture(GL13.GL_TEXTURE0)
-        val texture0 = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D)
-        GlStateManager._bindTexture(read.colorAttachment)
-        GL20.glUniform2f(shader.getUniformLocation("resolution"), read.textureWidth * deltaScale, read.textureHeight * deltaScale)
-        GL11.glBegin(GL11.GL_QUADS)
+        shader.bindProgram()
+
+        shader["offset"] = offset
+        shader["tex"] = read
+        shader["resolution"] = floatArrayOf(read.textureWidth * deltaScale, read.textureHeight * deltaScale)
+
         val invertedHeight = if (scale == 1F) read.textureHeight.toFloat() else read.textureHeight - read.textureHeight * scale
-        GL11.glVertex2f(0F, 0F)
-        GL11.glVertex2f(read.textureWidth * scale, 0F)
-        GL11.glVertex2f(read.textureWidth * scale, invertedHeight)
-        GL11.glVertex2f(0F, invertedHeight)
-        GL11.glEnd()
-        GL20.glUseProgram(prevProgram)
-        GL13.glActiveTexture(GL13.GL_TEXTURE0)
-        GlStateManager._bindTexture(texture0)
+        RenderUtil.quad(context, read.textureWidth * scale, invertedHeight)
+
+        shader.unbindProgram()
         return write
     }
 }

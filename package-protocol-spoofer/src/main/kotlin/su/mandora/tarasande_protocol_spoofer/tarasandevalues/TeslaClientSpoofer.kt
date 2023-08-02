@@ -49,7 +49,7 @@ object TeslaClientSpoofer {
                         }
 
                         is LoginHelloC2SPacket -> {
-                            var data: String = username.value
+                            var data = username.value
                             // These 2 lines are only executed, if we join teslacraft.... who cares about such checks
                             data += "\u0000Tesla\u0000" + teslaBuild.value
                             data += '\u0000' + password.value

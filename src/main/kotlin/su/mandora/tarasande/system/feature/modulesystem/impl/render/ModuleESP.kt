@@ -44,6 +44,8 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
     init {
         registerEvent(EventRender3D::class.java) { event ->
+            if(event.state != EventRender3D.State.POST) return@registerEvent
+
             hashMap.clear()
             if (!mode.isSelected(1))
                 return@registerEvent

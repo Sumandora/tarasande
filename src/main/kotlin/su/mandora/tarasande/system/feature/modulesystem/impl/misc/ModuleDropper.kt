@@ -23,6 +23,7 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.BlockPos
 import su.mandora.tarasande.util.extension.minecraft.minus
 import su.mandora.tarasande.util.math.rotation.Rotation
+import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.prediction.Input
 import su.mandora.tarasande.util.player.prediction.PredictionEngine
 import su.mandora.tarasande.util.render.RenderUtil
@@ -45,7 +46,7 @@ class ModuleDropper : Module("Dropper", "Tries to predict perfect Dropper plays"
     }
 
     private val preferInAirFluids = ValueBoolean(this, "Prefer in-air fluids", true)
-    private val onlyWhenStandinStill = ValueBoolean(this, "Only when standing still", true)
+    private val onlyWhenStandingStill = ValueBoolean(this, "Only when standing still", true)
     private val lockRotation = ValueBoolean(this, "Lock rotation", true)
 
     private val movements = ArrayList<Pair<Boolean, ArrayList<Vec3d>>>()
@@ -100,11 +101,11 @@ class ModuleDropper : Module("Dropper", "Tries to predict perfect Dropper plays"
                         }
                     }
                     if(hadPath != foundBest) {
-                        val pitch = if (foundBest) 0.6f else 0.5f
-                        mc.player?.playSound(SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3f, pitch)
+                        val pitch = if (foundBest) 0.6F else 0.5F
+                        mc.player?.playSound(SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, pitch)
                     }
                     if(!foundBest)
-                        if(onlyWhenStandinStill.value && mc.player?.input?.movementInput?.lengthSquared()!! > 0.0)
+                        if(onlyWhenStandingStill.value && PlayerUtil.isPlayerMoving())
                             return@registerEvent
 
                     val best =
@@ -114,13 +115,13 @@ class ModuleDropper : Module("Dropper", "Tries to predict perfect Dropper plays"
                             val best = if (lastMovement != null) {
                                 possibleInputs.minBy { sqrt(Vec2f(it.first.x, it.first.y).distanceSquared(lastMovement)) }
                             } else {
-                                possibleInputs.maxBy { (Vec2f(it.first.x, it.first.y) - Vec2f(1.0f, 0.0f)).length() }
+                                possibleInputs.maxBy { (Vec2f(it.first.x, it.first.y) - Vec2f(1F, 0F)).length() }
                             }
 
                             best
                         } else {
                             val longest = possibleInputs.maxBy { it.second.second.size }
-                            val neutral = possibleInputs.firstOrNull { it.first.lengthSquared() == 0.0f }
+                            val neutral = possibleInputs.firstOrNull { it.first.lengthSquared() == 0F }
                             if (neutral?.second?.second?.size == longest.second.second.size)
                                 neutral
                             else
@@ -147,6 +148,8 @@ class ModuleDropper : Module("Dropper", "Tries to predict perfect Dropper plays"
         }
 
         registerEvent(EventRender3D::class.java) { event ->
+            if(event.state != EventRender3D.State.POST) return@registerEvent
+
             for (movement in movements) {
                 RenderUtil.renderPath(event.matrices, movement.second, (if (movement.first) colorSelected else color).getColor().rgb)
             }

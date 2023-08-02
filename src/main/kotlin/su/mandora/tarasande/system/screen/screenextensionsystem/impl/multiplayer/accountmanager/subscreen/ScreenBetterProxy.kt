@@ -189,12 +189,12 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
                 }
             } catch (throwable: Throwable) {
                 if (this.proxy == proxy) {
-                    StatusRenderer.setStatus(this@ScreenBetterProxy, when (throwable) {
-                        is SocketTimeoutException -> Formatting.RED.toString() + "Timeout reached, unreachable"
-                        is IOException -> Formatting.RED.toString() + "Failed to reach proxy"
-                        is IllegalBlockingModeException -> Formatting.RED.toString() + "Illegal blocking method"
-                        is IllegalArgumentException -> Formatting.RED.toString() + "Invalid IP or port"
-                        else -> Formatting.RED.toString() + (if (throwable.message != null && throwable.message?.isNotEmpty()!!) throwable.message else "Unknown error")
+                    StatusRenderer.setStatus(this@ScreenBetterProxy, Formatting.RED.toString() + when (throwable) {
+                        is SocketTimeoutException -> "Timeout reached, unreachable"
+                        is IOException -> "Failed to reach proxy"
+                        is IllegalBlockingModeException -> "Illegal blocking method"
+                        is IllegalArgumentException -> "Invalid IP or port"
+                        else -> if (throwable.message != null && throwable.message?.isNotEmpty()!!) throwable.message else "Unknown error"
                     })
                 }
                 throwable.printStackTrace()

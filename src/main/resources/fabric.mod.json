@@ -10,7 +10,7 @@
   "contact": {
     "sources": "https://github.com/Sumandora/tarasande"
   },
-  "license": "All rights reserved",
+  "license": "GPL-3.0",
   "icon": "assets/tarasande/icon.png",
   "environment": "client",
   "mixins": [

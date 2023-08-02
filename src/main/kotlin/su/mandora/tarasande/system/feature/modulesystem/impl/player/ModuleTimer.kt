@@ -1,6 +1,6 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.player
 
-import su.mandora.tarasande.event.impl.EventTimeTravel
+import su.mandora.tarasande.event.impl.EventTickRate
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -17,16 +17,14 @@ class ModuleTimer : Module("Timer", "Changes the clientside tick-rate", ModuleCa
     private val onGroundTicksPerSecond = ValueNumber(this, "On ground ticks per second", 1.0, 20.0, 100.0, 1.0, isEnabled = { mode.isSelected(2) })
     private val offGroundTicksPerSecond = ValueNumber(this, "Off ground ticks per second", 1.0, 20.0, 100.0, 1.0, isEnabled = { mode.isSelected(2) })
 
-    override fun onDisable() {
-        mc.renderTickCounter.tickTime = (1000.0 / 20F).toFloat()
-    }
 
     init {
-        registerEvent(EventTimeTravel::class.java) {
-            when {
-                mode.isSelected(0) -> mc.renderTickCounter.tickTime = (1000.0 / ticksPerSecond.value).toFloat()
-                mode.isSelected(1) -> mc.renderTickCounter.tickTime = (1000.0 / max(ticksPerSecond.value + ThreadLocalRandom.current().nextInt(-variation.value.toInt() / 2, variation.value.toInt() / 2), 1.0)).toFloat()
-                mode.isSelected(2) -> mc.renderTickCounter.tickTime = (1000.0 / (if (mc.player?.isOnGround!!) onGroundTicksPerSecond.value else offGroundTicksPerSecond.value)).toFloat()
+        registerEvent(EventTickRate::class.java) { event ->
+            event.tickRate = when {
+                mode.isSelected(0) -> ticksPerSecond.value.toFloat()
+                mode.isSelected(1) -> max(ticksPerSecond.value + ThreadLocalRandom.current().nextInt(-variation.value.toInt() / 2, variation.value.toInt() / 2), 1.0).toFloat()
+                mode.isSelected(2) -> (if (mc.player?.isOnGround!!) onGroundTicksPerSecond.value else offGroundTicksPerSecond.value).toFloat()
+                else -> event.tickRate // brain
             }
         }
     }

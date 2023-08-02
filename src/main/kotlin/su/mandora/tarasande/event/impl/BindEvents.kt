@@ -8,7 +8,7 @@ class EventMouse(val button: Int, val action: Int) : Event(true)
 class EventKeyBindingIsPressed : Event {
     var dirty = false
     val keyBinding: KeyBinding
-    var pressed: Boolean
+    var pressed = false
         set(value) {
             field = value
             dirty = true

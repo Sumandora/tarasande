@@ -68,6 +68,8 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
         }
 
         registerEvent(EventRender3D::class.java) { event ->
+            if(event.state != EventRender3D.State.POST) return@registerEvent
+
             boundingBoxes.forEach {
                 it.value.forEach { box ->
                     RenderUtil.blockOutline(event.matrices, box, if (computeSelectedBox(it.key) == box) selectedColor.getColor().rgb else defaultColor.getColor().rgb)

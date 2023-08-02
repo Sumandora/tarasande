@@ -32,7 +32,7 @@ class EventMovement : Event {
     val entity: Entity
     var dirty = false
         private set
-    var velocity: Vec3d
+    var velocity = Vec3d.ZERO
         set(value) {
             field = value
             dirty = true
@@ -63,7 +63,7 @@ class EventAttack : Event(false) {
 }
 
 class EventStep : Event {
-    var stepHeight: Float
+    var stepHeight = 0.0f
         set(value) {
             if (state == State.POST)
                 error("stepHeight can't be modified during " + State.POST.name)
@@ -88,14 +88,14 @@ class EventBoundingBoxOverride(val entity: Entity, var boundingBox: Box) : Event
 class EventChat(val chatMessage: String) : Event(true)
 class EventSwing(var hand: Hand) : Event(true)
 class EventEntityHurt(val entity: Entity) : Event(false)
-class EventCanSprint(var canSprint: Boolean) : Event(false)
+class EventIsWalkingForward(var walksForward: Boolean) : Event(false)
 
 class EventVelocityMultiplier : Event {
     var dirty = false
         private set
 
     val block: Block
-    var velocityMultiplier: Double
+    var velocityMultiplier = 0.0
         set(value) {
             field = value
             dirty = true

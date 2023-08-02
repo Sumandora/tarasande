@@ -1,11 +1,10 @@
 package su.mandora.tarasande.system.screen.blursystem
 
-import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
+import net.minecraft.client.gui.DrawContext
 import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL20
 import su.mandora.tarasande.Manager
 import su.mandora.tarasande.event.EventDispatcher
@@ -18,6 +17,7 @@ import su.mandora.tarasande.system.screen.blursystem.impl.BlurBox
 import su.mandora.tarasande.system.screen.blursystem.impl.BlurGaussian
 import su.mandora.tarasande.system.screen.blursystem.impl.BlurKawase
 import su.mandora.tarasande.system.screen.panelsystem.screen.panelscreen.ScreenPanel
+import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.framebuffer.SimpleFramebufferWrapped
 import su.mandora.tarasande.util.render.shader.Program
 import su.mandora.tarasande.util.render.shader.Shader
@@ -42,11 +42,11 @@ object ManagerBlur : Manager<Blur>() {
         EventDispatcher.apply {
             add(EventScreenRender::class.java, 1) {
                 if (it.state == EventScreenRender.State.PRE && it.screen !is ScreenPanel) {
-                    blurScene(shapesBuffer = screenShapesFramebuffer)
+                    blurScene(it.context, shapesBuffer = screenShapesFramebuffer)
                 }
             }
             add(EventRender2D::class.java, 999) {
-                blurScene()
+                blurScene(it.context)
             }
         }
 
@@ -70,62 +70,35 @@ object ManagerBlur : Manager<Blur>() {
         buffer.beginWrite(setViewport)
     }
 
-    fun blurScene(strength: Int? = null, shapesBuffer: Framebuffer = inGameShapesFramebuffer, targetBuffer: Framebuffer = mc.framebuffer) {
+    fun blurScene(context: DrawContext, strength: Int? = null, shapesBuffer: Framebuffer = inGameShapesFramebuffer, targetBuffer: Framebuffer = mc.framebuffer) {
         if (!RenderSystem.isOnRenderThread()) return
 
-        GL11.glPushMatrix()
-        val texture2D = GL11.glIsEnabled(GL11.GL_TEXTURE_2D)
-        GL11.glEnable(GL11.GL_TEXTURE_2D)
         val cullFace = GL11.glIsEnabled(GL11.GL_CULL_FACE)
-        GL11.glDisable(GL11.GL_CULL_FACE)
+        RenderSystem.disableCull()
 
-        val activeTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE)
-
-        val framebuffer = selected.render(targetBuffer, strength ?: this.strength.value.toInt())
+        val framebuffer = selected.render(context, targetBuffer, strength ?: this.strength.value.toInt())
 
         mc.framebuffer.beginWrite(MinecraftClient.IS_SYSTEM_MAC)
 
-        val prevShader = cutoutShader.bindProgram()
-        GL20.glUniform1i(cutoutShader.getUniformLocation("shapes"), 0)
-        GL13.glActiveTexture(GL13.GL_TEXTURE0)
-        val texture0 = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D)
-        GlStateManager._bindTexture(shapesBuffer.colorAttachment)
+        cutoutShader.bindProgram()
 
-        GL20.glUniform1i(cutoutShader.getUniformLocation("tex"), 1)
-        GL13.glActiveTexture(GL13.GL_TEXTURE1)
-        val texture1 = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D)
-        GlStateManager._bindTexture(framebuffer.colorAttachment)
+        cutoutShader["shapes"] = shapesBuffer
+        cutoutShader["tex"] = framebuffer
+        cutoutShader["resolution"] = floatArrayOf(shapesBuffer.textureWidth.toFloat(), shapesBuffer.textureHeight.toFloat())
 
-        GL20.glUniform2f(cutoutShader.getUniformLocation("resolution"), shapesBuffer.textureWidth.toFloat(), shapesBuffer.textureHeight.toFloat())
+        RenderUtil.quad(context)
 
-        GL11.glBegin(GL11.GL_QUADS)
-        GL11.glVertex2f(0F, 0F)
-        GL11.glVertex2f(shapesBuffer.textureWidth.toFloat(), 0F)
-        GL11.glVertex2f(shapesBuffer.textureWidth.toFloat(), shapesBuffer.textureHeight.toFloat())
-        GL11.glVertex2f(0F, shapesBuffer.textureHeight.toFloat())
-        GL11.glEnd()
-
-        GL20.glUseProgram(prevShader)
-
-        GL13.glActiveTexture(GL13.GL_TEXTURE1)
-        GlStateManager._bindTexture(texture1)
-
-        GL13.glActiveTexture(GL13.GL_TEXTURE0)
-        GlStateManager._bindTexture(texture0)
-
-        GL13.glActiveTexture(activeTexture)
+        cutoutShader.unbindProgram()
 
         shapesBuffer.clear(MinecraftClient.IS_SYSTEM_MAC)
         mc.framebuffer.beginWrite(MinecraftClient.IS_SYSTEM_MAC)
 
-        if (!texture2D) GL11.glDisable(GL11.GL_TEXTURE_2D)
-        if (cullFace) GL11.glEnable(GL11.GL_CULL_FACE)
-        GL11.glPopMatrix()
+        if (cullFace) RenderSystem.enableCull()
     }
 
 }
 
 abstract class Blur(val name: String) {
 
-    abstract fun render(targetBuffer: Framebuffer, strength: Int): Framebuffer
+    abstract fun render(context: DrawContext, targetBuffer: Framebuffer, strength: Int): Framebuffer
 }

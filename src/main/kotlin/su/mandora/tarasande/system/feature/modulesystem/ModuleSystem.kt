@@ -12,7 +12,10 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.feature.modulesystem.impl.combat.*
-import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.*
+import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit
+import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModulePortalScreen
+import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModuleRegen
+import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModuleTickBaseManipulation
 import su.mandora.tarasande.system.feature.modulesystem.impl.ghost.*
 import su.mandora.tarasande.system.feature.modulesystem.impl.misc.*
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.*
@@ -70,6 +73,8 @@ object ManagerModule : Manager<Module>() {
             ModuleWaterSpeed(),
             ModuleTerrainSpeed(),
             ModuleReverseStep(),
+            ModuleAntiPowderSnow(),
+            ModuleAirJump(),
 
             // Player
             ModuleTimer(),
@@ -112,6 +117,8 @@ object ManagerModule : Manager<Module>() {
             ModuleNoRender(),
             ModuleCameraNoClip(),
             ModulePreferredOffHandItem(),
+            ModuleNoHurtCam(),
+            ModuleBlockChangeTracker(),
 
             // Misc
             ModuleBlink(),
@@ -125,6 +132,7 @@ object ManagerModule : Manager<Module>() {
             ModuleAutoRescuePlatform(),
             ModuleDropper(),
             ModuleEveryItemOnArmor(),
+            ModuleSkinDerp(),
 
             // Ghost
             ModuleReach(),

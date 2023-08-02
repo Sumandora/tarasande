@@ -17,12 +17,14 @@ object PlayerMovementPrediction {
     private val color = ValueColor(this, "Color", 0.0, 1.0, 1.0, 1.0)
 
     init {
-        EventDispatcher.add(EventRender3D::class.java) {
+        EventDispatcher.add(EventRender3D::class.java) { event ->
+            if(event.state != EventRender3D.State.POST) return@add
+
             if (!enabled.value) return@add
 
             for (entity in if (everyone.value) mc.world?.players!! else listOf(mc.player))
                 if (entity != null)
-                    RenderUtil.renderPath(it.matrices, listOf(entity.getLerpedPos(mc.tickDelta)!!, *PredictionEngine.predictState(ticks.value.toInt(), entity).second.toTypedArray()), color.getColor().rgb)
+                    RenderUtil.renderPath(event.matrices, listOf(entity.getLerpedPos(mc.tickDelta)!!, *PredictionEngine.predictState(ticks.value.toInt(), entity).second.toTypedArray()), color.getColor().rgb)
         }
     }
 }

@@ -3,7 +3,6 @@ package su.mandora.tarasande.injection.mixin.feature.module.entity;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.input.Input;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
@@ -117,16 +116,6 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
                 return true;
         }
         return instance.shouldPause();
-    }
-
-    @Redirect(method = "isWalking", at = @At(value = "FIELD", target = "Lnet/minecraft/client/input/Input;movementForward:F"))
-    public float hookSprint(Input instance) {
-        if ((Object) this == MinecraftClient.getInstance().player) {
-            ModuleSprint moduleSprint = ManagerModule.INSTANCE.get(ModuleSprint.class);
-            if (moduleSprint.getEnabled().getValue() && moduleSprint.getAllowBackwards().isEnabled().invoke() && moduleSprint.getAllowBackwards().getValue())
-                return instance.getMovementInput().length();
-        }
-        return instance.movementForward;
     }
 
     @Redirect(method = "canSprint", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;getFoodLevel()I"))

@@ -4,10 +4,8 @@ import net.minecraft.entity.EntityType
 import net.minecraft.particle.ParticleType
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.registry.Registries
-import su.mandora.tarasande.event.impl.EventChunkOcclusion
-import su.mandora.tarasande.event.impl.EventFogEnd
-import su.mandora.tarasande.event.impl.EventFogStart
-import su.mandora.tarasande.event.impl.EventParticle
+import su.mandora.tarasande.event.impl.*
+import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueRegistry
@@ -18,8 +16,6 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 class ModuleNoRender : Module("No render", "Disables rendering of certain things.", ModuleCategory.RENDER) {
 
     inner class NoRenderTypeOverlay : NoRenderType("Overlay") {
-
-        val hurtCam = ValueBooleanNoRender(this, "Hurt cam", false)
         val portalOverlay = ValueBooleanNoRender(this, "Portal overlay", false)
         val spyglassOverlay = ValueBooleanNoRender(this, "Spyglass overlay", false)
         val noNausea = ValueBooleanNoRender(this, "Nausea overlay", false)
@@ -48,7 +44,6 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
     val hud = NoRenderTypeHUD()
 
     inner class NoRenderTypeWorld : NoRenderType("World") {
-
         val weather = ValueBooleanNoRender(this, "Weather", false)
         val fog = ValueBooleanNoRender(this, "Fog", false)
         val enchantmentTableBook = ValueBooleanNoRender(this, "Enchantment table book", false)
@@ -61,7 +56,11 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
         val particles = object : ValueRegistry<ParticleType<*>>(this, "Particles", Registries.PARTICLE_TYPE, true) {
             override fun getTranslationKey(key: Any?) = Registries.PARTICLE_TYPE.getId(key as ParticleType<*>?)!!.path
         }
-        val barrierInvisibility = ValueBooleanNoRender(this, "Barrier invisibility", true)
+        val barrierInvisibility = object : ValueBooleanNoRender(this, "Barrier invisibility", true) {
+            override fun should(): Boolean {
+                return !super.should()
+            }
+        }
     }
 
     val world = NoRenderTypeWorld()
@@ -86,40 +85,45 @@ class ModuleNoRender : Module("No render", "Disables rendering of certain things
             ValueButtonOwnerValues(this, overlay.name, overlay)
         }
 
-        registerEvent(EventChunkOcclusion::class.java) {
+        registerEvent(EventChunkOcclusion::class.java) {event ->
             if (this.world.caveCulling.should()) {
-                it.cancelled = true
+                event.cancelled = true
             }
         }
 
-        registerEvent(EventParticle::class.java) {
-            if (world.weather.should() && it.effect == ParticleTypes.RAIN) {
-                it.cancelled = true
+        registerEvent(EventParticle::class.java) {event ->
+            if (world.weather.should() && event.effect == ParticleTypes.RAIN) {
+                event.cancelled = true
             }
 
-            if (world.fireworkExplosions.value && it.effect == ParticleTypes.FIREWORK) {
-                it.cancelled = true
+            if (world.fireworkExplosions.value && event.effect == ParticleTypes.FIREWORK) {
+                event.cancelled = true
             }
 
-            if (world.particles.isSelected(it.effect.type)) {
-                it.cancelled = true
+            if (world.particles.isSelected(event.effect.type)) {
+                event.cancelled = true
             }
         }
 
-        registerEvent(EventFogStart::class.java, 9999) {
+        registerEvent(EventRender3D::class.java) { event ->
+            if(event.state == EventRender3D.State.PRE && overlay.noNausea.value)
+                mc.player?.nauseaIntensity = 0F
+        }
+
+        registerEvent(EventFogStart::class.java, 9999) {event ->
             if (world.fog.should()) {
-                it.distance *= 9999F
+                event.distance *= 9999F
             }
         }
-        registerEvent(EventFogEnd::class.java, 9999) {
+        registerEvent(EventFogEnd::class.java, 9999) {event ->
             if (world.fog.should()) {
-                it.distance *= 9999F
+                event.distance *= 9999F
             }
         }
     }
 
     open class NoRenderType(val name: String)
     open inner class ValueBooleanNoRender(owner: Any, name: String, value: Boolean) : ValueBoolean(owner, name, value) {
-        fun should() = value && this@ModuleNoRender.enabled.value
+        open fun should() = value && this@ModuleNoRender.enabled.value
     }
 }

@@ -44,7 +44,6 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
     override fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val text = ArrayList<String>()
         for (owner in informationSystem.getAllOwners()) {
-
             val cache = ArrayList<String>()
             val informationList = informationSystem.getAllInformation(owner)
             for (information in informationList) {

@@ -1,5 +1,6 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.movement
 
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket
 import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket
@@ -71,8 +72,8 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes slowdowns when using ite
                                 mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
                             }
                             if (reuseMode.isSelected(1)) {
-                                var slot = mc.player?.inventory?.selectedSlot!!
-                                while (slot == mc.player?.inventory?.selectedSlot!!) slot = ThreadLocalRandom.current().nextInt(0, 8)
+                                var slot = ThreadLocalRandom.current().nextInt(0, PlayerInventory.getHotbarSize() - 2 /* 1 for array access and 1 for the current slot*/)
+                                if (slot >= mc.player?.inventory?.selectedSlot!!) slot++
                                 mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(slot))
                                 mc.networkHandler?.sendPacket(UpdateSelectedSlotC2SPacket(mc.player?.inventory?.selectedSlot!!))
                             }
