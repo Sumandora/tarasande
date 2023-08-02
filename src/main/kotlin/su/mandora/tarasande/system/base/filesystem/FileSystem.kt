@@ -7,7 +7,6 @@ import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventShutdown
 import su.mandora.tarasande.gson
 import su.mandora.tarasande.logger
-import java.io.FileWriter
 import java.util.logging.Level
 
 object ManagerFile : Manager<File>() {
@@ -35,9 +34,7 @@ object ManagerFile : Manager<File>() {
             if (fileObj.exists() && backup)
                 fileObj.renameTo(java.io.File(fileObj.path + "_backup"))
 
-            val fileWriter = FileWriter(fileObj)
-            fileWriter.write(gson.toJson(file.save()))
-            fileWriter.close()
+            fileObj.writeText(gson.toJson(file.save()))
         }
     }
 
