@@ -28,11 +28,6 @@ class ModuleHealingBot : Module("Healing bot", "Automates healing using items", 
     private val health = ValueNumber(this, "Health", 0.0, 0.4, 1.0, 0.01, isEnabled = { items.anySelected() })
     private val delay = ValueNumber(this, "Delay", 0.0, 300.0, 500.0, 50.0)
 
-    /*
-     * This code is garbage....
-     * I might delete life later, cya
-     */
-
     private var prevSlot: Int? = null
     var state = State.IDLE
     private var intendedSlot: Int? = null

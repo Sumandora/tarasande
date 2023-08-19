@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "tarasande-serverpinger",
+  "id": "tarasande-server-pinger",
   "version": "${version}",
-  "name": "tarasande Server Pinger",
+  "name": "tarasande server pinger",
   "description": "tarasande package to provide a server pinger and ip lookup.",
   "authors": [
     "Sumandora/Johannes"
@@ -12,21 +12,18 @@
     "sources": "https://github.com/Sumandora/tarasande"
   },
   "license": "GPL-3.0",
-  "icon": "assets/tarasande-serverpinger/icon.png",
+  "icon": "assets/tarasande-server-pinger/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "su.mandora.tarasande_serverpinger.TarasandeServerPinger"
+      "su.mandora.tarasande_server_pinger.TarasandeServerPinger"
     ]
   },
   "mixins": [
-    "tarasande-serverpinger.mixins.json"
+    "tarasande-server-pinger.mixins.json"
   ],
-  "accessWidener": "tarasande-serverpinger.accesswidener",
+  "accessWidener": "tarasande-server-pinger.accesswidener",
   "depends": {
-    "fabricloader": ">=0.14.9",
-    "minecraft": "1.20.1",
-    "java": ">=17",
     "tarasande": "*"
   },
   "custom": {

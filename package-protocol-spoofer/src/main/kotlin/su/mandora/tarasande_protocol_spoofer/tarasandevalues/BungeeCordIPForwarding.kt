@@ -14,19 +14,21 @@ object BungeeCordIPForwarding {
     private val customUUID = ValueBoolean(this, "Custom UUID", false)
     private val uuid = ValueText(this, "UUID", UUID.randomUUID().toString(), isEnabled = { customUUID.value })
 
-    private const val zero = "\u0000"
+    private const val NULL_TERMINATOR = '\u0000'
     private fun stripID(input: String) = input.replace("-", "")
 
     init {
         EventDispatcher.add(EventPacket::class.java) { event ->
-            if (event.type != EventPacket.Type.SEND) return@add
-            if (event.packet !is HandshakeC2SPacket) return@add
+            if (event.type != EventPacket.Type.SEND || event.packet !is HandshakeC2SPacket)
+                return@add
             if (enabled.value) {
-                var uuid = mc.session.uuid
-                if (this.customUUID.value)
-                    uuid = this.uuid.value
+                val uuid =
+                    if (this.customUUID.value)
+                        this.uuid.value
+                    else
+                        mc.session.uuid
 
-                (event.packet as HandshakeC2SPacket).address += this.zero + this.endIP.value + this.zero + this.stripID(uuid)
+                (event.packet as HandshakeC2SPacket).address += NULL_TERMINATOR + endIP.value + NULL_TERMINATOR + stripID(uuid)
             }
         }
     }

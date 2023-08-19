@@ -14,7 +14,9 @@ pluginManagement {
 include "package-linux-platform"
 include "package-mod-fixes"
 include "package-third-party"
-include "package-dupe-exploits"
 include "package-protocol-spoofer"
 include "package-serverpinger"
+
+// Uncomment if you want to see the example package
+//include "package-example"
 

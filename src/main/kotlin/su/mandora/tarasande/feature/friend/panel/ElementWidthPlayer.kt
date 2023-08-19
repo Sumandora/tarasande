@@ -8,7 +8,7 @@ import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.injection.accessor.ITextFieldWidget
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.impl.ElementWidthValueComponentFocusableText
-import su.mandora.tarasande.util.extension.minecraft.fill
+import su.mandora.tarasande.util.extension.minecraft.render.fill
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.element.ElementWidth

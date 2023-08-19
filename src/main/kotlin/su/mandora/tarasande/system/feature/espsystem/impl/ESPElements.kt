@@ -16,8 +16,9 @@ import su.mandora.tarasande.system.feature.espsystem.ESPElement
 import su.mandora.tarasande.system.feature.espsystem.ESPElementRotatable
 import su.mandora.tarasande.system.feature.espsystem.Orientation
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleESP
-import su.mandora.tarasande.util.extension.minecraft.drawText
-import su.mandora.tarasande.util.extension.minecraft.fillHorizontalGradient
+import su.mandora.tarasande.util.extension.kotlinruntime.ignoreAlpha
+import su.mandora.tarasande.util.extension.minecraft.render.drawText
+import su.mandora.tarasande.util.extension.minecraft.render.fillHorizontalGradient
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import java.awt.Color
@@ -25,15 +26,15 @@ import kotlin.math.abs
 import kotlin.math.min
 
 class ESPElementBox : ESPElement("Box") {
-    private val width = ValueNumber(this, "Width", 1.0, 2.0, 5.0, 0.1)
+    private val width = ValueNumber(this, "Width", 0.1, 2.0, 5.0, 0.1)
     private val outlined = ValueBoolean(this, "Outlined", true)
-    private val outlineWidth = ValueNumber(this, "Outline width", 1.0, 2.0, 5.0, 0.1, isEnabled = { outlined.value })
+    private val outlineWidth = ValueNumber(this, "Outline width", 0.1, 1.0, 5.0, 0.1, isEnabled = { outlined.value })
 
     override fun draw(context: DrawContext, entity: Entity, rectangle: ModuleESP.Rectangle) {
-        val col = Color(entity.teamColorValue).rgb // ignore alpha
+        val col = entity.teamColorValue.ignoreAlpha()
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F)
         if (outlined.value)
-            RenderUtil.outlinedFill(context.matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, outlineWidth.value.toFloat(), Color.black.rgb)
+            RenderUtil.outlinedFill(context.matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, (width.value + outlineWidth.value).toFloat(), Color.black.rgb)
         RenderUtil.outlinedFill(context.matrices, rectangle.x, rectangle.y, rectangle.z, rectangle.w, width.value.toFloat(), col)
     }
 }
@@ -45,7 +46,7 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
     private val scale = ValueNumber(this, "Scale", 0.1, 1.0, 3.0, 0.1)
 
     override fun draw(context: DrawContext, entity: Entity, sideWidth: Double, orientation: Orientation) {
-        val col = Color(entity.teamColorValue).rgb // ignore alpha
+        val col = entity.teamColorValue.ignoreAlpha()
         val tagName = entity.displayName.asOrderedText()
         context.matrices.push()
         val width = mc.textRenderer!!.getWidth(tagName)

@@ -10,6 +10,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.Session
 import net.minecraft.text.Text
 import net.minecraft.util.Util
+import su.mandora.tarasande.feature.screens.accountmanager.subscreen.ScreenBetterAzureApps
 import su.mandora.tarasande.gson
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.accountmanager.account.Account
@@ -18,7 +19,6 @@ import su.mandora.tarasande.system.screen.accountmanager.account.api.ExtraInfo
 import su.mandora.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
 import su.mandora.tarasande.system.screen.accountmanager.azureapp.AzureAppPreset
 import su.mandora.tarasande.system.screen.accountmanager.azureapp.ManagerAzureApp
-import su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterAzureApps
 import su.mandora.tarasande.util.extension.javaruntime.Thread
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -127,12 +127,14 @@ $errorDescription""".toByteArray())
             } else
                 error("No data was supplied")
         }
-
-        service = YggdrasilAuthenticationService(mc.networkProxy, "", environment).createMinecraftSessionService()
+        YggdrasilAuthenticationService(mc.networkProxy, "", environment).also {
+            yggdrasilAuthenticationService = it
+            minecraftSessionService = it.createMinecraftSessionService()
+        }
         if (msAuthProfile != null) {
             session = msAuthProfile?.asSession()!!
         } else {
-            error("WHAT THE FUCK")
+            error("Auth profile is invalid")
         }
     }
 
@@ -298,7 +300,7 @@ $errorDescription""".toByteArray())
     @Suppress("unused")
     @ExtraInfo("Web Login")
     val webLogin: (Screen, Runnable) -> Unit = login@{ screen, close ->
-        fun abort() = mc.setScreen(screen)
+        fun abort() = RenderSystem.recordRenderCall { mc.setScreen(screen) }
 
         val serverSocket = setupHttpServer(code = {
             code = it

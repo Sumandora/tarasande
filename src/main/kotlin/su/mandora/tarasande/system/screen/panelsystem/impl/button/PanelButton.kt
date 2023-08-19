@@ -14,10 +14,12 @@ class PanelButton(x: Int, y: Int, val width: Int, val height: Int, private val t
     init {
         this.x = x.toDouble()
         this.y = y.toDouble()
+        panelWidth = width.toDouble()
+        panelHeight = height.toDouble()
     }
 
     companion object {
-        fun createButton(x: Int, y: Int, width: Int, height: Int, text: String, pressAction: (button: Int) -> Unit): ClickableWidgetPanel {
+        fun createButtonWidget(x: Int, y: Int, width: Int, height: Int, text: String, pressAction: (button: Int) -> Unit): ClickableWidgetPanel {
             return ClickableWidgetPanel(PanelButton(x, y, width, height, text, pressAction), true)
         }
     }

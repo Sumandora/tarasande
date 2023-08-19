@@ -16,11 +16,6 @@ import su.mandora.tarasande.util.player.container.ContainerUtil
 class ModuleZoot : Module("Zoot", "Removes fire status", ModuleCategory.GHOST) {
     private val delay = ValueNumber(this, "Delay", 0.0, 300.0, 500.0, 50.0)
 
-    /*
-     * This code is garbage....
-     * I might delete life later, cya
-     */
-
     private var prevSlot: Int? = null
     var state = State.IDLE
     private var intendedSlot: Int? = null

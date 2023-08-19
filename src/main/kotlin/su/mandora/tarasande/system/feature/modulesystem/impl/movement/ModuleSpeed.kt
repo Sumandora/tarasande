@@ -13,7 +13,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.DEFAULT_WALK_SPEED
-import su.mandora.tarasande.util.extension.minecraft.copy
+import su.mandora.tarasande.util.extension.minecraft.math.copy
 import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
 import kotlin.math.max
@@ -30,6 +30,8 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
     private val lowHop = ValueBoolean(this, "Low hop", false)
     private val damageBoost = ValueBoolean(this, "Damage boost", false)
     private val boostAmount = ValueNumber(this, "Boost amount", 0.0, DEFAULT_WALK_SPEED, 1.0, 0.01, isEnabled = { damageBoost.value })
+    private val hardStop = ValueBoolean(this, "Hard stop", true)
+    private val wallDetection = ValueBoolean(this, "Wall detection", true, isEnabled = { jumpHeight.value != 1.0 || lowHop.value })
 
     private var speed = 0.0
     private var moveDir = 0.0
@@ -47,18 +49,26 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
 
             if (mc.player?.velocity?.lengthSquared()!! <= 0.01) firstMove = true
 
-            if (!PlayerUtil.isPlayerMoving()) return@registerEvent
+            if (!PlayerUtil.isPlayerMoving()) {
+                if(hardStop.value)
+                    event.velocity = Vec3d.ZERO.withAxis(Direction.Axis.Y, event.velocity.y)
+
+                return@registerEvent
+            }
 
             val prevVelocity = mc.player?.velocity?.copy()!!
             if (mc.player?.isOnGround == true) {
                 if (jumpHeight.value > 0.0) {
                     mc.player?.jump()
 
-                    event.velocity = event.velocity.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!! * jumpHeight.value)
+                    val collided = wallDetection.value && mc.player!!.horizontalCollision
+
+                    if(!collided && !mc.options.jumpKey.pressed)
+                        event.velocity = event.velocity.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!! * jumpHeight.value)
 
                     mc.player?.velocity = Vec3d(
                         prevVelocity.x,
-                        if (lowHop.value && mc.player?.horizontalCollision == false && !PlayerUtil.input.jumping)
+                        if (lowHop.value && !collided && !mc.options.jumpKey.pressed)
                             prevVelocity.y
                         else
                             event.velocity.y,

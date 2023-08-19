@@ -100,11 +100,13 @@ class InformationTextRadar : Information("World", "Text radar") {
     private val amount = ValueNumber(this, "Amount", 0.0, 5.0, 15.0, 1.0)
     private val decimalPlaces = ValueNumber(this, "Decimal places", 0.0, 1.0, 5.0, 1.0)
 
+    private val moduleESP by lazy { ManagerModule.get(ModuleESP::class.java) }
+
     override fun getMessage(): String? {
         val closestPlayers = (mc.world?.players ?: return null)
             .map { it to (mc.player?.distanceTo(it)?.toDouble() ?: 0.0) }
             .sortedBy { it.second }
-            .filter { it.first != mc.player && ManagerModule.get(ModuleESP::class.java).shouldRender(it.first) }
+            .filter { it.first != mc.player && moduleESP.shouldRender(it.first) }
             .let { it.subList(0, min(amount.value.toInt(), it.size)) }
         if (closestPlayers.isEmpty()) return null
         return "\n" + closestPlayers.joinToString("\n") { Formatting.strip(it.first.gameProfile.name) + " (" + StringUtil.round(it.second, decimalPlaces.value.toInt()) + ")" }

@@ -13,8 +13,8 @@ import net.minecraft.util.math.random.RandomSplitter
 import su.mandora.tarasande.injection.accessor.prediction.IParticleManager
 import su.mandora.tarasande.injection.accessor.prediction.ISoundSystem
 import su.mandora.tarasande.mc
-import su.mandora.tarasande.util.extension.minecraft.copy
-import su.mandora.tarasande.util.extension.minecraft.times
+import su.mandora.tarasande.util.extension.minecraft.math.copy
+import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import java.util.function.BiConsumer
@@ -167,7 +167,7 @@ object ProjectileUtil {
         mc.player?.velocity = prevVelocity
         mc.player?.yaw = prevRotation.yaw
         mc.player?.pitch = prevRotation.pitch
-        while (!collided) {
+        while (!collided && persistentProjectileEntity.velocity.lengthSquared() != 0.0) {
             path.add(persistentProjectileEntity.pos)
             persistentProjectileEntity.tick()
             if (persistentProjectileEntity.pos.let { it.y < mc.world?.bottomY!! || it == path.lastOrNull() }) break

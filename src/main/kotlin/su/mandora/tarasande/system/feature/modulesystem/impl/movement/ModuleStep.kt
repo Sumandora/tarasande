@@ -9,7 +9,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
-import su.mandora.tarasande.util.extension.minecraft.times
+import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.player.prediction.PredictionEngine
 import su.mandora.tarasande.util.player.prediction.with
@@ -20,16 +20,17 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
     private val delay = ValueNumber(this, "Delay", 0.0, 0.0, 500.0, 50.0)
     private val mode = ValueMode(this, "Mode", false, "Vanilla", "No cheat")
     private val predictedMotionLimit = ValueNumber(this, "Predicted motion limit", 1.0, 2.0, 5.0, 1.0, isEnabled = { mode.isSelected(1) })
+    val ignoreJumpBoost = ValueBoolean(this, "Ignore jump boost", true, isEnabled = { mode.isSelected(1) })
 
     private val slowdown = ValueNumber(this, "Slowdown", 0.0, 1.0, 1.0, 0.1)
-    private val slowdownTicks = ValueNumber(this, "Slowdown ticks", 1.0, 1.0, 10.0, 1.0, isEnabled = { slowdown.value < 1.0 })
+    private val slowdownTicks = ValueNumber(this, "Slowdown ticks", 1.0, 1.0, 10.0, 1.0, isEnabled = { slowdown.value != 1.0 })
 
     private val timer = ValueNumber(this, "Timer", 1.0, 20.0, 20.0, 1.0)
-    private val timerTicks = ValueNumber(this, "Timer ticks", 1.0, 1.0, 10.0, 1.0, isEnabled = { timer.value < 20.0 })
+    private val timerTicks = ValueNumber(this, "Timer ticks", 1.0, 1.0, 10.0, 1.0, isEnabled = { timer.value != 20.0 })
 
     private val onGroundTicks = ValueNumber(this, "On-ground ticks", 0.0, 0.0, 10.0, 1.0)
 
-    val ignoreJumpBoost = ValueBoolean(this, "Ignore jump boost", true)
+    private val onlyOnGround = ValueBoolean(this, "Only on ground", false)
 
     private var stepTick = 0
     private var offGroundTick = 0
@@ -67,17 +68,19 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
         return neededMotions
     }
 
+    private fun canStep() = (!onlyOnGround.value || mc.player!!.isOnGround) && mc.player!!.velocity.y < 0.0
+
     init {
         registerEvent(EventStep::class.java) { event ->
             when (event.state) {
                 EventStep.State.PRE -> {
-                    if (mc.player?.age!! - offGroundTick > onGroundTicks.value && mc.player?.velocity?.y!! < 0.0)
+                    if (mc.player?.age!! - offGroundTick > onGroundTicks.value && canStep())
                         if (timeUtil.hasReached(delay.value.toLong()))
                             event.stepHeight = stepHeight.value.toFloat()
                 }
 
                 EventStep.State.POST -> {
-                    if (event.stepHeight in mc.player?.stepHeight!!..stepHeight.value.toFloat() && mc.player?.isOnGround == true && mc.player?.velocity?.y!! < 0.0) {
+                    if (event.stepHeight in mc.player?.stepHeight!!..stepHeight.value.toFloat() && canStep()) {
                         timeUtil.reset()
                         if (mode.isSelected(1)) {
                             for (motion in predictMotions()) {
@@ -92,10 +95,9 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
         }
 
         registerEvent(EventUpdate::class.java) { event ->
-            if (event.state == EventUpdate.State.PRE) {
-                if (mc.player?.isOnGround == false && mc.player?.age!! - stepTick > 3) {
+            if (event.state == EventUpdate.State.PRE_PACKET) { // after movement
+                if (mc.player?.isOnGround == false)
                     offGroundTick = mc.player?.age!!
-                }
             }
         }
 

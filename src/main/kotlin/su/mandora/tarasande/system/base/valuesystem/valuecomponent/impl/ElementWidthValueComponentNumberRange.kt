@@ -11,7 +11,7 @@ import su.mandora.tarasande.system.base.valuesystem.Value
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
-import su.mandora.tarasande.util.extension.minecraft.fillHorizontalGradient
+import su.mandora.tarasande.util.extension.minecraft.render.fillHorizontalGradient
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.DragInfo

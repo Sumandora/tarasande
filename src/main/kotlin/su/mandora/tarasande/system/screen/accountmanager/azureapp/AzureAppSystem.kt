@@ -1,19 +1,13 @@
 package su.mandora.tarasande.system.screen.accountmanager.azureapp
 
 import su.mandora.tarasande.Manager
-import su.mandora.tarasande.system.screen.accountmanager.azureapp.impl.*
+import su.mandora.tarasande.system.screen.accountmanager.azureapp.impl.AzureAppPresetInGameAccountSwitcher
 
 object ManagerAzureApp : Manager<AzureAppPreset>() {
 
     init {
         add(
-            AzureAppPresetInGameAccountSwitcher(),
-            AzureAppPresetPolyMC(),
-            AzureAppPresetMultiMC(),
-            AzureAppPresetTechnicLauncher(),
-            AzureAppPresetLabyMod(),
-            AzureAppPresetOldTechnicLauncher(),
-            AzureAppPresetGDLauncher()
+            AzureAppPresetInGameAccountSwitcher()
         )
     }
 

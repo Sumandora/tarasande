@@ -10,7 +10,7 @@ import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthV
 import su.mandora.tarasande.system.screen.blursystem.ManagerBlur
 import su.mandora.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import su.mandora.tarasande.system.screen.panelsystem.api.PanelElements
-import su.mandora.tarasande.util.extension.minecraft.fill
+import su.mandora.tarasande.util.extension.minecraft.render.fill
 import su.mandora.tarasande.util.screen.ScreenBetter
 import java.util.*
 
@@ -56,7 +56,6 @@ class ScreenBetterOwnerValues(title: String, parent: Screen, val owner: Any) : S
     }
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-        this.renderBackground(context)
         if (mc.world != null) {
             var prevScreen = prevScreen
             while (prevScreen is ScreenBetterOwnerValues)
@@ -69,7 +68,6 @@ class ScreenBetterOwnerValues(title: String, parent: Screen, val owner: Any) : S
             context.fill(0.0, 0.0, client?.window?.scaledWidth?.toDouble()!!, client?.window?.scaledHeight?.toDouble()!!, -1)
             client?.framebuffer?.beginWrite(true)
         }
-
         super.render(context, mouseX, mouseY, delta)
     }
 

@@ -8,11 +8,11 @@ import su.mandora.tarasande.system.screen.screenextensionsystem.ScreenExtensionB
 class ScreenExtensionButtonListHandledScreen : ScreenExtensionButtonList<HandledScreen<*>>(HandledScreen::class.java) {
 
     init {
-        add("Clientside close") {
+        add(Button("Clientside close") {
             mc.setScreen(null)
-        }
-        add("Serverside close") {
+        })
+        add(Button("Serverside close") {
             mc.networkHandler?.sendPacket(CloseHandledScreenC2SPacket(mc.player?.currentScreenHandler!!.syncId))
-        }
+        })
     }
 }

@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.event.EventDispatcher;
 import su.mandora.tarasande.event.impl.*;
 import su.mandora.tarasande.injection.accessor.IEntity;
-import su.mandora.tarasande.util.extension.minecraft.Vec3dKt;
+import su.mandora.tarasande.util.extension.minecraft.math.Vec3dKt;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity implements IEntity {

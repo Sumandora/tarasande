@@ -9,7 +9,6 @@ import su.mandora.tarasande.event.impl.EventRender3D
 import su.mandora.tarasande.feature.tarasandevalue.impl.debug.Chat
 import su.mandora.tarasande.feature.tarasandevalue.impl.debug.MinecraftDebugger
 import su.mandora.tarasande.feature.tarasandevalue.impl.debug.PlayerMovementPrediction
-import su.mandora.tarasande.feature.tarasandevalue.impl.debug.camera.Camera
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
@@ -25,7 +24,6 @@ object DebugValues {
     val openGLErrorDebugger = ValueBoolean(this, "OpenGL error debugger", true)
     val disableInterpolation = ValueBoolean(this, "Disable interpolation", false)
     private val ignoreResourcePackHash = ValueBoolean(this, "Ignore resource pack hash", false)
-    val camera = ValueButtonOwnerValues(this, "Camera", Camera)
     val eliminateHitDelay = ValueBoolean(this, "Eliminate hit delay", false)
     val chat = ValueButtonOwnerValues(this, "Chat", Chat)
     val forcePermissionLevel = ValueBoolean(this, "Force permission level", false)
@@ -35,6 +33,7 @@ object DebugValues {
     val visualizeSlotIds = ValueBoolean(this, "Visualize slot ids", false)
     val forceCreativeInventory = ValueBoolean(this, "Force creative inventory", false)
     private val wireframe = ValueBoolean(this, "Wireframe", false)
+    val showAllPlayerEntries = ValueBoolean(this, "Show all player entries", false)
 
     init {
         EventDispatcher.apply {

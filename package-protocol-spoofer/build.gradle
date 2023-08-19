@@ -28,7 +28,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     implementation project(":")
-    compileOnly("com.github.ViaVersion:ViaFabricPlus:v2.7.8") {
+    compileOnly("com.github.ViaVersion:ViaFabricPlus:v2.8.2") {
         exclude group: "com.terraformersmc"
     }
 

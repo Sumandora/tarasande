@@ -32,6 +32,12 @@ public class MixinGameRenderer implements IGameRenderer {
     @Unique
     private double tarasande_reach = MinecraftConstantsKt.DEFAULT_REACH;
 
+    @Unique
+    private double tarasande_blockreach = MinecraftConstantsKt.DEFAULT_BLOCK_REACH;
+
+    @Unique
+    private boolean tarasande_selfInflicted = false;
+
     @Inject(method = "updateTargetedEntity", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;crosshairTarget:Lnet/minecraft/util/hit/HitResult;", ordinal = 0, shift = At.Shift.AFTER), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;getReachDistance()F")))
     public void throughWalls(float tickDelta, CallbackInfo ci) {
         if (tarasande_allowThroughWalls)
@@ -40,15 +46,12 @@ public class MixinGameRenderer implements IGameRenderer {
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;getReachDistance()F"))
     public float blockReach(ClientPlayerInteractionManager clientPlayerInteractionManager) {
-        return Math.max(clientPlayerInteractionManager.getReachDistance(), (float) tarasande_reach);
+        return (float) tarasande_blockreach;
     }
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;squaredDistanceTo(Lnet/minecraft/util/math/Vec3d;)D"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/util/hit/EntityHitResult;getPos()Lnet/minecraft/util/math/Vec3d;")))
     public double reach(Vec3d instance, Vec3d vec) {
-        double dist = instance.squaredDistanceTo(vec);
-        if (dist <= tarasande_reach * tarasande_reach)
-            return Math.min(dist, MinecraftConstantsKt.DEFAULT_REACH * MinecraftConstantsKt.DEFAULT_REACH);
-        return dist;
+        return Math.pow(instance.distanceTo(vec) / tarasande_reach * MinecraftConstantsKt.DEFAULT_REACH, 2);
     }
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;hasExtendedReach()Z"))
@@ -87,5 +90,25 @@ public class MixinGameRenderer implements IGameRenderer {
     @Override
     public void tarasande_setReach(double reach) {
         this.tarasande_reach = reach;
+    }
+
+    @Override
+    public double tarasande_getBlockReach() {
+        return tarasande_blockreach;
+    }
+
+    @Override
+    public void tarasande_setBlockReach(double reach) {
+        this.tarasande_blockreach = reach;
+    }
+
+    @Override
+    public boolean tarasande_isSelfInflicted() {
+        return tarasande_selfInflicted;
+    }
+
+    @Override
+    public void tarasande_setSelfInflicted(boolean selfInflicted) {
+        tarasande_selfInflicted = selfInflicted;
     }
 }

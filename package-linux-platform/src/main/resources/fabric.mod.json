@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "tarasande-linux-platform",
   "version": "${version}",
-  "name": "tarasande Linux Platform",
-  "description": "tarasande package to provide linux platform specific enhancements",
+  "name": "tarasande linux platform",
+  "description": "tarasande package to provide linux specific enhancements",
   "authors": [
     "Sumandora/Johannes"
   ],
@@ -20,9 +20,6 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.14.9",
-    "minecraft": "1.20.1",
-    "java": ">=17",
     "tarasande": "*"
   },
   "custom": {

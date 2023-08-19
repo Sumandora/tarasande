@@ -10,8 +10,8 @@ import su.mandora.tarasande.system.screen.screenextensionsystem.ScreenExtensionB
 class ScreenExtensionButtonListTitleScreen : ScreenExtensionButtonList<TitleScreen>(TitleScreen::class.java) {
 
     init {
-        add("$TARASANDE_NAME values") {
+        add(Button("$TARASANDE_NAME values") {
             mc.setScreen(ScreenBetterOwnerValues("$TARASANDE_NAME values", mc.currentScreen!!, TarasandeValues))
-        }
+        })
     }
 }

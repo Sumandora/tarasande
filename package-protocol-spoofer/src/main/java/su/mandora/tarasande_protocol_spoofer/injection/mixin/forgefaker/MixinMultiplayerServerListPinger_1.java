@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer;
 import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerInfo;
 import su.mandora.tarasande_protocol_spoofer.injection.accessor.IServerMetadata;
 import su.mandora.tarasande_protocol_spoofer.tarasandevalues.ForgeProtocolSpoofer;
@@ -30,7 +29,8 @@ public class MixinMultiplayerServerListPinger_1 {
 
     @Redirect(method = "onResponse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;)V"))
     public void trackForgePayload(ClientConnection instance, Packet<?> packet) {
-        if (!TarasandeProtocolSpoofer.Companion.getViaFabricPlusLoaded()) return;
+        instance.send(packet);
+
         IForgePayload payload = ((IServerMetadata) (Object) tarasande_metadata).tarasande_getForgePayload();
 
         if (payload != null) {
@@ -38,8 +38,6 @@ public class MixinMultiplayerServerListPinger_1 {
 
             ForgeProtocolSpoofer.INSTANCE.getForgeInfoTracker().put((InetSocketAddress) instance.getAddress(), payload);
         }
-
-        instance.send(packet); // Original Code
     }
 
     @Redirect(method = "onResponse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/packet/s2c/query/QueryResponseS2CPacket;metadata()Lnet/minecraft/server/ServerMetadata;"))

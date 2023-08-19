@@ -11,7 +11,8 @@ import java.util.logging.Level
 
 object ManagerFile : Manager<File>() {
 
-    private val rootDirectory = java.io.File(System.getProperty("user.home") + java.io.File.separator + TARASANDE_NAME)
+    @Suppress("MemberVisibilityCanBePrivate") // Packages could want that
+    val rootDirectory = java.io.File(System.getProperty("user.home") + java.io.File.separator + TARASANDE_NAME)
 
     init {
         EventDispatcher.add(EventShutdown::class.java) {

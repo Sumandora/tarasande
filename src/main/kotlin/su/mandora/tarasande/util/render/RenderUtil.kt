@@ -5,7 +5,6 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.*
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
-import net.minecraft.util.Formatting
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.ColorHelper
 import net.minecraft.util.math.Vec3d
@@ -17,7 +16,7 @@ import su.mandora.tarasande.injection.accessor.IDrawContext
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
-import su.mandora.tarasande.util.extension.minecraft.minus
+import su.mandora.tarasande.util.extension.minecraft.math.minus
 import java.awt.Color
 import kotlin.math.*
 
@@ -35,8 +34,8 @@ object RenderUtil {
     fun outlinedFill(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, width: Float, color: Int) {
         glEnable(GL_LINE_SMOOTH)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-        val lineWidth = RenderSystem.getShaderLineWidth()
-        RenderSystem.lineWidth(width)
+        val lineWidth = glGetFloat(GL_LINE_WIDTH)
+        glLineWidth(width)
         val matrix = matrices.peek().positionMatrix
         val colors = colorToRGBA(color)
 
@@ -54,15 +53,15 @@ object RenderUtil {
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
 
         RenderSystem.disableBlend()
-        RenderSystem.lineWidth(lineWidth)
+        glLineWidth(lineWidth)
         glDisable(GL_LINE_SMOOTH)
     }
 
     fun outlinedHorizontalGradient(matrices: MatrixStack, x1: Double, y1: Double, x2: Double, y2: Double, width: Float, colorStart: Int, colorEnd: Int) {
         glEnable(GL_LINE_SMOOTH)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-        val lineWidth = RenderSystem.getShaderLineWidth()
-        RenderSystem.lineWidth(width)
+        val lineWidth = glGetFloat(GL_LINE_WIDTH)
+        glLineWidth(width)
         val matrix = matrices.peek().positionMatrix
 
         val startColors = colorToRGBA(colorStart)
@@ -82,15 +81,15 @@ object RenderUtil {
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
 
         RenderSystem.disableBlend()
-        RenderSystem.lineWidth(lineWidth)
+        glLineWidth(lineWidth)
         glDisable(GL_LINE_SMOOTH)
     }
 
     fun outlinedCircle(matrices: MatrixStack, x: Double, y: Double, radius: Double, width: Float, color: Int) {
         glEnable(GL_LINE_SMOOTH)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-        val lineWidth = RenderSystem.getShaderLineWidth()
-        RenderSystem.lineWidth(width)
+        val lineWidth = glGetFloat(GL_LINE_WIDTH)
+        glLineWidth(width)
         val matrix = matrices.peek().positionMatrix
         val colors = colorToRGBA(color)
         val bufferBuilder = Tessellator.getInstance().buffer
@@ -107,11 +106,12 @@ object RenderUtil {
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
 
         RenderSystem.disableBlend()
-        RenderSystem.lineWidth(lineWidth)
+        glLineWidth(lineWidth)
         glDisable(GL_LINE_SMOOTH)
     }
 
     fun fillCircle(matrices: MatrixStack, x: Double, y: Double, radius: Double, color: Int) {
+        val cull = glIsEnabled(GL_CULL_FACE)
         RenderSystem.disableCull()
         RenderSystem.disableDepthTest()
         val matrix = matrices.peek().positionMatrix
@@ -130,6 +130,8 @@ object RenderUtil {
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
 
         RenderSystem.disableBlend()
+        if(cull)
+            RenderSystem.enableCull()
     }
 
     fun blockOutline(matrices: MatrixStack, box: Box, color: Int) {
@@ -225,30 +227,6 @@ object RenderUtil {
         return Color((a.red + (b.red - a.red) * tR.toFloat()) / 255F, (a.green + (b.green - a.green) * tG.toFloat()) / 255F, (a.blue + (b.blue - a.blue) * tB.toFloat()) / 255F, (a.alpha + (b.alpha - a.alpha) * tA.toFloat()) / 255F)
     }
 
-    fun formattingByHex(hex: Int): Formatting {
-        var bestFormatting: Formatting? = null
-        var bestDiff = 0.0
-        val red = (hex shr 16 and 0xFF) / 255F
-        val green = (hex shr 8 and 0xFF) / 255F
-        val blue = (hex shr 0 and 0xFF) / 255F
-
-        for (formatting in Formatting.entries) {
-            if (formatting.colorValue == null) continue
-
-            val otherRed = (formatting.colorValue!! shr 16 and 0xFF) / 255F
-            val otherGreen = (formatting.colorValue!! shr 8 and 0xFF) / 255F
-            val otherBlue = (formatting.colorValue!! shr 0 and 0xFF) / 255F
-
-            val diff = (otherRed - red).toDouble().pow(2.0) * 0.2126 + (otherGreen - green).toDouble().pow(2.0) * 0.7152 + (otherBlue - blue).toDouble().pow(2.0) * 0.0722
-
-            if (bestFormatting == null || bestDiff > diff) {
-                bestFormatting = formatting
-                bestDiff = diff
-            }
-        }
-        return bestFormatting!!
-    }
-
     fun renderPath(matrices: MatrixStack, path: Iterable<Vec3d>, color: Int) {
         RenderSystem.enableBlend()
         RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -279,27 +257,34 @@ object RenderUtil {
         RenderSystem.disableBlend()
     }
 
-    fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Vec3d? {
+    fun project(modelView: Matrix4f, projection: Matrix4f, vector: Vec3d): Pair<Vec3d, Boolean> {
         val camPos = vector - mc.gameRenderer.camera.pos
         val vec1 = Vector4f(camPos.x.toFloat(), camPos.y.toFloat(), camPos.z.toFloat(), 1F).mul(modelView)
         val screenPos = vec1.mul(projection)
 
-        if (screenPos.w <= 0.0) return null
-
         val newW = 1.0 / screenPos.w * 0.5
 
-        screenPos.set(
-            (screenPos.x * newW + 0.5).toFloat(),
-            (screenPos.y * newW + 0.5).toFloat(),
-            (screenPos.z * newW + 0.5).toFloat(),
-            newW.toFloat()
+        var position = Vec3d(
+            screenPos.x * newW + 0.5,
+            screenPos.y * newW + 0.5,
+            screenPos.z * newW + 0.5
         )
 
-        return Vec3d(
-            screenPos.x * mc.window.framebufferWidth / mc.window.scaleFactor,
-            (mc.window.framebufferHeight - (screenPos.y * mc.window.framebufferHeight)) / mc.window.scaleFactor,
-            screenPos.z.toDouble()
+        position = Vec3d(
+            position.x * mc.window.scaledWidth.toDouble(),
+            (1.0 - position.y) * mc.window.scaledHeight.toDouble(),
+            position.z
         )
+
+        if(screenPos.w <= 0.0) {
+            position = Vec3d(
+                mc.window.scaledWidth - position.x,
+                mc.window.scaledHeight - position.y,
+                screenPos.z.toDouble()
+            )
+        }
+
+        return position to (screenPos.w > 0.0)
     }
 
     fun getBindName(type: ValueBind.Type, button: Int): String {

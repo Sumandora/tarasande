@@ -13,6 +13,7 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.kotlinruntime.nullOr
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.player.container.Cleaner
 import su.mandora.tarasande.util.player.container.ContainerUtil
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.sqrt
@@ -24,8 +25,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
     private val openDelay = ValueNumber(this, "Open delay", 0.0, 100.0, 500.0, 1.0, isEnabled = { openInventory.value })
     private val randomize = ValueNumber(this, "Randomize", 0.0, 0.0, 30.0, 1.0)
 
-    private val keepSameMaterial = ValueBoolean(this, "Keep same material", true)
-    private val keepSameEnchantments = ValueBoolean(this, "Keep same enchantments", true)
+    private val cleaner = Cleaner(this)
 
     private val timeUtil = TimeUtil()
 
@@ -56,7 +56,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your 
                 mousePos = Vec2f(mc.window.scaledWidth / 2F, mc.window.scaledHeight / 2F)
             }
 
-            val nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> slot.hasStack() && ContainerUtil.hasBetterEquivalent(slot.stack, list.filter { it != slot }.map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value) }
+            val nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list -> slot.hasStack() && cleaner.hasBetterEquivalent(slot.stack, list.filter { it != slot }.map { it.stack }) }
 
             if (!timeUtil.hasReached(
                     if (wasClosed && !openInventory.value)

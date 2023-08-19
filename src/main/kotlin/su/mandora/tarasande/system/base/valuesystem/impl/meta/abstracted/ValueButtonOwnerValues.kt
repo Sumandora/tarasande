@@ -7,7 +7,7 @@ import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOw
 open class ValueButtonOwnerValues(
     owner: Any,
     name: String,
-    val valuesOwner: Any,
+    private val valuesOwner: Any,
     visible: Boolean = true,
     isEnabled: () -> Boolean = { true },
     manage: Boolean = true

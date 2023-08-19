@@ -13,6 +13,7 @@ public class MixinPlayerEntity {
 
     @Inject(method = "hasReducedDebugInfo", at = @At("HEAD"), cancellable = true)
     public void disableReducedDebugInfo(CallbackInfoReturnable<Boolean> cir) {
+        //noinspection ConstantValue
         if (MinecraftDebugger.INSTANCE.getIgnoreRDI().getValue() && (Object) this == MinecraftClient.getInstance().player)
             cir.setReturnValue(false);
     }

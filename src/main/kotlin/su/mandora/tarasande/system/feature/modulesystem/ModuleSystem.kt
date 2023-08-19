@@ -11,11 +11,10 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
+import su.mandora.tarasande.system.feature.commandsystem.ManagerCommand
+import su.mandora.tarasande.system.feature.modulesystem.command.CommandToggle
 import su.mandora.tarasande.system.feature.modulesystem.impl.combat.*
-import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit
-import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModulePortalScreen
-import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModuleRegen
-import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModuleTickBaseManipulation
+import su.mandora.tarasande.system.feature.modulesystem.impl.gamemode.*
 import su.mandora.tarasande.system.feature.modulesystem.impl.ghost.*
 import su.mandora.tarasande.system.feature.modulesystem.impl.misc.*
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.*
@@ -36,7 +35,6 @@ object ManagerModule : Manager<Module>() {
             ModuleWTap(),
             ModuleAntiBot(),
             ModuleProjectileAimBot(),
-            ModuleQuakeAura(),
             ModuleCriticals(),
             ModuleTNTBlock(),
             ModuleHealingBot(),
@@ -75,6 +73,7 @@ object ManagerModule : Manager<Module>() {
             ModuleReverseStep(),
             ModuleAntiPowderSnow(),
             ModuleAirJump(),
+            ModuleStrafe(),
 
             // Player
             ModuleTimer(),
@@ -92,7 +91,7 @@ object ManagerModule : Manager<Module>() {
             ModuleAntiAFK(),
             ModuleFastBreak(),
             ModuleCivBreak(),
-            ModuleNoStatusEffect(),
+            ModuleNoEffect(),
             ModuleAntiCactus(),
             ModuleAutoArmor(),
             ModuleXCarry(),
@@ -119,20 +118,19 @@ object ManagerModule : Manager<Module>() {
             ModulePreferredOffHandItem(),
             ModuleNoHurtCam(),
             ModuleBlockChangeTracker(),
+            ModuleCamera(),
+            ModuleInteractAura(),
 
             // Misc
             ModuleBlink(),
-            ModuleMurderMystery(),
             ModuleBlockBot(),
             ModuleNoFriends(),
             ModuleMidClick(),
             ModuleAutoRespawn(),
-            ModuleTroubleInTerroristTown(),
             ModuleSpammer(),
             ModuleAutoRescuePlatform(),
-            ModuleDropper(),
-            ModuleEveryItemOnArmor(),
             ModuleSkinDerp(),
+            ModulePotionSaver(),
 
             // Ghost
             ModuleReach(),
@@ -147,7 +145,15 @@ object ManagerModule : Manager<Module>() {
             ModuleTickBaseManipulation(),
             ModulePortalScreen(),
             ModuleNoPitchLimit(),
-            ModuleRegen()
+            ModuleRegen(),
+
+            // Gamemode
+            ModuleMurderMystery(),
+            ModuleQuakeAura(),
+            ModuleTroubleInTerroristTown(),
+            ModuleDropper(),
+            ModuleBlockParty(),
+            ModulePropHunt()
         )
 
         ManagerPanel.add(PanelArrayList(this@ManagerModule))
@@ -190,6 +196,7 @@ object ManagerModule : Manager<Module>() {
                 }
             }
         }
+        ManagerCommand.add(CommandToggle())
     }
 }
 
@@ -215,7 +222,7 @@ open class Module(val name: String, val description: String, val category: Strin
     }
 
     @Suppress("LeakingThis")
-    val visible = ValueBoolean(this, "Visible in ArrayList", true)
+    val visibleInArraylist = ValueBoolean(this, "Visible in array list", true)
 
     @Suppress("LeakingThis")
     val autoDisable = ValueMode(this, "Auto disable", true, "Serverside movement", "Death", "Disconnect")
@@ -243,5 +250,5 @@ object ModuleCategory {
     const val RENDER = "Render"
     const val MISC = "Misc"
     const val GHOST = "Ghost"
-    const val EXPLOIT = "Exploit"
+    const val GAMEMODE = "Gamemode"
 }

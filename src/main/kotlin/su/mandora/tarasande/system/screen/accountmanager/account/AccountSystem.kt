@@ -3,17 +3,18 @@ package su.mandora.tarasande.system.screen.accountmanager.account
 import com.google.gson.JsonArray
 import com.mojang.authlib.Environment
 import com.mojang.authlib.minecraft.MinecraftSessionService
+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.authlib.yggdrasil.YggdrasilEnvironment
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.Session
 import su.mandora.tarasande.Manager
+import su.mandora.tarasande.feature.screens.accountmanager.subscreen.ScreenBetterEnvironment
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.accountmanager.account.api.ExtraInfo
 import su.mandora.tarasande.system.screen.accountmanager.account.impl.AccountSession
 import su.mandora.tarasande.system.screen.accountmanager.account.impl.AccountYggdrasil
 import su.mandora.tarasande.system.screen.accountmanager.account.impl.microsoft.AccountMicrosoft
 import su.mandora.tarasande.system.screen.accountmanager.account.impl.microsoft.AccountMicrosoftRefreshToken
-import su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterEnvironment
 import su.mandora.tarasande.util.render.skin.SkinRenderer
 
 object ManagerAccount : Manager<Class<out Account>>() {
@@ -35,7 +36,8 @@ abstract class Account {
                 skin = SkinRenderer(value.uuidOrNull, value.username)
             field = value
         }
-    var service: MinecraftSessionService? = null
+    var yggdrasilAuthenticationService: YggdrasilAuthenticationService? = null
+    var minecraftSessionService: MinecraftSessionService? = null
     var status: String? = null
     var skin: SkinRenderer? = null
 
@@ -54,5 +56,5 @@ abstract class Account {
         })
     }
 
-    fun ready() = session != null && service != null
+    fun ready() = session != null && minecraftSessionService != null
 }

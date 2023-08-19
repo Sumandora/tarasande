@@ -4,7 +4,7 @@ import net.minecraft.client.world.ClientWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.mc
-import su.mandora.tarasande.util.extension.minecraft.BlockPos
+import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
 import kotlin.math.abs
 
 /**

@@ -42,7 +42,9 @@ class ModuleSkinDerp : Module("Skin derp", "Randomly toggles skin layers on and 
 
     init {
         registerEvent(EventScreenInput::class.java) { _ ->
-            for (modelPart in PlayerModelPart.entries) {
+            for ((index, modelPart) in PlayerModelPart.entries.withIndex()) {
+                if(!modelParts.isSelected(index))
+                    continue
                 val enabled = mc.options.isPlayerModelPartEnabled(modelPart)
                 if(!previousStates.contains(modelPart))
                     previousStates[modelPart] = enabled

@@ -141,7 +141,7 @@ The "main" jar file is the one without any suffix other than the version.
 | Block bot                 | A griefing module, which moves into other players line of sight in order to annoy them                                                                                       |
 | Dropper                   | A module which uses prediction to solve dropper puzzles <br/> [https://youtu.be/W48PQ_7nDDQ](https://youtu.be/W48PQ_7nDDQ)                                                   |
 | Prediction engine         | Allows prediction of local and other player entities                                                                                                                         |
-| Protocol spoofers         | Makes it appear as you are using a different client (Made by both developers)                                                                                                |
+| Protocol spoofers         | Makes it appear as you are using a different client                                                                                                                          |
 | Code checker              | A tool made to automatically quality control the source code                                                                                                                 |
 | Kill aura                 | If not the best multi-version PvP Kill aura (including adjustments for 1.11 shield changes) <br/> [https://youtu.be/ntseC-D75HQ](https://youtu.be/ntseC-D75HQ)               |
 | Nuker                     | A nuker, which does not violate badpackets, unlike in a billion other cheats                                                                                                 |

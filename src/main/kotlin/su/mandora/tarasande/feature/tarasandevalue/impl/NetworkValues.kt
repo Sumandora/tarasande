@@ -7,4 +7,6 @@ object NetworkValues {
 
     val allowAddressParsingForBlacklistedServers = ValueBoolean(this, "Allow address parsing for blacklisted servers", true)
     val removeNettyExceptionHandling = ValueMode(this, "Remove Netty exception handling", true, "Timeout", "Wrong packets")
+    val printExceptionStacktrace = ValueBoolean(this, "Print exception stacktrace", false)
+
 }

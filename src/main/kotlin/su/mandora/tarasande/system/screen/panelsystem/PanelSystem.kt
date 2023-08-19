@@ -21,7 +21,7 @@ import su.mandora.tarasande.system.screen.panelsystem.impl.fixed.*
 import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import su.mandora.tarasande.system.screen.panelsystem.screen.panelscreen.ScreenPanel
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
-import su.mandora.tarasande.util.extension.minecraft.fill
+import su.mandora.tarasande.util.extension.minecraft.render.fill
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
@@ -85,9 +85,6 @@ open class Panel(
 
     // Fixed panels
     constructor(title: String, width: Double, height: Double, background: Boolean = false, resizable: Boolean = true) : this(title, width, height, null, null, background, resizable, true, background)
-
-    // Sidebar panels
-    constructor(title: String, width: Double) : this(title, width, 0.0, null, null, true, false, false, true)
 
     var x = 0.0
     var y = 0.0

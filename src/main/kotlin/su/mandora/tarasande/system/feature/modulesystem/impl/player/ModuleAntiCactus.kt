@@ -10,10 +10,9 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 class ModuleAntiCactus : Module("Anti cactus", "Prevents you from taking damage from cacti", ModuleCategory.PLAYER) {
 
     init {
-        registerEvent(EventCollisionShape::class.java) {
-            if (mc.world?.getBlockState(it.pos)?.block == Blocks.CACTUS) {
-                it.collisionShape = VoxelShapes.fullCube()
-            }
+        registerEvent(EventCollisionShape::class.java) { event ->
+            if(mc.world?.getBlockState(event.pos)?.block == Blocks.CACTUS)
+                event.collisionShape = VoxelShapes.fullCube()
         }
     }
 }

@@ -41,9 +41,9 @@ object ResourcePackSpoofer {
 
         ManagerScreenExtension.add(object : ScreenExtensionButtonList<ConfirmScreen>(ConfirmScreen::class.java) {
             init {
-                add("Spoof resource pack", visible = { return@add (mc.currentScreen as IConfirmScreen).tarasande_isResourcePacksScreen() }) {
+                add(Button("Spoof resource pack", { (mc.currentScreen as IConfirmScreen).tarasande_isResourcePacksScreen() }) {
                     sendPackets()
-                }
+                })
             }
         })
     }

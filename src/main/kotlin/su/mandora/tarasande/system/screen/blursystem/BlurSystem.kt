@@ -78,7 +78,7 @@ object ManagerBlur : Manager<Blur>() {
 
         val framebuffer = selected.render(context, targetBuffer, strength ?: this.strength.value.toInt())
 
-        mc.framebuffer.beginWrite(MinecraftClient.IS_SYSTEM_MAC)
+        mc.framebuffer.beginWrite(true)
 
         cutoutShader.bindProgram()
 
@@ -91,7 +91,7 @@ object ManagerBlur : Manager<Blur>() {
         cutoutShader.unbindProgram()
 
         shapesBuffer.clear(MinecraftClient.IS_SYSTEM_MAC)
-        mc.framebuffer.beginWrite(MinecraftClient.IS_SYSTEM_MAC)
+        mc.framebuffer.beginWrite(true)
 
         if (cullFace) RenderSystem.enableCull()
     }

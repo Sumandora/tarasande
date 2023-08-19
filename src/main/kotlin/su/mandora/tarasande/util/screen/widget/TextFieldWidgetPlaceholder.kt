@@ -9,7 +9,7 @@ import java.awt.Color
 
 open class TextFieldWidgetPlaceholder(textRenderer: TextRenderer?, x: Int, y: Int, width: Int, height: Int, text: Text?) : TextFieldWidget(textRenderer, x, y, width, height, text) {
 
-    protected var holdingPlace = false
+    protected var placeholderActive = false
     // We can't use the text replacer, because the text replacement is only invoked when the text isn't empty
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
@@ -19,10 +19,10 @@ open class TextFieldWidgetPlaceholder(textRenderer: TextRenderer?, x: Int, y: In
             this.text = message.string
             if (accessor.tarasande_getColor() == null)
                 accessor.tarasande_setColor(Color.lightGray)
-            holdingPlace = true
+            placeholderActive = true
         }
         super.render(context, mouseX, mouseY, delta)
-        holdingPlace = false
+        placeholderActive = false
         this.text = prevText
         accessor.tarasande_setColor(null)
     }

@@ -32,7 +32,7 @@ class ModuleAutoRescuePlatform : Module("Auto rescue platform", "Uses rescue pla
             if (event.state == EventUpdate.State.PRE) {
                 val rescuePlatformSlot = ContainerUtil.findSlot { it.value.item == Items.BLAZE_ROD }
                 if (rescuePlatformSlot == null) {
-                    state = State.IDLE // FUCK
+                    state = State.IDLE
                     return@registerEvent
                 }
                 if (state == State.SWITCH_BACK && prevSlot != null) {

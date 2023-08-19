@@ -10,6 +10,7 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
 import su.mandora.tarasande.system.screen.panelsystem.Panel
+import su.mandora.tarasande.util.extension.javaruntime.Thread
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
 import java.net.URL
@@ -25,13 +26,18 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
     private val apiKey = ValueText(this, "API Key", "")
     private val fields = ValueMode(this, "Fields", true, "Name", "Playtime", "Age", "Level", "Final-Kill/Death Ratio", "Winstreak", "Achievements", "API response length")
 
+    init {
+        fields.select(0)
+        fields.select(4)
+    }
+
     private val blackList = ArrayList<GameProfile>()
     private var playerData = ConcurrentHashMap<GameProfile, Stats>()
     private val url = "https://api.hypixel.net/player?uuid=%s&key=%s"
     private val baseLine = "Name\tPlaytime\tAge\tLevel\tFKDR\tWS\tACH\tLength"
 
     init {
-        val t = Thread {
+        Thread("Hypixel enemies lookup thread") {
             while (true) {
                 try {
                     if (apiKey.value.isEmpty() || !opened) {
@@ -56,9 +62,7 @@ class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeig
                     Thread.sleep(10000L)
                 }
             }
-        }
-        t.name = "Hypixel enemies lookup thread"
-        t.start()
+        }.start()
     }
 
     private fun drawString(context: DrawContext, str: String, x: Double, y: Double) {

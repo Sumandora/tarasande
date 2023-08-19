@@ -18,8 +18,8 @@ import java.util.zip.GZIPOutputStream
 
 class CommandOpenModsRCE : Command("openmodsrce") {
 
-    override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
-        return builder.executes {
+    override fun builder(builder: LiteralArgumentBuilder<CommandSource>) {
+        builder.executes {
             execute()
             return@executes SUCCESS
         }.then(argument("world-id", IntegerArgumentType.integer(-1, 1))!!.executes {

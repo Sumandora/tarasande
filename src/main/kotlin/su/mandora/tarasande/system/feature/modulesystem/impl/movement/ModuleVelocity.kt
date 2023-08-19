@@ -11,8 +11,8 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
-import su.mandora.tarasande.util.extension.minecraft.plus
-import su.mandora.tarasande.util.extension.minecraft.times
+import su.mandora.tarasande.util.extension.minecraft.math.plus
+import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil

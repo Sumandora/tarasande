@@ -7,14 +7,16 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleESP
 import su.mandora.tarasande.system.screen.panelsystem.Panel
+import su.mandora.tarasande.util.extension.kotlinruntime.ignoreAlpha
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.render.RenderUtil
-import java.awt.Color
 import kotlin.math.*
 
 class PanelRadar : Panel("Radar", 100.0, 100.0, true) {
 
     private val scale = ValueNumber(this, "Scale", 0.0, 1.0, 3.0, 0.1)
+
+    private val moduleESP by lazy { ManagerModule.get(ModuleESP::class.java) }
 
     override fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         if (mc.player == null)
@@ -23,7 +25,7 @@ class PanelRadar : Panel("Radar", 100.0, 100.0, true) {
         val pos = mc.player?.getLerpedPos(delta)!!
         val panelLength = sqrt(panelWidth * panelWidth + panelHeight * panelHeight)
         for (entity in mc.world?.entities!!) {
-            if (!ManagerModule.get(ModuleESP::class.java).shouldRender(entity))
+            if (!moduleESP.shouldRender(entity))
                 continue
 
             val otherPos = entity.getLerpedPos(delta)!!
@@ -37,7 +39,7 @@ class PanelRadar : Panel("Radar", 100.0, 100.0, true) {
             val x = -sin(yawDelta / 360.0 * PI * 2) * dist
             val y = cos(yawDelta / 360.0 * PI * 2) * dist
 
-            RenderUtil.fillCircle(context.matrices, this.x + panelWidth / 2F + x, this.y + panelHeight / 2F + y, 2.0, Color(entity.teamColorValue).rgb /* alpha ignore */)
+            RenderUtil.fillCircle(context.matrices, this.x + panelWidth / 2F + x, this.y + panelHeight / 2F + y, 2.0, entity.teamColorValue.ignoreAlpha())
         }
     }
 }

@@ -1,12 +1,10 @@
 package su.mandora.tarasande.feature.rotation
 
-import net.minecraft.client.gui.screen.ingame.HandledScreen
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventPollEvents
 import su.mandora.tarasande.event.impl.EventRotation
 import su.mandora.tarasande.event.impl.EventTick
 import su.mandora.tarasande.feature.rotation.correctmovement.CorrectMovement
-import su.mandora.tarasande.feature.tarasandevalue.impl.TargetingValues
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
@@ -65,8 +63,7 @@ object Rotations {
             val realRotation = Rotation(mc.player!!)
             val eventRotation = EventRotation(realRotation)
 
-            if (!TargetingValues.closedInventory.value || mc.currentScreen !is HandledScreen<*>) // Play it off like nobody modified the event
-                EventDispatcher.call(eventRotation)
+            EventDispatcher.call(eventRotation)
 
             if (eventRotation.dirty) {
                 fakeRotation = eventRotation.rotation

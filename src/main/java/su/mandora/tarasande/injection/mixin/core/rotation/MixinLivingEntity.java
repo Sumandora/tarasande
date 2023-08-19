@@ -104,7 +104,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     }
 
     @Inject(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;headYaw:F"))
-    public void setHeadRotation(EntityType entityType, World world, CallbackInfo ci) {
+    public void setHeadRotation(EntityType<?> entityType, World world, CallbackInfo ci) {
         tarasande_headYaw = getYaw();
         tarasande_headPitch = getPitch();
     }

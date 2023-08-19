@@ -29,7 +29,7 @@ class ModuleClickPearl : Module("Click pearl", "Auto switches to an ender pearl"
                         pearlSlot = -1
 
                 if (pearlSlot == null) {
-                    state = State.IDLE // FUCK
+                    state = State.IDLE
                     return@registerEvent
                 }
                 if (state == State.WAIT_FOR_BUTTON_RELEASE && !mc.options.useKey.pressed) {

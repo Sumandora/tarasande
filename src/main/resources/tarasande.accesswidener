@@ -69,7 +69,10 @@ accessible field net/minecraft/client/gui/widget/EntryListWidget itemHeight I
 accessible field net/minecraft/client/MinecraftClient telemetryManager Lnet/minecraft/client/util/telemetry/TelemetryManager;
 accessible field net/minecraft/client/MinecraftClient abuseReportContext Lnet/minecraft/client/report/AbuseReportContext;
 accessible field net/minecraft/client/MinecraftClient skinProvider Lnet/minecraft/client/texture/PlayerSkinProvider;
-accessible field net/minecraft/client/gui/screen/DirectConnectScreen addressField Lnet/minecraft/client/gui/widget/TextFieldWidget;
+accessible field net/minecraft/client/texture/PlayerSkinProvider skinCacheDir Ljava/io/File;
+accessible field net/minecraft/client/network/ClientPlayNetworkHandler playerListEntries Ljava/util/Map;
+accessible field net/minecraft/entity/TrackedPosition pos Lnet/minecraft/util/math/Vec3d;
+accessible field net/minecraft/client/gui/widget/TextFieldWidget VERTICAL_CURSOR_COLOR I
 
 accessible class net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized
 

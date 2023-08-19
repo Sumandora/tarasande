@@ -26,6 +26,8 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool when breaking 
     val useAxeToCounterBlocking = ValueBoolean(this, "Use axe to counter blocking", false, isEnabled = { mode.isSelected(1) })
     private val despiseAxes = ValueBoolean(this, "Despise axes", false, isEnabled = { mode.isSelected(1) })
 
+    private val moduleHealingBot by lazy { ManagerModule.get(ModuleHealingBot::class.java) }
+
     init {
         registerEvent(EventUpdate::class.java) { event ->
             if (event.state == EventUpdate.State.PRE) {
@@ -56,7 +58,7 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool when breaking 
             if (event.state == EventAttackEntity.State.PRE) {
                 if (!mode.isSelected(1))
                     return@registerEvent
-                if (ManagerModule.get(ModuleHealingBot::class.java).let { it.enabled.value && it.state != ModuleHealingBot.State.IDLE })
+                if (moduleHealingBot.let { it.enabled.value && it.state != ModuleHealingBot.State.IDLE })
                     return@registerEvent
 
                 var hotbar: Iterable<IndexedValue<ItemStack>> = ContainerUtil.getHotbarSlots().withIndex()

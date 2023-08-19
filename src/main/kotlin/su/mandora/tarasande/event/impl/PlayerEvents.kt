@@ -32,7 +32,7 @@ class EventMovement : Event {
     val entity: Entity
     var dirty = false
         private set
-    var velocity = Vec3d.ZERO
+    var velocity: Vec3d = Vec3d.ZERO
         set(value) {
             field = value
             dirty = true
@@ -63,7 +63,7 @@ class EventAttack : Event(false) {
 }
 
 class EventStep : Event {
-    var stepHeight = 0.0f
+    var stepHeight = 0F
         set(value) {
             if (state == State.POST)
                 error("stepHeight can't be modified during " + State.POST.name)

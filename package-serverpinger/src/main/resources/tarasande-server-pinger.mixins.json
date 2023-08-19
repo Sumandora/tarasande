@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "su.mandora.tarasande_server_pinger.injection.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixinPriority": 1,
+  "mixins": [
+    "MixinClickableWidget",
+    "MixinMultiplayerServerListWidgetSubServerEntry"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

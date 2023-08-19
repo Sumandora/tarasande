@@ -53,7 +53,6 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes slowdowns when using ite
                             EventUpdate.State.PRE_PACKET -> {
                                 mc.networkHandler?.sendPacket(PlayerActionC2SPacket(PlayerActionC2SPacket.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, Direction.DOWN))
                             }
-
                             EventUpdate.State.POST -> {
                                 val hand = PlayerUtil.getUsedHand()
                                 if (hand != null) {
@@ -62,7 +61,6 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes slowdowns when using ite
                                     interacting = false
                                 }
                             }
-
                             else -> {}
                         }
                     }

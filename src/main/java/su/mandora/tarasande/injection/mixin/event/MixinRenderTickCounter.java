@@ -27,7 +27,7 @@ public class MixinRenderTickCounter {
     public void hookEventTimer(long timeMillis, CallbackInfoReturnable<Integer> cir) {
         EventTickRate eventTickRate = new EventTickRate(tarasande_baseTPS);
         EventDispatcher.INSTANCE.call(eventTickRate);
-        tickTime = (long) (1000.0f / eventTickRate.getTickRate());
+        tickTime = (long) (1000F / eventTickRate.getTickRate());
     }
 
 }

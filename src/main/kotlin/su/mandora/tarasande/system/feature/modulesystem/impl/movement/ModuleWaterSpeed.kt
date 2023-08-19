@@ -12,6 +12,7 @@ class ModuleWaterSpeed : Module("Water speed", "Modifies movement speed inside f
 
     private val horizontalMultiplier = ValueNumber(this, "Horizontal multiplier", 0.0, 1.0, 3.0, 0.1)
     private val verticalMultiplier = ValueNumber(this, "Vertical multiplier", 0.0, 1.0, 3.0, 0.1)
+    val gravityMultiplier = ValueNumber(this, "Gravity multiplier", -1.0, 1.0, 2.0, 0.01)
     private val disablePushing = ValueBoolean(this, "Disable pushing", false)
 
     init {

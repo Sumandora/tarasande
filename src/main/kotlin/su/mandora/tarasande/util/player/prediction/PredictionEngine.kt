@@ -18,8 +18,8 @@ import su.mandora.tarasande.injection.accessor.prediction.IParticleManager
 import su.mandora.tarasande.injection.accessor.prediction.ISoundSystem
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.util.dummy.ClientPlayNetworkHandlerDummy
-import su.mandora.tarasande.util.extension.minecraft.copy
-import su.mandora.tarasande.util.extension.minecraft.minus
+import su.mandora.tarasande.util.extension.minecraft.math.copy
+import su.mandora.tarasande.util.extension.minecraft.math.minus
 
 object PredictionEngine {
 

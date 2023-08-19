@@ -11,7 +11,7 @@ import java.util.logging.Level
 class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen>(PackScreen::class.java) {
 
     init {
-        add("Dump server pack", { mc.serverResourcePackProvider?.serverContainer != null }) {
+        add(Button("Dump server pack", { mc.serverResourcePackProvider?.serverContainer != null }) {
             mc.serverResourcePackProvider?.serverContainer?.apply {
                 // The pack provider, will always make ZipResourcePacks
                 val base = (this.createResourcePack() as ZipResourcePack).backingZipFile
@@ -31,10 +31,10 @@ class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen
                     logger.log(Level.WARNING, "Wasn't able to copy $name to " + target.absolutePath)
                 }
             }
-        }
+        })
 
-        add("Unload server pack", { mc.serverResourcePackProvider?.serverContainer != null }) {
+        add(Button("Unload server pack", { mc.serverResourcePackProvider?.serverContainer != null }) {
             mc.serverResourcePackProvider.clear()
-        }
+        })
     }
 }

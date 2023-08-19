@@ -14,10 +14,10 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
 import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
-import su.mandora.tarasande.util.extension.minecraft.BlockPos
-import su.mandora.tarasande.util.extension.minecraft.boundingBox
-import su.mandora.tarasande.util.extension.minecraft.div
-import su.mandora.tarasande.util.extension.minecraft.plus
+import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
+import su.mandora.tarasande.util.extension.minecraft.math.boundingBox
+import su.mandora.tarasande.util.extension.minecraft.math.div
+import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.math.pathfinder.Node
 import su.mandora.tarasande.util.math.pathfinder.PathFinder
 import su.mandora.tarasande.util.player.PlayerUtil

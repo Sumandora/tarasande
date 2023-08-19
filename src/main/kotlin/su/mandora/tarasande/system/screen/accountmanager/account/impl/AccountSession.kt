@@ -31,7 +31,10 @@ class AccountSession : Account() {
 
     override fun logIn() {
         uuid = UUID.randomUUID().toString()
-        service = YggdrasilAuthenticationService(mc.networkProxy, "", environment).createMinecraftSessionService()
+        YggdrasilAuthenticationService(mc.networkProxy, "", environment).also {
+            yggdrasilAuthenticationService = it
+            minecraftSessionService = it.createMinecraftSessionService()
+        }
         session = Session(username, uuid, accessToken, Optional.ofNullable(xUid), Optional.ofNullable(clientUid), if (xUid.isNotEmpty() || clientUid.isNotEmpty()) Session.AccountType.MSA else Session.AccountType.MOJANG)
     }
 

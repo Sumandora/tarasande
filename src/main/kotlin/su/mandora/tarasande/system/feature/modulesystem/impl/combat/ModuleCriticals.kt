@@ -11,7 +11,8 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 class ModuleCriticals : Module("Criticals", "Forces critical hits", ModuleCategory.COMBAT) {
 
     private val mode = ValueMode(this, "Mode", false, "Packet", "Jump", "Off-ground", "Crack")
-    private val offset = ValueNumber(this, "Offset", 0.0, 0.1, 1.0, 0.01, isEnabled = { mode.isSelected(0) })
+    private val ascendOffset = ValueNumber(this, "Ascend offset", 0.0, 0.1, 1.0, 0.01, isEnabled = { mode.isSelected(0) })
+    private val descendOffset = ValueNumber(this, "Descend offset", 0.0, 0.1, 1.0, 0.01, isEnabled = { mode.isSelected(0) })
     private val motion = ValueNumber(this, "Motion", 0.0, 0.1, 1.0, 0.01, isEnabled = { mode.isSelected(1) })
     private val particles = ValueMode(this, "Particles", true, "Critical hit", "Enchanted hit", isEnabled = { mode.isSelected(3) })
 
@@ -22,10 +23,10 @@ class ModuleCriticals : Module("Criticals", "Forces critical hits", ModuleCatego
             when {
                 mode.isSelected(0) -> {
                     if (mc.player?.isOnGround!!) {
-                        mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(mc.player?.x!!, mc.player?.y!! + offset.value, mc.player?.z!!, false))
-                        mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(mc.player?.x!!, mc.player?.y!! + offset.value / 2, mc.player?.z!!, false))
+                        mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(mc.player?.x!!, mc.player?.y!! + ascendOffset.value, mc.player?.z!!, false))
+                        mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(mc.player?.x!!, mc.player?.y!! + ascendOffset.value - descendOffset.value, mc.player?.z!!, false))
                     } else {
-                        mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(mc.player?.x!!, mc.player?.y!! - offset.value, mc.player?.z!!, false))
+                        mc.networkHandler?.sendPacket(PlayerMoveC2SPacket.PositionAndOnGround(mc.player?.x!!, mc.player?.y!! - descendOffset.value, mc.player?.z!!, false))
                     }
                 }
 

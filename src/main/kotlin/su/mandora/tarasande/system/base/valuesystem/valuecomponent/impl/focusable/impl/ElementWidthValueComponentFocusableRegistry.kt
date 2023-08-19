@@ -10,7 +10,7 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.Value
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueRegistry
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.impl.focusable.ElementWidthValueComponentFocusable
-import su.mandora.tarasande.util.extension.minecraft.fill
+import su.mandora.tarasande.util.extension.minecraft.render.fill
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholder

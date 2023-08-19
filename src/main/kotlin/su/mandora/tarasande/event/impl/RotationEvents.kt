@@ -9,7 +9,7 @@ class EventPollEvents : Event(false)
 class EventRotation : Event {
     var dirty = false
         private set
-    var rotation = Rotation(0.0f, 0.0f)
+    var rotation = Rotation(0F, 0F)
         set(value) {
             field = value
             dirty = true

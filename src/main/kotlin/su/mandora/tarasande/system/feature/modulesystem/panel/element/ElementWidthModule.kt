@@ -10,7 +10,7 @@ import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.system.base.valuesystem.ManagerValue
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import su.mandora.tarasande.system.feature.modulesystem.Module
-import su.mandora.tarasande.util.extension.minecraft.fill
+import su.mandora.tarasande.util.extension.minecraft.render.fill
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.RenderUtil.isHovered
 import su.mandora.tarasande.util.render.font.FontWrapper
@@ -68,8 +68,8 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
             context.matrices.push()
             GL11.glEnable(GL11.GL_LINE_SMOOTH)
             GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST)
-            val lineWidth = RenderSystem.getShaderLineWidth()
-            RenderSystem.lineWidth(2F)
+            val lineWidth = GL11.glGetFloat(GL11.GL_LINE_WIDTH)
+            GL11.glLineWidth(2F)
             val matrix = context.matrices.peek()?.positionMatrix!!
             val bufferBuilder = Tessellator.getInstance().buffer
             RenderSystem.enableBlend()
@@ -87,7 +87,7 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
             BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
 
             RenderSystem.disableBlend()
-            RenderSystem.lineWidth(lineWidth)
+            GL11.glLineWidth(lineWidth)
             GL11.glDisable(GL11.GL_LINE_SMOOTH)
             context.matrices.pop()
         }

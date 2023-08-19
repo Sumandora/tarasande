@@ -10,8 +10,8 @@ import su.mandora.tarasande.util.player.chat.CustomChat
 class CommandToggle : Command("toggle") {
 
     @Suppress("NAME_SHADOWING")
-    override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
-        return builder.then(this.argument("module", StringArgumentType.greedyString())?.suggests { _, builder ->
+    override fun builder(builder: LiteralArgumentBuilder<CommandSource>) {
+        builder.then(this.argument("module", StringArgumentType.greedyString())?.suggests { _, builder ->
             ManagerModule.list.forEach {
                 if (it.name.startsWith(builder.remaining)) {
                     builder.suggest(it.name)

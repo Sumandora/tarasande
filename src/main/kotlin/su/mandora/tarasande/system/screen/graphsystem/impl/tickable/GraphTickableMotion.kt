@@ -3,7 +3,7 @@ package su.mandora.tarasande.system.screen.graphsystem.impl.tickable
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.graphsystem.GraphTickable
-import su.mandora.tarasande.util.extension.minecraft.minus
+import su.mandora.tarasande.util.extension.minecraft.math.minus
 
 
 class GraphTickableMotion : GraphTickable("Player", "Motion", 200, false) {

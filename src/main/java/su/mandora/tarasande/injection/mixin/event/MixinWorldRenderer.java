@@ -18,14 +18,14 @@ import su.mandora.tarasande.event.impl.EventRender3D;
 public class MixinWorldRenderer {
 
     @Inject(method = "render", at = @At("HEAD"))
-    public void hookPreEventRender3D(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        EventDispatcher.INSTANCE.call(new EventRender3D(matrices, positionMatrix, EventRender3D.State.PRE));
+    public void hookPreEventRender3D(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f projectionMatrix, CallbackInfo ci) {
+        EventDispatcher.INSTANCE.call(new EventRender3D(matrices, projectionMatrix, EventRender3D.State.PRE));
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void hookPostEventRender3D(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        EventDispatcher.INSTANCE.call(new EventRender3D(matrices, positionMatrix, EventRender3D.State.POST));
+    public void hookPostEventRender3D(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f projectionMatrix, CallbackInfo ci) {
+        EventDispatcher.INSTANCE.call(new EventRender3D(matrices, projectionMatrix, EventRender3D.State.POST));
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
     }
 }

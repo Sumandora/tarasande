@@ -10,7 +10,6 @@ import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
-import su.mandora.tarasande_protocol_spoofer.TarasandeProtocolSpoofer
 
 val quiltHandshake = Identifier("registry_sync/handshake")
 
@@ -20,10 +19,8 @@ object ProtocolSpooferValues {
         ValueButtonOwnerValues(this, "Client brand spoofer", ClientBrandSpoofer)
         ValueButtonOwnerValues(this, "Plugin message filter", PluginMessageFilter)
         ValueButtonOwnerValues(this, "Resource pack spoofer", ResourcePackSpoofer)
-        if (TarasandeProtocolSpoofer.viaFabricPlusLoaded) {
-            ValueButtonOwnerValues(this, "Forge protocol spoofer", ForgeProtocolSpoofer)
-            ValueButtonOwnerValues(this, "Tesla client spoofer", TeslaClientSpoofer)
-        }
+        ValueButtonOwnerValues(this, "Forge protocol spoofer", ForgeProtocolSpoofer)
+        ValueButtonOwnerValues(this, "Tesla client spoofer", TeslaClientSpoofer)
     }
 
     private val spoofQuiltProtocol = ValueBoolean(this, "Spoof Quilt protocol", false)

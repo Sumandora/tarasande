@@ -7,7 +7,7 @@ import su.mandora.tarasande.feature.rotation.Rotations
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
-import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit
+import su.mandora.tarasande.system.feature.modulesystem.impl.misc.ModuleNoPitchLimit
 import su.mandora.tarasande.util.render.RenderUtil
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.*
@@ -38,11 +38,12 @@ class Rotation {
                 sensitivityPow3Mult8
         }
 
+        private val moduleNoPitchLimit by lazy { ManagerModule.get(ModuleNoPitchLimit::class.java) }
         fun calculateNewRotation(prevRotation: Rotation, cursorDeltas: Pair<Double, Double>): Rotation {
             val gcd = getGcd()
             val rotationChange = Rotation((cursorDeltas.first * gcd).toFloat() * 0.15F, (cursorDeltas.second * gcd).toFloat() * 0.15F)
             var newRotation = prevRotation + rotationChange
-            if (!ManagerModule.get(ModuleNoPitchLimit::class.java).enabled.value)
+            if (!moduleNoPitchLimit.enabled.value)
                 newRotation = newRotation.withPitch(newRotation.pitch.coerceIn(-90F, 90F))
             return newRotation
         }

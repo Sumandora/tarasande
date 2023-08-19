@@ -39,7 +39,7 @@ object ManagerValue : Manager<Value>() {
 }
 
 @Suppress("LeakingThis")
-abstract class Value(var owner: Any, val name: String, val visible: Boolean, val isEnabled: () -> Boolean, var valueComponent: Class<out ElementWidthValueComponent<*>>, manage: Boolean = true) {
+abstract class Value(var owner: Any, val name: String, val visible: Boolean, val isEnabled: () -> Boolean, private val valueComponent: Class<out ElementWidthValueComponent<*>>, manage: Boolean = true) {
 
     init {
         if (manage)

@@ -13,6 +13,10 @@ loom {
     accessWidenerPath = file("src/main/resources/tarasande.accesswidener")
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -68,12 +72,11 @@ tasks.register('installPackages') {
     group archivesBaseName
     dependsOn "build"
     doLast {
-        File base = file(".")
-        base.listFiles().each {
-            if (it.name.startsWith("package") && it.isDirectory()) {
-                String packageName = it.name + "-" + project(it.name).version + ".jar"
-                File build = new File(it, "build" + File.separator + "libs" + File.separator + packageName)
-                File modDest = new File(base, "run" + File.separator + "mods" + File.separator + packageName)
+        subprojects.findAll {it.name.startsWith("package")}.each {
+            p ->
+                String packageName = p.name + "-" + p.version + ".jar"
+                File build = new File(p.buildDir, "libs" + File.separator + packageName)
+                File modDest = file("run" + File.separator + "mods" + File.separator + packageName)
                 if (build.exists()) {
                     if (modDest.delete())
                         println "Deleted old $packageName"
@@ -82,7 +85,6 @@ tasks.register('installPackages') {
                     if (build.renameTo(modDest))
                         println "Copied $packageName"
                 }
-            }
         }
     }
 }

@@ -16,6 +16,7 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.kotlinruntime.nullOr
 import su.mandora.tarasande.util.extension.minecraft.safeCount
 import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.player.container.Cleaner
 import su.mandora.tarasande.util.player.container.ContainerUtil
 import su.mandora.tarasande.util.string.StringUtil
 import java.util.concurrent.ThreadLocalRandom
@@ -34,8 +35,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
     private val failChance = ValueNumber(this, "Fail chance", 0.0, 0.0, 100.0, 1.0)
 
     private val intelligent = ValueBoolean(this, "Intelligent", true)
-    private val keepSameMaterial = ValueBoolean(this, "Keep same material", true, isEnabled = { intelligent.value })
-    private val keepSameEnchantments = ValueBoolean(this, "Keep same enchantments", true, isEnabled = { intelligent.value })
+    private val cleaner = Cleaner(this, isEnabled = { intelligent.value})
 
     private val timeUtil = TimeUtil()
 
@@ -51,9 +51,9 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
         val list = ArrayList(list)
 
         list.remove(slot)
-        list.removeIf { ItemStack.canCombine(slot.stack, it.stack) /* nice name retard (in mcp this is called areItemStackTagsEqual)*/ }
+        list.removeIf { ItemStack.canCombine(slot.stack, it.stack) }
 
-        return ContainerUtil.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.distinctBy { it.stack.item }.filter { it != slot }.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).filter { it.hasStack() }.toTypedArray()).map { it.stack }, keepSameMaterial.value, keepSameEnchantments.value)
+        return cleaner.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.distinctBy { it.stack.item }.filter { it != slot }.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).filter { it.hasStack() }.toTypedArray()).map { it.stack })
     }
 
     /**

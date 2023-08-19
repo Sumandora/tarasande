@@ -19,7 +19,7 @@ class ModuleTimer : Module("Timer", "Changes the clientside tick-rate", ModuleCa
 
 
     init {
-        registerEvent(EventTickRate::class.java) { event ->
+        registerEvent(EventTickRate::class.java, 1) { event ->
             event.tickRate = when {
                 mode.isSelected(0) -> ticksPerSecond.value.toFloat()
                 mode.isSelected(1) -> max(ticksPerSecond.value + ThreadLocalRandom.current().nextInt(-variation.value.toInt() / 2, variation.value.toInt() / 2), 1.0).toFloat()

@@ -1,30 +1,34 @@
 package su.mandora.tarasande.system.screen.screenextensionsystem
 
-import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import su.mandora.tarasande.Manager
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventChildren
+import su.mandora.tarasande.injection.accessor.IScreen
 import su.mandora.tarasande.system.screen.panelsystem.impl.button.PanelButton
 import su.mandora.tarasande.system.screen.screenextensionsystem.impl.*
-import su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer.ScreenExtensionButtonListMultiplayerScreen
+import su.mandora.tarasande.util.BUTTON_PADDING
+import su.mandora.tarasande.util.DEFAULT_BUTTON_WIDTH
 
 object ManagerScreenExtension : Manager<ScreenExtension<*>>() {
 
     init {
         add(
-            ScreenExtensionButtonListMultiplayerScreen(),
             ScreenExtensionButtonListTitleScreen(),
-            ScreenExtensionDownloadingTerrainScreen(),
+            ScreenExtensionButtonListDownloadingTerrainScreen(),
             ScreenExtensionButtonListDeathScreen(),
             ScreenExtensionButtonListPackScreen(),
             ScreenExtensionButtonListHandledScreen(),
             ScreenExtensionButtonListSleepingChatScreen()
         )
 
-        EventDispatcher.add(EventChildren::class.java) { eventChildren ->
-            list.filter { it.screen.isAssignableFrom(eventChildren.screen.javaClass) }.forEach {
-                eventChildren.elements.addAll(it.invoker(eventChildren.screen))
+        EventDispatcher.add(EventChildren::class.java) { event ->
+            list.filter { it.screen.isAssignableFrom(event.screen.javaClass) }.forEach {
+                fun <T : Screen> ScreenExtension<T>.createElements(screen: Screen) {
+                    @Suppress("UNCHECKED_CAST")
+                    createElements(screen as T)
+                }
+                it.createElements(event.screen)
             }
         }
     }
@@ -32,34 +36,41 @@ object ManagerScreenExtension : Manager<ScreenExtension<*>>() {
 
 abstract class ScreenExtension<T : Screen>(val screen: Class<out T>) {
 
-    @Suppress("UNCHECKED_CAST") // trashy bypass
-    fun invoker(screen: Screen) = createElements(screen as T)
-    abstract fun createElements(screen: T): MutableList<Element>
+    abstract fun createElements(screen: T)
 }
 
 open class ScreenExtensionButtonList<T : Screen>(screen: Class<out T>) : ScreenExtension<T>(screen) {
-    private val buttons = LinkedHashMap<String, Triple<() -> Boolean, Direction, (button: Int) -> Unit>>()
+    class Button(
+        val text: String,
+        val visible: () -> Boolean = { true },
+        val position: Position = Position.LEFT,
+        val pressAction: (button: Int) -> Unit)
 
-    fun add(text: String, visible: () -> Boolean = { true }, direction: Direction = Direction.LEFT, pressAction: (button: Int) -> Unit) {
-        buttons[text] = Triple(visible, direction, pressAction)
+    private val buttons = ArrayList<Button>()
+
+    fun add(button: Button) {
+        buttons.add(button)
     }
 
-    override fun createElements(screen: T): MutableList<Element> {
-        val list = ArrayList<Element>()
-        for (value in Direction.entries) {
-            var y = 3
-            for (button in buttons.filter { it.value.second == value }) {
-                if (!button.value.first()) continue
+    override fun createElements(screen: T) {
+        for (position in Position.entries) {
+            var y = BUTTON_PADDING
+            for (button in buttons.filter { it.position == position }) {
+                if (!button.visible()) continue
 
-                list.add(PanelButton.createButton(if (value == Direction.LEFT) 3 else screen.width - 98 - 3, y, 98, 25, button.key, button.value.third))
-                y += 25 + 3
+                val panelButton = PanelButton.createButtonWidget(when (position) {
+                    Position.LEFT -> BUTTON_PADDING
+                    Position.MIDDLE -> screen.width / 2 - DEFAULT_BUTTON_WIDTH / 2
+                    Position.RIGHT -> screen.width - BUTTON_PADDING - DEFAULT_BUTTON_WIDTH
+                }, y, DEFAULT_BUTTON_WIDTH, 25, button.text, button.pressAction).also {
+                    (screen as IScreen).tarasande_addDrawableChild(it)
+                }
+                y += panelButton.height + BUTTON_PADDING
             }
         }
-
-        return list
     }
 
-    enum class Direction {
-        LEFT, RIGHT
+    enum class Position {
+        LEFT, MIDDLE, RIGHT
     }
 }

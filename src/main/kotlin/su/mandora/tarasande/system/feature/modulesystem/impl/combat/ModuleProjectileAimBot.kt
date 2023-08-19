@@ -19,7 +19,8 @@ import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleFastUse
-import su.mandora.tarasande.util.extension.minecraft.minus
+import su.mandora.tarasande.util.PROJECTILE_GRAVITY
+import su.mandora.tarasande.util.extension.minecraft.math.minus
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -36,20 +37,20 @@ class ModuleProjectileAimBot : Module("Projectile aim bot", "Automatically aims 
     private val throughWalls = ValueBoolean(this, "Through walls", false)
     private val predictionColor = ValueColor(this, "Prediction color", 0.0, 1.0, 1.0, 1.0)
 
-    private val gravity = 0.006
-
     private var predictedBox: Box? = null
 
+    private val moduleFastUse by lazy { ManagerModule.get(ModuleFastUse::class.java) }
+
     private fun calcVelocity(stack: ItemStack): Double {
-        return BowItem.getPullProgress(if (mc.player?.isUsingItem!! && !ManagerModule.get(ModuleFastUse::class.java).enabled.value) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
+        return BowItem.getPullProgress(if (mc.player?.isUsingItem!! && !moduleFastUse.enabled.value) mc.player?.itemUseTime!! else stack.maxUseTime).toDouble()
     }
 
     // https://en.wikipedia.org/wiki/Projectile_motion#Angle_%CE%B8_required_to_hit_coordinate_(x,_y)
     private fun calcPitch(stack: ItemStack, dist: Double, deltaY: Double): Double {
         val velocity = calcVelocity(stack)
-        val root = sqrt(velocity * velocity * velocity * velocity - gravity * (gravity * dist * dist + 2 * deltaY * velocity * velocity))
+        val root = sqrt(velocity * velocity * velocity * velocity - PROJECTILE_GRAVITY * (PROJECTILE_GRAVITY * dist * dist + 2 * deltaY * velocity * velocity))
         // Use the negated one first, because it's usually better
-        return -Math.toDegrees(atan2(velocity * velocity /*+/-*/ - root, gravity * dist))
+        return -Math.toDegrees(atan2(velocity * velocity /*+/-*/ - root, PROJECTILE_GRAVITY * dist))
     }
 
     private fun deadReckoning(stack: ItemStack, entity: Entity, rotation: Rotation): Box {

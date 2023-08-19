@@ -45,6 +45,6 @@ public abstract class MixinMinecraftClient {
 
     @Inject(method = "render", at = @At("TAIL"))
     public void calculateDeltaTime(boolean tick, CallbackInfo ci) {
-        RenderUtil.INSTANCE.setDeltaTime((System.nanoTime() - this.tarasande_startTime) / 1000000.0);
+        RenderUtil.INSTANCE.setDeltaTime((System.nanoTime() - this.tarasande_startTime) / 1000000.0 /*nanos to millis*/);
     }
 }

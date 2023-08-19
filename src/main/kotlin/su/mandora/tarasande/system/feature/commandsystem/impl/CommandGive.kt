@@ -24,8 +24,8 @@ class CommandGive : Command("give") {
         return SUCCESS
     }
 
-    override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
-        return builder.then(argument("item", ItemStackArgumentType.itemStack(registryAccess))?.executes {
+    override fun builder(builder: LiteralArgumentBuilder<CommandSource>) {
+        builder.then(argument("item", ItemStackArgumentType.itemStack(registryAccess))?.executes {
             return@executes executeGive(ItemStackArgumentType.getItemStackArgument(it, "item"))
         }?.then(argument("count", IntegerArgumentType.integer())?.executes {
             return@executes executeGive(ItemStackArgumentType.getItemStackArgument(it, "item"), IntegerArgumentType.getInteger(it, "count"))

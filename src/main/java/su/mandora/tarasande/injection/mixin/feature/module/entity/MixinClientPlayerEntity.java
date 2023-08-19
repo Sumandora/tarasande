@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
-import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModulePortalScreen;
+import su.mandora.tarasande.system.feature.modulesystem.impl.misc.ModulePortalScreen;
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleFlight;
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleNoSlowdown;
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;

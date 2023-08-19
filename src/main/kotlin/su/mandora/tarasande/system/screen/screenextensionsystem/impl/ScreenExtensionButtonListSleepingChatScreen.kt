@@ -7,9 +7,9 @@ import su.mandora.tarasande.system.screen.screenextensionsystem.ScreenExtensionB
 class ScreenExtensionButtonListSleepingChatScreen : ScreenExtensionButtonList<SleepingChatScreen>(SleepingChatScreen::class.java) {
 
     init {
-        add("Client wakeup") {
+        add(Button("Client wakeup") {
             mc.player?.wakeUp()
             mc.setScreen(null)
-        }
+        })
     }
 }

@@ -38,7 +38,7 @@ class ModuleAimAssist : Module("Aim assist", "Helps you aim at enemies", ModuleC
             val smoothedRot = selfRotation.smoothedTurn(rotation, aimSpeed).correctSensitivity() // correct wrap
 
             val deltaRotation = smoothedRot.closestDelta(selfRotation)
-            val cursorDeltas = Rotation.approximateCursorDeltas(deltaRotation).prefer { PlayerUtil.getTargetedEntity(DEFAULT_REACH /* TODO*/, Rotation.calculateNewRotation(selfRotation, it), false)?.isEntityHitResult() == true }
+            val cursorDeltas = Rotation.approximateCursorDeltas(deltaRotation).prefer { PlayerUtil.getTargetedEntity(DEFAULT_REACH, Rotation.calculateNewRotation(selfRotation, it), false)?.isEntityHitResult() == true }
 
             event.deltaX += cursorDeltas.first.coerceIn(-maxInfluence.value..maxInfluence.value)
             event.deltaY += cursorDeltas.second.coerceIn(-maxInfluence.value..maxInfluence.value)

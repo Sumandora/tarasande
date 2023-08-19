@@ -2,7 +2,7 @@ package su.mandora.tarasande.util.render.font
 
 import net.minecraft.client.gui.DrawContext
 import su.mandora.tarasande.mc
-import su.mandora.tarasande.util.extension.minecraft.drawText
+import su.mandora.tarasande.util.extension.minecraft.render.drawText
 import su.mandora.tarasande.util.string.StringUtil
 import java.awt.Color
 

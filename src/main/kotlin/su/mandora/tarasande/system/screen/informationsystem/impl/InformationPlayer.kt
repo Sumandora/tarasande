@@ -113,6 +113,9 @@ class InformationFakeRotation : Information("Player", "Fake Rotation") {
 }
 
 class InformationReach : Information("Player", "Reach") {
+
+    private val decimalPlaces = ValueNumber(this, "Decimal places", 0.0, 1.0, 5.0, 1.0)
+
     private var reach: Double? = null
 
     init {
@@ -131,6 +134,8 @@ class InformationReach : Information("Player", "Reach") {
     }
 
     override fun getMessage(): String? {
-        return reach?.toString()
+        if(reach == null)
+            return null
+        return StringUtil.round(reach!!, decimalPlaces.value.toInt())
     }
 }

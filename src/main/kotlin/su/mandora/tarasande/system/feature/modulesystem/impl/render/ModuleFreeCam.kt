@@ -15,9 +15,9 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
+import su.mandora.tarasande.util.extension.minecraft.math.plus
+import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.extension.minecraft.packet.evaluateNewRotation
-import su.mandora.tarasande.util.extension.minecraft.plus
-import su.mandora.tarasande.util.extension.minecraft.times
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -163,7 +163,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
 
         registerEvent(EventUpdateTargetedEntity::class.java, 1) { event ->
             if (event.state == EventUpdateTargetedEntity.State.POST)
-                if (position != null && rotation != null)
+                if (!(mc.gameRenderer as IGameRenderer).tarasande_isSelfInflicted() && position != null && rotation != null)
                     if (blockInteraction.value) {
                         mc.targetedEntity = null
                         mc.crosshairTarget = PlayerUtil.rayCast(position!!, position!! + rotation?.forwardVector()!! * (mc.gameRenderer as IGameRenderer).tarasande_getReach())

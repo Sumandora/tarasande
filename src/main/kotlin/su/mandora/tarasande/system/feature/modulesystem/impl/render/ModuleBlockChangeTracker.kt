@@ -10,7 +10,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
-import su.mandora.tarasande.util.extension.minecraft.boundingBox
+import su.mandora.tarasande.util.extension.minecraft.math.boundingBox
 import su.mandora.tarasande.util.render.RenderUtil
 import java.util.concurrent.CopyOnWriteArrayList
 

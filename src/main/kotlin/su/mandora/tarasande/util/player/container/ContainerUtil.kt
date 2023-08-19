@@ -5,7 +5,10 @@ import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.*
+import net.minecraft.item.ArmorItem
+import net.minecraft.item.ItemStack
+import net.minecraft.item.SwordItem
+import net.minecraft.item.ToolItem
 import net.minecraft.screen.PlayerScreenHandler
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
@@ -37,60 +40,6 @@ object ContainerUtil {
         return list
             .filter { block(it, list) }
             .minByOrNull { lastMouseClick.distanceSquared(getDisplayPosition(original, it)) }
-    }
-
-    private fun wrapMaterialScore(stack: ItemStack, durability: Boolean): Float {
-        return when (stack.item) {
-            is SwordItem -> (stack.item as SwordItem).material.attackDamage
-            is ToolItem -> (stack.item as ToolItem).material.durability.toFloat()
-            is ArmorItem -> (stack.item as ArmorItem).protection.toFloat()
-            else -> 0F
-        }.times(if (durability) (1F - stack.damage / stack.maxDamage.toFloat()) else 1F)
-    }
-
-    private fun isSameItemType(stack: ItemStack, otherStack: ItemStack): Boolean {
-        return when {
-            stack.item is SwordItem && otherStack.item is SwordItem -> true
-
-            // There is no way to group them better
-            stack.item is AxeItem && otherStack.item is AxeItem -> true
-            stack.item is PickaxeItem && otherStack.item is PickaxeItem -> true
-            stack.item is HoeItem && otherStack.item is HoeItem -> true
-            stack.item is ShovelItem && otherStack.item is ShovelItem -> true
-
-            stack.item is ArmorItem && otherStack.item is ArmorItem -> (stack.item as ArmorItem).slotType == (otherStack.item as ArmorItem).slotType
-
-            else -> stack.item == otherStack.item
-        }
-    }
-
-    fun hasBetterEquivalent(stack: ItemStack, list: List<ItemStack>, keepSameMaterial: Boolean, keepSameEnchantments: Boolean): Boolean {
-        if (stack.item.enchantability == 0) // actually a pretty smart check even tho it's not perfect
-            return false
-
-        val materialScore = wrapMaterialScore(stack, false)
-
-        val enchantments = EnchantmentHelper.get(stack)
-
-        for (otherStack in list) {
-            if (isSameItemType(stack, otherStack)) {
-                if (stack.isOf(Items.TURTLE_HELMET) != otherStack.isOf(Items.TURTLE_HELMET))
-                    continue // Turtle helmets grant water breathing, this is something unique to the turtle helmet, this behaviour is hardcoded into the game, im going to commit arson
-
-                val otherEnchantments = EnchantmentHelper.get(otherStack)
-
-                val otherMaterialScore = wrapMaterialScore(otherStack, false)
-
-                if ((if (keepSameMaterial) otherMaterialScore > materialScore else otherMaterialScore >= materialScore) && ((enchantments.isEmpty() && otherEnchantments.isNotEmpty()) || enchantments.all { otherEnchantments.containsKey(it.key) && (if (keepSameEnchantments) otherEnchantments[it.key]!! > it.value else otherEnchantments[it.key]!! >= it.value) })) {
-//                    if (otherStack.damage > stack.damage * durability)
-//                        continue
-
-                    return true
-                }
-            }
-        }
-
-        return false
     }
 
     fun wrapMaterialDamage(stack: ItemStack): Float {

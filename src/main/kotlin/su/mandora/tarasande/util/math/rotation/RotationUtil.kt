@@ -2,7 +2,7 @@ package su.mandora.tarasande.util.math.rotation
 
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
-import su.mandora.tarasande.util.extension.minecraft.minus
+import su.mandora.tarasande.util.extension.minecraft.math.minus
 import kotlin.math.atan2
 
 object RotationUtil {

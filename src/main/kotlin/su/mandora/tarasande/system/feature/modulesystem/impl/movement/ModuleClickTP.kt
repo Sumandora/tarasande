@@ -4,9 +4,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.minecraft.command.CommandSource
 import net.minecraft.command.argument.BlockPosArgumentType
 import net.minecraft.command.argument.PosArgument
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.PositionAndOnGround
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.impl.EventRender3D
@@ -15,16 +15,14 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.feature.commandsystem.Command
 import su.mandora.tarasande.system.feature.commandsystem.ManagerCommand
-import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
-import su.mandora.tarasande.util.MAX_PLAYER_MOVE
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
-import su.mandora.tarasande.util.extension.minecraft.BlockPos
-import su.mandora.tarasande.util.extension.minecraft.Box
-import su.mandora.tarasande.util.math.pathfinder.PathFinder
+import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
+import su.mandora.tarasande.util.math.pathfinder.Teleporter
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
+import su.mandora.tarasande.util.player.chat.CustomChat
 import su.mandora.tarasande.util.render.RenderUtil
 import java.awt.Color
 
@@ -32,24 +30,33 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
 
     private val teleportKey = ValueBind(this, "Teleport key", ValueBind.Type.MOUSE, GLFW.GLFW_MOUSE_BUTTON_2)
 
-    private fun isPassable(pos: BlockPos): Boolean {
-        return mc.world?.getBlockState(pos)?.getCollisionShape(mc.world, pos).let { it == null || it.isEmpty }
-    }
-
-    private val pathFinder = PathFinder({ _, node -> isPassable(BlockPos(node.x, node.y, node.z)) && isPassable(BlockPos(node.x, node.y + 1, node.z)) })
+    private val teleporter = Teleporter(this)
 
     private var path: List<Vec3d>? = null
     private var goal: BlockPos? = null
 
     init {
-        ManagerCommand.add(object : Command("teleport", "tp") {
-            override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
-                return builder.then(argument("position", BlockPosArgumentType.blockPos())?.executes {
-                    ManagerModule.get(ModuleClickTP::class.java).teleportToPosition(it.getArgument("position", PosArgument::class.java).toAbsoluteBlockPos(createServerCommandSource()))
-                    return@executes SUCCESS
-                })
-            }
-        })
+        ManagerCommand.apply {
+            add(object : Command("teleport", "tp") {
+                override fun builder(builder: LiteralArgumentBuilder<CommandSource>) {
+                    builder.then(argument("position", BlockPosArgumentType.blockPos())!!.executes {
+                        if(teleporter.teleportToPosition(it.getArgument("position", PosArgument::class.java).toAbsoluteBlockPos(createServerCommandSource()), methodOverride = Teleporter.Method.PATH) == null) {
+                            CustomChat.printChatMessage("Could not find a path to that position")
+                            return@executes ERROR
+                        }
+                        return@executes SUCCESS
+                    })
+                }
+            })
+            add(object : Command("clip") {
+                override fun builder(builder: LiteralArgumentBuilder<CommandSource>) {
+                    builder.then(argument("position", BlockPosArgumentType.blockPos())?.executes {
+                        teleporter.teleportToPosition(it.getArgument("position", PosArgument::class.java).toAbsoluteBlockPos(createServerCommandSource()), methodOverride = Teleporter.Method.CLIP)
+                        return@executes SUCCESS
+                    })
+                }
+            })
+        }
     }
 
     override fun onDisable() {
@@ -71,7 +78,7 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
                         if (blockPos == null)
                             return@registerEvent
 
-                        path = teleportToPosition(blockPos)
+                        path = teleporter.teleportToPosition(blockPos)
                         goal = blockPos
                     }
                 }
@@ -82,53 +89,9 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
             if(event.state != EventRender3D.State.POST) return@registerEvent
 
             if (goal != null) {
-                val goal = goal!!
-                RenderUtil.blockOutline(event.matrices, Box().offset(goal.x.toDouble(), goal.y.toDouble(), goal.z.toDouble()), Color.white.withAlpha(50).rgb)
+                RenderUtil.blockOutline(event.matrices, Box(goal!!), Color.white.withAlpha(50).rgb)
             }
             RenderUtil.renderPath(event.matrices, path ?: return@registerEvent, -1)
-        }
-    }
-
-    fun teleportToPosition(blockPos: BlockPos, timeout: Long = 1000L): List<Vec3d>? {
-        @Suppress("NAME_SHADOWING")
-        var blockPos = blockPos
-
-        while (!isPassable(blockPos))
-            blockPos = blockPos.add(0, 1, 0)
-
-        val path = pathFinder.findPath(mc.player?.pos!!, Vec3d.of(blockPos), timeout) ?: return null
-
-        optimizePath(path)
-
-        for (vec in path) {
-            mc.networkHandler?.sendPacket(PositionAndOnGround(vec.x, vec.y, vec.z, false))
-            mc.player?.setPosition(vec)
-        }
-        PlayerUtil.updateLastPosition()
-        return path
-    }
-
-    private fun optimizePath(path: ArrayList<Vec3d>) {
-        val iterator = path.iterator()
-
-        if (iterator.hasNext()) {
-            iterator.next()
-            iterator.remove() // Remove the first position, because that is what we are standing on.
-        }
-
-        var previous: Vec3d? = null
-        while (iterator.hasNext()) {
-            val current = iterator.next()
-            if (!iterator.hasNext())
-                return // Leave the last position standing no matter what, we want to get there and not just a position which is really close to it
-
-            if (previous != null) {
-                if (PlayerUtil.canVectorBeSeen(previous, current) && previous.squaredDistanceTo(current) < MAX_PLAYER_MOVE) {
-                    iterator.remove()
-                    continue
-                }
-            }
-            previous = current
         }
     }
 

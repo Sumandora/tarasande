@@ -6,8 +6,8 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
-import su.mandora.tarasande.util.extension.minecraft.plus
-import su.mandora.tarasande.util.extension.minecraft.times
+import su.mandora.tarasande.util.extension.minecraft.math.plus
+import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -37,19 +37,23 @@ class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of othe
             if (event.state != EventJump.State.PRE) return@registerEvent
             event.yaw = Rotations.fakeRotation?.yaw ?: return@registerEvent
         }
+
         registerEvent(EventVelocityYaw::class.java, 1) { event ->
             event.yaw = Rotations.fakeRotation?.yaw ?: return@registerEvent
         }
 
         registerEvent(EventInput::class.java) { event ->
             if (event.input == mc.player?.input)
-                if (move)
+                if (move) {
                     event.movementForward = 1F
+                    event.movementSideways = 0F
+                }
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
             if (event.keyBinding == mc.options.jumpKey)
-                event.pressed = mc.player?.horizontalCollision!!
+                if (move)
+                    event.pressed = mc.player?.horizontalCollision!!
         }
     }
 

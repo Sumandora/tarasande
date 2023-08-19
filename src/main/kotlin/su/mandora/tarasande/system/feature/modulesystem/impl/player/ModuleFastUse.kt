@@ -14,7 +14,9 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
+import su.mandora.tarasande.util.TRIDENT_USE_TIME
 import su.mandora.tarasande.util.player.PlayerUtil
+import kotlin.math.min
 
 class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.PLAYER) {
 
@@ -41,16 +43,17 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
                         var tick = 0
                         var lastProgress = 0F // something lower than 0
                         while (true) {
-                            tick++
-                            val progress = BowItem.getPullProgress(tick)
-                            if (lastProgress == progress) // We cant charge up anymore than this
+                            val progress = BowItem.getPullProgress(tick + 1)
+                            if (lastProgress != progress)
+                                tick++
+                            else
                                 break
                             lastProgress = progress
                         }
                         tick
                     }
 
-                    UseAction.SPEAR -> 10 // TridentItem#onStoppedUsing hard coded value, mojang is shit
+                    UseAction.SPEAR -> TRIDENT_USE_TIME
                     else -> {
                         var longest = 0
                         Registries.ITEM.forEach {
@@ -69,7 +72,7 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
         }
     }
 
-    private val preventIllegalPacket = ValueBoolean(this, "Prevent illegal packet", true)
+    private val preventIllegalPackets = ValueBoolean(this, "Prevent illegal packet", true)
 
     init {
         registerEvent(EventUpdate::class.java) { event ->
@@ -79,18 +82,19 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
                     if (useActions.contains(usedStack.useAction) && actions.isSelected(nameMap[usedStack.useAction!!]!!)) {
                         val useTime = mc.player?.itemUseTime!!
                         if (useTime > values[usedStack.useAction]?.value!!) {
-                            if (preventIllegalPacket.value) { // This will lead to more flags, but prevents simple protocol checks
+                            val remainingTime = min(usedStack.maxUseTime, values[usedStack.useAction]!!.max.toInt()) - useTime
+                            if (preventIllegalPackets.value) { // This will lead to more flags, but prevents simple protocol checks
                                 var onGround = mc.player?.isOnGround!!
                                 if (mc.player?.lastOnGround!! == onGround) {
                                     onGround = !onGround // The server already knows this state, use a different one
                                 }
-                                repeat(useTime) {
+                                repeat(remainingTime) {
                                     mc.networkHandler?.sendPacket(OnGroundOnly(onGround))
                                     onGround = !onGround
                                 }
                                 mc.player?.lastOnGround = onGround
                             } else {
-                                repeat(useTime) {
+                                repeat(remainingTime) {
                                     mc.networkHandler?.sendPacket(OnGroundOnly(mc.player?.isOnGround!!))
                                 }
                             }

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "tarasande-protocol-spoofer",
   "version": "${version}",
-  "name": "tarasande Protocol Spoofer",
+  "name": "tarasande protocol spoofer",
   "description": "tarasande package to provide connection exploits or client spoofers",
   "authors": [
     "Sumandora/Johannes"
@@ -24,9 +24,6 @@
   ],
   "accessWidener": "tarasande-protocol-spoofer.accesswidener",
   "depends": {
-    "fabricloader": ">=0.14.9",
-    "minecraft": "1.20.1",
-    "java": ">=17",
     "tarasande": "*"
   },
   "custom": {

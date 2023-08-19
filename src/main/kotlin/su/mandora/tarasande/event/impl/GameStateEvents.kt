@@ -2,7 +2,6 @@ package su.mandora.tarasande.event.impl
 
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.StringReader
-import net.minecraft.client.gui.Element
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.command.CommandSource
 import net.minecraft.item.Item
@@ -23,7 +22,6 @@ class EventUpdateTargetedEntity(val state: State) : Event(false) {
     }
 }
 
-class EventIsSaddled(var saddled: Boolean) : Event(false)
 class EventInvalidGameMode(val uuid: UUID) : Event(false)
 class EventScreenInput(var doneInput: Boolean) : Event(true)
 class EventChangeScreen : Event {
@@ -40,7 +38,7 @@ class EventChangeScreen : Event {
     }
 }
 
-class EventChildren(val screen: Screen, val elements: ArrayList<Element>) : Event(false)
+class EventChildren(val screen: Screen) : Event(false)
 class EventShowsDeathScreen(var showsDeathScreen: Boolean) : Event(false)
 class EventTimeTravel(var time: Long) : Event(false)
 class EventShutdown : Event(false)

@@ -28,7 +28,7 @@ public class MixinGameRenderer {
         }
     }
 
-    @Inject(method = "updateTargetedEntity", at = @At("HEAD"))
+    @Inject(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;push(Ljava/lang/String;)V", ordinal = 0, shift = At.Shift.AFTER))
     public void hookEventUpdateTargetedEntityPre(float tickDelta, CallbackInfo ci) {
         EventDispatcher.INSTANCE.call(new EventUpdateTargetedEntity(EventUpdateTargetedEntity.State.PRE));
     }

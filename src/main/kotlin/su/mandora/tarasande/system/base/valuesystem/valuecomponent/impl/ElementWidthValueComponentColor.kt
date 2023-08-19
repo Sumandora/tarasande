@@ -6,14 +6,15 @@ import net.minecraft.client.render.*
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec2f
 import org.lwjgl.glfw.GLFW
+import org.lwjgl.opengl.GL11
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.system.base.valuesystem.Value
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueColor
 import su.mandora.tarasande.system.base.valuesystem.valuecomponent.ElementWidthValueComponent
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
-import su.mandora.tarasande.util.extension.minecraft.fill
-import su.mandora.tarasande.util.extension.minecraft.fillHorizontalGradient
-import su.mandora.tarasande.util.extension.minecraft.fillVerticalGradient
+import su.mandora.tarasande.util.extension.minecraft.render.fill
+import su.mandora.tarasande.util.extension.minecraft.render.fillHorizontalGradient
+import su.mandora.tarasande.util.extension.minecraft.render.fillVerticalGradient
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.DragInfo
@@ -105,6 +106,8 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
         val outerRadius = (pickerHeight - 5) / 2.0
         val middleRadius = innerRadius + (outerRadius - innerRadius) * 0.5
         val width = outerRadius - innerRadius
+        val cull = GL11.glIsEnabled(GL11.GL_CULL_FACE)
+        RenderSystem.disableCull()
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR)
         run {
@@ -119,6 +122,8 @@ class ElementWidthValueComponentColor(value: Value) : ElementWidthValueComponent
             }
         }
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
+        if(cull)
+            RenderSystem.enableCull()
 
         RenderUtil.outlinedCircle(context.matrices, this.width - (pickerHeight - 5) / 2.0 - sin((value.hue + 0.5F) * PI * 2) * middleRadius, (pickerHeight - 5) / 2.0 + cos((value.hue + 0.5F) * PI * 2) * middleRadius, width / 2.0, 3F, white.rgb)
         RenderUtil.fillCircle(context.matrices, this.width - (pickerHeight - 5) / 2.0 - sin((value.hue + 0.5F) * PI * 2) * middleRadius, (pickerHeight - 5) / 2.0 + cos((value.hue + 0.5F) * PI * 2) * middleRadius, width / 2.0, Color.getHSBColor(value.hue.toFloat(), 1F, 1F).let { if (value.isEnabled() && !value.locked) it else it.darker().darker() }.rgb)

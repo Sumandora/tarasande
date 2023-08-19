@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "tarasande-example",
+  "version": "${version}",
+  "name": "tarasande example",
+  "description": "example tarasande package to show how to use tarasandes api",
+  "authors": [
+    "Sumandora/Johannes"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Sumandora/",
+    "sources": "https://github.com/Sumandora/tarasande"
+  },
+  "license": "GPL-3.0",
+  "icon": "assets/tarasande-example/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "su.mandora.tarasande_example.TarasandeExample"
+    ]
+  },
+  "depends": {
+    "tarasande": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "tarasande"
+    }
+  }
+}

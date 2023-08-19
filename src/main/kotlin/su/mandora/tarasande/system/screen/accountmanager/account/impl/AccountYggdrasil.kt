@@ -21,14 +21,14 @@ class AccountYggdrasil : Account() {
     var password = ""
 
     override fun logIn() {
-        val authenticationService = YggdrasilAuthenticationService(mc.networkProxy, "", environment)
-        val userAuthentication = YggdrasilUserAuthentication(authenticationService, "", Agent.MINECRAFT, environment)
+        yggdrasilAuthenticationService = YggdrasilAuthenticationService(mc.networkProxy, "", environment)
+        val userAuthentication = YggdrasilUserAuthentication(yggdrasilAuthenticationService, "", Agent.MINECRAFT, environment)
         userAuthentication.setUsername(username)
         userAuthentication.setPassword(password)
         userAuthentication.logIn()
         if (userAuthentication.isLoggedIn) {
             session = Session(userAuthentication.selectedProfile.name, userAuthentication.selectedProfile.id.toString(), userAuthentication.authenticatedToken, Optional.empty(), Optional.empty(), Session.AccountType.MOJANG)
-            service = authenticationService.createMinecraftSessionService()
+            minecraftSessionService = yggdrasilAuthenticationService!!.createMinecraftSessionService()
         }
     }
 

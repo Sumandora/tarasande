@@ -16,7 +16,10 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
-import su.mandora.tarasande.util.extension.minecraft.*
+import su.mandora.tarasande.util.extension.minecraft.hitResultSide
+import su.mandora.tarasande.util.extension.minecraft.isSame
+import su.mandora.tarasande.util.extension.minecraft.math.*
+import su.mandora.tarasande.util.extension.minecraft.safeCount
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.math.rotation.Rotation
@@ -360,7 +363,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                             }
 
                             if (hasBlock) {
-                                PlayerUtil.placeBlock(hitResult)
+                                PlayerUtil.interact(hitResult)
                                 event.dirty = true
 
                                 if (target?.second?.offsetY == 0) {
@@ -379,7 +382,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                     }
                 } else if (alwaysClick.value) {
                     repeat(clicks) {
-                        PlayerUtil.placeBlock(hitResult)
+                        PlayerUtil.interact(hitResult)
                     }
                     event.dirty = true
                 }

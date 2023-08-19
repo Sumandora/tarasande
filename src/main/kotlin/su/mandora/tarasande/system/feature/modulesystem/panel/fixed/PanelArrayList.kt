@@ -13,7 +13,7 @@ import su.mandora.tarasande.util.render.animation.Animator
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
 
-class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array List", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
+class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array list", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
 
     private val animations = HashMap<Module, Double>()
 
@@ -22,7 +22,7 @@ class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array Lis
 
         for (module in moduleSystem.list) {
             val animation = animations[module]!!
-            if (module.visible.value && animation > 0.0) {
+            if (module.visibleInArraylist.value && animation > 0.0) {
                 enabledModules.add(module)
             }
         }
@@ -62,7 +62,7 @@ class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array Lis
 
         for (module in moduleSystem.list) {
             val animation = animations[module]!!
-            if (module.visible.value && animation > 0.0) {
+            if (module.visibleInArraylist.value && animation > 0.0) {
                 return true
             }
         }

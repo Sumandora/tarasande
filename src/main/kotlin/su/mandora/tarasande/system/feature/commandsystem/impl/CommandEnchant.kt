@@ -61,7 +61,7 @@ class CommandEnchant : Command("enchant") {
         syncInventory()
     }
 
-    override fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource> {
+    override fun builder(builder: LiteralArgumentBuilder<CommandSource>) {
         builder.then(literal("single").then(argument("enchantment", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENCHANTMENT))?.then(
             literal("level").then(argument("level", IntegerArgumentType.integer())?.executes {
                 val level = it.getArgument("level", Int::class.java)
@@ -132,6 +132,5 @@ class CommandEnchant : Command("enchant") {
             CustomChat.printChatMessage("All enchantments have been removed")
             return@executes SUCCESS
         })
-        return builder
     }
 }

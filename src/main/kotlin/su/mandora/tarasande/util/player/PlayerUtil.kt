@@ -64,11 +64,15 @@ object PlayerUtil {
 
         val prevAllowThroughWalls = accessor.tarasande_isAllowThroughWalls()
         val prevReach = accessor.tarasande_getReach()
+        val prevBlockReach = accessor.tarasande_getBlockReach()
         val prevReachExtension = accessor.tarasande_isDisableReachExtension()
+        val prevSelfInflicted = accessor.tarasande_isSelfInflicted()
 
         accessor.tarasande_setAllowThroughWalls(allowThroughWalls)
         accessor.tarasande_setReach(reach)
+        accessor.tarasande_setBlockReach(reach)
         accessor.tarasande_setDisableReachExtension(true)
+        accessor.tarasande_setSelfInflicted(true)
 
         val prevCrosshairTarget = mc.crosshairTarget
         val prevTargetedEntity = mc.targetedEntity
@@ -103,9 +107,11 @@ object PlayerUtil {
         mc.crosshairTarget = prevCrosshairTarget
         mc.targetedEntity = prevTargetedEntity
 
+        accessor.tarasande_setSelfInflicted(prevSelfInflicted)
+        accessor.tarasande_setDisableReachExtension(prevReachExtension)
+        accessor.tarasande_setBlockReach(prevBlockReach)
         accessor.tarasande_setReach(prevReach)
         accessor.tarasande_setAllowThroughWalls(prevAllowThroughWalls)
-        accessor.tarasande_setDisableReachExtension(prevReachExtension)
 
         return hitResult
     }
@@ -171,10 +177,10 @@ object PlayerUtil {
         }
     }
 
+    private val moduleAutoTool by lazy { ManagerModule.get(ModuleAutoTool::class.java) }
     fun getBreakSpeed(blockPos: BlockPos): Pair<Float, Int> {
-        if (!ManagerModule.get(ModuleAutoTool::class.java).let { it.enabled.value && it.mode.isSelected(0) })
+        if (!moduleAutoTool.let { it.enabled.value && it.mode.isSelected(0) })
             return mc.player?.inventory?.selectedSlot!!.let { Pair(getBreakSpeed(blockPos, it), it) }
-
 
         val origSlot = mc.player?.inventory?.selectedSlot
         val best = (0..8).map { getBreakSpeed(blockPos, it) to it }.minBy { it.first }
@@ -224,9 +230,9 @@ object PlayerUtil {
         mc.crosshairTarget = original
     }
 
-    fun placeBlock(blockHitResult: BlockHitResult) {
+    fun interact(hitResult: HitResult) {
         val original = mc.crosshairTarget
-        mc.crosshairTarget = blockHitResult
+        mc.crosshairTarget = hitResult
         mc.doItemUse()
         mc.crosshairTarget = original
     }

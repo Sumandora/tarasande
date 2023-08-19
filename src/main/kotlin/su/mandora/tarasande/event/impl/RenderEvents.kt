@@ -23,7 +23,7 @@ class EventScreenRender(val context: DrawContext, val screen: Screen, val state:
     }
 }
 
-class EventRender3D(val matrices: MatrixStack, val positionMatrix: Matrix4f, val state: State) : Event(false) {
+class EventRender3D(val matrices: MatrixStack, val projectionMatrix: Matrix4f, val state: State) : Event(false) {
     enum class State {
         PRE, POST
     }

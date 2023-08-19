@@ -7,12 +7,12 @@ import su.mandora.tarasande.system.screen.screenextensionsystem.ScreenExtensionB
 class ScreenExtensionButtonListDeathScreen : ScreenExtensionButtonList<DeathScreen>(DeathScreen::class.java) {
 
     init {
-        add("Fake respawn") {
+        add(Button("Fake respawn") {
             mc.player?.init()
             mc.setScreen(null)
-        }
-        add("Force respawn") {
+        })
+        add(Button("Force respawn") {
             mc.player?.requestRespawn()
-        }
+        })
     }
 }

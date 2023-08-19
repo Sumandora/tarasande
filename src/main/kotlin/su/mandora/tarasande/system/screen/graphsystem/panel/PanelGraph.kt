@@ -3,6 +3,7 @@ package su.mandora.tarasande.system.screen.graphsystem.panel
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.*
+import net.minecraft.util.math.MathHelper
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.graphsystem.Graph
 import su.mandora.tarasande.system.screen.panelsystem.Panel
@@ -35,6 +36,14 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100, FontWrap
 
         val width = maxOf(minWidth, curWidth, maxWidth) + 1.0
 
+        val graphBeginX = x
+        val graphEndX = x + panelWidth - width
+
+        val onePixel = 1 / mc.window.scaleFactor
+
+        val graphBeginY = y + titleBarHeight + onePixel
+        val graphEndY = y + panelHeight - onePixel
+
         val bufferBuilder = Tessellator.getInstance().buffer
         RenderSystem.disableCull()
         RenderSystem.enableBlend()
@@ -43,26 +52,25 @@ class PanelGraph(private val graph: Graph) : Panel(graph.name, max(100, FontWrap
         RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR)
 
-        val onePixel = 1 / mc.window.scaleFactor
-
         for ((index, value) in values.withIndex()) {
-            bufferBuilder.vertex(matrix, (x + (panelWidth - width) * (index / (graph.bufferLength - 1).toFloat())).toFloat(), (y + panelHeight - onePixel - (panelHeight - titleBarHeight - (1 / mc.window.scaleFactor)) * normalize(value.toDouble(), min, max)).toFloat(), 0F).color(1F, 1F, 1F, 1F).next()
+            val xPercent = index / values.size.toDouble()
+            val yPercent = normalize(value.toDouble(), min, max)
+            bufferBuilder.vertex(matrix, MathHelper.lerp(xPercent, graphBeginX, graphEndX).toFloat(), MathHelper.lerp(yPercent, graphEndY, graphBeginY).toFloat(), 0F).color(1F, 1F, 1F, 1F).next()
         }
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
 
         RenderSystem.disableBlend()
         RenderSystem.enableCull()
 
-        val normalizedHeight = 1.0 - this.normalize(cur.toDouble(), min, max)
-        val height = (panelHeight - titleBarHeight) * normalizedHeight
-        val currentY = y + titleBarHeight + height - FontWrapper.fontHeight() / 2.0 * normalizedHeight
+        val percent = 1.0 - normalize(cur.toDouble(), min, max)
+        val currentY = MathHelper.lerp(percent, graphBeginY, graphEndY) - FontWrapper.fontHeight() / 2.0 * percent
 
         FontWrapper.textShadow(context, curStr, (x + panelWidth - curWidth).toFloat(), currentY.toFloat(), -1, scale = 0.5F, offset = 0.5F)
-        if (currentY < y + panelHeight - FontWrapper.fontHeight()) {
-            FontWrapper.textShadow(context, minStr, (x + panelWidth - minWidth).toFloat(), (y + panelHeight - FontWrapper.fontHeight() / 2).toFloat(), -1, scale = 0.5F, offset = 0.5F)
+        if (currentY > graphBeginY + FontWrapper.fontHeight() * 0.5F) {
+            FontWrapper.textShadow(context, maxStr, (x + panelWidth - maxWidth).toFloat(), (y + titleBarHeight).toFloat(), -1, scale = 0.5F, offset = 0.5F)
         }
-        if (currentY >= y + FontWrapper.fontHeight() * 1.5) {
-            FontWrapper.textShadow(context, maxStr, (x + panelWidth - maxWidth).toFloat(), (y + FontWrapper.fontHeight()).toFloat(), -1, scale = 0.5F, offset = 0.5F)
+        if (currentY < graphEndY - FontWrapper.fontHeight()) {
+            FontWrapper.textShadow(context, minStr, (x + panelWidth - minWidth).toFloat(), (y + panelHeight - FontWrapper.fontHeight() * 0.5F).toFloat(), -1, scale = 0.5F, offset = 0.5F)
         }
     }
 

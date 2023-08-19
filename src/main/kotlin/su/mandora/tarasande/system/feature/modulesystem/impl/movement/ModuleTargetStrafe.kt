@@ -12,10 +12,10 @@ import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.feature.modulesystem.impl.combat.ModuleKillAura
-import su.mandora.tarasande.util.extension.minecraft.BlockPos
 import su.mandora.tarasande.util.extension.minecraft.isEntityHitResult
-import su.mandora.tarasande.util.extension.minecraft.minus
-import su.mandora.tarasande.util.extension.minecraft.times
+import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
+import su.mandora.tarasande.util.extension.minecraft.math.minus
+import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -28,6 +28,9 @@ class ModuleTargetStrafe : Module("Target strafe", "Circle-strafes around target
     private val maximumFallDistance = ValueNumber(this, "Maximum fall distance", 0.0, 5.0, 15.0, 0.1)
 
     private var invert = false
+
+    private val moduleFlight by lazy { ManagerModule.get(ModuleFlight::class.java) }
+    private val moduleKillAura by lazy { ManagerModule.get(ModuleKillAura::class.java) }
 
     private fun calculateNextPosition(selfSpeed: Double, curPos: Vec3d, center: Vec3d): Vec3d {
         var angleOffset = selfSpeed / radius.value
@@ -57,7 +60,6 @@ class ModuleTargetStrafe : Module("Target strafe", "Circle-strafes around target
             if (!PlayerUtil.isPlayerMoving())
                 return@registerEvent
 
-            val moduleKillAura = ManagerModule.get(ModuleKillAura::class.java)
             val enemy =
                 if (moduleKillAura.enabled.value && moduleKillAura.targets.isNotEmpty())
                     moduleKillAura.targets[0].first
@@ -80,7 +82,6 @@ class ModuleTargetStrafe : Module("Target strafe", "Circle-strafes around target
 
             var newPos = calculateNextPosition(selfSpeed, curPos, center)
 
-            val moduleFlight = ManagerModule.get(ModuleFlight::class.java)
             val flying = moduleFlight.enabled.value
             val freeFlying = moduleFlight.let { it.enabled.value && (it.mode.isSelected(0) || it.mode.isSelected(1)) }
 

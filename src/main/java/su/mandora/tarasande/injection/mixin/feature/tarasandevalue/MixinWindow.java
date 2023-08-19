@@ -13,7 +13,7 @@ public class MixinWindow {
     @Inject(method = "logGlError", at = @At("HEAD"))
     public void printCallstack(int error, long description, CallbackInfo ci) {
         if (DebugValues.INSTANCE.getOpenGLErrorDebugger().getValue()) {
-            new IllegalStateException().printStackTrace();
+            Thread.dumpStack();
         }
     }
 }

@@ -12,7 +12,7 @@ repositories {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/tarasande-serverpinger.accesswidener")
+    accessWidenerPath = file("src/main/resources/tarasande-server-pinger.accesswidener")
 }
 
 dependencies {

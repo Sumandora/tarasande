@@ -27,30 +27,26 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
-import su.mandora.tarasande.system.feature.commandsystem.impl.CommandClip
 import su.mandora.tarasande.system.feature.commandsystem.impl.CommandEnchant
 import su.mandora.tarasande.system.feature.commandsystem.impl.CommandGive
-import su.mandora.tarasande.system.feature.modulesystem.command.CommandToggle
 import su.mandora.tarasande.util.player.chat.CustomChat
 import kotlin.math.max
 
 object ManagerCommand : Manager<Command>() {
 
-    private val commandPrefix = ValueText(this, "Command prefix", "$")
+    private val commandPrefix = ValueText(this, "Command prefix", ".")
     private val exceptions = ValueBoolean(this, "Show exceptions", true)
     private val bypassCommands = object : ValueBind(this, "Bypass commands", Type.KEY, GLFW.GLFW_KEY_UNKNOWN) {
         override fun filter(type: Type, bind: Int) = bind >= GLFW.GLFW_KEY_ESCAPE || bind == GLFW.GLFW_KEY_UNKNOWN
     }
 
     private val dispatcher = CommandDispatcher<CommandSource>()
-    private val commandSource = ClientCommandSource(null, mc) // yep, this works lmao
+    private val commandSource = ClientCommandSource(null, mc)
 
     init {
         add(
             CommandGive(),
-            CommandEnchant(),
-            CommandClip(),
-            CommandToggle()
+            CommandEnchant()
         )
 
         EventDispatcher.add(EventChat::class.java) {
@@ -89,7 +85,7 @@ object ManagerCommand : Manager<Command>() {
 
         EventDispatcher.add(EventInputSuggestions::class.java) {
             if (it.reader.canRead(commandPrefix.value.length) && it.reader.string.startsWith(commandPrefix.value, it.reader.cursor)) {
-                it.reader.cursor = it.reader.cursor + commandPrefix.value.length
+                it.reader.cursor += commandPrefix.value.length
 
                 it.dispatcher = dispatcher
                 it.commandSource = commandSource
@@ -115,16 +111,15 @@ abstract class Command(private vararg val aliases: String) {
 
     fun createServerCommandSource() = ServerCommandSource(null, mc.player?.pos, null, null, 0, null, null, null, null)
 
-    open fun literal(name: String): LiteralArgumentBuilder<CommandSource> = LiteralArgumentBuilder.literal(name)
-    open fun argument(name: String?, type: ArgumentType<*>?): RequiredArgumentBuilder<CommandSource?, *>? = RequiredArgumentBuilder.argument(name, type)
+    fun literal(name: String): LiteralArgumentBuilder<CommandSource> = LiteralArgumentBuilder.literal(name)
+    fun argument(name: String?, type: ArgumentType<*>?): RequiredArgumentBuilder<CommandSource?, *>? = RequiredArgumentBuilder.argument(name, type)
 
-    abstract fun builder(builder: LiteralArgumentBuilder<CommandSource>): LiteralArgumentBuilder<CommandSource>
+    abstract fun builder(builder: LiteralArgumentBuilder<CommandSource>)
 
     fun setup(dispatcher: CommandDispatcher<CommandSource>) {
+        val main = dispatcher.register(literal(aliases[0]).also { builder(it) })
         aliases.forEach { alias ->
-            literal(alias).also {
-                dispatcher.register(literal(alias).redirect(dispatcher.register(builder(it))))
-            }
+            dispatcher.register(literal(alias).redirect(main))
         }
     }
 }

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "tarasande-mod-fixes",
   "version": "${version}",
-  "name": "tarasande Mod Fixes",
+  "name": "tarasande mod fixes",
   "description": "tarasande package to provide fixes for other mods",
   "authors": [
     "Sumandora/Johannes"
@@ -18,9 +18,6 @@
     "tarasande-mod-fixes.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.9",
-    "minecraft": "1.20.1",
-    "java": ">=17",
     "tarasande": "*"
   },
   "custom": {

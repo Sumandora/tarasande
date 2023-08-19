@@ -1,11 +1,12 @@
 package su.mandora.tarasande.system.screen.accountmanager.account.impl.microsoft
 
 import net.minecraft.client.gui.screen.Screen
+import su.mandora.tarasande.feature.screens.accountmanager.subscreen.ScreenBetterAzureApps
+import su.mandora.tarasande.feature.screens.accountmanager.subscreen.ScreenBetterEnvironment
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import su.mandora.tarasande.system.screen.accountmanager.account.api.ExtraInfo
 import su.mandora.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
-import su.mandora.tarasande.system.screen.screenextensionsystem.impl.multiplayer.accountmanager.subscreen.ScreenBetterAzureApps
 
 @AccountInfo("Refresh-Token", inherit = false)
 class AccountMicrosoftRefreshToken : AccountMicrosoft() {
@@ -32,6 +33,14 @@ class AccountMicrosoftRefreshToken : AccountMicrosoft() {
     val azureApps: (Screen, Runnable) -> Unit = { screen, _ ->
         mc.setScreen(ScreenBetterAzureApps(screen, azureApp) { newAzureApp ->
             azureApp = newAzureApp
+        })
+    }
+
+    @Suppress("unused")
+    @ExtraInfo("Environment")
+    val newEnvironmentExtra: (Screen, Runnable) -> Unit = { screen, _ ->
+        mc.setScreen(ScreenBetterEnvironment(screen, environment) { newEnvironment ->
+            environment = newEnvironment
         })
     }
 }

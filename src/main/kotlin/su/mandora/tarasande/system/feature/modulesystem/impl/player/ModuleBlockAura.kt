@@ -22,8 +22,8 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleBlockESP
 import su.mandora.tarasande.util.DEFAULT_BLOCK_REACH
 import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
-import su.mandora.tarasande.util.extension.minecraft.BlockPos
-import su.mandora.tarasande.util.extension.minecraft.isMissHitResult
+import su.mandora.tarasande.util.extension.minecraft.isBlockHitResult
+import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.math.rotation.RotationUtil
@@ -31,6 +31,8 @@ import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.chat.CustomChat
 import kotlin.math.ceil
+import kotlin.math.min
+import kotlin.math.pow
 
 class ModuleBlockAura : Module("Block aura", "Automatically interacts with blocks", ModuleCategory.PLAYER) {
 
@@ -48,20 +50,28 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
             interactedBlocks.clearAndGC()
         }
     }
+    private val maxInteractions = ValueNumber(this, "Max interactions", 1.0, 1.0, maxReach.pow(3.0), 1.0)
+    private val shuffledOrder = ValueBoolean(this, "Shuffled order", true)
+    private val notDuringSneaking = ValueBoolean(this, "Not during sneaking", true)
 
     private var interactedBlocks = ArrayList<BlockPos>()
     private val timeUtil = TimeUtil()
 
-    private var focusedBlock: Pair<BlockPos, BlockHitResult>? = null
+    private var focusedBlocks = ArrayList<Pair<BlockPos, BlockHitResult>>()
+
+    private val moduleBlockESP by lazy { ManagerModule.get(ModuleBlockESP::class.java) }
 
     override fun onDisable() {
         interactedBlocks.clearAndGC()
-        focusedBlock = null
+        focusedBlocks.clearAndGC()
     }
 
     init {
         registerEvent(EventRotation::class.java) { event ->
-            focusedBlock = null
+            focusedBlocks.clearAndGC()
+
+            if (notDuringSneaking.value && mc.player?.isSneaking == true)
+                return@registerEvent
 
             if (!timeUtil.hasReached(delay.value.toLong()))
                 return@registerEvent
@@ -81,7 +91,7 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
                     val pos = collisionShape.boundingBox.offset(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble()).center
                     if (pos.squaredDistanceTo(mc.player?.eyePos) <= reach.value * reach.value) {
                         val hitResult = PlayerUtil.rayCast(mc.player?.eyePos!!, pos)
-                        if (hitResult.isMissHitResult())
+                        if (!hitResult.isBlockHitResult())
                             continue
                         if (!throughWalls.value && hitResult.blockPos != pos)
                             continue
@@ -90,24 +100,27 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
                 }
             }
 
-            if (list.isNotEmpty()) {
-                val best = list.distinct().filter { !interactedBlocks.contains(it.first) }.minByOrNull { it.second.pos.distanceTo(mc.player?.eyePos) } ?: return@registerEvent
-                val hitResult = best.second as BlockHitResult
+            for(block in list
+                .distinct()
+                .filter { !interactedBlocks.contains(it.first) }
+                .let { if(shuffledOrder.value) it.shuffled() else it }
+                .let { it.subList(0, min(maxInteractions.value.toInt(), it.size)) }
+                .sortedBy { it.second.pos.distanceTo(mc.player?.eyePos) }) {
+                val hitResult = block.second as BlockHitResult
 
-                focusedBlock = Pair(best.first, hitResult)
+                focusedBlocks.add(block.first to hitResult)
                 event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, hitResult.pos).correctSensitivity()
             }
         }
         registerEvent(EventAttack::class.java, 1001) {
             if (closedInventory.value && mc.currentScreen != null) return@registerEvent
 
-            if (focusedBlock != null) {
-                PlayerUtil.placeBlock(focusedBlock!!.second.withBlockPos(focusedBlock!!.first)!!)
-                if (interactOnce.value)
-                    interactedBlocks.add(focusedBlock!!.first)
-                val moduleBlockESP = ManagerModule.get(ModuleBlockESP::class.java)
+            for (focusedBlock in focusedBlocks) {
+                PlayerUtil.interact(focusedBlock.second.withBlockPos(focusedBlock.first))
+                if (interactOnce.value && !interactedBlocks.contains(focusedBlock.first))
+                    interactedBlocks.add(focusedBlock.first)
                 if (moduleBlockESP.enabled.value)
-                    moduleBlockESP.list.removeIf { it.first == focusedBlock!!.first }
+                    moduleBlockESP.list.removeIf { it.first == focusedBlock.first }
                 timeUtil.reset()
             }
         }

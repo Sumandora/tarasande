@@ -20,16 +20,18 @@ object Friends {
 
     init {
         EventDispatcher.apply {
+            val moduleNoFriends by lazy { ManagerModule.get(ModuleNoFriends::class.java) }
             add(EventIsEntityAttackable::class.java) {
-                if (ManagerModule.get(ModuleNoFriends::class.java).enabled.value)
+                if (moduleNoFriends.isActive())
                     return@add
 
                 if (it.attackable && it.entity is PlayerEntity)
                     if (friends.any { friend -> friend.first == it.entity.gameProfile })
                         it.attackable = false
             }
+            val moduleNameProtect by lazy { ManagerModule.get(ModuleNameProtect::class.java) }
             add(EventTagName::class.java) {
-                if (ManagerModule.get(ModuleNameProtect::class.java).enabled.value) // Name protect will replace the names, so this is redundant
+                if (moduleNameProtect.enabled.value) // Name protect will replace the names, so this is redundant
                     return@add
 
                 if (it.entity is PlayerEntity) {
@@ -40,7 +42,7 @@ object Friends {
                 }
             }
             add(EventPlayerListName::class.java) {
-                if (ManagerModule.get(ModuleNameProtect::class.java).enabled.value) // Name protect will replace the names, so this is redundant
+                if (moduleNameProtect.enabled.value) // Name protect will replace the names, so this is redundant
                     return@add
 
                 for (friend in friends)
@@ -79,5 +81,7 @@ object Friends {
     }
 
     fun names() = HashMap<String, String>().also { friends.forEach { pair -> it[pair.first.name] = pair.second ?: return@forEach } }
+
+    fun amount() = friends.size
 
 }

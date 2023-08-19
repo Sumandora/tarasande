@@ -16,6 +16,7 @@ class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you ar
 
     private val fallDistance = ValueNumber(this, "Fall distance", 0.0, 3.0, 10.0, 0.1)
     private val void = ValueBoolean(this, "Void", false)
+    private val waitForDamage = ValueBoolean(this, "Wait for damage", false)
     private val mode = ValueMode(this, "Mode", false, "Setback", "Jump")
     private val jumpMultiplier = ValueNumber(this, "Jump multiplier", 0.0, 1.0, 10.0, 0.1, isEnabled = { mode.isSelected(1) })
     private val boost = ValueNumber(this, "Boost", 0.0, 1.0, 10.0, 0.1, isEnabled = { mode.isSelected(1) })
@@ -30,7 +31,7 @@ class ModuleAntiFall : Module("Anti fall", "Tries to force a setback when you ar
                 if (mc.player?.isOnGround == true) {
                     lastOnGroundPos = mc.player?.pos
                     wasOnGround = true
-                } else if (mc.player?.fallDistance!! > fallDistance.value && (!void.value || PlayerUtil.predictFallDistance() == null)) {
+                } else if (mc.player?.fallDistance!! > fallDistance.value && (!void.value || PlayerUtil.predictFallDistance() == null) && (!waitForDamage.value || mc.player!!.hurtTime > 0)) {
                     if ((wasOnGround || repeating.value) && !PlayerUtil.input.sneaking) {
                         when {
                             mode.isSelected(0) -> {

@@ -18,6 +18,7 @@ import su.mandora.tarasande.system.screen.graphsystem.information.InformationGra
 import su.mandora.tarasande.system.screen.graphsystem.panel.PanelGraph
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
 import su.mandora.tarasande.system.screen.panelsystem.ManagerPanel
+import su.mandora.tarasande.util.extension.kotlinruntime.roundTo
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -26,13 +27,16 @@ object ManagerGraph : Manager<Graph>() {
 
     init {
         add(
+            // Normal ones
             GraphTickableFPS(),
             GraphTPS(),
             GraphTickableCPS(),
             GraphYawDelta(),
             GraphPitchDelta(),
-            GraphTickableMotion(),
             GraphPing(),
+
+            // Tickable ones
+            GraphTickableMotion(),
             GraphTickableOnlinePlayers(),
             GraphTickableMemory(),
             GraphTickableIncomingTraffic(),
@@ -53,7 +57,7 @@ object ManagerGraph : Manager<Graph>() {
 @Suppress("LeakingThis")
 open class Graph(val category: String, val name: String, bufferLength: Int, integer: Boolean) {
     var decimalPlaces = 0
-    var bufferLength = 0
+    private var bufferLength = ValueNumber(this, "Buffer length", 1.0, bufferLength / 2.0, bufferLength.toDouble(), 1.0)
 
     init {
         if (!integer)
@@ -63,18 +67,14 @@ open class Graph(val category: String, val name: String, bufferLength: Int, inte
                 }
             }
 
-        object : ValueNumber(this, "Buffer length", 1.0, bufferLength / 2.0, bufferLength.toDouble(), 1.0) {
-            override fun onChange(oldValue: Double?, newValue: Double) {
-                this@Graph.bufferLength = newValue.toInt()
-            }
-        }
+
     }
 
     private val values = CopyOnWriteArrayList<Number>()
 
     fun add(num: Number) {
         values.add(num)
-        while (values.size > bufferLength)
+        while (values.size > bufferLength.value)
             values.removeAt(0)
     }
 
@@ -84,10 +84,14 @@ open class Graph(val category: String, val name: String, bufferLength: Int, inte
 
     fun clear() = values.clear()
 
-    open fun format(num: Number?) = if (decimalPlaces > 0.0) {
-        val rounding = 10.0.pow(decimalPlaces.toDouble())
-        num?.toDouble()?.times(rounding)?.roundToInt()?.div(rounding)?.toString()
-    } else num?.toDouble()?.roundToInt()?.toString()
+    open fun format(num: Number?): String? {
+        if(num == null)
+            return null
+        return if (decimalPlaces > 0.0)
+            num.toDouble().roundTo(10.0.pow(decimalPlaces)).toString()
+        else
+            num.toDouble().roundToInt().toString() // Cast to int for no comma
+    }
 }
 
 abstract class GraphTickable(category: String, name: String, bufferLength: Int, integer: Boolean) : Graph(category, name, bufferLength, integer) {

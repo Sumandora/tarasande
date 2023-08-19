@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "tarasande-third-party",
   "version": "${version}",
-  "name": "tarasande Third Party",
+  "name": "tarasande third party",
   "description": "tarasande package to provide features for certain servers and platforms",
   "authors": [
     "Sumandora/Johannes"
@@ -20,9 +20,6 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.14.9",
-    "minecraft": "1.20.1",
-    "java": ">=17",
     "tarasande": "*"
   },
   "custom": {

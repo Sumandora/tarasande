@@ -26,7 +26,7 @@ public class MixinTextFieldWidget implements ITextFieldWidget {
         return instance.drawTextWithShadow(textRenderer, text, x, y, this.tarasande_color != null ? this.tarasande_color.getRGB() : color);
     }
 
-    @ModifyConstant(method = "renderButton", constant = @Constant(intValue = -3092272))
+    @ModifyConstant(method = "renderButton", constant = @Constant(intValue = TextFieldWidget.VERTICAL_CURSOR_COLOR))
     public int injectColor(int original) {
         return this.tarasande_color != null ? this.tarasande_color.getRGB() : original;
     }

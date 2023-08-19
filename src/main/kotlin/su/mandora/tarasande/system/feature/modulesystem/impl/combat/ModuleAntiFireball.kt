@@ -1,7 +1,6 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.combat
 
 import net.minecraft.entity.projectile.FireballEntity
-import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.event.impl.EventAttack
 import su.mandora.tarasande.event.impl.EventRotation
 import su.mandora.tarasande.mc
@@ -12,7 +11,8 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.DEFAULT_REACH
 import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
-import su.mandora.tarasande.util.extension.minecraft.minus
+import su.mandora.tarasande.util.extension.minecraft.math.minus
+import su.mandora.tarasande.util.extension.minecraft.prevPos
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.math.rotation.RotationUtil
@@ -40,7 +40,7 @@ class ModuleAntiFireball : Module("Anti fireball", "Hits fireballs to reflect th
                 val aimPoint = MathUtil.getBestAimPoint(entity.boundingBox.expand(entity.targetingMargin.toDouble()))
                 if (aimPoint.squaredDistanceTo(mc.player?.eyePos!!) > reach.value * reach.value)
                     continue
-                if ((Vec3d(entity.prevX, entity.prevY, entity.prevZ) - mc.player?.eyePos!!).horizontalLength() <= (entity.pos - mc.player?.eyePos!!).horizontalLength())
+                if ((entity.prevPos() - mc.player?.eyePos!!).horizontalLength() <= (entity.pos - mc.player?.eyePos!!).horizontalLength())
                     continue
 
                 if (!targets.contains(entity)) {

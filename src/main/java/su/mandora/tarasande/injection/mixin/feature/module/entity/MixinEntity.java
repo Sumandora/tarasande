@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
-import su.mandora.tarasande.system.feature.modulesystem.impl.exploit.ModuleNoPitchLimit;
+import su.mandora.tarasande.system.feature.modulesystem.impl.misc.ModuleNoPitchLimit;
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleESP;
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleTrueSight;
 
