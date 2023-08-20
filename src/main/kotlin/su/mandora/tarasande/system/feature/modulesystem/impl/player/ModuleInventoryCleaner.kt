@@ -18,7 +18,7 @@ import su.mandora.tarasande.util.player.container.ContainerUtil
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.sqrt
 
-class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops items in your inventory", ModuleCategory.PLAYER) {
+class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops unwanted items in your inventory", ModuleCategory.PLAYER) {
 
     private val openInventory = ValueBoolean(this, "Open inventory", true)
     private val delay = ValueNumberRange(this, "Delay", 0.0, 100.0, 200.0, 500.0, 1.0)
