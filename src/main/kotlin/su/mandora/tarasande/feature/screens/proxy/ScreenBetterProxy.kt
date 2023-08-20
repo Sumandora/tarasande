@@ -48,15 +48,19 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
 
     private var status: Text? = null
 
+    companion object {
+        const val IP_PORT_RATIO = 0.8
+    }
+
     override fun init() {
-        addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - TEXTFIELD_WIDTH / 2, height / 2 - 50 - 15, (TEXTFIELD_WIDTH * 0.8).toInt(), DEFAULT_BUTTON_HEIGHT, Text.of("IP-Address")).also {
+        addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - TEXTFIELD_WIDTH / 2, height / 2 - 50 - 15, (TEXTFIELD_WIDTH * IP_PORT_RATIO).toInt(), DEFAULT_BUTTON_HEIGHT, Text.of("IP-Address")).also {
             ipTextField = it
             it.setMaxLength(Int.MAX_VALUE)
             if (proxy?.socketAddress != null) {
                 it.text = proxy!!.socketAddress.address.hostAddress
             }
         })
-        addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - TEXTFIELD_WIDTH / 2 + (TEXTFIELD_WIDTH * 0.8).toInt() + BUTTON_PADDING, height / 2 - 50 - 15, (TEXTFIELD_WIDTH * 0.2).toInt(), DEFAULT_BUTTON_HEIGHT, Text.of("Port")).also {
+        addDrawableChild(TextFieldWidgetPlaceholder(textRenderer, width / 2 - TEXTFIELD_WIDTH / 2 + (TEXTFIELD_WIDTH * IP_PORT_RATIO).toInt() + BUTTON_PADDING, height / 2 - 50 - 15, (TEXTFIELD_WIDTH * (1.0 - IP_PORT_RATIO)).toInt(), DEFAULT_BUTTON_HEIGHT, Text.of("Port")).also {
             portTextField = it
             it.setMaxLength(Int.MAX_VALUE)
             if (proxy != null) {
