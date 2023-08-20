@@ -92,64 +92,73 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         registerEvent(EventCameraOverride::class.java, 1) { event ->
             if (position == null || rotation == null)
                 onEnable()
-            mc.options.perspective = Perspective.THIRD_PERSON_BACK
-            event.camera.pos = (prevCameraPos ?: position)?.lerp(position, mc.tickDelta.toDouble())
-            event.camera.setRotation(rotation?.yaw!!, rotation?.pitch!!)
+            else {
+                mc.options.perspective = Perspective.THIRD_PERSON_BACK
+                event.camera.pos = (prevCameraPos ?: position)?.lerp(position, mc.tickDelta.toDouble())
+                event.camera.setRotation(rotation?.yaw!!, rotation?.pitch!!)
+            }
         }
 
         registerEvent(EventRotation::class.java, 1) { event ->
             if (beginRotation == null)
                 onEnable()
-
-            if (!event.dirty) {
-                event.rotation = beginRotation!!
+            else {
+                if (!event.dirty) {
+                    event.rotation = beginRotation!!
+                }
             }
         }
 
         registerEvent(EventMouseDelta::class.java, 1) { event ->
             if (rotation == null)
                 onEnable()
-            rotation = Rotation.calculateNewRotation(rotation!!, Pair(event.deltaX, event.deltaY)).correctSensitivity() // clamp
-            event.deltaX = 0.0
-            event.deltaY = 0.0
+            else {
+                rotation = Rotation.calculateNewRotation(rotation!!, Pair(event.deltaX, event.deltaY)).correctSensitivity() // clamp
+                event.deltaX = 0.0
+                event.deltaY = 0.0
+            }
         }
 
         registerEvent(EventUpdate::class.java, 1) { event ->
             if (event.state == EventUpdate.State.PRE) {
                 if (position == null || rotation == null)
                     onEnable()
-                var yMotion = 0.0
-                if (mc.options.jumpKey.pressed)
-                    yMotion += speed.value
-                if (mc.options.sneakKey.pressed)
-                    yMotion -= speed.value
-                var velocity = Entity.movementInputToVelocity(Vec3d(
-                    MathUtil.roundAwayFromZero(input.movementSideways.toDouble()),
-                    0.0,
-                    MathUtil.roundAwayFromZero(input.movementForward.toDouble())
-                ), speed.value.toFloat(), rotation?.yaw!!)
-                velocity = Vec3d(velocity?.x!!, yMotion, velocity.z)
-                prevCameraPos = position
-                position = position!! + velocity
+                else {
+                    var yMotion = 0.0
+                    if (mc.options.jumpKey.pressed)
+                        yMotion += speed.value
+                    if (mc.options.sneakKey.pressed)
+                        yMotion -= speed.value
+                    var velocity = Entity.movementInputToVelocity(Vec3d(
+                        MathUtil.roundAwayFromZero(input.movementSideways.toDouble()),
+                        0.0,
+                        MathUtil.roundAwayFromZero(input.movementForward.toDouble())
+                    ), speed.value.toFloat(), rotation?.yaw!!)
+                    velocity = Vec3d(velocity?.x!!, yMotion, velocity.z)
+                    prevCameraPos = position
+                    position = position!! + velocity
+                }
             }
         }
 
         registerEvent(EventInput::class.java, 1) { event ->
             if (firstInput == null || firstRealInput == null)
                 onEnable()
-            if (event.input == mc.player?.input) {
-                if (!keepMovement.value) {
-                    event.movementForward = 0F
-                    event.movementSideways = 0F
+            else {
+                if (event.input == mc.player?.input) {
+                    if (!keepMovement.value) {
+                        event.movementForward = 0F
+                        event.movementSideways = 0F
+                    }
+                } else if (event.input == PlayerUtil.input) {
+                    event.cancelled = true
                 }
-            } else if (event.input == PlayerUtil.input) {
-                event.cancelled = true
-            }
-            if (keepMovement.value) {
-                if (event.input != input) {
-                    event.movementForward = firstRealInput?.first!!
-                    event.movementSideways = firstRealInput?.second!!
-                    event.cancelled = false
+                if (keepMovement.value) {
+                    if (event.input != input) {
+                        event.movementForward = firstRealInput?.first!!
+                        event.movementSideways = firstRealInput?.second!!
+                        event.cancelled = false
+                    }
                 }
             }
         }
@@ -157,8 +166,10 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         registerEvent(EventKeyBindingIsPressed::class.java, 1) { event ->
             if (map.isEmpty())
                 onEnable()
-            if (capturedKeys.contains(event.keyBinding))
-                event.pressed = keepMovement.value && map[event.keyBinding] ?: false
+            else {
+                if (capturedKeys.contains(event.keyBinding))
+                    event.pressed = keepMovement.value && map[event.keyBinding] ?: false
+            }
         }
 
         registerEvent(EventUpdateTargetedEntity::class.java, 1) { event ->
