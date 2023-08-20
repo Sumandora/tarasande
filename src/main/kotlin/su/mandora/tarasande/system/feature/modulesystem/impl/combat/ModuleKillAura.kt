@@ -609,9 +609,10 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
     }
 
     private fun willPerformCritical(criticalSprint: Boolean, fallDistance: Boolean): Boolean {
-        if (mc.player?.isOnGround != true &&
-            mc.player?.isClimbing != true &&
-            mc.player?.isTouchingWater != true &&
+        if (!mc.player!!.isOnGround &&
+            !mc.player!!.isClimbing &&
+            !mc.player!!.isTouchingWater &&
+            !mc.player!!.isSubmergedInWater &&
             !(mc.player as ILivingEntity).tarasande_forceHasStatusEffect(StatusEffects.BLINDNESS) &&
             mc.player?.hasVehicle() == false)
             if (!fallDistance || mc.player?.fallDistance!! > 0F)

@@ -35,6 +35,8 @@ import java.util.logging.Logger
  *  - Teleport commands taking entities
  *  - Rewrite ProjectileUtil
  *  - Constants for slot list and text field screens
+ *  - List of valid chest titles
+ *  - List of spammer messages
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
