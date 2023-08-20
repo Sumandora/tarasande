@@ -16,7 +16,6 @@ import su.mandora.tarasande.system.base.valuesystem.impl.*
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.INVENTORY_SYNC_ID
-import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 import su.mandora.tarasande.util.math.rotation.RotationUtil
 import su.mandora.tarasande.util.player.prediction.Input
@@ -24,6 +23,7 @@ import su.mandora.tarasande.util.player.prediction.PredictionEngine
 import su.mandora.tarasande.util.player.prediction.with
 import su.mandora.tarasande.util.render.RenderUtil
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.math.sqrt
 
 class ModuleBlockParty : Module("Block party", "Automatically plays block party", ModuleCategory.GAMEMODE) {
@@ -46,7 +46,7 @@ class ModuleBlockParty : Module("Block party", "Automatically plays block party"
     private var move = false
     private var wasFilled = false
 
-    private var heatSpots = ArrayList<Vec3d>()
+    private var heatSpots = CopyOnWriteArrayList<Vec3d>()
 
     private var preparing = false
     private var queueReset = false
@@ -144,7 +144,7 @@ class ModuleBlockParty : Module("Block party", "Automatically plays block party"
         best = null
         move = false
         wasFilled = false
-        heatSpots.clearAndGC()
+        heatSpots = CopyOnWriteArrayList()
         preparing = false
     }
 
