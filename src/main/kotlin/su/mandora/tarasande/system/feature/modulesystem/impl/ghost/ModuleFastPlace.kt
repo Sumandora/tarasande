@@ -20,8 +20,7 @@ class ModuleFastPlace : Module("Fast place", "Speeds up block placements", Modul
             if (event.state == EventTick.State.PRE) {
                 if(mc.player == null)
                     return@registerEvent
-                val usedHand = PlayerUtil.getUsedHand() ?: return@registerEvent
-                if(!onlyWhenPlacing.value || mc.player?.getStackInHand(usedHand)?.item is BlockItem)
+                if(!onlyWhenPlacing.value || mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return@registerEvent)?.item is BlockItem)
                     mc.itemUseCooldown = mc.itemUseCooldown.coerceAtMost(maximumDelay.value.toInt())
 
             }
