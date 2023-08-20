@@ -22,7 +22,7 @@ class Cleaner(owner: Any, isEnabled: () -> Boolean = { true }) {
         return when (stack.item) {
             is SwordItem -> (stack.item as SwordItem).material.attackDamage
             is ToolItem -> (stack.item as ToolItem).material.durability.toFloat()
-            is ArmorItem -> (stack.item as ArmorItem).protection.toFloat()
+            is ArmorItem -> (stack.item as ArmorItem).protection.toFloat() * (1F + (stack.item as ArmorItem).material.knockbackResistance)
             else -> 0F
         }.times(if (scaleByDurability.value) (1F - stack.damage / stack.maxDamage.toFloat()) else 1F)
     }
