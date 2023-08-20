@@ -39,11 +39,15 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
 
     init {
         registerEvent(EventKeyBindingIsPressed::class.java, 1) { event ->
-            if (isPassingEvents()) if (movementKeys.contains(event.keyBinding)) if (event.keyBinding != mc.options.sneakKey || updateSneaking.value) event.pressed = InputUtil.isKeyPressed(mc.window.handle, event.keyBinding.boundKey.code)
+            if (isPassingEvents())
+                if (movementKeys.contains(event.keyBinding))
+                    if (event.keyBinding != mc.options.sneakKey || updateSneaking.value)
+                        event.pressed = InputUtil.isKeyPressed(mc.window.handle, event.keyBinding.boundKey.code)
         }
 
         registerEvent(EventTick::class.java) { event ->
-            if (event.state == EventTick.State.POST) textBoxFocused = isTextBoxFocused()
+            if (event.state == EventTick.State.POST)
+                textBoxFocused = isTextBoxFocused()
         }
     }
 

@@ -322,7 +322,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
                 if(counterBlocking.isSelected(2))
                     if (clicks == 0)
-                        if (isCancellingShields() && !allAttackedLivingEntities { !it.isBlockingDamage(simulateShieldBlock.value) })
+                        if (isCancellingShields() && !validEntities.all { it.first !is LivingEntity || !(it.first as LivingEntity).isBlockingDamage(simulateShieldBlock.value) })
                             clicks = 1 // Axes can cancel out shields whenever they want, so lets force a hit
 
                 if (!autoBlock.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {

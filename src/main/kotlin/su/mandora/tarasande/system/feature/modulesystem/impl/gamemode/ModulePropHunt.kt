@@ -20,7 +20,7 @@ import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 
 class ModulePropHunt : Module("Prop hunt", "Shows moving entities", ModuleCategory.GAMEMODE) {
 
-    private val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registries.ENTITY_TYPE, true, EntityType.PLAYER) {
+    private val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registries.ENTITY_TYPE, true, EntityType.ARMOR_STAND, EntityType.FALLING_BLOCK) {
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
         override fun onAdd(key: EntityType<*>) {
             movedEntities.clear()
