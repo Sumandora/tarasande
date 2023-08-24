@@ -31,4 +31,6 @@ jobs:
         prerelease: true
         title: "Development Build"
         files: |
-          **/build/libs/*.jar
+          **/build/libs/package*.jar
+          **/build/libs/tarasande*.jar
+          !*-sources.jar
