@@ -73,17 +73,21 @@ cheat under MacOS shouldn't pose much of a challenge, however.
 
 ## Download
 
-I am not offering binary downloads. You can compile it yourself, trust me.
+### Binary downloads
+
+Download the latest release [here](https://github.com/Sumandora/tarasande/releases).  
+Installing the main mod is required to install the packages.  
+You also have to install [Fabric Kotlin Support](https://github.com/FabricMC/fabric-language-kotlin/releases) to use tarasande.
+
+### Compiling from source
 
 Download the repository using `git clone https://github.com/Sumandora/tarasande.git`  
 Updates can be downloaded by running `git pull` in the cloned repository.
 
-### IDEs
+#### IDEs
 
 Opening the repository using an IDE is possible and recommended for development, the following instructions will only
 show how to compile/run the cheat with a command-line/terminal.
-
-### Compile from source
 
 Building requires JDK17.
 
