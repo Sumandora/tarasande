@@ -80,8 +80,8 @@ class InformationVanishedPlayers : Information("World", "Vanished players") {
                     if (event.packet.isNewWorld())
                         vanishedPlayers = CopyOnWriteArrayList()
             }
-            add(EventDisconnect::class.java) {
-                if (it.connection == mc.networkHandler?.connection)
+            add(EventDisconnect::class.java) { event ->
+                if (event.connection == mc.networkHandler?.connection)
                     vanishedPlayers = CopyOnWriteArrayList()
             }
         }

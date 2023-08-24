@@ -72,11 +72,15 @@ tasks.register('installPackages') {
     group archivesBaseName
     dependsOn "build"
     doLast {
+        File modFolder = new File("run", "mods")
+        if(!modFolder.exists())
+            modFolder.mkdirs()
+
         subprojects.findAll {it.name.startsWith("package")}.each {
             p ->
                 String packageName = p.name + "-" + p.version + ".jar"
                 File build = new File(p.buildDir, "libs" + File.separator + packageName)
-                File modDest = file("run" + File.separator + "mods" + File.separator + packageName)
+                File modDest = new File(modFolder, packageName)
                 if (build.exists()) {
                     if (modDest.delete())
                         println "Deleted old $packageName"

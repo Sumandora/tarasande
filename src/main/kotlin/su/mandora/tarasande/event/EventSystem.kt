@@ -14,7 +14,7 @@ object EventDispatcher {
 
     fun <T : Event> add(clazz: Class<T>, priority: Int = 1000, c: Consumer<T>) {
         eventListeners.computeIfAbsent(clazz) { CopyOnWriteArrayList() }.also {
-            @Suppress("UNCHECKED_CAST") // bypass generics $$$$$
+            @Suppress("UNCHECKED_CAST")
             it.add(Pair(c as Consumer<Event>, priority))
             it.sortBy { listener -> listener.second }
         }
