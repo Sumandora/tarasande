@@ -4,11 +4,13 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.minecraft.command.CommandSource
 import net.minecraft.command.argument.BlockPosArgumentType
 import net.minecraft.command.argument.PosArgument
+import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
 import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.event.impl.EventRender3D
 import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.mc
@@ -19,6 +21,7 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
 import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
+import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 import su.mandora.tarasande.util.math.pathfinder.Teleporter
 import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
@@ -83,6 +86,12 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
                     }
                 }
             }
+        }
+
+        registerEvent(EventPacket::class.java) { event ->
+            if(event.type == EventPacket.Type.RECEIVE && event.packet is PlayerRespawnS2CPacket)
+                if(event.packet.isNewWorld())
+                    onDisable()
         }
 
         registerEvent(EventRender3D::class.java) { event ->
