@@ -3,7 +3,6 @@ package su.mandora.tarasande.system.feature.modulesystem.impl.player
 import net.minecraft.enchantment.EnchantmentTarget
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.AxeItem
-import net.minecraft.item.ItemStack
 import net.minecraft.item.SwordItem
 import net.minecraft.item.ToolItem
 import net.minecraft.util.hit.BlockHitResult
@@ -16,6 +15,7 @@ import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.feature.modulesystem.impl.combat.ModuleHealingBot
+import su.mandora.tarasande.util.extension.minecraft.isBlockingDamage
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.container.ContainerUtil
 
@@ -24,7 +24,8 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool when breaking 
     val mode = ValueMode(this, "Mode", true, "Blocks", "Entities")
 
     val useAxeToCounterBlocking = ValueBoolean(this, "Use axe to counter blocking", false, isEnabled = { mode.isSelected(1) })
-    private val despiseAxes = ValueBoolean(this, "Despise axes", false, isEnabled = { mode.isSelected(1) })
+    private val simulateBlock = ValueBoolean(this, "Simulate block", false, isEnabled = { useAxeToCounterBlocking.value })
+    private val preferSwords = ValueBoolean(this, "Prefer swords", false, isEnabled = { mode.isSelected(1) })
 
     private val moduleHealingBot by lazy { ManagerModule.get(ModuleHealingBot::class.java) }
 
@@ -61,22 +62,22 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool when breaking 
                 if (moduleHealingBot.let { it.enabled.value && it.state != ModuleHealingBot.State.IDLE })
                     return@registerEvent
 
-                var hotbar: Iterable<IndexedValue<ItemStack>> = ContainerUtil.getHotbarSlots().withIndex()
+                var hotbar = ContainerUtil.getHotbarSlots().mapIndexed { index, itemStack -> index to itemStack }
 
-                if (useAxeToCounterBlocking.value && event.entity is PlayerEntity && event.entity.isBlocking) {
-                    if (hotbar.any { it.value.item is AxeItem })
-                        hotbar = hotbar.filter { it.value.item is AxeItem }
-                }
-                if (despiseAxes.value)
-                    if (hotbar.any { it.value.item is SwordItem })
-                        hotbar = hotbar.filter { it.value.item is SwordItem }
+                if (useAxeToCounterBlocking.value && event.entity is PlayerEntity && event.entity.isBlockingDamage(simulateBlock.value))
+                    if (hotbar.any { it.second.item is AxeItem })
+                        hotbar = hotbar.filter { it.second.item is AxeItem }
 
-                hotbar = hotbar.filter { it.value.item is ToolItem }
+                if (preferSwords.value)
+                    if (hotbar.any { it.second.item is SwordItem })
+                        hotbar = hotbar.filter { it.second.item is SwordItem }
 
-                val best = hotbar.maxByOrNull { ContainerUtil.wrapMaterialDamage(it.value) + ContainerUtil.getProperEnchantments(it.value).filter { it.key.target == EnchantmentTarget.WEAPON }.values.sum() }
+                hotbar = hotbar.filter { it.second.item is ToolItem }
+
+                val best = hotbar.maxByOrNull { ContainerUtil.wrapMaterialDamage(it.second) + ContainerUtil.getProperEnchantments(it.second).filter { it.key.target == EnchantmentTarget.WEAPON }.values.sum() }
 
                 if (best != null)
-                    mc.player?.inventory?.selectedSlot = best.index
+                    mc.player?.inventory?.selectedSlot = best.first
             }
         }
     }
