@@ -12,8 +12,8 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 class ModulePotionSaver : Module("Potion saver", "Sends no movement updates when standing still", ModuleCategory.MISC) {
 
     private val potionCheck = ValueMode(this, "Potion check", false, "Ignore", "Only positive", "Balance", "Only negative", "Any effect")
-    private val balanceThreshold = ValueNumber(this, "Balance threshold", -2.0, 1.0, 2.0, 1.0)
-    private val balanceComparison = ValueMode(this, "Balance comparison", false,  "Less than", "Less than or equal", "Equal", "Greater than or equal", "Greater than")
+    private val balanceThreshold = ValueNumber(this, "Balance threshold", -2.0, 1.0, 2.0, 1.0, isEnabled = { potionCheck.isSelected(2) })
+    private val balanceComparison = ValueMode(this, "Balance comparison", false,  "Less than", "Less than or equal", "Equal", "Greater than or equal", "Greater than", isEnabled = { potionCheck.isSelected(2) })
     init {
         balanceComparison.select(4)
     }
