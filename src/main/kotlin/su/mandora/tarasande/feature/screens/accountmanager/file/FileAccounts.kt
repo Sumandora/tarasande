@@ -84,8 +84,10 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
                         environment["Services-Host"].asString,
                         TARASANDE_NAME
                     )
-
-                    accountImplementation.minecraftSessionService = YggdrasilAuthenticationService(mc.networkProxy, "", accountImplementation.environment).createMinecraftSessionService()
+                    YggdrasilAuthenticationService(mc.networkProxy, "", accountImplementation.environment).also {
+                        accountImplementation.yggdrasilAuthenticationService = it
+                        accountImplementation.minecraftSessionService = it.createMinecraftSessionService()
+                    }
 
                     accountManager.accounts.add(accountImplementation)
                 }
