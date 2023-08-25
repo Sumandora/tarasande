@@ -75,6 +75,8 @@ cheat under MacOS shouldn't pose much of a challenge, however.
 
 ### Binary downloads
 
+[Video tutorial](https://youtu.be/giKuWAGU050)
+
 Download the latest release [here](https://github.com/Sumandora/tarasande/releases).  
 Installing the main mod is required to install the packages.  
 You also have to install [Fabric Kotlin Support](https://github.com/FabricMC/fabric-language-kotlin/releases) to use tarasande.
