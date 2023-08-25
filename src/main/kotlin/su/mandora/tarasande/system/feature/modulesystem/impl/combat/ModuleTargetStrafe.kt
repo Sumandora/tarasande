@@ -1,4 +1,4 @@
-package su.mandora.tarasande.system.feature.modulesystem.impl.movement
+package su.mandora.tarasande.system.feature.modulesystem.impl.combat
 
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.math.Direction
@@ -11,7 +11,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
-import su.mandora.tarasande.system.feature.modulesystem.impl.combat.ModuleKillAura
+import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleFlight
 import su.mandora.tarasande.util.extension.minecraft.isEntityHitResult
 import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
 import su.mandora.tarasande.util.extension.minecraft.math.minus
@@ -22,7 +22,7 @@ import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
 import kotlin.math.sin
 
-class ModuleTargetStrafe : Module("Target strafe", "Circle-strafes around targets", ModuleCategory.MOVEMENT) {
+class ModuleTargetStrafe : Module("Target strafe", "Circle-strafes around targets", ModuleCategory.COMBAT) {
 
     private val radius = ValueNumber(this, "Radius", 0.0, 1.0, maxReach, 0.1)
     private val maximumFallDistance = ValueNumber(this, "Maximum fall distance", 0.0, 5.0, 15.0, 0.1)

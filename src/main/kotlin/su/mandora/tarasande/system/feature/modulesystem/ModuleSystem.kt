@@ -40,6 +40,7 @@ object ManagerModule : Manager<Module>() {
             ModuleHealingBot(),
             ModuleAntiFireball(),
             ModuleAutoLog(),
+            ModuleTargetStrafe(),
 
             // Movement
             ModuleSprint(),
@@ -55,7 +56,6 @@ object ManagerModule : Manager<Module>() {
             ModuleParkour(),
             ModuleNoCramming(),
             ModuleStep(),
-            ModuleTargetStrafe(),
             ModuleSneak(),
             ModuleAirStuck(),
             ModuleNoWeb(),
