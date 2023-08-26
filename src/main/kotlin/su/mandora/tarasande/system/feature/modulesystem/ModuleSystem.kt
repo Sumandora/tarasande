@@ -131,6 +131,10 @@ object ManagerModule : Manager<Module>() {
             ModuleAutoRescuePlatform(),
             ModuleSkinDerp(),
             ModulePotionSaver(),
+            ModuleTickBaseManipulation(),
+            ModulePortalScreen(),
+            ModuleNoPitchLimit(),
+            ModuleRegen(),
 
             // Ghost
             ModuleReach(),
@@ -140,12 +144,6 @@ object ManagerModule : Manager<Module>() {
             ModuleHitBox(),
             ModuleFastPlace(),
             ModuleZoot(),
-
-            // Exploit
-            ModuleTickBaseManipulation(),
-            ModulePortalScreen(),
-            ModuleNoPitchLimit(),
-            ModuleRegen(),
 
             // Gamemode
             ModuleMurderMystery(),
