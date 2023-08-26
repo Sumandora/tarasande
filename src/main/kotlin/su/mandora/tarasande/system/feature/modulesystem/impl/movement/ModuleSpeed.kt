@@ -61,14 +61,13 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 if (jumpHeight.value > 0.0) {
                     mc.player?.jump()
 
-                    val collided = wallDetection.value && mc.player!!.horizontalCollision
+                    val collided = (wallDetection.value && mc.player!!.horizontalCollision) || mc.options.jumpKey.pressed
 
-                    if(!collided && !mc.options.jumpKey.pressed)
-                        event.velocity = event.velocity.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!! * jumpHeight.value)
+                    event.velocity = event.velocity.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!! * if(collided) 1.0 else jumpHeight.value)
 
                     mc.player?.velocity = Vec3d(
                         prevVelocity.x,
-                        if (lowHop.value && !collided && !mc.options.jumpKey.pressed)
+                        if (lowHop.value && !collided)
                             prevVelocity.y
                         else
                             event.velocity.y,
