@@ -3,10 +3,7 @@ package su.mandora.tarasande.util.string
 import net.minecraft.client.resource.language.LanguageDefinition
 import net.minecraft.client.resource.language.LanguageManager
 import net.minecraft.client.resource.language.TranslationStorage
-import net.minecraft.text.Text
 import su.mandora.tarasande.mc
-import java.util.*
-import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 object StringUtil {
@@ -17,9 +14,7 @@ object StringUtil {
         return languageCache.computeIfAbsent(languageDefinition) { TranslationStorage.load(mc.resourceManager, listOf(languageCode), languageDefinition.rightToLeft) }.get(key)
     }
 
-    fun formatEnumTypes(name: String) = (name.substring(0, 1) + name.substring(1).lowercase()).replace('_', ' ')
-
-    fun round(input: Double, places: Int) = String.format(Locale.ROOT, "%." + places + "f", input)
+    fun round(input: Double, places: Int) = ("%." + places + "f").format(input)
 
     fun formatBytes(value: Long, count: Int): String {
         return if (value < 1024L)
@@ -34,46 +29,6 @@ object StringUtil {
             round(value / 1024.0 / 1024.0 / 1024.0 / 1024.0, count) + " Tb"
     }
 
-    fun formatTime(input: Long): String {
-        @Suppress("NAME_SHADOWING")
-        var input = input
-
-        val days = TimeUnit.MILLISECONDS.toDays(input)
-        input -= TimeUnit.DAYS.toMillis(days)
-        val hours = TimeUnit.MILLISECONDS.toHours(input)
-        input -= TimeUnit.HOURS.toMillis(hours)
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(input)
-        input -= TimeUnit.MINUTES.toMillis(minutes)
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(input)
-
-        return StringBuilder().apply {
-            if (days > 0) {
-                append(days).append(" days")
-            }
-            if (hours > 0) {
-                if (isNotEmpty()) append(", ")
-                append(hours).append(" hours")
-            }
-            if (minutes > 0) {
-                if (isNotEmpty()) append(", ")
-                append(minutes).append(" minutes")
-            }
-            if (seconds > 0) {
-                if (isNotEmpty()) append(", ")
-                append(seconds).append(" seconds")
-            }
-        }.toString()
-    }
-
-    fun extractContent(text: Text): String {
-        var str = ""
-        text.visit {
-            str += it
-            Optional.of(it)
-        }
-        return str
-    }
-
     val colorCodePattern: Pattern = Pattern.compile("(?i)\u00a7[0-9A-F]")
 
     fun stripColors(string: String): String {
@@ -81,20 +36,15 @@ object StringUtil {
     }
 
     fun camelCaseToTitleCase(string: String): String {
-        var newString = ""
-        var newWord = true
+        val newString = StringBuilder()
         for ((index, c) in string.withIndex()) {
-            if (c.isUpperCase())
-                newWord = true
-            newString +=
-                when {
-                    index == 0 -> c.uppercase()
-                    newWord -> " " + c.uppercase()
-                    else -> c.lowercase()
-                }
-            newWord = false
+            when {
+                index == 0 -> newString.append(c.uppercase())
+                c.isUpperCase() -> newString.append(" ").append(c)
+                else -> newString.append(c)
+            }
         }
-        return newString
+        return newString.toString()
     }
 
 }

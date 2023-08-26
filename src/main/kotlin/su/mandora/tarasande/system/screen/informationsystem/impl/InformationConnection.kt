@@ -1,14 +1,14 @@
 package su.mandora.tarasande.system.screen.informationsystem.impl
 
+import org.apache.commons.lang3.time.DurationFormatUtils
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventConnectServer
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.screen.informationsystem.Information
-import su.mandora.tarasande.util.string.StringUtil
 
 class InformationHandlers : Information("Connection", "Handlers") {
-    private val displayMode = ValueMode(this, "Display mode", false, "Names", "Size")
+    private val displayMode = ValueMode(this, "Display mode", false, "Names", "Count")
 
     override fun getMessage(): String? {
         val names = (mc.networkHandler?.connection!!.channel ?: return null).pipeline().names()
@@ -35,6 +35,6 @@ class InformationPlayTime : Information("Connection", "Play Time") {
     override fun getMessage(): String? {
         if (mc.isInSingleplayer) return null
 
-        return StringUtil.formatTime(System.currentTimeMillis() - this.time)
+        return DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - this.time, true, false)
     }
 }
