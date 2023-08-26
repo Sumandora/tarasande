@@ -12,6 +12,7 @@ import su.mandora.tarasande.injection.accessor.ILivingEntity
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.panelsystem.Panel
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
+import su.mandora.tarasande.util.extension.minecraft.extractContent
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.animation.Animator
 import su.mandora.tarasande.util.render.font.FontWrapper
@@ -40,7 +41,7 @@ class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble(),
                         if (statusEffectInstance.amplifier in 1..9) {
                             string += " " + I18n.translate("enchantment.level." + (statusEffectInstance.amplifier + 1))
                         }
-                        string += ": " + Formatting.GRAY.toString() + StringUtil.extractContent(StatusEffectUtil.getDurationText(statusEffectInstance, 1F))
+                        string += ": " + Formatting.GRAY.toString() + StatusEffectUtil.getDurationText(statusEffectInstance, 1F).extractContent()
                         activeStatusEffects.add(Triple(statusEffect, string, statusEffect.color))
                     }
                 }

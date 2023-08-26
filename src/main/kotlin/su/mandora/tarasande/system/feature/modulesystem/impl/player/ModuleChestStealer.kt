@@ -14,11 +14,11 @@ import su.mandora.tarasande.system.base.valuesystem.impl.*
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.kotlinruntime.nullOr
+import su.mandora.tarasande.util.extension.minecraft.extractContent
 import su.mandora.tarasande.util.extension.minecraft.safeCount
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.player.container.Cleaner
 import su.mandora.tarasande.util.player.container.ContainerUtil
-import su.mandora.tarasande.util.string.StringUtil
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.sqrt
 
@@ -87,7 +87,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
             val accessor = mc.currentScreen as HandledScreen<*>
 
             if (checkTitle.value) {
-                val string = StringUtil.extractContent(accessor.title)
+                val string = accessor.title.extractContent()
                 when {
                     checkType.isSelected(0) -> {
                         if (!string.contains(titleSubstring.value, ignoreCase.value))
