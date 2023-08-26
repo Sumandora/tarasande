@@ -17,7 +17,7 @@ class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MO
 
     init {
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (event.keyBinding == mc.options?.sprintKey)
+            if (event.keyBinding == mc.options.sprintKey)
                 event.pressed = true
         }
 
