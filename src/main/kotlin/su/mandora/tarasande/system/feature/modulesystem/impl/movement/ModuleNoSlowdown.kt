@@ -15,7 +15,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.player.PlayerUtil
-import su.mandora.tarasande.util.string.StringUtil
+import su.mandora.tarasande.util.useActionMapping
 import java.util.concurrent.ThreadLocalRandom
 
 class ModuleNoSlowdown : Module("No slowdown", "Removes slowdowns when using items", ModuleCategory.MOVEMENT) {
@@ -24,7 +24,7 @@ class ModuleNoSlowdown : Module("No slowdown", "Removes slowdowns when using ite
 
     init {
         for (useAction in UseAction.entries)
-            useActions[useAction] = StringUtil.formatEnumTypes(useAction.name)
+            useActions[useAction] = useActionMapping[useAction]!!
     }
 
     val slowdown = ValueNumber(this, "Slowdown", 0.0, 1.0, 1.0, 0.01)

@@ -2,6 +2,7 @@ package su.mandora.tarasande.util
 
 import net.minecraft.entity.EntityStatuses
 import net.minecraft.server.network.ServerPlayNetworkHandler
+import net.minecraft.util.UseAction
 import kotlin.math.sqrt
 
 // These constants may change with a game update, check in case that happens (the names are in yarn mappings, since that is what this projects currently uses)
@@ -22,6 +23,7 @@ const val MAX_NAME_LENGTH = 16
 const val PROJECTILE_GRAVITY = 0.006 // This is calculated based on samples
 const val DEFAULT_TPS = 20 // In MinecraftClient: Instantiation of RenderTickCounter
 const val DEFAULT_PLACE_DELAY = 4 // MinecraftClient#doItemUse: The assignment of itemUseCooldown
+val timeBasedUseActions = arrayOf(UseAction.EAT, UseAction.DRINK, UseAction.BOW, UseAction.SPEAR, UseAction.CROSSBOW, UseAction.BRUSH) // UseActions which require time to be used (like Eating; unlike Blocking)
 
 // The following are rendering constants like paddings, widths, heights etc.
 // They don't have to be accurate but in order to have a uniform look with the base game, they should be close
@@ -29,3 +31,17 @@ const val DEFAULT_BUTTON_WIDTH = 100 // Minecraft uses 98 (who came up with this
 const val DEFAULT_BUTTON_HEIGHT = 20 // In the ButtonWidget Builder the default height is set in the initializer
 const val BUTTON_PADDING = 3 // The game seems to be even less uniform on this on, sometimes 4, sometimes 3
 const val TEXTFIELD_WIDTH = 200 // CreateWorldScreen: World name field (I don't know where the +8 comes from, lets ignore it)
+
+// Mapping related constants (We can't use the name, since fabric will run in intermediary mode when using launchers)
+val useActionMapping = hashMapOf(
+    UseAction.NONE to "None",
+    UseAction.EAT to "Eat",
+    UseAction.DRINK to "Drink",
+    UseAction.BLOCK to "Block",
+    UseAction.BOW to "Bow",
+    UseAction.SPEAR to "Spear",
+    UseAction.CROSSBOW to "Crossbow",
+    UseAction.SPYGLASS to "Spyglass",
+    UseAction.TOOT_HORN to "Toot horn",
+    UseAction.BRUSH to "Brush"
+)

@@ -16,27 +16,19 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.TRIDENT_USE_TIME
 import su.mandora.tarasande.util.player.PlayerUtil
+import su.mandora.tarasande.util.timeBasedUseActions
+import su.mandora.tarasande.util.useActionMapping
 import kotlin.math.min
 
 class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.PLAYER) {
 
-    private val useActions = arrayOf(UseAction.EAT, UseAction.DRINK, UseAction.BOW, UseAction.SPEAR, UseAction.CROSSBOW, UseAction.BRUSH)
     private lateinit var actions: ValueMode
     private val values = HashMap<UseAction, ValueNumber>()
 
-    private val nameMap = hashMapOf(
-        UseAction.EAT to "Eat",
-        UseAction.DRINK to "Drink",
-        UseAction.BOW to "Bow",
-        UseAction.SPEAR to "Spear",
-        UseAction.CROSSBOW to "Crossbow",
-        UseAction.BRUSH to "Brush"
-    )
-
     init {
         EventDispatcher.add(EventSuccessfulLoad::class.java) {
-            actions = ValueMode(this, "Actions", true, *useActions.map { nameMap[it]!! }.toTypedArray())
-            for (useAction in useActions) {
+            actions = ValueMode(this, "Actions", true, *timeBasedUseActions.map { useActionMapping[it]!! }.toTypedArray())
+            for (useAction in timeBasedUseActions) {
                 // This when is expressing my hate towards mojang really nicely
                 val longest = when (useAction) {
                     UseAction.BOW -> {
@@ -67,7 +59,7 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
                         longest
                     }
                 }
-                values[useAction] = ValueNumber(this, nameMap[useAction] + ": Ticks", 0.0, longest.toDouble(), longest.toDouble(), 1.0, isEnabled = { actions.isSelected(nameMap[useAction]!!) })
+                values[useAction] = ValueNumber(this, useActionMapping[useAction] + ": Ticks", 0.0, longest.toDouble(), longest.toDouble(), 1.0, isEnabled = { actions.isSelected(useActionMapping[useAction]!!) })
             }
         }
     }
@@ -79,7 +71,7 @@ class ModuleFastUse : Module("Fast use", "Speeds up item usage", ModuleCategory.
             if (event.state == EventUpdate.State.PRE) {
                 if (mc.player?.isUsingItem == true) {
                     val usedStack = mc.player?.getStackInHand(PlayerUtil.getUsedHand() ?: return@registerEvent)!!
-                    if (useActions.contains(usedStack.useAction) && actions.isSelected(nameMap[usedStack.useAction!!]!!)) {
+                    if (timeBasedUseActions.contains(usedStack.useAction) && actions.isSelected(useActionMapping[usedStack.useAction!!]!!)) {
                         val useTime = mc.player?.itemUseTime!!
                         if (useTime > values[usedStack.useAction]?.value!!) {
                             val remainingTime = min(usedStack.maxUseTime, values[usedStack.useAction]!!.max.toInt()) - useTime
