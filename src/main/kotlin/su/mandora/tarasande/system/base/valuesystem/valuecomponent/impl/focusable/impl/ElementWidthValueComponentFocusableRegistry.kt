@@ -114,6 +114,7 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
         } else {
             textFieldWidget.mouseClicked(-1.0, -1.0, button)
             textFieldWidget.setCursorToEnd()
+            textFieldWidget.isFocused = false
         }
 
         for ((index, key) in entries.withIndex()) {
