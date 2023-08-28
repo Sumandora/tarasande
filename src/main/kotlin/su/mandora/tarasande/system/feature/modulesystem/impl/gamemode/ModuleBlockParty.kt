@@ -2,6 +2,7 @@ package su.mandora.tarasande.system.feature.modulesystem.impl.gamemode
 
 import net.minecraft.block.Block
 import net.minecraft.item.BlockItem
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket
 import net.minecraft.registry.Registries
@@ -18,6 +19,7 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.INVENTORY_SYNC_ID
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.util.player.container.ContainerUtil
 import su.mandora.tarasande.util.player.prediction.Input
 import su.mandora.tarasande.util.player.prediction.PredictionEngine
 import su.mandora.tarasande.util.player.prediction.with
@@ -68,17 +70,11 @@ class ModuleBlockParty : Module("Block party", "Automatically plays block party"
 
     private fun calculateBestPreparation(): Vec3d? {
         val colorIndex = HashMap<Block, Int>()
-        val image = HashMap<Pair<Int, Int>, Int>()
-
-        val downscale = 2.0
+        val image = HashMap<Int, HashSet<Pair<Int, Int>>>()
 
         allBlocksInDanceArea().forEach {
-            val blocks = Array<Block>((downscale * downscale).toInt()) { i ->
-                mc.world!!.getBlockState(it.add((i / downscale).toInt(), 0, (i % downscale).toInt())).block
-            }
-
-            val block = blocks.groupBy { it }.maxBy { it.value.size }.key
-            image[Pair(((it.x - danceArea!!.minX) / downscale).toInt(), ((it.z - danceArea!!.minZ) / downscale).toInt())] = colorIndex.computeIfAbsent(block) { colorIndex.size }
+            val block = mc.world!!.getBlockState(it).block
+            image.computeIfAbsent(colorIndex.computeIfAbsent(block) { colorIndex.size }) { HashSet() }.add(Pair((it.x - danceArea!!.minX).toInt(), (it.z - danceArea!!.minZ).toInt()))
         }
 
         if (colorIndex.values.isEmpty())
@@ -95,26 +91,41 @@ class ModuleBlockParty : Module("Block party", "Automatically plays block party"
             return sqrt(x * x + y * y)
         }
 
-        image.forEach { (pos, _) ->
-            map[pos] = CompletableFuture.supplyAsync {
-                return@supplyAsync colorIndex.values
-                    .map { color ->
-                        image
-                            .filter { (_, color2) -> color2 == color }
-                            .minOfOrNull { (pos2, _) -> distance(pos2.first - pos.first, pos2.second - pos.second) }
-                            ?: return@supplyAsync Double.MAX_VALUE // Might be a race condition, not sure?
-                    }.sum()
+        image.forEach { (color, list) ->
+            list.forEach { pos ->
+                map[pos] = CompletableFuture.supplyAsync {
+                    return@supplyAsync colorIndex.values
+                        .filterNot { it == color }
+                        .map { color ->
+                            image[color]!!
+                                .minOfOrNull { pos2 -> distance(pos2.first - pos.first, pos2.second - pos.second) }
+                                ?: return@supplyAsync Double.MAX_VALUE // Might be a race condition, not sure?
+                        }.sum()
+                }
             }
         }
 
         if (map.isEmpty())
             return null
 
-        val bestValue = map.minOf { it.value.get() }
+        val bestOnes = map.let {
+            var bestScore = Double.POSITIVE_INFINITY
+            val best = HashSet<Pair<Int, Int>>()
+            for((pos, score) in it) {
+                @Suppress("NAME_SHADOWING")
+                val score = score.get()
+                if(bestScore > score) {
+                    best.clear()
+                    bestScore = score
+                }
+                if(bestScore == score)
+                    best.add(pos)
+            }
+            best
+        }
 
-        return map
-            .filter { bestValue == it.value.get() }
-            .map { Vec3d(danceArea!!.minX + it.key.first * downscale + downscale / 2, danceArea!!.maxY + 1, danceArea!!.minZ + it.key.second * downscale + downscale / 2) }
+        return bestOnes
+            .map { Vec3d(danceArea!!.minX + it.first + 0.5, danceArea!!.maxY + 1, danceArea!!.minZ + it.second + 0.5) }
             .also { heatSpots.clear(); heatSpots.addAll(it) }
             .minBy { mc.player!!.pos.distanceTo(it) }
     }
@@ -146,6 +157,7 @@ class ModuleBlockParty : Module("Block party", "Automatically plays block party"
         wasFilled = false
         heatSpots = CopyOnWriteArrayList()
         preparing = false
+        queueReset = false
     }
 
     init {
@@ -154,8 +166,10 @@ class ModuleBlockParty : Module("Block party", "Automatically plays block party"
                 if (danceArea == null)
                     onEnable()
                 if (danceArea != null) {
-                    if (allBlocksInDanceArea().isEmpty())
+                    if (allBlocksInDanceArea().isEmpty()) {
+                        onDisable()
                         return@registerEvent
+                    }
                     val filled = allBlocksInDanceArea().none { mc.world!!.isAir(it) }
 
                     if (!wasFilled && filled) {
@@ -199,11 +213,12 @@ class ModuleBlockParty : Module("Block party", "Automatically plays block party"
         registerEvent(EventPacket::class.java) { event ->
             if (event.type == EventPacket.Type.RECEIVE) {
                 when (event.packet) {
+                    is PlayerPositionLookS2CPacket ->
+                        mc.executeSync { onDisable() }
+
                     is PlayerRespawnS2CPacket ->
-                        if (event.packet.isNewWorld()) {
-                            best = null
-                            danceArea = null
-                        }
+                        if (event.packet.isNewWorld())
+                            mc.executeSync { onDisable() }
 
                     is ScreenHandlerSlotUpdateS2CPacket ->
                         if (event.packet.syncId == INVENTORY_SYNC_ID) {
@@ -213,8 +228,11 @@ class ModuleBlockParty : Module("Block party", "Automatically plays block party"
                                     preparing = false
                                     best = calculateBestBlock(item.block)
                                     heatSpots.clear()
-                                } else
-                                    queueReset = true
+                                } else {
+                                    val oldItem = ContainerUtil.getHotbarSlots()[hotbarSlot.value.toInt() - 1].item
+                                    if(oldItem is BlockItem && blocks.isSelected(oldItem.block))
+                                        queueReset = true
+                                }
                             }
                         }
                 }

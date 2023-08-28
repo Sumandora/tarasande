@@ -17,7 +17,6 @@ import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.animation.Animator
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
-import su.mandora.tarasande.util.string.StringUtil
 import java.awt.Color
 
 class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
