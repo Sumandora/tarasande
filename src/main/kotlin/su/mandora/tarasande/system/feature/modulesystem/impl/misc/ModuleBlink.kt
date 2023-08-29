@@ -93,16 +93,14 @@ class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MIS
     }
 
     private fun shouldPulsate(): Boolean {
-        // POV: Du hast Esounds Leben in wenigen Minuten useless gemacht $$$
-
         //@formatter:off
         val validEntities =
-            mc.world?.entities?.
-            asSequence()?.
-            filterIsInstance<PlayerEntity>()?.
-            filter { PlayerUtil.isAttackable(it) }?.
-            filter { mc.player?.eyePos?.squaredDistanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, it.boundingBox.expand(it.targetingMargin.toDouble())))!! <= reach.value * reach.value }?.
-            toList()!!
+            (mc.world?.entities ?: return false).
+            asSequence().
+            filterIsInstance<PlayerEntity>().
+            filter { PlayerUtil.isAttackable(it) }.
+            filter { mc.player?.eyePos?.squaredDistanceTo(MathUtil.closestPointToBox(mc.player?.eyePos!!, it.boundingBox.expand(it.targetingMargin.toDouble())))!! <= reach.value * reach.value }.
+            toList()
         //@formatter:on
         if (validEntities.isEmpty())
             return false
