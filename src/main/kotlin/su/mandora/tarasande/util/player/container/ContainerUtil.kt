@@ -1,6 +1,5 @@
 package su.mandora.tarasande.util.player.container
 
-import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.EquipmentSlot
@@ -19,9 +18,9 @@ import su.mandora.tarasande.util.extension.minecraft.safeCount
 
 object ContainerUtil {
 
-    fun getDisplayPosition(original: HandledScreen<*>, slot: Slot): Vec2f {
+    fun getDisplayPosition(slot: Slot): Vec2f {
         val halfSize = SLOT_RENDER_SIZE / 2
-        return Vec2f(original.x + slot.x.toFloat() + halfSize, original.y + slot.y.toFloat() + halfSize)
+        return Vec2f(slot.x.toFloat() + halfSize, slot.y.toFloat() + halfSize)
     }
 
     fun getValidSlots(screenHandler: ScreenHandler): List<Slot> {
@@ -35,11 +34,11 @@ object ContainerUtil {
             .firstOrNull { it.stack.item is ArmorItem && (it.stack.item as ArmorItem).slotType == equipmentSlot }
     }
 
-    fun getClosestSlot(screenHandler: ScreenHandler, original: HandledScreen<*>, lastMouseClick: Vec2f, block: (Slot, List<Slot>) -> Boolean): Slot? {
+    fun getClosestSlot(screenHandler: ScreenHandler, lastMouseClick: Vec2f, block: (Slot, List<Slot>) -> Boolean): Slot? {
         val list = getValidSlots(screenHandler)
         return list
             .filter { block(it, list) }
-            .minByOrNull { lastMouseClick.distanceSquared(getDisplayPosition(original, it)) }
+            .minByOrNull { lastMouseClick.distanceSquared(getDisplayPosition(it)) }
     }
 
     fun wrapMaterialDamage(stack: ItemStack): Float {

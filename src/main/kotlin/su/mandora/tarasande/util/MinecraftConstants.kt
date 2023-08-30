@@ -24,6 +24,8 @@ const val PROJECTILE_GRAVITY = 0.006 // This is calculated based on samples
 const val DEFAULT_TPS = 20 // In MinecraftClient: Instantiation of RenderTickCounter
 const val DEFAULT_PLACE_DELAY = 4 // MinecraftClient#doItemUse: The assignment of itemUseCooldown
 val timeBasedUseActions = arrayOf(UseAction.EAT, UseAction.DRINK, UseAction.BOW, UseAction.SPEAR, UseAction.CROSSBOW, UseAction.BRUSH) // UseActions which require time to be used (like Eating; unlike Blocking)
+const val DEFAULT_CONTAINER_WIDTH = 176 // Walk the inheritance tree from
+const val DEFAULT_CONTAINER_HEIGHT = 166
 
 // The following are rendering constants like paddings, widths, heights etc.
 // They don't have to be accurate but in order to have a uniform look with the base game, they should be close

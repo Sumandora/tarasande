@@ -1,7 +1,6 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.player
 
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen
-import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.slot.Slot
 import net.minecraft.screen.slot.SlotActionType
@@ -84,10 +83,10 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 return@registerEvent
             }
 
-            val accessor = mc.currentScreen as HandledScreen<*>
+            val screen = mc.currentScreen as GenericContainerScreen
 
             if (checkTitle.value) {
-                val string = accessor.title.extractContent()
+                val string = screen.title.extractContent()
                 when {
                     checkType.isSelected(0) -> {
                         if (!string.contains(titleSubstring.value, ignoreCase.value))
@@ -101,16 +100,16 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                 }
             }
 
-            val screenHandler = (mc.currentScreen as GenericContainerScreen).screenHandler
+            val screenHandler = screen.screenHandler
 
             if (!screenHandler.cursorStack.nullOr { it.isEmpty })
                 return@registerEvent
 
             if (mousePos == null) {
-                mousePos = Vec2f(mc.window.scaledWidth / 2F, mc.window.scaledHeight / 2F)
+                mousePos = Vec2f(screen.backgroundWidth / 2F, screen.backgroundHeight / 2F)
             }
 
-            var nextSlot = ContainerUtil.getClosestSlot(screenHandler, accessor, mousePos!!) { slot, list ->
+            var nextSlot = ContainerUtil.getClosestSlot(screenHandler, mousePos!!) { slot, list ->
                 slot.hasStack() &&
                         slot.id < screenHandler.inventory.size() &&
                         !hasBetterEquivalent(slot, list) &&
@@ -130,19 +129,19 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
             if (nextSlot == null)
                 mc.currentScreen?.close()
             else {
-                val displayPos = ContainerUtil.getDisplayPosition(accessor, nextSlot).add(Vec2f(
+                val displayPos = ContainerUtil.getDisplayPosition(nextSlot).add(Vec2f(
                     if (randomize.value == 0.0) 0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat(),
                     if (randomize.value == 0.0) 0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
                 ))
                 if (ThreadLocalRandom.current().nextInt(100) < failChance.value) {
                     val interpolated = mousePos?.add(displayPos?.add(mousePos?.negate())?.multiply(ThreadLocalRandom.current().nextDouble(0.0, 1.0).toFloat()))!!
-                    ContainerUtil.getClosestSlot(screenHandler, accessor, interpolated) { slot, _ -> !slot.hasStack() }?.also {
+                    ContainerUtil.getClosestSlot(screenHandler, interpolated) { slot, _ -> !slot.hasStack() }?.also {
                         nextSlot = it
                     }
                 }
                 val distance = mousePos?.distanceSquared(displayPos)!!
                 mousePos = displayPos
-                val mapped = sqrt(distance).div(Vec2f(accessor.backgroundWidth.toFloat(), accessor.backgroundHeight.toFloat()).length())
+                val mapped = sqrt(distance).div(Vec2f(screen.backgroundWidth.toFloat(), screen.backgroundHeight.toFloat()).length())
                 nextDelay = delay.interpolate(mapped.toDouble()).toLong()
                 mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot?.id!!, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
                 event.doneInput = true

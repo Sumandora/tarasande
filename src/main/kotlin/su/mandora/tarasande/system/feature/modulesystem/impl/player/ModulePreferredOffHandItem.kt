@@ -51,14 +51,14 @@ class ModulePreferredOffHandItem : Module("Preferred off-hand item", "Equips an 
                 return@registerEvent
             }
 
-            if (openInventory.value && mc.currentScreen !is AbstractInventoryScreen<*>) {
+            if (mc.player == null || (openInventory.value && mc.currentScreen !is AbstractInventoryScreen<*>)) {
                 return@registerEvent
             }
 
-            val screenHandler = mc.player?.playerScreenHandler!!
+            val screenHandler = mc.player!!.playerScreenHandler
 
-            if (screenHandler.cursorStack?.isOf(items.getSelected()) == true && mc.player?.offHandStack.nullOr { it.isEmpty }) {
-                mc.interactionManager?.clickSlot(screenHandler.syncId, PlayerScreenHandler.OFFHAND_ID, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.PICKUP, mc.player)
+            if (screenHandler.cursorStack.isOf(items.getSelected()) && mc.player!!.offHandStack.nullOr { it.isEmpty }) {
+                mc.interactionManager!!.clickSlot(screenHandler.syncId, PlayerScreenHandler.OFFHAND_ID, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.PICKUP, mc.player)
                 event.doneInput = true
                 return@registerEvent
             }
@@ -76,11 +76,11 @@ class ModulePreferredOffHandItem : Module("Preferred off-hand item", "Equips an 
 
             if (offHandSlot?.isEnabled == true) {
                 if (LivingEntity.getPreferredEquipmentSlot(item.stack) == EquipmentSlot.OFFHAND)
-                    mc.interactionManager?.clickSlot(screenHandler.syncId, item.id, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
+                    mc.interactionManager!!.clickSlot(screenHandler.syncId, item.id, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
                 else if (ContainerUtil.isInHotbar(item.id) || useSwapKey.value) {
-                    mc.interactionManager?.clickSlot(screenHandler.syncId, item.id, ContainerUtil.getOffHandSlot(screenHandler).id, SlotActionType.SWAP, mc.player)
+                    mc.interactionManager!!.clickSlot(screenHandler.syncId, item.id, ContainerUtil.getOffHandSlot(screenHandler).id, SlotActionType.SWAP, mc.player)
                 } else {
-                    mc.interactionManager?.clickSlot(screenHandler.syncId, item.id, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.PICKUP, mc.player)
+                    mc.interactionManager!!.clickSlot(screenHandler.syncId, item.id, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.PICKUP, mc.player)
                 }
                 event.doneInput = true
             }
