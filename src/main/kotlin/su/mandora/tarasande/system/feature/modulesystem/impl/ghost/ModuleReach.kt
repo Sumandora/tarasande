@@ -17,8 +17,8 @@ class ModuleReach : Module("Reach", "Increases the hit reach", ModuleCategory.GH
     private val modifyBlockReach = ValueBoolean(this, "Modify block reach", false)
     private val blockReach = ValueNumber(this, "Block reach", 0.1, DEFAULT_BLOCK_REACH, maxReach, 0.1, isEnabled = { modifyBlockReach.value })
 
-    private var origReach: Double? = null
-    private var origBlockReach: Double? = null
+    private var origReach = 0.0
+    private var origBlockReach = 0.0
 
     init {
         registerEvent(EventUpdateTargetedEntity::class.java) { event ->
@@ -39,8 +39,8 @@ class ModuleReach : Module("Reach", "Increases the hit reach", ModuleCategory.GH
                     val accessor = mc.gameRenderer as IGameRenderer
                     if(!accessor.tarasande_isSelfInflicted()) {
                         if(modifyBlockReach.value)
-                            accessor.tarasande_setBlockReach(origBlockReach!!)
-                        accessor.tarasande_setReach(origReach!!)
+                            accessor.tarasande_setBlockReach(origBlockReach)
+                        accessor.tarasande_setReach(origReach)
                     }
                 }
             }
