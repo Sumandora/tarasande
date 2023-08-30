@@ -23,7 +23,7 @@ class ModuleTimer : Module("Timer", "Changes the clientside tick-rate", ModuleCa
             event.tickRate = when {
                 mode.isSelected(0) -> ticksPerSecond.value.toFloat()
                 mode.isSelected(1) -> max(ticksPerSecond.value + ThreadLocalRandom.current().nextInt(-variation.value.toInt() / 2, variation.value.toInt() / 2), 1.0).toFloat()
-                mode.isSelected(2) -> (if (mc.player?.isOnGround!!) onGroundTicksPerSecond.value else offGroundTicksPerSecond.value).toFloat()
+                mode.isSelected(2) -> (if (mc.player?.isOnGround == true) onGroundTicksPerSecond.value else offGroundTicksPerSecond.value).toFloat()
                 else -> event.tickRate // brain
             }
         }
