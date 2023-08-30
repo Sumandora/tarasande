@@ -10,6 +10,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.string.StringUtil
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadLocalRandom
 
 class ModuleSkinDerp : Module("Skin derp", "Randomly toggles skin layers on and off", ModuleCategory.MISC) {
@@ -26,7 +27,7 @@ class ModuleSkinDerp : Module("Skin derp", "Randomly toggles skin layers on and 
 
     // TODO Group packets
 
-    private val previousStates = HashMap<PlayerModelPart, Boolean>()
+    private val previousStates = ConcurrentHashMap<PlayerModelPart, Boolean>()
     private var mainArm: Arm? = null
 
     override fun onDisable() {
