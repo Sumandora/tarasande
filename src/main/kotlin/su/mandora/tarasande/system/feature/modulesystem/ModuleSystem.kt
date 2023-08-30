@@ -204,16 +204,14 @@ open class Module(val name: String, val description: String, val category: Strin
     @Suppress("LeakingThis")
     var enabled = object : ValueBoolean(this, "Enabled", false, visible = false) {
         override fun onChange(oldValue: Boolean?, newValue: Boolean) {
-            if (oldValue == null)
-                return
-
-            if (oldValue != newValue) if (newValue) {
-                onEnable()
-                eventListeners.forEach { EventDispatcher.add(it.first, it.second, it.third) }
-            } else {
-                eventListeners.forEach { EventDispatcher.rem(it.first, it.third) }
-                onDisable()
-            }
+            if (oldValue != newValue)
+                if (newValue) {
+                    onEnable()
+                    eventListeners.forEach { EventDispatcher.add(it.first, it.second, it.third) }
+                } else if(oldValue != null /*expect modules to have states set to the turned off state by default*/) {
+                    eventListeners.forEach { EventDispatcher.rem(it.first, it.third) }
+                    onDisable()
+                }
 
             EventDispatcher.call(EventModuleStateSwitched(this@Module, oldValue, newValue))
         }

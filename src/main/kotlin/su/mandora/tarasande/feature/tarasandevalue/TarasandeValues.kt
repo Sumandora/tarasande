@@ -1,6 +1,5 @@
 package su.mandora.tarasande.feature.tarasandevalue
 
-import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
@@ -8,12 +7,9 @@ import su.mandora.tarasande.feature.rotation.Rotations
 import su.mandora.tarasande.feature.tarasandevalue.impl.*
 import su.mandora.tarasande.feature.tarasandevalue.panel.PanelElementsTarasandeValues
 import su.mandora.tarasande.system.base.filesystem.ManagerFile
-import su.mandora.tarasande.system.base.valuesystem.ManagerValue
-import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueColor
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
-import su.mandora.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import su.mandora.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import su.mandora.tarasande.system.feature.commandsystem.ManagerCommand
 import su.mandora.tarasande.system.screen.blursystem.ManagerBlur
@@ -26,7 +22,7 @@ object TarasandeValues {
     val accentColor = ValueColor(this, "Accent color", 0.6, 1.0, 1.0)
     private val autoSaveConfig = object : ValueBoolean(this, "Auto save: config", true) {
         override fun onChange(oldValue: Boolean?, newValue: Boolean) {
-            autoSaveDaemon.name = autoSaveDaemonName + if (!newValue) " (disabled)" else ""
+            autoSaveDaemon.name = AUTO_SAVE_DAEMON_NAME + if (!newValue) " (disabled)" else ""
         }
     }
     private val autoSaveDelay = ValueNumber(this, "Auto save: delay", 0.0, 10000.0, 60000.0, 1000.0, isEnabled = { autoSaveConfig.value })
@@ -47,23 +43,8 @@ object TarasandeValues {
     val unlockTicksPerFrame = ValueBoolean(this, "Unlock ticks per frame", false)
     val executeScreenInputsInTicks = ValueBoolean(this, "Execute screen inputs in ticks", false) // <=1.12.2 compat
 
-    // Other
-    init {
-        object : ValueButton(this, "Clear binds") {
-            override fun onClick() {
-                ManagerValue.list.forEach {
-                    if (it is ValueBind && it.filter(ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN))
-                        it.apply {
-                            type = ValueBind.Type.KEY
-                            button = GLFW.GLFW_KEY_UNKNOWN
-                        }
-                }
-            }
-        }
-    }
-
-    const val autoSaveDaemonName = "$TARASANDE_NAME config auto save daemon"
-    val autoSaveDaemon: Thread = Thread(autoSaveDaemonName) {
+    const val AUTO_SAVE_DAEMON_NAME = "$TARASANDE_NAME config auto save daemon"
+    val autoSaveDaemon: Thread = Thread(AUTO_SAVE_DAEMON_NAME) {
         while (true) {
             Thread.sleep(autoSaveDelay.value.toLong())
             if (autoSaveConfig.value) {
