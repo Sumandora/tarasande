@@ -32,7 +32,7 @@ class Rotation {
             val sensitivityPow3 = sensitivity * sensitivity * sensitivity
             val sensitivityPow3Mult8 = sensitivityPow3 * 8.0
 
-            return if (mc.options.perspective.isFirstPerson && mc.player!!.isUsingSpyglass)
+            return if (mc.options.perspective.isFirstPerson && mc.player?.isUsingSpyglass == true)
                 sensitivityPow3
             else
                 sensitivityPow3Mult8
@@ -61,7 +61,7 @@ class Rotation {
         }
     }
 
-    fun correctSensitivity(prevRotation: Rotation = Rotations.fakeRotation ?: Rotation(mc.player!!), preference: ((Rotation) -> Boolean)? = null): Rotation {
+    fun correctSensitivity(prevRotation: Rotation = Rotations.fakeRotation ?: if(mc.player != null) Rotation(mc.player!!) else this /*?*/, preference: ((Rotation) -> Boolean)? = null): Rotation {
         val deltaRotation = closestDelta(prevRotation)
         val cursorDeltas = approximateCursorDeltas(deltaRotation)
         val newRotations = cursorDeltas.map { calculateNewRotation(prevRotation, it) }
