@@ -66,7 +66,7 @@ class ModulePhase : Module("Phase", "Allows you to move through blocks", ModuleC
 
         registerEvent(EventCollisionShape::class.java) { event ->
             if (mode.isSelected(1)) {
-                if (fallThrough.value || event.pos.y >= mc.player?.blockPos?.y!!)
+                if (fallThrough.value || event.pos.y >= (mc.player ?: return@registerEvent).blockPos.y)
                     event.collisionShape = VoxelShapes.empty()
             }
         }
