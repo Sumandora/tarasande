@@ -12,6 +12,7 @@ import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventConnectServer
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
+import su.mandora.tarasande.injection.accessor.IClientConnection
 import su.mandora.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import su.mandora.tarasande.system.feature.commandsystem.ManagerCommand
 import su.mandora.tarasande_protocol_spoofer.command.CommandOpenModsRCE
@@ -29,7 +30,9 @@ class TarasandeProtocolSpoofer : ClientModInitializer {
                 return
             }
 
-            MinecraftClient.getInstance().networkHandler!!.sendPacket(CustomPayloadC2SPacket(Identifier(channel), PacketByteBuf(Unpooled.buffer()).writeByteArray(value)))
+            ((MinecraftClient.getInstance().networkHandler ?: return).connection as IClientConnection).tarasande_forceSend(
+                CustomPayloadC2SPacket(Identifier(channel), PacketByteBuf(Unpooled.buffer()).writeByteArray(value))
+            )
         }
     }
 

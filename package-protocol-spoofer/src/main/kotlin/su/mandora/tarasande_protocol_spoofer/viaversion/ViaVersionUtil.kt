@@ -18,14 +18,14 @@ object ViaVersionUtil {
     }
 
     fun sendLegacyPluginMessage(channel: String, value: ByteArray): Boolean {
-        if (ProtocolHack.getTargetVersion().isOlderThanOrEqualTo(VersionEnum.r1_12_2)) {
-            val customPayload = PacketWrapper.create(ServerboundPackets1_12.PLUGIN_MESSAGE, TarasandeProtocolSpoofer.clientConnection!!.channel.attr(ProtocolHack.LOCAL_VIA_CONNECTION).get())
-            customPayload.write(Type.STRING, channel)
-            customPayload.write(Type.REMAINING_BYTES, value)
+        if (!ProtocolHack.getTargetVersion().isOlderThanOrEqualTo(VersionEnum.r1_12_2))
+            return false
 
-            customPayload.sendToServerRaw()
-            return true
-        }
-        return false
+        val customPayload = PacketWrapper.create(ServerboundPackets1_12.PLUGIN_MESSAGE, TarasandeProtocolSpoofer.clientConnection!!.channel.attr(ProtocolHack.LOCAL_VIA_CONNECTION).get())
+        customPayload.write(Type.STRING, channel)
+        customPayload.write(Type.REMAINING_BYTES, value)
+
+        customPayload.sendToServerRaw()
+        return true
     }
 }
