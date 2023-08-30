@@ -19,7 +19,7 @@ class ModuleAutoLog : Module("Auto log", "Disconnects when death is imminent", M
     init {
         registerEvent(EventPacket::class.java, Int.MAX_VALUE /* has to come after everything, to prevent NPEs */) { event ->
             if (event.type == EventPacket.Type.RECEIVE && event.packet is HealthUpdateS2CPacket) {
-                if (disconnectWhen.isSelected(0) && event.packet.health / mc.player?.maxHealth!! <= health.value)
+                if (disconnectWhen.isSelected(0) && event.packet.health / (mc.player ?: return@registerEvent).maxHealth <= health.value)
                     PlayerUtil.disconnect()
             }
         }
