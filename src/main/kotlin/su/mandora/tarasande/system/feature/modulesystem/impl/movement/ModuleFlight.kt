@@ -42,7 +42,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
     val timeUtil = TimeUtil()
 
     override fun onDisable() {
-        if(hardStop.value)
+        if (hardStop.value)
             mc.player?.velocity = Vec3d.ZERO
     }
 
@@ -77,7 +77,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
                 return@registerEvent
             if (!event.collisionShape.isEmpty)
                 return@registerEvent
-            val offset = mc.player?.y!! - event.pos.y
+            val offset = (mc.player ?: return@registerEvent).y - event.pos.y
             if (offset in 0.0..1.0)
                 event.collisionShape = VoxelShapes.cuboid(0.0, 0.0, 0.0, 1.0, offset, 1.0)
         }
@@ -114,6 +114,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
                                 mc.networkHandler?.sendPacket(makePacket(xAxis(mc.player!!.x, forward.x), yAxis(mc.player!!.y, forward.y), zAxis(mc.player!!.z, forward.z), onGround.isSelected(1)))
                             }
                         }
+
                         order.isSelected(1) -> {
                             repeat(repeatInvalid.value.toInt()) {
                                 mc.networkHandler?.sendPacket(makePacket(xAxis(mc.player!!.x, forward.x), yAxis(mc.player!!.y, forward.y), zAxis(mc.player!!.z, forward.z), onGround.isSelected(1)))
@@ -130,7 +131,7 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
     inner class PacketFlightAxis(owner: Any, axis: Axis, isEnabled: () -> Boolean) {
         private val mode = ValueMode(owner, axis.getName().uppercase() + " mode", false, "Unmodified", "Offset", "Absolute", "Min value", "Max value", "Positive infinity", "Negative infinity", "NaN", isEnabled = isEnabled)
         private val useNewPosition = ValueBoolean(owner, axis.getName().uppercase() + ": Use old position", false, isEnabled = { isEnabled() && (mode.isSelected(0) || mode.isSelected(1)) })
-        private val offset = ValueNumber(owner, axis.getName().uppercase() + " offset", -1000.0, 1000.0, 1000.0, 0.1, isEnabled = { isEnabled() && mode.isSelected(1) })
+        private val operand = ValueNumber(owner, axis.getName().uppercase() + " operand", -1000.0, 1000.0, 1000.0, 0.1, isEnabled = { isEnabled() && (mode.isSelected(1) || mode.isSelected(2)) })
 
         init {
             if (axis == Axis.Y) // Defaults that are likely to work
@@ -138,10 +139,10 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
         }
 
         operator fun invoke(oldPos: Double, newPos: Double): Double {
-            val pos = if(useNewPosition.value) newPos else oldPos
+            val pos = if (useNewPosition.value) newPos else oldPos
             return when {
-                mode.isSelected(1) -> pos + offset.value
-                mode.isSelected(2) -> offset.value
+                mode.isSelected(1) -> pos + operand.value
+                mode.isSelected(2) -> operand.value
                 mode.isSelected(3) -> Double.MIN_VALUE
                 mode.isSelected(4) -> Double.MAX_VALUE
                 mode.isSelected(5) -> Double.POSITIVE_INFINITY
