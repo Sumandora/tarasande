@@ -1,4 +1,4 @@
-package su.mandora.tarasande.feature.screens.accountmanager.subscreen
+package su.mandora.tarasande.feature.screen.accountmanager.subscreen
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.screen.Screen

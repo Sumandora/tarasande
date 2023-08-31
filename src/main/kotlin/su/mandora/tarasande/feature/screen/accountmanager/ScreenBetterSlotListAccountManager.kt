@@ -1,4 +1,4 @@
-package su.mandora.tarasande.feature.screens.accountmanager
+package su.mandora.tarasande.feature.screen.accountmanager
 
 import com.mojang.authlib.minecraft.UserApiService
 import com.mojang.authlib.yggdrasil.ServicesKeyType
@@ -18,10 +18,10 @@ import org.apache.commons.lang3.RandomStringUtils
 import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
-import su.mandora.tarasande.feature.screens.Screens.screenBetterProxy
-import su.mandora.tarasande.feature.screens.accountmanager.file.FileAccounts
-import su.mandora.tarasande.feature.screens.accountmanager.screenextension.ScreenExtensionButtonListMultiplayerScreen
-import su.mandora.tarasande.feature.screens.accountmanager.subscreen.ScreenBetterAccount
+import su.mandora.tarasande.feature.screen.Screens.screenBetterProxy
+import su.mandora.tarasande.feature.screen.accountmanager.file.FileAccounts
+import su.mandora.tarasande.feature.screen.accountmanager.screenextension.ScreenExtensionButtonListMultiplayerScreen
+import su.mandora.tarasande.feature.screen.accountmanager.subscreen.ScreenBetterAccount
 import su.mandora.tarasande.injection.accessor.IRealmsPeriodicCheckers
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.filesystem.ManagerFile

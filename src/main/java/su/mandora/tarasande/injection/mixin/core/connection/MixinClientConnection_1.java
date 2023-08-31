@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import su.mandora.tarasande.feature.screens.Screens;
+import su.mandora.tarasande.feature.screen.Screens;
 import su.mandora.tarasande.util.connection.Proxy;
 
 @Mixin(targets = "net.minecraft.network.ClientConnection$1")

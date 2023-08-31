@@ -1,4 +1,4 @@
-package su.mandora.tarasande.feature.screens.accountmanager.subscreen
+package su.mandora.tarasande.feature.screen.accountmanager.subscreen
 
 import com.mojang.authlib.Environment
 import com.mojang.authlib.yggdrasil.YggdrasilEnvironment

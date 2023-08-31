@@ -6,7 +6,7 @@ import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
 import su.mandora.tarasande.feature.friend.Friends
 import su.mandora.tarasande.feature.rotation.Rotations
-import su.mandora.tarasande.feature.screens.Screens
+import su.mandora.tarasande.feature.screen.Screens
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.system.base.filesystem.ManagerFile
 import su.mandora.tarasande.system.base.valuesystem.ManagerValue
@@ -37,6 +37,7 @@ import java.util.logging.Logger
  *  - Constants for slot list and text field screens
  *  - List of valid chest titles
  *  - List of spammer messages
+ *  - Camera No Clip as value in Camera Module
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv

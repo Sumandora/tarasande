@@ -1,4 +1,4 @@
-package su.mandora.tarasande.feature.screens.accountmanager.file
+package su.mandora.tarasande.feature.screen.accountmanager.file
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
@@ -7,7 +7,7 @@ import com.mojang.authlib.Environment
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import net.minecraft.client.util.Session
 import su.mandora.tarasande.TARASANDE_NAME
-import su.mandora.tarasande.feature.screens.accountmanager.ScreenBetterSlotListAccountManager
+import su.mandora.tarasande.feature.screen.accountmanager.ScreenBetterSlotListAccountManager
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.filesystem.File
 import su.mandora.tarasande.system.screen.accountmanager.account.ManagerAccount

@@ -1,4 +1,4 @@
-package su.mandora.tarasande.feature.screens.proxy
+package su.mandora.tarasande.feature.screen.proxy
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.DrawContext

@@ -8,7 +8,7 @@ import com.mojang.authlib.yggdrasil.YggdrasilEnvironment
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.util.Session
 import su.mandora.tarasande.Manager
-import su.mandora.tarasande.feature.screens.accountmanager.subscreen.ScreenBetterEnvironment
+import su.mandora.tarasande.feature.screen.accountmanager.subscreen.ScreenBetterEnvironment
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.accountmanager.account.api.ExtraInfo
 import su.mandora.tarasande.system.screen.accountmanager.account.impl.AccountSession

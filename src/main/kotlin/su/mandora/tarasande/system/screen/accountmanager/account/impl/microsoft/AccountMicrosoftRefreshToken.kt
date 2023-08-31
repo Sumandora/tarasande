@@ -1,8 +1,8 @@
 package su.mandora.tarasande.system.screen.accountmanager.account.impl.microsoft
 
 import net.minecraft.client.gui.screen.Screen
-import su.mandora.tarasande.feature.screens.accountmanager.subscreen.ScreenBetterAzureApps
-import su.mandora.tarasande.feature.screens.accountmanager.subscreen.ScreenBetterEnvironment
+import su.mandora.tarasande.feature.screen.accountmanager.subscreen.ScreenBetterAzureApps
+import su.mandora.tarasande.feature.screen.accountmanager.subscreen.ScreenBetterEnvironment
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import su.mandora.tarasande.system.screen.accountmanager.account.api.ExtraInfo
