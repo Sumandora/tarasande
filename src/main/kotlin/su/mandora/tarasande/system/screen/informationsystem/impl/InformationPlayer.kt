@@ -27,9 +27,9 @@ class InformationXYZ : Information("Player", "XYZ") {
     override fun getMessage(): String? {
         val player = mc.player ?: return null
 
-        val dimension = mc.world?.dimension ?: return null
-        val nether = mc.world?.registryManager?.get(RegistryKeys.DIMENSION_TYPE)?.get(DimensionTypes.OVERWORLD) ?: return null
-        val scaleFactor = DimensionType.getCoordinateScaleFactor(dimension, nether)
+        val dimension = player.world.dimension
+        val overworld = player.world.registryManager.get(RegistryKeys.DIMENSION_TYPE).get(DimensionTypes.OVERWORLD)
+        val scaleFactor = DimensionType.getCoordinateScaleFactor(dimension, overworld)
         val pos = player.pos.multiply(scaleFactor, 1.0, scaleFactor)
 
         return StringUtil.round(pos.x, this.decimalPlacesX.value.toInt()) + " " +
@@ -46,8 +46,8 @@ class InformationNetherXYZ : Information("Player", "Nether XYZ") {
     override fun getMessage(): String? {
         val player = mc.player ?: return null
 
-        val dimension = mc.world?.dimension ?: return null
-        val nether = mc.world?.registryManager?.get(RegistryKeys.DIMENSION_TYPE)?.get(DimensionTypes.THE_NETHER) ?: return null
+        val dimension = player.world.dimension
+        val nether = player.world.registryManager.get(RegistryKeys.DIMENSION_TYPE).get(DimensionTypes.THE_NETHER)
         val scaleFactor = DimensionType.getCoordinateScaleFactor(dimension, nether)
         val pos = player.pos.multiply(scaleFactor, 1.0, scaleFactor)
 
