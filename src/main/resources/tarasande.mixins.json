@@ -74,6 +74,7 @@
     "feature.module.MixinStatusEffectInstance",
     "feature.module.MixinWorld",
     "feature.module.MixinWorldRenderer",
+    "feature.module.camera.MixinCamera",
     "feature.module.camera.MixinGameRenderer",
     "feature.module.camera.MixinHeldItemRenderer",
     "feature.module.entity.MixinClientPlayerEntity",
@@ -127,8 +128,5 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "feature.module.camera.MixinCamera"
-  ]
+  }
 }
