@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventChangeScreen
 import su.mandora.tarasande.event.impl.EventUpdate
@@ -40,7 +41,7 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
     private val screenBackgroundOpacity = ValueNumber(this, "Screen background opacity", 0.0, 0.66, 1.0, 0.01)
     val panelBackgroundOpacity = ValueNumber(this, "Panel background opacity", 0.0, 0.3, 1.0, 0.01)
 
-    private val imageIdentifier = Identifier("tarasande", "textures/jannick.png")
+    private val imageIdentifier = Identifier(TARASANDE_NAME, "textures/jannick.png")
     private val particles = ArrayList<Particle>()
 
     private var wasClosed = true
