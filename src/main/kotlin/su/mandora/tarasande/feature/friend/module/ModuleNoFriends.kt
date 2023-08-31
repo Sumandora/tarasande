@@ -1,4 +1,4 @@
-package su.mandora.tarasande.system.feature.modulesystem.impl.misc
+package su.mandora.tarasande.feature.friend.module
 
 import su.mandora.tarasande.feature.friend.Friends
 import su.mandora.tarasande.mc

@@ -7,9 +7,9 @@ import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventIsEntityAttackable
 import su.mandora.tarasande.event.impl.EventPlayerListName
 import su.mandora.tarasande.event.impl.EventTagName
+import su.mandora.tarasande.feature.friend.module.ModuleNoFriends
 import su.mandora.tarasande.feature.friend.panel.PanelElementsFriends
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
-import su.mandora.tarasande.system.feature.modulesystem.impl.misc.ModuleNoFriends
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleNameProtect
 import su.mandora.tarasande.system.screen.panelsystem.ManagerPanel
 import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
@@ -52,6 +52,7 @@ object Friends {
             }
         }
 
+        ManagerModule.add(ModuleNoFriends())
         ManagerPanel.add(PanelElementsFriends(this))
     }
 

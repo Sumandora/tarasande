@@ -124,7 +124,6 @@ object ManagerModule : Manager<Module>() {
             // Misc
             ModuleBlink(),
             ModuleBlockBot(),
-            ModuleNoFriends(),
             ModuleMidClick(),
             ModuleAutoRespawn(),
             ModuleSpammer(),
