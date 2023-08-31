@@ -75,7 +75,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
         return MathHelper.clamp(value, min, max);
     }
 
-    @ModifyConstant(method = "applyClimbingSpeed", constant = @Constant(doubleValue = (double)-0.15f, ordinal = 2))
+    @ModifyConstant(method = "applyClimbingSpeed", constant = @Constant(doubleValue = (double)-0.15F, ordinal = 2))
     public double hookFastClimb_descend(double original) {
         if ((Object) this == MinecraftClient.getInstance().player)
             if (isClimbing()) {
