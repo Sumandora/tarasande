@@ -21,7 +21,6 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleBlockESP
 import su.mandora.tarasande.util.DEFAULT_BLOCK_REACH
-import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
 import su.mandora.tarasande.util.extension.minecraft.isBlockHitResult
 import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
@@ -47,28 +46,28 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
     private val throughWalls = ValueBoolean(this, "Through walls", true)
     private val interactOnce = object : ValueBoolean(this, "Interact once", true) {
         override fun onChange(oldValue: Boolean?, newValue: Boolean) {
-            interactedBlocks.clearAndGC()
+            interactedBlocks = HashSet()
         }
     }
     private val maxInteractions = ValueNumber(this, "Max interactions", 1.0, 1.0, maxReach.pow(3.0), 1.0)
     private val shuffledOrder = ValueBoolean(this, "Shuffled order", true)
     private val notDuringSneaking = ValueBoolean(this, "Not during sneaking", true)
 
-    private var interactedBlocks = ArrayList<BlockPos>()
+    private var interactedBlocks = HashSet<BlockPos>()
     private val timeUtil = TimeUtil()
 
-    private var focusedBlocks = ArrayList<Pair<BlockPos, BlockHitResult>>()
+    private var focusedBlocks = HashMap<BlockPos, BlockHitResult>()
 
     private val moduleBlockESP by lazy { ManagerModule.get(ModuleBlockESP::class.java) }
 
     override fun onDisable() {
-        interactedBlocks.clearAndGC()
-        focusedBlocks.clearAndGC()
+        interactedBlocks = HashSet()
+        focusedBlocks = HashMap()
     }
 
     init {
         registerEvent(EventRotation::class.java) { event ->
-            focusedBlocks.clearAndGC()
+            focusedBlocks.clear()
 
             if (notDuringSneaking.value && mc.player?.isSneaking == true)
                 return@registerEvent
@@ -108,19 +107,20 @@ class ModuleBlockAura : Module("Block aura", "Automatically interacts with block
                 .sortedBy { it.second.pos.distanceTo(mc.player?.eyePos) }) {
                 val hitResult = block.second as BlockHitResult
 
-                focusedBlocks.add(block.first to hitResult)
+                focusedBlocks[block.first] = hitResult
                 event.rotation = RotationUtil.getRotations(mc.player?.eyePos!!, hitResult.pos).correctSensitivity()
             }
         }
         registerEvent(EventAttack::class.java, 1001) {
             if (closedInventory.value && mc.currentScreen != null) return@registerEvent
 
-            for (focusedBlock in focusedBlocks) {
-                PlayerUtil.interact(focusedBlock.second.withBlockPos(focusedBlock.first))
-                if (interactOnce.value && !interactedBlocks.contains(focusedBlock.first))
-                    interactedBlocks.add(focusedBlock.first)
-                if (moduleBlockESP.enabled.value)
-                    moduleBlockESP.list.removeIf { it.first == focusedBlock.first }
+            for ((blockPos, hitResult) in focusedBlocks) {
+                PlayerUtil.interact(hitResult.withBlockPos(blockPos))
+                if (interactOnce.value) {
+                    interactedBlocks.add(blockPos)
+                    if (moduleBlockESP.enabled.value)
+                        moduleBlockESP.list.removeIf { it.first == blockPos }
+                }
                 timeUtil.reset()
             }
         }

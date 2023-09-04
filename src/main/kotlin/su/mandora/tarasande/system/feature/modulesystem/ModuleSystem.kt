@@ -97,6 +97,7 @@ object ManagerModule : Manager<Module>() {
             ModuleXCarry(),
             ModuleClickPearl(),
             ModuleBlockAura(),
+            ModuleInteractAura(),
 
             // Render
             ModuleESP(),
@@ -114,12 +115,10 @@ object ManagerModule : Manager<Module>() {
             ModuleNameProtect(),
             ModuleTrueSight(),
             ModuleNoRender(),
-            ModuleCameraNoClip(),
             ModulePreferredOffHandItem(),
             ModuleNoHurtCam(),
             ModuleBlockChangeTracker(),
             ModuleCamera(),
-            ModuleInteractAura(),
 
             // Misc
             ModuleBlink(),
@@ -233,7 +232,7 @@ open class Module(val name: String, val description: String, val category: Strin
     open fun onDisable() {}
 
     fun <T : Event> registerEvent(clazz: Class<T>, priority: Int = 1000, c: Consumer<T>) {
-        @Suppress("UNCHECKED_CAST") // BYPASS GENERICS ONCE AGAIN $$$$$$$
+        @Suppress("UNCHECKED_CAST")
         eventListeners.add(Triple(clazz as Class<Event>, priority, c as Consumer<Event>))
     }
 }

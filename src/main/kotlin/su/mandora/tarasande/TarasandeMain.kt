@@ -37,7 +37,6 @@ import java.util.logging.Logger
  *  - Constants for slot list and text field screens
  *  - List of valid chest titles
  *  - List of spammer messages
- *  - Camera No Clip as value in Camera Module
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
