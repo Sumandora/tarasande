@@ -19,7 +19,7 @@ class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementW
 
     private val value = object : ValueText(this, gameProfile.name, "", manage = false) {
         override fun onChange(oldText: String?, newText: String) {
-            Friends.setAlias(gameProfile, newText.ifEmpty { null })
+            Friends.setAlias(gameProfile, newText.ifEmpty { gameProfile.name })
         }
     }
     val textField = ElementWidthValueComponentFocusableText(value, 1F, false)

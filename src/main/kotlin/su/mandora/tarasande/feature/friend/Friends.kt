@@ -16,7 +16,7 @@ import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
 
 object Friends {
 
-    private val friends = ArrayList<Pair<GameProfile, String?>>()
+    private val friends = ArrayList<Pair<GameProfile, String>>()
 
     init {
         EventDispatcher.apply {
@@ -37,7 +37,7 @@ object Friends {
                 if (it.entity is PlayerEntity) {
                     val profile = (it.entity as PlayerEntity).gameProfile
                     for (friend in friends)
-                        if (friend.first == profile && friend.second != null && friend.second != profile.name)
+                        if (friend.first == profile && friend.second != profile.name)
                             it.displayName = it.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
                 }
             }
@@ -46,7 +46,7 @@ object Friends {
                     return@add
 
                 for (friend in friends)
-                    if (friend.first == it.playerListEntry.profile && friend.second != null && friend.second != it.playerListEntry.profile.name) {
+                    if (friend.first == it.playerListEntry.profile && friend.second != it.playerListEntry.profile.name) {
                         it.displayName = it.displayName.copy().append(Formatting.RESET.toString() + Formatting.GRAY.toString() + " (" + Formatting.WHITE.toString() + friend.second + Formatting.GRAY + ")" + Formatting.RESET /* maybe other mods are too incompetent to put this here */)
                     }
             }
@@ -56,9 +56,9 @@ object Friends {
         ManagerPanel.add(PanelElementsFriends(this))
     }
 
-    private fun addFriend(gameProfile: GameProfile, alias: String? = null) {
+    private fun addFriend(gameProfile: GameProfile, alias: String = gameProfile.name) {
         if (friends.any { it.first == gameProfile }) return
-        friends.add(Pair(gameProfile, alias ?: gameProfile.name))
+        friends.add(Pair(gameProfile, alias))
     }
 
     private fun remFriend(gameProfile: GameProfile) {
@@ -69,19 +69,19 @@ object Friends {
 
     fun isFriend(gameProfile: GameProfile) = friends.any { it.first == gameProfile }
 
-    fun changeFriendState(gameProfile: GameProfile, alias: String? = null) {
+    fun changeFriendState(gameProfile: GameProfile, alias: String = gameProfile.name) {
         if (isFriend(gameProfile)) remFriend(gameProfile)
         else addFriend(gameProfile, alias)
     }
 
-    fun setAlias(gameProfile: GameProfile, newAlias: String?) {
+    fun setAlias(gameProfile: GameProfile, newAlias: String = gameProfile.name) {
         if (isFriend(gameProfile)) {
             remFriend(gameProfile)
             addFriend(gameProfile, newAlias)
         }
     }
 
-    fun names() = HashMap<String, String>().also { friends.forEach { pair -> it[pair.first.name] = pair.second ?: return@forEach } }
+    fun names() = friends.map { it.first.name to it.second }
 
     fun amount() = friends.size
 

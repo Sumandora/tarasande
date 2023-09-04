@@ -14,6 +14,7 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
     private val protectedName = ValueText(this, "Protected name", TARASANDE_NAME)
     private val protectEveryone = ValueBoolean(this, "Protect everyone", false)
     private val checkForBoundary = ValueBoolean(this, "Check for boundary (slow)", true)
+    private val protectFriends = ValueBoolean(this, "Protect friends", true)
 
     private val border = "( |[^a-z]|\\b)"
 
@@ -53,9 +54,10 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
             for (player in protectedNames)
                 event.string = replaceName(event.string, player, protectedName.value)
 
-            for (pair in Friends.names()) {
-                event.string = replaceName(event.string, pair.key, pair.value)
-            }
+            if(protectFriends.value)
+                for (pair in Friends.names())
+                    if(pair.first != pair.second)
+                        event.string = replaceName(event.string, pair.first, pair.second)
         }
     }
 }
