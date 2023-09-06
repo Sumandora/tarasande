@@ -18,6 +18,7 @@ import su.mandora.tarasande.system.screen.graphsystem.ManagerGraph
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
 import su.mandora.tarasande.system.screen.panelsystem.ManagerPanel
 import su.mandora.tarasande.system.screen.screenextensionsystem.ManagerScreenExtension
+import sun.misc.Unsafe
 import java.util.logging.Logger
 
 
@@ -37,11 +38,16 @@ import java.util.logging.Logger
  *  - Constants for slot list and text field screens
  *  - List of valid chest titles
  *  - List of spammer messages
+ *  - Re-Sprint when slowdowned
+ *  - Anti AFK Format string
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
 val logger = Logger.getLogger(TARASANDE_NAME)!!
 val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()!!
+
+val unsafe by lazy { Unsafe::class.java.getDeclaredField("theUnsafe").apply { isAccessible = true }.get(null) as Unsafe }
+
 val mc: MinecraftClient
     get() = MinecraftClient.getInstance()
 
