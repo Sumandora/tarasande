@@ -9,7 +9,7 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.isEntityHitResult
-import su.mandora.tarasande.util.math.rotation.Rotation
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 
 class ModuleMidClick : Module("Mid click", "Friends mid-clicked players", ModuleCategory.MISC) {

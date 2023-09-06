@@ -12,8 +12,8 @@ import su.mandora.tarasande.util.extension.minecraft.math.minus
 import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.extension.minecraft.prevPos
-import su.mandora.tarasande.util.math.rotation.Rotation
-import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 
 class ModuleQuakeAura : Module("Quake aura", "Aimbot for Quake-like game modes", ModuleCategory.GAMEMODE) {

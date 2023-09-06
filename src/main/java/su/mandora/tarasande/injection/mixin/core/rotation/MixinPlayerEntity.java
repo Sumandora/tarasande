@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.feature.rotation.Rotations;
 import su.mandora.tarasande.injection.accessor.ILivingEntity;
-import su.mandora.tarasande.util.math.rotation.Rotation;
+import su.mandora.tarasande.feature.rotation.api.Rotation;
 
 @Mixin(PlayerEntity.class)
 public abstract class MixinPlayerEntity extends LivingEntity {

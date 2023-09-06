@@ -21,7 +21,7 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.DEFAULT_TPS
 import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
 import su.mandora.tarasande.util.extension.minecraft.math.minus
-import su.mandora.tarasande.util.math.rotation.Rotation
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.prediction.Input
 import su.mandora.tarasande.util.player.prediction.PredictionEngine

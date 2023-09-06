@@ -19,7 +19,7 @@ import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.TimeUtil
-import su.mandora.tarasande.util.math.rotation.Rotation
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 
 class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", ModuleCategory.MOVEMENT) {

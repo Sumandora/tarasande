@@ -12,8 +12,8 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueRegistry
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
-import su.mandora.tarasande.util.math.rotation.Rotation
-import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.chat.CustomChat
 

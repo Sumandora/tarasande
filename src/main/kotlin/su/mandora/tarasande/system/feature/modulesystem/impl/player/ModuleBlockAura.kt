@@ -25,7 +25,7 @@ import su.mandora.tarasande.util.extension.minecraft.isBlockHitResult
 import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 import su.mandora.tarasande.util.math.TimeUtil
-import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.chat.CustomChat

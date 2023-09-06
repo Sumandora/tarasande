@@ -8,7 +8,7 @@ import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleESP
 import su.mandora.tarasande.system.screen.panelsystem.Panel
 import su.mandora.tarasande.util.extension.kotlinruntime.ignoreAlpha
-import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.render.RenderUtil
 import kotlin.math.*
 

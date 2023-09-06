@@ -4,7 +4,6 @@ import net.minecraft.client.input.KeyboardInput
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.option.Perspective
 import net.minecraft.entity.Entity
-import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.event.impl.*
 import su.mandora.tarasande.injection.accessor.IGameRenderer
@@ -17,9 +16,8 @@ import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
 import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
-import su.mandora.tarasande.util.extension.minecraft.packet.evaluateNewRotation
 import su.mandora.tarasande.util.math.MathUtil
-import su.mandora.tarasande.util.math.rotation.Rotation
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.string.StringUtil
 
@@ -30,7 +28,6 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
     private val blockInteraction = ValueBoolean(this, "Block interaction", false)
 
     private var position: Vec3d? = null
-    private var beginRotation: Rotation? = null
     private var rotation: Rotation? = null
 
     private var prevCameraPos: Vec3d? = null
@@ -67,20 +64,15 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         if (mc.player != null) {
             position = mc.gameRenderer.camera.pos
             rotation = mc.gameRenderer.camera.let { Rotation(it.yaw, it.pitch) }
-            beginRotation = Rotation(mc.player!!)
             perspective = mc.options.perspective
             firstRealInput = PlayerUtil.input.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
-            firstInput = mc.player?.input?.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
+            firstInput = mc.player!!.input.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
             for (keyBinding in mc.options.allKeys.filter { capturedKeys.contains(it) })
                 map[keyBinding] = keyBinding.pressed
         }
     }
 
     override fun onDisable() {
-        if (beginRotation != null) {
-            mc.player?.yaw = beginRotation?.yaw!!
-            mc.player?.pitch = beginRotation?.pitch!!
-        }
         mc.options.perspective = perspective ?: Perspective.FIRST_PERSON
         prevCameraPos = null
         firstRealInput = null
@@ -96,16 +88,6 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
                 mc.options.perspective = Perspective.THIRD_PERSON_BACK
                 event.camera.pos = (prevCameraPos ?: position)?.lerp(position, mc.tickDelta.toDouble())
                 event.camera.setRotation(rotation?.yaw!!, rotation?.pitch!!)
-            }
-        }
-
-        registerEvent(EventRotation::class.java, 1) { event ->
-            if (beginRotation == null)
-                onEnable()
-            else {
-                if (!event.dirty) {
-                    event.rotation = beginRotation!!
-                }
             }
         }
 
@@ -184,12 +166,6 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         registerEvent(EventTick::class.java) { event ->
             if (event.state == EventTick.State.PRE && mc.player != null)
                 input.tick(false, 1F)
-        }
-
-        registerEvent(EventPacket::class.java) { event ->
-            if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayerPositionLookS2CPacket) {
-                beginRotation = event.packet.evaluateNewRotation()
-            }
         }
     }
 }

@@ -8,8 +8,8 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
-import su.mandora.tarasande.util.math.rotation.Rotation
-import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 
 class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of other players", ModuleCategory.MISC) {

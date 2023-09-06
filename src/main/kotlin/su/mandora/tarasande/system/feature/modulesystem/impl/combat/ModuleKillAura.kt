@@ -39,8 +39,8 @@ import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 import su.mandora.tarasande.util.extension.minecraft.smoothedHurtTime
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.pathfinder.Teleporter
-import su.mandora.tarasande.util.math.rotation.Rotation
-import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.container.ContainerUtil

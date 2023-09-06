@@ -10,9 +10,11 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Vec3d
 import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.event.impl.EventDisconnect
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.event.impl.EventRender3D
 import su.mandora.tarasande.event.impl.EventUpdate
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.feature.commandsystem.Command
@@ -23,7 +25,6 @@ import su.mandora.tarasande.util.extension.javaruntime.withAlpha
 import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 import su.mandora.tarasande.util.math.pathfinder.Teleporter
-import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.chat.CustomChat
 import su.mandora.tarasande.util.render.RenderUtil
@@ -92,6 +93,10 @@ class ModuleClickTP : Module("Click tp", "Teleports you to the position you clic
             if(event.type == EventPacket.Type.RECEIVE && event.packet is PlayerRespawnS2CPacket)
                 if(event.packet.isNewWorld())
                     onDisable()
+        }
+        registerEvent(EventDisconnect::class.java) { event ->
+            if(event.connection == mc.networkHandler?.connection)
+                onDisable()
         }
 
         registerEvent(EventRender3D::class.java) { event ->

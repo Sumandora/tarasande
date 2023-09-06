@@ -1,4 +1,4 @@
-package su.mandora.tarasande.util.math.rotation
+package su.mandora.tarasande.feature.rotation.api
 
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.MathHelper
@@ -129,6 +129,11 @@ class Rotation {
 
     fun withPitch(pitch: Float): Rotation {
         return Rotation(yaw, pitch)
+    }
+
+    fun applyOn(entity: Entity) {
+        entity.yaw = yaw
+        entity.pitch = pitch
     }
 
     operator fun plus(other: Rotation) = Rotation(yaw + other.yaw, pitch + other.pitch)

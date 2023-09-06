@@ -22,7 +22,7 @@ import su.mandora.tarasande.util.extension.kotlinruntime.WeakSet
 import su.mandora.tarasande.util.extension.minecraft.isEntityHitResult
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 import su.mandora.tarasande.util.math.TimeUtil
-import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.chat.CustomChat

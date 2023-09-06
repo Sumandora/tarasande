@@ -20,7 +20,7 @@ import su.mandora.tarasande.util.DEFAULT_TPS
 import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.math.MathUtil
-import su.mandora.tarasande.util.math.rotation.Rotation
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil
 

@@ -1,4 +1,4 @@
-package su.mandora.tarasande.feature.rotation.correctmovement.impl
+package su.mandora.tarasande.feature.rotation.components.correctmovement.impl
 
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventInput
@@ -9,7 +9,7 @@ import kotlin.math.round
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-class Silent(rotations: Rotations) {
+class Silent(rotations: Rotations, isEnabled: () -> Boolean) {
 
     init {
         EventDispatcher.add(EventInput::class.java) { event ->
@@ -17,7 +17,7 @@ class Silent(rotations: Rotations) {
             if (event.input != mc.player?.input)
                 return@add
 
-            if (!rotations.correctMovement.isSelected(3))
+            if (!isEnabled())
                 return@add
 
             if (event.movementForward == 0F && event.movementSideways == 0F)

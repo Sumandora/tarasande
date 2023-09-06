@@ -20,6 +20,7 @@ import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.event.impl.EventPollEvents
 import su.mandora.tarasande.event.impl.EventRender3D
 import su.mandora.tarasande.event.impl.EventTick
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.injection.accessor.IClientConnection
 import su.mandora.tarasande.injection.accessor.ILivingEntity
 import su.mandora.tarasande.mc
@@ -31,7 +32,6 @@ import su.mandora.tarasande.system.screen.graphsystem.ManagerGraph
 import su.mandora.tarasande.util.DEFAULT_REACH
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.TimeUtil
-import su.mandora.tarasande.util.math.rotation.Rotation
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil
@@ -255,10 +255,11 @@ class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MIS
         } else
             packets.clear()
         if (cancelled) {
-            mc.player?.setPosition(pos)
-            mc.player?.velocity = velocity
-            mc.player?.yaw = rotation?.yaw!!
-            mc.player?.pitch = rotation?.pitch!!
+            mc.player?.apply {
+                setPosition(pos)
+                velocity = velocity
+                rotation?.applyOn(this)
+            }
         }
     }
 }

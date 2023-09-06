@@ -17,8 +17,8 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.kotlinruntime.WeakSet
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
-import su.mandora.tarasande.util.math.rotation.Rotation
-import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import java.util.*
 
 class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with bots", ModuleCategory.COMBAT) {

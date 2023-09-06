@@ -12,7 +12,7 @@ import su.mandora.tarasande.util.player.PlayerUtil
 
 class ModuleSprint : Module("Sprint", "Automatically sprints", ModuleCategory.MOVEMENT) {
 
-    private val allowBackwards = ValueBoolean(this, "Allow backwards", false, isEnabled = { !Rotations.correctMovement.isSelected(1) })
+    private val allowBackwards = ValueBoolean(this, "Allow backwards", false, isEnabled = { Rotations.correctMovement.allowsBackwards() })
     val ignoreHunger = ValueBoolean(this, "Ignore hunger", false)
 
     init {

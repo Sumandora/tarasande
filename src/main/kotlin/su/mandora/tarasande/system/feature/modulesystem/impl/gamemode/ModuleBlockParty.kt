@@ -18,7 +18,7 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.INVENTORY_SYNC_ID
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
-import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.player.container.ContainerUtil
 import su.mandora.tarasande.util.player.prediction.Input
 import su.mandora.tarasande.util.player.prediction.PredictionEngine

@@ -2,7 +2,7 @@ package su.mandora.tarasande.event.impl
 
 import net.minecraft.client.input.Input
 import su.mandora.tarasande.event.Event
-import su.mandora.tarasande.util.math.rotation.Rotation
+import su.mandora.tarasande.feature.rotation.api.Rotation
 
 class EventPollEvents : Event(false)
 

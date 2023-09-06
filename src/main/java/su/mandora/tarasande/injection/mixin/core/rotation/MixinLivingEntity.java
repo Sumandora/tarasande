@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import su.mandora.tarasande.feature.rotation.Rotations;
 import su.mandora.tarasande.injection.accessor.ILivingEntity;
-import su.mandora.tarasande.util.math.rotation.Rotation;
+import su.mandora.tarasande.feature.rotation.api.Rotation;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity implements ILivingEntity {

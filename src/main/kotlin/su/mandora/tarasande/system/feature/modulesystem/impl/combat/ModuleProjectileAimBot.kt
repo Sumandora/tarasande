@@ -21,8 +21,8 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleFastUse
 import su.mandora.tarasande.util.PROJECTILE_GRAVITY
 import su.mandora.tarasande.util.extension.minecraft.math.minus
-import su.mandora.tarasande.util.math.rotation.Rotation
-import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.prediction.PredictionEngine
 import su.mandora.tarasande.util.player.prediction.projectile.ProjectileUtil

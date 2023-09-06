@@ -27,8 +27,8 @@ import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
 import su.mandora.tarasande.util.DEFAULT_WALK_SPEED
 import su.mandora.tarasande.util.extension.minecraft.isBlockHitResult
-import su.mandora.tarasande.util.math.rotation.Rotation
-import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 
 object PlayerUtil {
 

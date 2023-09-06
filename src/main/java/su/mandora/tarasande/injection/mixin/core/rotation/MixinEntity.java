@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.feature.rotation.Rotations;
 import su.mandora.tarasande.injection.accessor.ILivingEntity;
-import su.mandora.tarasande.util.math.rotation.Rotation;
+import su.mandora.tarasande.feature.rotation.api.Rotation;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity {

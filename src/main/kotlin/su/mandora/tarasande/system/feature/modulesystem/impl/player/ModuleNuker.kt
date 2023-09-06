@@ -20,7 +20,7 @@ import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
 import su.mandora.tarasande.util.extension.minecraft.isMissHitResult
 import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
 import su.mandora.tarasande.util.math.TimeUtil
-import su.mandora.tarasande.util.math.rotation.RotationUtil
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.ceil

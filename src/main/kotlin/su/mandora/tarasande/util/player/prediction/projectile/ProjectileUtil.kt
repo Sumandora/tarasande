@@ -10,13 +10,13 @@ import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.random.Random
 import net.minecraft.util.math.random.RandomSplitter
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.injection.accessor.prediction.IParticleManager
 import su.mandora.tarasande.injection.accessor.prediction.ISoundSystem
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.util.extension.minecraft.math.copy
 import su.mandora.tarasande.util.extension.minecraft.math.times
-import su.mandora.tarasande.util.math.rotation.Rotation
-import su.mandora.tarasande.util.math.rotation.RotationUtil
 import java.util.function.BiConsumer
 
 object ProjectileUtil {

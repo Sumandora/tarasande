@@ -1,4 +1,4 @@
-package su.mandora.tarasande.util.math.rotation
+package su.mandora.tarasande.feature.rotation.api
 
 import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
