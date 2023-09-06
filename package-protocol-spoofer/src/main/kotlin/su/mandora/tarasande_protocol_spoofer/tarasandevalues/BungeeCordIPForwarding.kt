@@ -6,16 +6,14 @@ import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
-import java.util.*
 
 object BungeeCordIPForwarding {
     private val enabled = ValueBoolean(this, "Enabled", false)
     private val endIP = ValueText(this, "End IP", "127.0.0.1")
     private val customUUID = ValueBoolean(this, "Custom UUID", false)
-    private val uuid = ValueText(this, "UUID", UUID.randomUUID().toString(), isEnabled = { customUUID.value })
+    private val uuid = ValueText(this, "UUID", "", isEnabled = { customUUID.value })
 
     private const val NULL_TERMINATOR = '\u0000'
-    private fun stripID(input: String) = input.replace("-", "")
 
     init {
         EventDispatcher.add(EventPacket::class.java) { event ->
@@ -28,7 +26,7 @@ object BungeeCordIPForwarding {
                     else
                         mc.session.uuid
 
-                (event.packet as HandshakeC2SPacket).address += NULL_TERMINATOR + endIP.value + NULL_TERMINATOR + stripID(uuid)
+                (event.packet as HandshakeC2SPacket).address += NULL_TERMINATOR + endIP.value + NULL_TERMINATOR + uuid.filterNot { it == '-' }
             }
         }
     }
