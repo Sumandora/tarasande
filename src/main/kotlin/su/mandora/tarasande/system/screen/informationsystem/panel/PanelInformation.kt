@@ -8,12 +8,14 @@ import su.mandora.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueBu
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
 import su.mandora.tarasande.system.screen.panelsystem.Panel
+import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
 
 class PanelInformation(private val informationSystem: ManagerInformation) : Panel("Information", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
 
     val map = HashMap<Information, String>()
+    val text = ArrayList<String>()
 
     init {
         informationSystem.list.forEach {
@@ -21,7 +23,11 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
         }
     }
 
-    private val elements = ValueMode(this, "Elements", true, *informationSystem.list.map { map[it]!! }.toTypedArray())
+    private val elements = object : ValueMode(this, "Elements", true, *informationSystem.list.map { map[it]!! }.toTypedArray()) {
+        override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
+            text.clearAndGC()
+        }
+    }
 
     class InformationValues(panelInformation: PanelInformation) {
         init {
@@ -42,7 +48,17 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
     fun isSelected(information: Information) = elements.isSelected(map[information]!!)
 
     override fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-        val text = ArrayList<String>()
+        for ((index, it) in text.withIndex()) {
+            when (alignment) {
+                Alignment.LEFT -> FontWrapper.textShadow(context, it, x.toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.MIDDLE -> FontWrapper.textShadow(context, it, x.toFloat() + panelWidth.toFloat() / 2F - FontWrapper.getWidth(it).toFloat() / 2F, y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
+                Alignment.RIGHT -> FontWrapper.textShadow(context, it, x.toFloat() + panelWidth.toFloat() - FontWrapper.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
+            }
+        }
+    }
+
+    override fun isVisible(): Boolean {
+        text.clear()
         for (owner in informationSystem.getAllOwners()) {
             val cache = ArrayList<String>()
             val informationList = informationSystem.getAllInformation(owner)
@@ -72,20 +88,7 @@ class PanelInformation(private val informationSystem: ManagerInformation) : Pane
             }
         }
 
-        for ((index, it) in text.withIndex()) {
-            when (alignment) {
-                Alignment.LEFT -> FontWrapper.textShadow(context, it, x.toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
-                Alignment.MIDDLE -> FontWrapper.textShadow(context, it, x.toFloat() + panelWidth.toFloat() / 2F - FontWrapper.getWidth(it).toFloat() / 2F, y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
-                Alignment.RIGHT -> FontWrapper.textShadow(context, it, x.toFloat() + panelWidth.toFloat() - FontWrapper.getWidth(it).toFloat(), y.toFloat() + titleBarHeight + FontWrapper.fontHeight() * index, TarasandeValues.accentColor.getColor().rgb, offset = 0.5F)
-            }
-        }
-    }
-
-    override fun isVisible(): Boolean {
-        for (information in informationSystem.list)
-            if (information.getMessage() != null)
-                return true
-        return false
+        return text.isNotEmpty()
     }
 
 }
