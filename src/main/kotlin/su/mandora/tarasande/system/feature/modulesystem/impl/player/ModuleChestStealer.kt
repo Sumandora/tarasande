@@ -52,7 +52,7 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
         list.remove(slot)
         list.removeIf { ItemStack.canCombine(slot.stack, it.stack) }
 
-        return cleaner.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.distinctBy { it.stack.item }.filter { it != slot }.toTypedArray(), *ContainerUtil.getValidSlots(mc.player?.playerScreenHandler!!).filter { it.hasStack() }.toTypedArray()).map { it.stack })
+        return cleaner.hasBetterEquivalent(slot.stack, ArrayUtils.addAll(list.distinctBy { it.stack.item }.filter { it != slot }.toTypedArray(), *ContainerUtil.getValidSlots(mc.player!!.playerScreenHandler).filter { it.hasStack() }.toTypedArray()).map { it.stack })
     }
 
     /**
@@ -67,12 +67,6 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
 
     init {
         registerEvent(EventScreenInput::class.java) { event ->
-            /*
-             * Side story: <=1.12.2 does this in the tick method
-             * We do it in the frame
-             * Means we can steal faster and on top, we can steal with a low timer, without any issues
-             * Maybe 1.8 isn't so good after all for cheating?
-             */
             if (event.doneInput)
                 return@registerEvent
 
@@ -134,16 +128,16 @@ class ModuleChestStealer : Module("Chest stealer", "Takes all items out of a che
                     if (randomize.value == 0.0) 0F else ThreadLocalRandom.current().nextDouble(-randomize.value, randomize.value).toFloat()
                 ))
                 if (ThreadLocalRandom.current().nextInt(100) < failChance.value) {
-                    val interpolated = mousePos?.add(displayPos?.add(mousePos?.negate())?.multiply(ThreadLocalRandom.current().nextDouble(0.0, 1.0).toFloat()))!!
+                    val interpolated = mousePos!!.let { it.add(displayPos.add(it.negate()).multiply(ThreadLocalRandom.current().nextDouble().toFloat())) }
                     ContainerUtil.getClosestSlot(screenHandler, interpolated) { slot, _ -> !slot.hasStack() }?.also {
                         nextSlot = it
                     }
                 }
-                val distance = mousePos?.distanceSquared(displayPos)!!
+                val distance = mousePos!!.distanceSquared(displayPos)
                 mousePos = displayPos
                 val mapped = sqrt(distance).div(Vec2f(screen.backgroundWidth.toFloat(), screen.backgroundHeight.toFloat()).length())
                 nextDelay = delay.interpolate(mapped.toDouble()).toLong()
-                mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot?.id!!, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
+                mc.interactionManager!!.clickSlot(screenHandler.syncId, nextSlot!!.id, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
                 event.doneInput = true
             }
         }
