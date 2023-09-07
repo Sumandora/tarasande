@@ -16,11 +16,15 @@ class Teleporter(owner: Any) {
     private val ground = ValueMode(owner, "Ground", false, "Always on ground", "Always off ground", "Approximate ground")
 
     companion object {
-        fun isPassable(pos: BlockPos): Boolean {
+        private fun isPassable(pos: BlockPos): Boolean {
             return mc.world?.getBlockState(pos)?.getCollisionShape(mc.world, pos).let { it == null || it.isEmpty }
         }
 
-        private val pathFinder = PathFinder({ _, node -> isPassable(BlockPos(node.x, node.y, node.z)) && isPassable(BlockPos(node.x, node.y + 1, node.z)) })
+        fun canStand(pos: BlockPos): Boolean {
+            return isPassable(pos) && isPassable(pos.add(0, 1, 0))
+        }
+
+        private val pathFinder = PathFinder({ _, node -> canStand(BlockPos(node.x, node.y, node.z)) })
     }
 
     enum class Method {
@@ -32,7 +36,7 @@ class Teleporter(owner: Any) {
 
         fun moveUp(pos: BlockPos): BlockPos {
             var pos = pos
-            while (!isPassable(pos))
+            while (!canStand(pos))
                 pos = pos.add(0, 1, 0)
             return pos
         }
