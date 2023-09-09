@@ -65,7 +65,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
             if (event.state != EventRender3D.State.POST)
                 return@registerEvent
             hashMap.clear()
-            if (!mode.isSelected(1))
+            if (!mode.isSelected(1) && !mode.isSelected(2))
                 return@registerEvent
             for (entity in mc.world!!.entities) {
                 if (!shouldRender(entity)) continue
@@ -120,10 +120,10 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
         }
 
         registerEvent(EventRender2D::class.java, 998) { event ->
-            for ((entity, pair) in hashMap.entries) {
-                if (pair.second)
-                    ManagerESP.renderBox(event.context, entity, pair.first)
-            }
+            if(mode.isSelected(1))
+                for ((entity, pair) in hashMap.entries)
+                    if (pair.second)
+                        ManagerESP.renderBox(event.context, entity, pair.first)
 
             if (mode.isSelected(2)) {
                 val hashMap = hashMap.filterNot { it.key == mc.player }
@@ -133,6 +133,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
                     GL11.glEnable(GL11.GL_LINE_SMOOTH)
                     val lineWidth = GL11.glGetFloat(GL11.GL_LINE_WIDTH)
                     GL11.glLineWidth(tracerWidth.value.toFloat())
+                    RenderSystem.enableDepthTest()
 
                     RenderSystem.setShaderColor(1F, 1F, 1F, 1F)
 
@@ -160,6 +161,7 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
                     }
 
                     BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
+                    RenderSystem.disableDepthTest()
                     GL11.glLineWidth(lineWidth)
                     GL11.glDisable(GL11.GL_LINE_SMOOTH)
                     RenderSystem.disableBlend()
