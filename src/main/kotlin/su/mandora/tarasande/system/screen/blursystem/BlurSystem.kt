@@ -3,16 +3,16 @@ package su.mandora.tarasande.system.screen.blursystem
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.Framebuffer
-import net.minecraft.client.gui.DrawContext
+import net.minecraft.client.util.math.MatrixStack
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL20
 import su.mandora.tarasande.Manager
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventRender2D
 import su.mandora.tarasande.event.impl.EventScreenRender
+import su.mandora.tarasande.event.impl.EventSuccessfulLoad
 import su.mandora.tarasande.mc
-import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
-import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
+import su.mandora.tarasande.system.screen.blursystem.api.BlurEffect
 import su.mandora.tarasande.system.screen.blursystem.impl.BlurBox
 import su.mandora.tarasande.system.screen.blursystem.impl.BlurGaussian
 import su.mandora.tarasande.system.screen.blursystem.impl.BlurKawase
@@ -24,9 +24,7 @@ import su.mandora.tarasande.util.render.shader.Shader
 
 object ManagerBlur : Manager<Blur>() {
 
-    lateinit var selected: Blur
-    val mode: ValueMode
-    val strength = ValueNumber(this, "Blur strength", 1.0, 1.0, 20.0, 1.0, exceed = false)
+    lateinit var blurEffect: BlurEffect
 
     private val inGameShapesFramebuffer = SimpleFramebufferWrapped()
     private val screenShapesFramebuffer = SimpleFramebufferWrapped()
@@ -42,22 +40,16 @@ object ManagerBlur : Manager<Blur>() {
         EventDispatcher.apply {
             add(EventScreenRender::class.java, 1) {
                 if (it.state == EventScreenRender.State.PRE && it.screen !is ScreenPanel) {
-                    blurScene(it.context, shapesBuffer = screenShapesFramebuffer)
+                    blurScene(it.context.matrices, shapesBuffer = screenShapesFramebuffer)
                 }
             }
             add(EventRender2D::class.java, 999) {
-                blurScene(it.context)
+                blurScene(it.context.matrices)
+            }
+            add(EventSuccessfulLoad::class.java, 1001) {
+                blurEffect = BlurEffect(this@ManagerBlur)
             }
         }
-
-        mode = object : ValueMode(this, "Blur mode", false, *list.map { it.name }.toTypedArray()) {
-            override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) {
-                if (!oldSelected && newSelected)
-                    selected = list[index]
-            }
-        }
-
-        mode.select(2) // Select the best blur as default
     }
 
     fun bind(setViewport: Boolean, screens: Boolean = false) {
@@ -70,13 +62,13 @@ object ManagerBlur : Manager<Blur>() {
         buffer.beginWrite(setViewport)
     }
 
-    fun blurScene(context: DrawContext, strength: Int? = null, shapesBuffer: Framebuffer = inGameShapesFramebuffer, targetBuffer: Framebuffer = mc.framebuffer) {
+    fun blurScene(matrices: MatrixStack, strength: Int = blurEffect.strength.value.toInt(), shapesBuffer: Framebuffer = inGameShapesFramebuffer, targetBuffer: Framebuffer = mc.framebuffer) {
         if (!RenderSystem.isOnRenderThread()) return
 
         val cullFace = GL11.glIsEnabled(GL11.GL_CULL_FACE)
         RenderSystem.disableCull()
 
-        val framebuffer = selected.render(context, targetBuffer, strength ?: this.strength.value.toInt())
+        val framebuffer = blurEffect(matrices, strength, targetBuffer)
 
         mc.framebuffer.beginWrite(true)
 
@@ -86,7 +78,7 @@ object ManagerBlur : Manager<Blur>() {
         cutoutShader["tex"] = framebuffer
         cutoutShader["resolution"] = floatArrayOf(shapesBuffer.textureWidth.toFloat(), shapesBuffer.textureHeight.toFloat())
 
-        RenderUtil.quad(context)
+        RenderUtil.quad(matrices)
 
         cutoutShader.unbindProgram()
 
@@ -100,5 +92,5 @@ object ManagerBlur : Manager<Blur>() {
 
 abstract class Blur(val name: String) {
 
-    abstract fun render(context: DrawContext, targetBuffer: Framebuffer, strength: Int): Framebuffer
+    abstract fun render(matrices: MatrixStack, targetBuffer: Framebuffer, strength: Int): Framebuffer
 }

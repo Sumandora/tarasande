@@ -1,7 +1,7 @@
 package su.mandora.tarasande.system.screen.blursystem.impl
 
 import net.minecraft.client.gl.Framebuffer
-import net.minecraft.client.gui.DrawContext
+import net.minecraft.client.util.math.MatrixStack
 import org.lwjgl.opengl.GL20
 import su.mandora.tarasande.system.screen.blursystem.Blur
 import su.mandora.tarasande.util.render.RenderUtil
@@ -15,13 +15,13 @@ class BlurBox : Blur("Box") {
     private val blurredFramebuffer = SimpleFramebufferWrapped()
     private val alternativeFramebuffer = SimpleFramebufferWrapped()
 
-    override fun render(context: DrawContext, targetBuffer: Framebuffer, strength: Int): Framebuffer {
-        sample(context, strength, targetBuffer, alternativeFramebuffer, Direction.HORIZONTAL)
-        sample(context, strength, alternativeFramebuffer, blurredFramebuffer, Direction.VERTICAL)
+    override fun render(matrices: MatrixStack, targetBuffer: Framebuffer, strength: Int): Framebuffer {
+        sample(matrices, strength, targetBuffer, alternativeFramebuffer, Direction.HORIZONTAL)
+        sample(matrices, strength, alternativeFramebuffer, blurredFramebuffer, Direction.VERTICAL)
         return blurredFramebuffer
     }
 
-    private fun sample(context: DrawContext, strength: Int, read: Framebuffer, write: Framebuffer, direction: Direction) {
+    private fun sample(matrices: MatrixStack, strength: Int, read: Framebuffer, write: Framebuffer, direction: Direction) {
         write.beginWrite(true)
         box.bindProgram()
 
@@ -30,7 +30,7 @@ class BlurBox : Blur("Box") {
         box["direction"] = direction
         box["resolution"] = floatArrayOf(write.textureWidth.toFloat(), write.textureHeight.toFloat())
 
-        RenderUtil.quad(context)
+        RenderUtil.quad(matrices)
 
         box.unbindProgram()
     }

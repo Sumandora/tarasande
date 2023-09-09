@@ -91,7 +91,7 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
 
         val color = TarasandeValues.accentColor.getColor()
 
-        val strength = round(progress * ManagerBlur.strength.value).toInt()
+        val strength = round(progress * ManagerBlur.blurEffect.strength.value).toInt()
         if (strength > 0) {
             ManagerBlur.bind(true)
             context.fill(
@@ -103,7 +103,7 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
             )
             client?.framebuffer?.beginWrite(true)
 
-            ManagerBlur.blurScene(context, strength)
+            ManagerBlur.blurScene(context.matrices, strength)
         }
 
         context.matrices.push()
