@@ -69,6 +69,10 @@ class Program(vararg shaders: Shader): AutoCloseable {
         }
     }
 
+    operator fun set(uniformName: String, value: Boolean) {
+        GL20.glUniform1i(get(uniformName), if(value) 1 else 0)
+    }
+
     override fun close() {
         GlStateManager.glDeleteProgram(programId)
     }
