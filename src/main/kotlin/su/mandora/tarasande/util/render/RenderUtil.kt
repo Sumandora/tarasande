@@ -199,10 +199,10 @@ object RenderUtil {
     }
 
     fun colorToRGBA(color: Int): FloatArray {
-        val a = ColorHelper.Argb.getAlpha(color).toFloat() / 255F
         val r = ColorHelper.Argb.getRed(color).toFloat() / 255F
         val g = ColorHelper.Argb.getGreen(color).toFloat() / 255F
         val b = ColorHelper.Argb.getBlue(color).toFloat() / 255F
+        val a = ColorHelper.Argb.getAlpha(color).toFloat() / 255F
 
         return floatArrayOf(r, g, b, a)
     }
@@ -311,14 +311,14 @@ object RenderUtil {
         }
     }
 
-    fun quad(context: DrawContext, width: Float = mc.window.framebufferWidth.toFloat(), height: Float = mc.window.framebufferHeight.toFloat()) {
+    fun quad(matrixStack: MatrixStack, width: Float = mc.window.framebufferWidth.toFloat(), height: Float = mc.window.framebufferHeight.toFloat()) {
         // Convert width & height to NDC
         @Suppress("NAME_SHADOWING")
         val width = width / mc.window.framebufferWidth.toFloat() * 2F - 1F
         @Suppress("NAME_SHADOWING")
         val height = height / mc.window.framebufferHeight.toFloat() * 2F - 1F
 
-        val matrix = context.matrices.peek().positionMatrix
+        val matrix = matrixStack.peek().positionMatrix
         val bufferBuilder = Tessellator.getInstance().buffer
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION)
         bufferBuilder.vertex(matrix, -1F, -1F, 0F).next()
