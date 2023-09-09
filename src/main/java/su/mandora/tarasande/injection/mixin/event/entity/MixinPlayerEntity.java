@@ -22,7 +22,8 @@ public class MixinPlayerEntity {
             EventDispatcher.INSTANCE.call(eventKeepSprint);
             if (!eventKeepSprint.getSprinting())
                 instance.setSprinting(b);
-        }
+        } else
+            instance.setSprinting(b);
     }
 
     @Inject(method = "getDisplayName", at = @At("RETURN"), cancellable = true)
