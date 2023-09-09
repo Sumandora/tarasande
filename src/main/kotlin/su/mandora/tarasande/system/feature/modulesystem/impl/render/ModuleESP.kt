@@ -31,9 +31,10 @@ import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.render.RenderUtil
 import kotlin.math.max
 
+
 class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCategory.RENDER) {
 
-    val mode = ValueMode(this, "Mode", true, "Shader", "2D", "Tracers")
+    val mode = ValueMode(this, "Mode", true, "Spectral", "2D", "Tracers")
     val entities = object : ValueRegistry<EntityType<*>>(this, "Entities", Registries.ENTITY_TYPE, true, EntityType.PLAYER) {
         override fun getTranslationKey(key: Any?) = (key as EntityType<*>).translationKey
     }
@@ -58,14 +59,15 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
     private val hashMap = HashMap<Entity, Pair<Rectangle, Boolean>>()
 
+
     init {
         registerEvent(EventRender3D::class.java) { event ->
-            if (event.state != EventRender3D.State.POST) return@registerEvent
-
+            if (event.state != EventRender3D.State.POST)
+                return@registerEvent
             hashMap.clear()
             if (!mode.isSelected(1))
                 return@registerEvent
-            for (entity in mc.world?.entities!!) {
+            for (entity in mc.world!!.entities) {
                 if (!shouldRender(entity)) continue
 
                 if (mc.options.perspective.isFirstPerson && entity == mc.player) continue
@@ -119,47 +121,49 @@ class ModuleESP : Module("ESP", "Makes entities visible behind walls", ModuleCat
 
         registerEvent(EventRender2D::class.java, 998) { event ->
             for ((entity, pair) in hashMap.entries) {
-                if(pair.second)
+                if (pair.second)
                     ManagerESP.renderBox(event.context, entity, pair.first)
             }
 
-            if(mode.isSelected(2) && hashMap.isNotEmpty()) {
-                RenderSystem.enableBlend()
-                RenderSystem.blendFunc(GlConst.GL_SRC_ALPHA, GlConst.GL_ONE_MINUS_SRC_ALPHA)
-                GL11.glEnable(GL11.GL_LINE_SMOOTH)
-                val lineWidth = GL11.glGetFloat(GL11.GL_LINE_WIDTH)
-                GL11.glLineWidth(tracerWidth.value.toFloat())
+            if (mode.isSelected(2)) {
+                val hashMap = hashMap.filterNot { it.key == mc.player }
+                if (hashMap.isNotEmpty()) {
+                    RenderSystem.enableBlend()
+                    RenderSystem.blendFunc(GlConst.GL_SRC_ALPHA, GlConst.GL_ONE_MINUS_SRC_ALPHA)
+                    GL11.glEnable(GL11.GL_LINE_SMOOTH)
+                    val lineWidth = GL11.glGetFloat(GL11.GL_LINE_WIDTH)
+                    GL11.glLineWidth(tracerWidth.value.toFloat())
 
-                RenderSystem.setShaderColor(1F, 1F, 1F, 1F)
+                    RenderSystem.setShaderColor(1F, 1F, 1F, 1F)
 
-                val bufferBuilder = Tessellator.getInstance().buffer
+                    val bufferBuilder = Tessellator.getInstance().buffer
 
-                RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
-                bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR)
+                    RenderSystem.setShader { GameRenderer.getPositionColorProgram() }
+                    bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR)
 
-                val matrix = event.context.matrices.peek().positionMatrix
+                    val matrix = event.context.matrices.peek().positionMatrix
 
-                val center = Vec2f(mc.window.scaledWidth / 2F, mc.window.scaledHeight / 2F)
-                val screenSize = max(mc.window.scaledWidth, mc.window.scaledHeight)
+                    val center = Vec2f(mc.window.scaledWidth / 2F, mc.window.scaledHeight / 2F)
+                    val screenSize = max(mc.window.scaledWidth, mc.window.scaledHeight)
 
-                for ((entity, pair) in hashMap.entries) {
-                    val color = entity.teamColorValue
-                    bufferBuilder.fixedColor(ColorHelper.Argb.getRed(color), ColorHelper.Argb.getGreen(color), ColorHelper.Argb.getBlue(color), 255)
-                    bufferBuilder.vertex(matrix, center.x, center.y, 0F).next()
+                    for ((entity, pair) in hashMap.entries) {
+                        val color = entity.teamColorValue
+                        bufferBuilder.fixedColor(ColorHelper.Argb.getRed(color), ColorHelper.Argb.getGreen(color), ColorHelper.Argb.getBlue(color), 255)
+                        bufferBuilder.vertex(matrix, center.x, center.y, 0F).next()
 
-                    var vec2f = pair.first.center()
-                    if(!pair.second) { // Those are linear functions, so we can extend them
-                        vec2f = (vec2f - center) * screenSize
+                        var vec2f = pair.first.center()
+                        if (!pair.second) { // Those are linear functions, so we can extend them
+                            vec2f = (vec2f - center) * screenSize
+                        }
+                        bufferBuilder.vertex(matrix, vec2f.x, vec2f.y, 0F).next()
+                        bufferBuilder.unfixColor()
                     }
-                    bufferBuilder.vertex(matrix, vec2f.x, vec2f.y, 0F).next()
-                    bufferBuilder.unfixColor()
+
+                    BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
+                    GL11.glLineWidth(lineWidth)
+                    GL11.glDisable(GL11.GL_LINE_SMOOTH)
+                    RenderSystem.disableBlend()
                 }
-
-                BufferRenderer.drawWithGlobalProgram(bufferBuilder.end())
-                GL11.glLineWidth(lineWidth)
-                GL11.glDisable(GL11.GL_LINE_SMOOTH)
-                RenderSystem.disableBlend()
-
             }
         }
     }
