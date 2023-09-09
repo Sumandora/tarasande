@@ -9,11 +9,12 @@ uniform vec2 resolution;
 out vec4 fragColor;
 
 void main() {
-    vec4 color = texture(tex, gl_FragCoord.xy / resolution) * 4.0;
-    color += texture(tex, (gl_FragCoord.xy - 0.5 * offset) / resolution);
-    color += texture(tex, (gl_FragCoord.xy + 0.5 * offset) / resolution);
-    color += texture(tex, (gl_FragCoord.xy + vec2(0.5, -0.5) * offset) / resolution);
-    color += texture(tex, (gl_FragCoord.xy - vec2(0.5, -0.5) * offset) / resolution);
+    fragColor = texture(tex, gl_FragCoord.xy / resolution) * 4.0;
+    fragColor += texture(tex, (gl_FragCoord.xy - 0.5 * offset) / resolution);
+    fragColor += texture(tex, (gl_FragCoord.xy + 0.5 * offset) / resolution);
+    fragColor += texture(tex, (gl_FragCoord.xy + vec2(0.5, -0.5) * offset) / resolution);
+    fragColor += texture(tex, (gl_FragCoord.xy - vec2(0.5, -0.5) * offset) / resolution);
 
-    fragColor = vec4(color.rgb / 8.0, 1.0);
+    fragColor /= 8.0;
+    fragColor.a = 1.0;
 }

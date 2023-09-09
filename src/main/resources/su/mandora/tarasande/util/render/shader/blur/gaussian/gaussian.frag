@@ -14,13 +14,12 @@ float gaussian(float x) {
 }
 
 void main() {
-    vec3 color = vec3(0.0);
-
+    fragColor = vec4(0.0);
     float halfSize = sigma * 3.0;
 
     for (float x = -halfSize; x <= halfSize; x++) {
-        color += texture(tex, (gl_FragCoord.xy + direction * x) / resolution).rgb * gaussian(x);
+        fragColor += texture(tex, (gl_FragCoord.xy + direction * x) / resolution) * gaussian(x);
     }
 
-    fragColor = vec4(color, 1.0);
+    fragColor.a = 1.0;
 }

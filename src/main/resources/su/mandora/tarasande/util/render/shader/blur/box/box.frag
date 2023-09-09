@@ -8,16 +8,13 @@ uniform vec2 resolution;
 out vec4 fragColor;
 
 void main() {
-    vec3 color = vec3(0.0);
-
+    fragColor = vec4(0.0);
     float halfSize = size / 2.0;
 
-    int sum = 0;
-
-    for (float x = -halfSize; x <= halfSize; x++) {
-        color += texture(tex, (gl_FragCoord.xy + direction * x) / resolution).rgb;
-        sum++;
+    for (float x = -halfSize; x < halfSize; x++) {
+        fragColor += texture(tex, (gl_FragCoord.xy + direction * x) / resolution);
     }
 
-    fragColor = vec4(color / sum, 1.0);
+    fragColor /= size;
+    fragColor.a = 1.0;
 }
