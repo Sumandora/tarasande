@@ -60,13 +60,8 @@ public abstract class MixinClientConnection implements IClientConnection {
     }
 
     @Override
-    public void tarasande_addForcePacket(Packet<?> packet) {
-        tarasande_forced.add(packet);
-    }
-
-    @Override
     public void tarasande_forceSend(Packet<?> packet) {
-        tarasande_addForcePacket(packet);
+        tarasande_forced.add(packet);
         send(packet);
     }
 }

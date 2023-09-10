@@ -19,26 +19,25 @@ class ModuleCivBreak : Module("Civ break", "Breaks blocks multiple times", Modul
     private val multiplier = ValueNumber(this, "Multiplier", 0.0, 100.0, 1000.0, 1.0, isEnabled = { packets.anySelected() })
 
     private fun sendPackets(startBreaking: Boolean, stopBreaking: Boolean, pos: BlockPos, direction: Direction) {
+        val clientConnection = mc.networkHandler?.connection as? IClientConnection ?: return
         for (i in 0 until multiplier.value.toInt()) {
-            if (startBreaking)
-                (mc.networkHandler?.connection as IClientConnection).tarasande_addForcePacket(
-                    PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, pos, direction, PlayerUtil.getSequence())
-                )
-            if (stopBreaking)
-                (mc.networkHandler?.connection as IClientConnection).tarasande_addForcePacket(
-                    PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, pos, direction, PlayerUtil.getSequence())
-                )
+            if (startBreaking) clientConnection.tarasande_forceSend(PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, pos, direction, PlayerUtil.getSequence()))
+            if (stopBreaking) clientConnection.tarasande_forceSend(PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, pos, direction, PlayerUtil.getSequence()))
         }
     }
 
-    private var queriedBlock: Pair<BlockPos, Direction>? = null
+    private var queuedBlock: Pair<BlockPos, Direction>? = null
+
+    override fun onDisable() {
+        queuedBlock = null
+    }
 
     init {
         registerEvent(EventTick::class.java) { event ->
-            if (event.state == EventTick.State.POST) {
-                if (queriedBlock != null) {
-                    sendPackets(startBreaking = true, stopBreaking = true, queriedBlock!!.first, queriedBlock!!.second)
-                    queriedBlock = null
+            if (event.state == EventTick.State.POST && mc.player != null) {
+                if (queuedBlock != null) {
+                    sendPackets(startBreaking = true, stopBreaking = true, queuedBlock!!.first, queuedBlock!!.second)
+                    queuedBlock = null
                 }
             }
         }
@@ -56,7 +55,7 @@ class ModuleCivBreak : Module("Civ break", "Breaks blocks multiple times", Modul
                             if (!packets.isSelected(0)) {
                                 sendPackets(startBreaking = false, stopBreaking = true, event.packet.pos, event.packet.direction)
                             } else {
-                                queriedBlock = Pair(event.packet.pos, event.packet.direction)
+                                queuedBlock = Pair(event.packet.pos, event.packet.direction)
                             }
                         }
                     }
