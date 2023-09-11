@@ -77,6 +77,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops unwanted items
                 val mapped = sqrt(distance).div(Vec2f(DEFAULT_CONTAINER_WIDTH.toFloat(), DEFAULT_CONTAINER_HEIGHT.toFloat()).length())
                 nextDelay = delay.interpolate(mapped.toDouble()).toLong()
                 mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot.id, 1 /* 1 = all; 0 = single */, SlotActionType.THROW, mc.player)
+                event.doneInput = true
             }
         }
     }

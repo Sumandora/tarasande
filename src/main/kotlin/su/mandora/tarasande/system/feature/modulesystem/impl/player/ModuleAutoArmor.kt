@@ -59,9 +59,6 @@ class ModuleAutoArmor : Module("Auto armor", "Equips armor if none is equipped",
                         .maxByOrNull { (it.stack.item as ArmorItem).protection + ContainerUtil.getProperEnchantments(it.stack).values.sum() }
                 }
 
-            if (bestArmors.isNotEmpty())
-                event.doneInput = true
-
             val nextSlot = ContainerUtil.getClosestSlot(screenHandler, mousePos) { slot, _ -> bestArmors.contains(slot) }
 
             if (!timeUtil.hasReached(
@@ -84,6 +81,7 @@ class ModuleAutoArmor : Module("Auto armor", "Equips armor if none is equipped",
                 val mapped = sqrt(distance).div(Vec2f(DEFAULT_CONTAINER_WIDTH.toFloat(), DEFAULT_CONTAINER_HEIGHT.toFloat()).length())
                 nextDelay = delay.interpolate(mapped.toDouble()).toLong()
                 mc.interactionManager?.clickSlot(screenHandler.syncId, nextSlot.id, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
+                event.doneInput = true
             }
         }
     }
