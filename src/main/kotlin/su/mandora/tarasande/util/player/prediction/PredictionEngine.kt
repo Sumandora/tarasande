@@ -1,6 +1,5 @@
 package su.mandora.tarasande.util.player.prediction
 
-import net.minecraft.SharedConstants
 import net.minecraft.block.BlockState
 import net.minecraft.client.input.Input
 import net.minecraft.client.network.ClientPlayerEntity
@@ -26,9 +25,6 @@ object PredictionEngine {
     fun predictState(count: Int, baseEntity: PlayerEntity = mc.player!!, input: Input? = null, abortWhen: (ClientPlayerEntity) -> Boolean = { false }): Pair<ClientPlayerEntity, ArrayList<Vec3d>> {
         val selfVelocity = baseEntity.velocity.copy()
         val localVelocity = mc.player?.velocity?.copy()
-
-        val wasDevelopment = SharedConstants.isDevelopment
-        SharedConstants.isDevelopment = true
 
         val soundSystem = mc.soundManager.soundSystem as ISoundSystem
         val wasSoundDisabled = soundSystem.tarasande_isDisabled()
@@ -65,7 +61,6 @@ object PredictionEngine {
             override fun playSound(event: SoundEvent?, category: SoundCategory?, volume: Float, pitch: Float) {
             }
         }
-        SharedConstants.isDevelopment = wasDevelopment
 
         @Suppress("NAME_SHADOWING")
         val input = input ?: if (baseEntity == mc.player) mc.player?.input!! else getClosestInput(baseEntity)
@@ -95,11 +90,8 @@ object PredictionEngine {
         playerEntity.copyPositionAndRotation(baseEntity)
         playerEntity.copyFrom(baseEntity)
 
-        if (playerEntity == mc.player) {
-            Rotations.fakeRotation?.also {
-                playerEntity.yaw = it.yaw
-                playerEntity.pitch = it.pitch
-            }
+        if (baseEntity == mc.player) {
+            Rotations.fakeRotation?.applyOn(playerEntity)
         }
 
         playerEntity.isOnGround = baseEntity.isOnGround // scary
@@ -115,18 +107,25 @@ object PredictionEngine {
         playerEntity.submergedInWater = baseEntity.isSubmergedInWater
         playerEntity.touchingWater = baseEntity.isTouchingWater
         playerEntity.isSwimming = baseEntity.isSwimming
+        playerEntity.isSprinting = baseEntity.isSprinting
+        playerEntity.isSneaking = baseEntity.isSneaking
+        playerEntity.verticalCollision = baseEntity.verticalCollision
+        playerEntity.horizontalCollision = baseEntity.horizontalCollision
+        playerEntity.collidedSoftly = baseEntity.collidedSoftly
 
         if (baseEntity == mc.player) {
             playerEntity.autoJumpEnabled = mc.player?.autoJumpEnabled == true
             playerEntity.ticksToNextAutojump = mc.player?.ticksToNextAutojump!!
         } else {
             playerEntity.autoJumpEnabled = false // Who plays with that?
+            // TODO maybe that makes it more human?
         }
 
         val list = ArrayList<Vec3d>()
 
-        val prevParticlesEnabled = (mc.particleManager as IParticleManager).tarasande_isParticlesEnabled() // race conditions :c
-        (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(false)
+        val particleManager = mc.particleManager as IParticleManager
+        val prevParticlesEnabled = particleManager.tarasande_isParticlesEnabled() // race conditions :c
+        particleManager.tarasande_setParticlesEnabled(false)
 
         for (i in 0 until count) {
             playerEntity.resetPosition()
@@ -137,13 +136,13 @@ object PredictionEngine {
                 break
         }
 
-        (mc.particleManager as IParticleManager).tarasande_setParticlesEnabled(prevParticlesEnabled)
+        particleManager.tarasande_setParticlesEnabled(prevParticlesEnabled)
+        soundSystem.tarasande_setDisabled(wasSoundDisabled)
 
         baseEntity.velocity = selfVelocity
 
         mc.player?.velocity = localVelocity // certain modifications assume that there is only one ClientPlayerEntity
 
-        soundSystem.tarasande_setDisabled(wasSoundDisabled)
 
         return Pair(playerEntity, list)
     }
