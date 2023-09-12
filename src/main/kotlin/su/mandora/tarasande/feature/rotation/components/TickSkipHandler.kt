@@ -24,7 +24,7 @@ class TickSkipHandler(rotations: Rotations) {
                 rotated = true
                 lastUpdate = System.currentTimeMillis()
             }
-            add(EventTick::class.java) { event ->
+            add(EventTick::class.java, 1) { event ->
                 if (event.state != EventTick.State.PRE) return@add
 
                 if (!rotated) {

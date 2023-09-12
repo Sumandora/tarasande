@@ -12,7 +12,7 @@ import kotlin.math.sqrt
 class Silent(rotations: Rotations, isEnabled: () -> Boolean) {
 
     init {
-        EventDispatcher.add(EventInput::class.java) { event ->
+        EventDispatcher.add(EventInput::class.java, 1) { event ->
             val fakeRotation = rotations.fakeRotation ?: return@add
             if (event.input != mc.player?.input)
                 return@add

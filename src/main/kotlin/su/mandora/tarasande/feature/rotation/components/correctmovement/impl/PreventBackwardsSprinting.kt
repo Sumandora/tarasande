@@ -10,7 +10,7 @@ import kotlin.math.abs
 class PreventBackwardsSprinting(rotations: Rotations, isEnabled: () -> Boolean) {
 
     init {
-        EventDispatcher.add(EventIsWalkingForward::class.java) {
+        EventDispatcher.add(EventIsWalkingForward::class.java, 1) {
             val fakeRotation = rotations.fakeRotation ?: return@add
             if (isEnabled())
                 if (PlayerUtil.isPlayerMoving())
