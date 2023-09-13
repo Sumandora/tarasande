@@ -22,6 +22,6 @@ class EventRotation : Event {
 }
 
 class EventVelocityYaw(var yaw: Float) : Event(false)
-class EventInput(val input: Input, var movementForward: Float, var movementSideways: Float, var slowDown: Boolean, val slowdownAmount: Float) : Event(true)
+class EventInput(val input: Input, var slowDown: Boolean, val slowdownAmount: Float) : Event(false)
 class EventMouseDelta(var deltaX: Double, var deltaY: Double) : Event(false)
 class EventRotationSet(val yaw: Float, val pitch: Float) : Event(false)

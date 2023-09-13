@@ -200,3 +200,8 @@ fun Input.with(jumping: Boolean = this.jumping, sneaking: Boolean = this.sneakin
         it.sneaking = sneaking
     }
 }
+
+// with() is quite weird to read, rename those usages to copy()
+fun Input.copy(): Input {
+    return with()
+}

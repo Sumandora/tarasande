@@ -1,15 +1,20 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.misc
 
-import su.mandora.tarasande.event.impl.*
+import su.mandora.tarasande.event.impl.EventInput
+import su.mandora.tarasande.event.impl.EventJump
+import su.mandora.tarasande.event.impl.EventRotation
+import su.mandora.tarasande.event.impl.EventVelocityYaw
 import su.mandora.tarasande.feature.rotation.Rotations
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
-import su.mandora.tarasande.feature.rotation.api.Rotation
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
+import su.mandora.tarasande.util.extension.minecraft.setMovementForward
+import su.mandora.tarasande.util.extension.minecraft.setMovementSideways
 import su.mandora.tarasande.util.player.PlayerUtil
 
 class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of other players", ModuleCategory.MISC) {
@@ -45,15 +50,10 @@ class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of othe
         registerEvent(EventInput::class.java) { event ->
             if (event.input == mc.player?.input)
                 if (move) {
-                    event.movementForward = 1F
-                    event.movementSideways = 0F
+                    event.input.setMovementForward(1F)
+                    event.input.setMovementSideways(0F)
+                    event.input.jumping = mc.player!!.horizontalCollision
                 }
-        }
-
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (event.keyBinding == mc.options.jumpKey)
-                if (move)
-                    event.pressed = mc.player?.horizontalCollision!!
         }
     }
 

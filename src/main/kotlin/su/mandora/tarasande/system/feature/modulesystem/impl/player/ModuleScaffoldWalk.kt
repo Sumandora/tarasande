@@ -8,6 +8,8 @@ import net.minecraft.util.UseAction
 import net.minecraft.util.math.*
 import su.mandora.tarasande.event.impl.*
 import su.mandora.tarasande.feature.rotation.Rotations
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.*
 import su.mandora.tarasande.system.feature.clickmethodsystem.api.ClickSpeedUtil
@@ -22,8 +24,6 @@ import su.mandora.tarasande.util.extension.minecraft.math.*
 import su.mandora.tarasande.util.extension.minecraft.safeCount
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.TimeUtil
-import su.mandora.tarasande.feature.rotation.api.Rotation
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.container.ContainerUtil
 import su.mandora.tarasande.util.render.RenderUtil
@@ -152,7 +152,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         var dist = 0.0
         for (target in arrayList) {
             if (target.third.offsetY != 0) {
-                if (PlayerUtil.input.jumping)
+                if (mc.options.jumpKey.pressed)
                     return Pair(target.second, target.third)
                 else if (best == null)
                     continue
@@ -394,7 +394,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 return@registerEvent
             if (target == null)
                 return@registerEvent
-            if (!PlayerUtil.input.jumping)
+            if (!mc.options.jumpKey.pressed)
                 return@registerEvent
 
             when {

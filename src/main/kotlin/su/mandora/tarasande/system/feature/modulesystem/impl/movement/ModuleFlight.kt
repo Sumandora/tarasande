@@ -9,6 +9,7 @@ import su.mandora.tarasande.event.impl.EventCollisionShape
 import su.mandora.tarasande.event.impl.EventJump
 import su.mandora.tarasande.event.impl.EventMovement
 import su.mandora.tarasande.event.impl.EventUpdate
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
@@ -17,9 +18,8 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
-import su.mandora.tarasande.util.math.MathUtil
+import su.mandora.tarasande.util.extension.minecraft.math.toVec3d
 import su.mandora.tarasande.util.math.TimeUtil
-import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 
 class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", ModuleCategory.MOVEMENT) {
@@ -56,19 +56,15 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
 
             var yMotion = 0.0
 
-            if (PlayerUtil.input.jumping)
+            if (mc.options.jumpKey.pressed)
                 yMotion += flightSpeed.value
-            if (PlayerUtil.input.sneaking)
+            if (mc.options.sneakKey.pressed)
                 yMotion -= flightSpeed.value
 
             if (yMotion == 0.0)
                 yMotion = baseYMotion.value
 
-            event.velocity = Entity.movementInputToVelocity(Vec3d(
-                MathUtil.roundAwayFromZero(PlayerUtil.input.movementSideways.toDouble()),
-                0.0,
-                MathUtil.roundAwayFromZero(PlayerUtil.input.movementForward.toDouble())
-            ), flightSpeed.value.toFloat(), mc.player?.yaw!!)
+            event.velocity = Entity.movementInputToVelocity(PlayerUtil.computeMovementInput().toVec3d(flipped = true), flightSpeed.value.toFloat(), mc.player?.yaw!!)
             event.velocity = Vec3d(event.velocity.x, yMotion, event.velocity.z)
         }
 

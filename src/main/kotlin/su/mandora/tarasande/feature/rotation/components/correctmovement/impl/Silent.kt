@@ -4,6 +4,8 @@ import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventInput
 import su.mandora.tarasande.feature.rotation.Rotations
 import su.mandora.tarasande.mc
+import su.mandora.tarasande.util.extension.minecraft.setMovementForward
+import su.mandora.tarasande.util.extension.minecraft.setMovementSideways
 import kotlin.math.cos
 import kotlin.math.round
 import kotlin.math.sin
@@ -20,14 +22,14 @@ class Silent(rotations: Rotations, isEnabled: () -> Boolean) {
             if (!isEnabled())
                 return@add
 
-            if (event.movementForward == 0F && event.movementSideways == 0F)
+            if (event.input.movementForward == 0F && event.input.movementSideways == 0F)
                 return@add
 
             val realYaw = mc.player!!.yaw
             val fakeYaw = fakeRotation.yaw
 
-            val moveX = event.movementSideways * cos(Math.toRadians(realYaw.toDouble())) - event.movementForward * sin(Math.toRadians(realYaw.toDouble()))
-            val moveZ = event.movementForward * cos(Math.toRadians(realYaw.toDouble())) + event.movementSideways * sin(Math.toRadians(realYaw.toDouble()))
+            val moveX = event.input.movementSideways * cos(Math.toRadians(realYaw.toDouble())) - event.input.movementForward * sin(Math.toRadians(realYaw.toDouble()))
+            val moveZ = event.input.movementForward * cos(Math.toRadians(realYaw.toDouble())) + event.input.movementSideways * sin(Math.toRadians(realYaw.toDouble()))
 
             var bestMovement: DoubleArray? = null
 
@@ -46,8 +48,8 @@ class Silent(rotations: Rotations, isEnabled: () -> Boolean) {
             }
 
             if (bestMovement != null) {
-                event.movementForward = round(bestMovement[1]).toInt().toFloat()
-                event.movementSideways = round(bestMovement[2]).toInt().toFloat()
+                event.input.setMovementForward(round(bestMovement[1].toFloat()))
+                event.input.setMovementSideways(round(bestMovement[2].toFloat()))
             }
         }
     }

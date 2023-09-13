@@ -1,7 +1,5 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.movement
 
-import net.minecraft.entity.MovementType
-import net.minecraft.entity.player.PlayerEntity
 import su.mandora.tarasande.event.impl.EventKeyBindingIsPressed
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -23,22 +21,28 @@ class ModuleSafeWalk : Module("Safe walk", "Prevents falling off blocks", Module
     private var lastSneak = Int.MIN_VALUE
 
     init {
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (event.keyBinding == mc.options.sneakKey && sneak.value && mc.player?.velocity?.horizontalLengthSquared()!! > 0.0) {
-                val onEdge = PredictionEngine.predictState(extrapolation.value.toInt(), input = mc.player?.input?.with(sneaking = true)).first.let { prediction ->
-                    mc.player?.velocity?.let { (prediction as PlayerEntity).adjustMovementForSneaking(it, MovementType.SELF) != it }!!
+        registerEvent(EventKeyBindingIsPressed::class.java) { event -> // TODO Fix
+            if(event.keyBinding != mc.options.sneakKey)
+                return@registerEvent
+
+            if(mc.player == null)
+                return@registerEvent
+
+            if (sneak.value && mc.player!!.velocity.horizontalLengthSquared() > 0.0) {
+                val onEdge = PredictionEngine.predictState(extrapolation.value.toInt(), input = mc.player!!.input.with(sneaking = false)).first.let { prediction ->
+                    prediction.y < mc.player!!.y
                 }
                 val forceSneak = when {
-                    offGround.isSelected(0) -> mc.player?.isOnGround == true && onEdge
-                    offGround.isSelected(1) -> mc.player?.isOnGround == false || onEdge
+                    offGround.isSelected(0) -> mc.player!!.isOnGround && onEdge
+                    offGround.isSelected(1) -> !mc.player!!.isOnGround || onEdge
                     offGround.isSelected(2) -> onEdge
                     else -> true
                 }
 
                 if (forceSneak)
-                    lastSneak = mc.player?.age!!
+                    lastSneak = mc.player!!.age
 
-                event.pressed = event.pressed || forceSneak || (mc.player?.age!! - lastSneak < unsneakDelay.value)
+                event.pressed = event.pressed || forceSneak || (mc.player!!.age - lastSneak < unsneakDelay.value)
             }
         }
     }

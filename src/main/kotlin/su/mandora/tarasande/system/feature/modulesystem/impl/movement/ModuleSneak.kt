@@ -1,7 +1,6 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.movement
 
 import su.mandora.tarasande.event.impl.EventInput
-import su.mandora.tarasande.event.impl.EventKeyBindingIsPressed
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
@@ -16,9 +15,9 @@ class ModuleSneak : Module("Sneak", "Automatically sneaks", ModuleCategory.MOVEM
     private val dontSlowdown = ValueBoolean(this, "Don't slowdown", false)
 
     init {
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (event.keyBinding == mc.options.sneakKey)
-                event.pressed = event.pressed || when {
+        registerEvent(EventInput::class.java) { event ->
+            if (mc.player?.input?.equals(event.input) == true)
+                event.input.sneaking = event.input.sneaking || when {
                     activation.isSelected(0) -> false
                     activation.isSelected(1) -> !PlayerUtil.isPlayerMoving()
                     /*activation.isSelected(2)*/else -> true

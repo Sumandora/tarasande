@@ -12,13 +12,15 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.event.impl.*
 import su.mandora.tarasande.feature.rotation.Rotations
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.*
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.INVENTORY_SYNC_ID
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
+import su.mandora.tarasande.util.extension.minecraft.setMovementForward
+import su.mandora.tarasande.util.extension.minecraft.setMovementSideways
 import su.mandora.tarasande.util.player.container.ContainerUtil
 import su.mandora.tarasande.util.player.prediction.Input
 import su.mandora.tarasande.util.player.prediction.PredictionEngine
@@ -269,24 +271,17 @@ class ModuleBlockParty : Module("Block party", "Automatically plays block party"
         registerEvent(EventInput::class.java) { event ->
             if (event.input == mc.player?.input)
                 if (move) {
-                    event.movementForward = 1F
-                    event.movementSideways = 0F
-                }
-        }
+                    event.input.setMovementForward(1F)
+                    event.input.setMovementSideways(0F)
 
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (event.keyBinding == mc.options.jumpKey) {
-                if (move && best != null) {
-                    if (mc.player!!.isOnGround && !preparing) {
-                        val realYaw = mc.player!!.yaw
-                        mc.player!!.yaw = Rotations.fakeRotation?.yaw ?: return@registerEvent
-                        val prediction = PredictionEngine.predictState(20, input = Input(1F, 0F).with(jumping = true), abortWhen = { it.isOnGround })
-                        mc.player!!.yaw = realYaw
-                        if (prediction.first.isOnGround && prediction.first.pos.distanceTo(best!!) < 0.7)
-                            event.pressed = true
+                    if (best != null) {
+                        if (mc.player!!.isOnGround && !preparing) {
+                            val prediction = PredictionEngine.predictState(20, input = Input(1F, 0F).with(jumping = true), abortWhen = { it.isOnGround })
+                            if (prediction.first.isOnGround && prediction.first.pos.distanceTo(best!!) < 0.7)
+                                event.input.jumping = true
+                        }
                     }
                 }
-            }
         }
     }
 

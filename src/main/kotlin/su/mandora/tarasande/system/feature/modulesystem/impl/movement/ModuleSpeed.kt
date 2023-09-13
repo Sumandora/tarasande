@@ -78,7 +78,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                     speed = PlayerUtil.calcBaseSpeed(speedValue.value)
                 }
             }
-            if (event.velocity.y < 0.0 && !PlayerUtil.input.jumping) {
+            if (event.velocity.y < 0.0 && !mc.options.jumpKey.pressed) {
                 event.velocity = event.velocity.multiply(1.0, gravity.value, 1.0)
             }
 

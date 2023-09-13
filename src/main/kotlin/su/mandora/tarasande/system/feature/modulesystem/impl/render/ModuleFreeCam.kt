@@ -1,11 +1,12 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.render
 
-import net.minecraft.client.input.KeyboardInput
+import net.minecraft.client.input.Input
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.option.Perspective
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.event.impl.*
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.injection.accessor.IGameRenderer
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -16,9 +17,11 @@ import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
 import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
-import su.mandora.tarasande.util.math.MathUtil
-import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.util.extension.minecraft.math.toVec3d
+import su.mandora.tarasande.util.extension.minecraft.setMovementForward
+import su.mandora.tarasande.util.extension.minecraft.setMovementSideways
 import su.mandora.tarasande.util.player.PlayerUtil
+import su.mandora.tarasande.util.player.prediction.copy
 import su.mandora.tarasande.util.string.StringUtil
 
 class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera", ModuleCategory.RENDER) {
@@ -33,11 +36,8 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
     private var prevCameraPos: Vec3d? = null
 
     private var perspective: Perspective? = null
-    private var firstRealInput: Pair<Float, Float>? = null
-    private var firstInput: Pair<Float, Float>? = null
+    private var firstInput: Input? = null
     private var map = HashMap<KeyBinding, Boolean>()
-
-    private val input = KeyboardInput(mc.options)
 
     private val capturedKeys = arrayOf(mc.options.jumpKey, mc.options.sneakKey, mc.options.sprintKey)
 
@@ -65,8 +65,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
             position = mc.gameRenderer.camera.pos
             rotation = mc.gameRenderer.camera.let { Rotation(it.yaw, it.pitch) }
             perspective = mc.options.perspective
-            firstRealInput = PlayerUtil.input.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
-            firstInput = mc.player!!.input.let { Pair(MathUtil.roundAwayFromZero(it.movementForward.toDouble()).toFloat(), MathUtil.roundAwayFromZero(it.movementSideways.toDouble()).toFloat()) }
+            firstInput = mc.player!!.input.copy()
             for (keyBinding in mc.options.allKeys.filter { capturedKeys.contains(it) })
                 map[keyBinding] = keyBinding.pressed
         }
@@ -75,7 +74,6 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
     override fun onDisable() {
         mc.options.perspective = perspective ?: Perspective.FIRST_PERSON
         prevCameraPos = null
-        firstRealInput = null
         firstInput = null
         map.clear()
     }
@@ -111,11 +109,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
                         yMotion += speed.value
                     if (mc.options.sneakKey.pressed)
                         yMotion -= speed.value
-                    var velocity = Entity.movementInputToVelocity(Vec3d(
-                        MathUtil.roundAwayFromZero(input.movementSideways.toDouble()),
-                        0.0,
-                        MathUtil.roundAwayFromZero(input.movementForward.toDouble())
-                    ), speed.value.toFloat(), rotation?.yaw!!)
+                    var velocity = Entity.movementInputToVelocity(PlayerUtil.computeMovementInput().toVec3d(flipped = true), speed.value.toFloat(), rotation?.yaw!!)
                     velocity = Vec3d(velocity?.x!!, yMotion, velocity.z)
                     prevCameraPos = position
                     position = position!! + velocity
@@ -124,22 +118,16 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         }
 
         registerEvent(EventInput::class.java, 1) { event ->
-            if (firstInput == null || firstRealInput == null)
+            if (firstInput == null)
                 onEnable()
             else {
                 if (event.input == mc.player?.input) {
                     if (!keepMovement.value) {
-                        event.movementForward = 0F
-                        event.movementSideways = 0F
-                    }
-                } else if (event.input == PlayerUtil.input) {
-                    event.cancelled = true
-                }
-                if (keepMovement.value) {
-                    if (event.input != input) {
-                        event.movementForward = firstRealInput?.first!!
-                        event.movementSideways = firstRealInput?.second!!
-                        event.cancelled = false
+                        event.input.setMovementForward(0F)
+                        event.input.setMovementSideways(0F)
+                    } else {
+                        event.input.setMovementForward(firstInput!!.movementForward)
+                        event.input.setMovementSideways(firstInput!!.movementSideways)
                     }
                 }
             }
@@ -161,11 +149,6 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
                         mc.targetedEntity = null
                         mc.crosshairTarget = PlayerUtil.rayCast(position!!, position!! + rotation?.forwardVector()!! * (mc.gameRenderer as IGameRenderer).tarasande_getReach())
                     }
-        }
-
-        registerEvent(EventTick::class.java) { event ->
-            if (event.state == EventTick.State.PRE && mc.player != null)
-                input.tick(false, 1F)
         }
     }
 }

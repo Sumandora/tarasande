@@ -2,7 +2,6 @@ package su.mandora.tarasande.util.player
 
 import net.minecraft.client.gui.screen.ChatScreen
 import net.minecraft.client.gui.screen.GameMenuScreen
-import net.minecraft.client.input.KeyboardInput
 import net.minecraft.entity.Entity
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.util.Hand
@@ -11,15 +10,17 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Vec2f
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.RaycastContext
 import net.minecraft.world.RaycastContext.FluidHandling
 import net.minecraft.world.RaycastContext.ShapeType
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.EventDispatcher
-import su.mandora.tarasande.event.impl.EventInput
 import su.mandora.tarasande.event.impl.EventIsEntityAttackable
 import su.mandora.tarasande.feature.rotation.Rotations
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.injection.accessor.IChatScreen
 import su.mandora.tarasande.injection.accessor.IGameRenderer
 import su.mandora.tarasande.mc
@@ -27,8 +28,6 @@ import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
 import su.mandora.tarasande.util.DEFAULT_WALK_SPEED
 import su.mandora.tarasande.util.extension.minecraft.isBlockHitResult
-import su.mandora.tarasande.feature.rotation.api.Rotation
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
 
 object PlayerUtil {
 
@@ -38,14 +37,6 @@ object PlayerUtil {
         mc.options.backKey,
         mc.options.rightKey
     )
-    val input = KeyboardInput(mc.options)
-
-    init {
-        EventDispatcher.add(EventInput::class.java) {
-            if (it.input == mc.player?.input)
-                input.tick(it.slowDown, it.slowdownAmount)
-        }
-    }
 
     fun isPlayerMoving() = mc.player!!.input.movementInput.lengthSquared() != 0F
 
@@ -122,8 +113,23 @@ object PlayerUtil {
         return !rayCast(start, end).isBlockHitResult()
     }
 
+    fun computeMovementInput(): Vec2f {
+        var forward = 0F
+        if(mc.options.forwardKey.pressed)
+            forward += 1F
+        if(mc.options.backKey.pressed)
+            forward -= 1F
+
+        var sideways = 0F
+        if(mc.options.leftKey.pressed)
+            sideways += 1F
+        if(mc.options.rightKey.pressed)
+            sideways -= 1F
+        return Vec2f(forward, sideways)
+    }
+
     fun getMoveDirection(): Double {
-        return RotationUtil.getYaw(input.movementInput) + (if (isPlayerMoving()) 0.0 else 90.0) + mc.player!!.yaw
+        return RotationUtil.getYaw(computeMovementInput().let { Vec2f(it.y, it.x) }) + (if (isPlayerMoving()) 0.0 else 90.0) + mc.player!!.yaw
     }
 
     fun isOnEdge(extrapolation: Double) = mc.player!!.let {

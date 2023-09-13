@@ -12,6 +12,8 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.math.minus
 import su.mandora.tarasande.util.extension.minecraft.prevPos
+import su.mandora.tarasande.util.extension.minecraft.setMovementForward
+import su.mandora.tarasande.util.extension.minecraft.setMovementSideways
 
 class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCategory.COMBAT) {
 
@@ -62,13 +64,13 @@ class ModuleWTap : Module("W-Tap", "Automatically W/S-Taps for you", ModuleCateg
                 if (changeBinds) {
                     when {
                         mode.isSelected(0) -> {
-                            event.movementForward = 0F
-                            event.movementSideways = 0F
+                            event.input.setMovementForward(0F)
+                            event.input.setMovementSideways(0F)
                         }
 
                         mode.isSelected(1) -> {
-                            event.movementForward *= -1F
-                            event.movementSideways *= -1F
+                            event.input.setMovementForward(event.input.movementForward * -1F)
+                            event.input.setMovementSideways(event.input.movementSideways * -1F)
                         }
                     }
                 }

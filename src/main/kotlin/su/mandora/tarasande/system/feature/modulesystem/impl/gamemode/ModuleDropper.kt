@@ -11,6 +11,7 @@ import su.mandora.tarasande.event.impl.EventInput
 import su.mandora.tarasande.event.impl.EventJump
 import su.mandora.tarasande.event.impl.EventRender3D
 import su.mandora.tarasande.event.impl.EventRotation
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueColor
@@ -21,7 +22,7 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.DEFAULT_TPS
 import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
 import su.mandora.tarasande.util.extension.minecraft.math.minus
-import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.util.extension.minecraft.setMovementForward
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.prediction.Input
 import su.mandora.tarasande.util.player.prediction.PredictionEngine
@@ -123,8 +124,8 @@ class ModuleDropper : Module("Dropper", "Tries to predict perfect Dropper plays"
                         }
 
                     val bestInput = best.first
-                    event.movementForward = bestInput.x
-                    event.movementSideways = bestInput.y
+                    event.input.setMovementForward(bestInput.x)
+                    event.input.setMovementForward(bestInput.y)
                     lastMovement = bestInput
                 }
             }
