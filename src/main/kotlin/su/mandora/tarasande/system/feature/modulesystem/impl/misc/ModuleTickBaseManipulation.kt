@@ -13,6 +13,8 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
 import su.mandora.tarasande.util.DEFAULT_REACH
+import su.mandora.tarasande.util.extension.minecraft.setMovementForward
+import su.mandora.tarasande.util.extension.minecraft.setMovementSideways
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.TimeUtil
 import su.mandora.tarasande.util.maxReach
@@ -133,16 +135,17 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
             }
         }
 
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (playStyle.isSelected(1)) {
-                if (shifted < prevShifted) {
-                    if (didHit && PlayerUtil.movementKeys.contains(event.keyBinding)) {
-                        event.pressed = !event.pressed
+        registerEvent(EventInput::class.java) { event ->
+            if(event.input == mc.player?.input)
+                if (playStyle.isSelected(1))
+                    if (shifted < prevShifted) {
+                        if (didHit) {
+                            event.input.setMovementForward(-event.input.movementForward)
+                            event.input.setMovementSideways(-event.input.movementSideways)
+                        }
+                    } else {
+                        didHit = false
                     }
-                } else {
-                    didHit = false
-                }
-            }
         }
 
         registerEvent(EventAttackEntity::class.java) {

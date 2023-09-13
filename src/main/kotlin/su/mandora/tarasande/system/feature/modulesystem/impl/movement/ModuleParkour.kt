@@ -1,6 +1,6 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.movement
 
-import su.mandora.tarasande.event.impl.EventKeyBindingIsPressed
+import su.mandora.tarasande.event.impl.EventInput
 import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -33,12 +33,11 @@ class ModuleParkour : Module("Parkour", "Jumps before falling off ledges", Modul
             }
         }
 
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (event.keyBinding == mc.options.jumpKey) {
+        registerEvent(EventInput::class.java) { event ->
+            if(event.input == mc.player?.input)
                 if(!ignoreWhenSneaking.value || !mc.player!!.isSneaking)
                     if (detectionMethod.isSelected(0) && PlayerUtil.isOnEdge(extrapolation.value))
-                        event.pressed = true
-            }
+                        event.input.jumping = true
         }
     }
 }

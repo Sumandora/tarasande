@@ -4,8 +4,8 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.event.impl.EventEntityHurt
+import su.mandora.tarasande.event.impl.EventInput
 import su.mandora.tarasande.event.impl.EventJump
-import su.mandora.tarasande.event.impl.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.impl.EventMovement
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -113,10 +113,11 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 speed = boostAmount.value
         }
 
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (!lowHop.value && event.keyBinding == mc.options.jumpKey && PlayerUtil.isPlayerMoving())
-                if (mc.player?.isOnGround!! && jumpHeight.value > 0.0)
-                    event.pressed = true
+        registerEvent(EventInput::class.java) { event ->
+            if(event.input == mc.player?.input)
+                if (!lowHop.value && PlayerUtil.isPlayerMoving())
+                    if (mc.player!!.isOnGround && jumpHeight.value > 0.0)
+                        event.input.jumping = true
         }
     }
 }

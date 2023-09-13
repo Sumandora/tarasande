@@ -2,9 +2,11 @@ package su.mandora.tarasande.system.feature.modulesystem.impl.movement
 
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
-import su.mandora.tarasande.event.impl.EventKeyBindingIsPressed
+import su.mandora.tarasande.event.impl.EventInput
 import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.event.impl.EventVelocity
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
@@ -13,8 +15,6 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
-import su.mandora.tarasande.feature.rotation.api.Rotation
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import java.util.concurrent.ThreadLocalRandom
 
@@ -125,9 +125,8 @@ class ModuleVelocity : Module("Velocity", "Reduces knock-back", ModuleCategory.M
             }
         }
 
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (event.keyBinding == mc.options.jumpKey)
-                event.pressed = event.pressed || isJumping
+        registerEvent(EventInput::class.java) { event ->
+            event.input.jumping = event.input.jumping || isJumping
         }
     }
 }

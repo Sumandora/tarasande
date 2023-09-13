@@ -1,7 +1,7 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.player
 
 import net.minecraft.client.gui.screen.ingame.HandledScreen
-import su.mandora.tarasande.event.impl.EventKeyBindingIsPressed
+import su.mandora.tarasande.event.impl.EventInput
 import su.mandora.tarasande.event.impl.EventMouseDelta
 import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.mc
@@ -57,14 +57,12 @@ class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PL
                 timer.reset()
         }
 
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (timer.hasReached(delay.value.toLong())) {
-                if (event.keyBinding == mc.options.jumpKey) {
+        registerEvent(EventInput::class.java) { event ->
+            if(event.input == mc.player?.input)
+                if (timer.hasReached(delay.value.toLong())) {
+                    event.input.jumping = true
                     timer.reset()
-                    event.pressed = true
-                }
-            } else if (movementKeys.contains(event.keyBinding))
-                if (event.pressed)
+                } else if (event.input.movementInput.lengthSquared() > 0.0)
                     timer.reset()
         }
     }

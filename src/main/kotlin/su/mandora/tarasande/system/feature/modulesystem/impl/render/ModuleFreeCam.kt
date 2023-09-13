@@ -1,7 +1,6 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.render
 
 import net.minecraft.client.input.Input
-import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.option.Perspective
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.Vec3d
@@ -37,9 +36,8 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
 
     private var perspective: Perspective? = null
     private var firstInput: Input? = null
-    private var map = HashMap<KeyBinding, Boolean>()
 
-    private val capturedKeys = arrayOf(mc.options.jumpKey, mc.options.sneakKey, mc.options.sprintKey)
+    private var sprinting: Boolean? = null
 
     init {
         ManagerInformation.add(object : Information("Free cam", "Camera position") {
@@ -66,8 +64,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
             rotation = mc.gameRenderer.camera.let { Rotation(it.yaw, it.pitch) }
             perspective = mc.options.perspective
             firstInput = mc.player!!.input.copy()
-            for (keyBinding in mc.options.allKeys.filter { capturedKeys.contains(it) })
-                map[keyBinding] = keyBinding.pressed
+            sprinting = mc.options.sprintKey.isPressed // let modulesprint override this
         }
     }
 
@@ -75,7 +72,7 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
         mc.options.perspective = perspective ?: Perspective.FIRST_PERSON
         prevCameraPos = null
         firstInput = null
-        map.clear()
+        sprinting = null
     }
 
     init {
@@ -125,21 +122,26 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
                     if (!keepMovement.value) {
                         event.input.setMovementForward(0F)
                         event.input.setMovementSideways(0F)
+                        event.input.jumping = false
+                        event.input.sneaking = false
                     } else {
-                        event.input.setMovementForward(firstInput!!.movementForward)
-                        event.input.setMovementSideways(firstInput!!.movementSideways)
+                        firstInput!!.also {
+                            event.input.setMovementForward(it.movementForward)
+                            event.input.setMovementSideways(it.movementSideways)
+                            event.input.jumping = it.jumping
+                            event.input.sneaking = it.sneaking
+                        }
                     }
                 }
             }
         }
 
         registerEvent(EventKeyBindingIsPressed::class.java, 1) { event ->
-            if (map.isEmpty())
-                onEnable()
-            else {
-                if (capturedKeys.contains(event.keyBinding))
-                    event.pressed = keepMovement.value && map[event.keyBinding] ?: false
-            }
+            if (event.keyBinding == mc.options.sprintKey)
+                if (sprinting == null)
+                    onEnable()
+                else
+                    event.pressed = keepMovement.value && sprinting!!
         }
 
         registerEvent(EventUpdateTargetedEntity::class.java, 1) { event ->

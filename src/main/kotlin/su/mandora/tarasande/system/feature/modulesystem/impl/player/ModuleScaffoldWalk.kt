@@ -434,10 +434,10 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 RenderUtil.blockOutline(event.matrices, Box.from(placeLine?.first).offset(-0.5, -0.5, -0.5).expand(-0.49).union(Box.from(placeLine?.second).offset(-0.5, -0.5, -0.5).expand(-0.49)), placeLineColor.getColor().rgb)
         }
 
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (event.keyBinding == mc.options.jumpKey && autoJump.value && mc.player?.isOnGround == true && PlayerUtil.isPlayerMoving())
-                if (!waitForSprint.value || mc.player?.isSprinting == true)
-                    event.pressed = true
+        registerEvent(EventInput::class.java) { event ->
+            if (event.input == mc.player?.input && autoJump.value && mc.player!!.isOnGround && PlayerUtil.isPlayerMoving())
+                if (!waitForSprint.value || mc.player!!.isSprinting)
+                    event.input.jumping = true
         }
     }
 

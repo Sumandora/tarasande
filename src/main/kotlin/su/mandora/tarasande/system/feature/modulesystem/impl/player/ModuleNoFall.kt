@@ -1,7 +1,7 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.player
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
-import su.mandora.tarasande.event.impl.EventKeyBindingIsPressed
+import su.mandora.tarasande.event.impl.EventInput
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.mc
@@ -42,9 +42,11 @@ class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", Module
             }
         }
 
-        registerEvent(EventKeyBindingIsPressed::class.java) { event ->
-            if (mode.isSelected(2) && event.keyBinding == mc.options.sneakKey && prevFallDistance > fallDistance.value && mc.options.jumpKey.isPressed) {
-                event.pressed = !mc.world!!.isSpaceEmpty(mc.player, mc.player?.boundingBox?.offset(0.0, mc.player?.velocity?.y!!, 0.0))
+        registerEvent(EventInput::class.java) { event ->
+            if(event.input == mc.player?.input) {
+                if (mode.isSelected(2) && prevFallDistance > fallDistance.value && mc.options.jumpKey.pressed) {
+                    event.input.sneaking = !mc.world!!.isSpaceEmpty(mc.player, mc.player!!.boundingBox.offset(0.0, mc.player!!.velocity.y, 0.0))
+                }
             }
         }
     }
