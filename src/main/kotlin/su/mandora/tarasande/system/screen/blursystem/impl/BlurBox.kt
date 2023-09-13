@@ -10,7 +10,7 @@ import su.mandora.tarasande.util.render.shader.Program
 import su.mandora.tarasande.util.render.shader.Shader
 
 class BlurBox : Blur("Box") {
-    private val box = Program(Shader("blur/box/box.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))
+    private val box = Program(Shader("blur/box.frag", GL20.GL_FRAGMENT_SHADER), Shader("default.vert", GL20.GL_VERTEX_SHADER))
 
     private val blurredFramebuffer = SimpleFramebufferWrapped()
     private val alternativeFramebuffer = SimpleFramebufferWrapped()
