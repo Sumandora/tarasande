@@ -10,6 +10,7 @@ import java.awt.Color
 open class TextFieldWidgetPlaceholder(textRenderer: TextRenderer?, x: Int, y: Int, width: Int, height: Int, text: Text?) : TextFieldWidget(textRenderer, x, y, width, height, text) {
 
     protected var placeholderActive = false
+        private set
     // We can't use the text replacer, because the text replacement is only invoked when the text isn't empty
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
