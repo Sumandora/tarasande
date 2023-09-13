@@ -13,10 +13,12 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
 import su.mandora.tarasande.util.DEFAULT_REACH
+import su.mandora.tarasande.util.DEFAULT_TPS
 import su.mandora.tarasande.util.extension.minecraft.setMovementForward
 import su.mandora.tarasande.util.extension.minecraft.setMovementSideways
 import su.mandora.tarasande.util.math.MathUtil
-import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.math.time.TickCounter
+import su.mandora.tarasande.util.math.time.TimeUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.prediction.PredictionEngine
@@ -64,7 +66,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
 
     private var willUncharge = false
 
-    private val entityResyncTimer = TimeUtil()
+    private val entityResyncer = TickCounter((1000.0 / DEFAULT_TPS).toLong())
 
     private var predictedPlayer: ClientPlayerEntity? = null
 
@@ -94,7 +96,7 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
     override fun onEnable() {
         shifted = 0L
         prevShifted = 0L
-        entityResyncTimer.reset()
+        entityResyncer.reset()
     }
 
     private fun shouldPredict() = (shifted > 0L || (future.value && shifted == 0L)) && (playStyle.isSelected(0) || actualPositionColor.alpha!! > 0.0)
@@ -173,16 +175,11 @@ class ModuleTickBaseManipulation : Module("Tick base manipulation", "Shifts the 
                         shifted += min(event.time - prevTime, -shifted)
                 }
                 if (resyncPositions.value && prevShifted < shifted) {
-                    val elapsedTime = System.currentTimeMillis() - entityResyncTimer.time
-                    val ticks = round(elapsedTime / mc.renderTickCounter.tickTime).toInt()
-                    val completedTime = (ticks * mc.renderTickCounter.tickTime).toLong()
-                    entityResyncTimer.time += completedTime
-
-                    repeat(ticks) {
+                    repeat(entityResyncer.getTicks().toInt()) {
                         mc.world?.tickEntities()
                     }
                 } else {
-                    entityResyncTimer.reset()
+                    entityResyncer.reset()
                 }
                 if (unchargeKey.isPressed()) {
                     if (shifted > 0L) {

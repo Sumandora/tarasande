@@ -14,7 +14,7 @@ import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
 import su.mandora.tarasande.util.extension.minecraft.math.minus
 import su.mandora.tarasande.util.extension.minecraft.prevPos
 import su.mandora.tarasande.util.math.MathUtil
-import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.math.time.TimeUtil
 import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil

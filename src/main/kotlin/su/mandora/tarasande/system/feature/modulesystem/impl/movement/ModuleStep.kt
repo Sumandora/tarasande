@@ -10,7 +10,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.math.times
-import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.math.time.TimeUtil
 import su.mandora.tarasande.util.player.prediction.PredictionEngine
 import su.mandora.tarasande.util.player.prediction.with
 

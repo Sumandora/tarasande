@@ -10,7 +10,7 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
-import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.math.time.TimeUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.roundToInt
 
@@ -35,7 +35,7 @@ class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PL
         ManagerInformation.add(object : Information("Anti AFK", "Jump countdown") {
             override fun getMessage() =
                 if (enabled.value)
-                    (((delay.value - (System.currentTimeMillis() - timer.time)) / 100).roundToInt() / 10.0).toString()
+                    ((timer.getTimeLeft(delay.value.toLong()) / 100.0).roundToInt() / 10.0).toString()
                 else
                     null
         })

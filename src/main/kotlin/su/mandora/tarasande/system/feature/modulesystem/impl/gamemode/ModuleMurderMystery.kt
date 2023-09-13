@@ -20,7 +20,7 @@ import su.mandora.tarasande.system.feature.modulesystem.impl.combat.ModuleAntiBo
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
-import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.math.time.TimeUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.container.ContainerUtil
 import su.mandora.tarasande.util.string.StringUtil
@@ -92,7 +92,7 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murderers based on h
                 override fun getMessage(): String? {
                     if (enabled.value)
                         if (!fakeNews.isSelected(0) && isMurderer())
-                            return (fakeNewsTime - (System.currentTimeMillis() - fakeNewsTimer.time)).toString()
+                            return fakeNewsTimer.getTimeLeft(fakeNewsTime).toString()
 
                     return null
                 }

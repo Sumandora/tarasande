@@ -4,7 +4,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumberRange
 import su.mandora.tarasande.system.feature.clickmethodsystem.ClickMethod
 import su.mandora.tarasande.system.feature.clickmethodsystem.ManagerClickMethod
-import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.math.time.TimeUtil
 import kotlin.math.min
 
 class ClickSpeedUtil(private val owner: Any, enabledCallback: () -> Boolean, vararg excluded: Class<out ClickMethod>, namePrefix: String = "") {

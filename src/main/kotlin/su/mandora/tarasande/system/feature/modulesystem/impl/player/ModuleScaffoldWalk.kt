@@ -23,7 +23,7 @@ import su.mandora.tarasande.util.extension.minecraft.isSame
 import su.mandora.tarasande.util.extension.minecraft.math.*
 import su.mandora.tarasande.util.extension.minecraft.safeCount
 import su.mandora.tarasande.util.math.MathUtil
-import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.math.time.TimeUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.container.ContainerUtil
 import su.mandora.tarasande.util.render.RenderUtil

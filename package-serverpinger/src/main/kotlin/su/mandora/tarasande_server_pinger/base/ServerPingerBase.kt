@@ -9,7 +9,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.screen.panelsystem.api.ClickableWidgetPanel
 import su.mandora.tarasande.system.screen.screenextensionsystem.ScreenExtension
-import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.math.time.TimeUtil
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande_server_pinger.base.panel.PanelServerInformation

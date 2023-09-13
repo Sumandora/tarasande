@@ -31,7 +31,7 @@ import su.mandora.tarasande.system.screen.graphsystem.Graph
 import su.mandora.tarasande.system.screen.graphsystem.ManagerGraph
 import su.mandora.tarasande.util.DEFAULT_REACH
 import su.mandora.tarasande.util.math.MathUtil
-import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.math.time.TimeUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.render.RenderUtil

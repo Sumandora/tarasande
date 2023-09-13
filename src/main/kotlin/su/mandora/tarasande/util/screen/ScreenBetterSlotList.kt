@@ -10,7 +10,7 @@ import su.mandora.tarasande.feature.tarasandevalue.impl.AccessibilityValues
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.util.SCROLLBAR_WIDTH
 import su.mandora.tarasande.util.extension.minecraft.render.widget.ButtonWidget
-import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.math.time.TimeUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 
 private typealias ListProvider = () -> List<EntryScreenBetterSlotList>

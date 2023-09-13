@@ -13,7 +13,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
-import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.math.time.TimeUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.round
 import kotlin.math.sqrt

@@ -15,7 +15,7 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.kotlinruntime.nullOr
 import su.mandora.tarasande.util.extension.minecraft.extractContent
 import su.mandora.tarasande.util.extension.minecraft.safeCount
-import su.mandora.tarasande.util.math.TimeUtil
+import su.mandora.tarasande.util.math.time.TimeUtil
 import su.mandora.tarasande.util.player.container.Cleaner
 import su.mandora.tarasande.util.player.container.ContainerUtil
 import java.util.concurrent.ThreadLocalRandom
