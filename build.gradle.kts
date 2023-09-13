@@ -35,7 +35,15 @@ dependencies {
     mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
     modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
 
-    dependency("io.netty:netty-handler-proxy:4.1.82.Final") // Match with mc version
+    dependency("io.netty:netty-handler-proxy:4.1.82.Final") {
+        exclude("io.netty", "netty-common")
+        exclude("io.netty", "netty-buffer")
+        exclude("io.netty", "netty-transport")
+        exclude("io.netty", "netty-codec")
+        exclude("io.netty", "netty-transport-native-unix-common")
+        exclude("io.netty", "netty-resolver")
+        exclude("io.netty", "netty-handler")
+    }
 }
 
 tasks {
