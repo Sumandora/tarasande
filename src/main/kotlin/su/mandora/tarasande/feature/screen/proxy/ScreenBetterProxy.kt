@@ -15,7 +15,6 @@ import su.mandora.tarasande.util.TEXTFIELD_WIDTH
 import su.mandora.tarasande.util.connection.Proxy
 import su.mandora.tarasande.util.connection.ProxyAuthentication
 import su.mandora.tarasande.util.connection.ProxyType
-import su.mandora.tarasande.util.extension.minecraft.render.drawText
 import su.mandora.tarasande.util.extension.minecraft.render.widget.ButtonWidget
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
@@ -160,7 +159,7 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
             FontWrapper.textShadow(context, it.address.hostAddress + ":" + it.port + if (proxy?.ping != null) " (" + proxy?.ping + "ms)" else "", width / 2F, height / 2F - 100, centered = true)
         }
         if (status != null)
-            context.drawText(mc.textRenderer, status!!, width / 2F, height / 2F - 85, -1, true)
+            context.drawCenteredTextWithShadow(mc.textRenderer, status!!, width / 2, height / 2 - 85, -1)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
