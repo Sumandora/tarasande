@@ -12,7 +12,7 @@ import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
 import su.mandora.tarasande.util.math.time.TimeUtil
 import su.mandora.tarasande.util.player.PlayerUtil
-import kotlin.math.roundToInt
+import su.mandora.tarasande.util.string.StringUtil
 
 class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PLAYER) {
 
@@ -35,7 +35,7 @@ class ModuleAntiAFK : Module("Anti AFK", "Prevents AFK kicks", ModuleCategory.PL
         ManagerInformation.add(object : Information("Anti AFK", "Jump countdown") {
             override fun getMessage() =
                 if (enabled.value)
-                    ((timer.getTimeLeft(delay.value.toLong()) / 100.0).roundToInt() / 10.0).toString()
+                    StringUtil.round(timer.getTimeLeft(delay.value.toLong()) / 1000.0, 1)
                 else
                     null
         })

@@ -39,7 +39,6 @@ import java.util.logging.Logger
  *  - List of valid chest titles
  *  - List of spammer messages
  *  - Re-Sprint when slowdowned
- *  - Anti AFK Format string
  *  - Trigger bot
  */
 
