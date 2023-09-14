@@ -27,6 +27,7 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleAutoTool
 import su.mandora.tarasande.util.DEFAULT_WALK_SPEED
+import su.mandora.tarasande.util.extension.minecraft.forceIsPressed
 import su.mandora.tarasande.util.extension.minecraft.isBlockHitResult
 
 object PlayerUtil {
@@ -115,15 +116,15 @@ object PlayerUtil {
 
     fun computeMovementInput(): Vec2f {
         var forward = 0F
-        if(mc.options.forwardKey.pressed)
+        if(mc.options.forwardKey.forceIsPressed())
             forward += 1F
-        if(mc.options.backKey.pressed)
+        if(mc.options.backKey.forceIsPressed())
             forward -= 1F
 
         var sideways = 0F
-        if(mc.options.leftKey.pressed)
+        if(mc.options.leftKey.forceIsPressed())
             sideways += 1F
-        if(mc.options.rightKey.pressed)
+        if(mc.options.rightKey.forceIsPressed())
             sideways -= 1F
         return Vec2f(forward, sideways)
     }

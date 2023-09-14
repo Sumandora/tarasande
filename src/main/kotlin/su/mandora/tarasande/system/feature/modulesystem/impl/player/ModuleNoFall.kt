@@ -10,6 +10,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
+import su.mandora.tarasande.util.extension.minecraft.forceIsPressed
 
 class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", ModuleCategory.PLAYER) {
 
@@ -44,7 +45,7 @@ class ModuleNoFall : Module("No fall", "Prevents or reduces fall damage", Module
 
         registerEvent(EventInput::class.java) { event ->
             if(event.input == mc.player?.input) {
-                if (mode.isSelected(2) && prevFallDistance > fallDistance.value && mc.options.jumpKey.pressed) {
+                if (mode.isSelected(2) && prevFallDistance > fallDistance.value && mc.options.jumpKey.forceIsPressed()) {
                     event.input.sneaking = !mc.world!!.isSpaceEmpty(mc.player, mc.player!!.boundingBox.offset(0.0, mc.player!!.velocity.y, 0.0))
                 }
             }

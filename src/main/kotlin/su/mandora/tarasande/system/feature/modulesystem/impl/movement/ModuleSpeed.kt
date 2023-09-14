@@ -13,6 +13,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.DEFAULT_WALK_SPEED
+import su.mandora.tarasande.util.extension.minecraft.forceIsPressed
 import su.mandora.tarasande.util.extension.minecraft.math.copy
 import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.cos
@@ -61,7 +62,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                 if (jumpHeight.value > 0.0) {
                     mc.player?.jump()
 
-                    val collided = (wallDetection.value && mc.player!!.horizontalCollision) || mc.options.jumpKey.pressed
+                    val collided = (wallDetection.value && mc.player!!.horizontalCollision) || mc.options.jumpKey.forceIsPressed()
 
                     event.velocity = event.velocity.withAxis(Direction.Axis.Y, mc.player?.velocity?.y!! * if(collided) 1.0 else jumpHeight.value)
 
@@ -78,7 +79,7 @@ class ModuleSpeed : Module("Speed", "Makes you move faster", ModuleCategory.MOVE
                     speed = PlayerUtil.calcBaseSpeed(speedValue.value)
                 }
             }
-            if (event.velocity.y < 0.0 && !mc.options.jumpKey.pressed) {
+            if (event.velocity.y < 0.0 && !mc.options.jumpKey.forceIsPressed()) {
                 event.velocity = event.velocity.multiply(1.0, gravity.value, 1.0)
             }
 

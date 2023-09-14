@@ -16,6 +16,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
+import su.mandora.tarasande.util.extension.minecraft.forceIsPressed
 import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.extension.minecraft.math.toVec3d
@@ -56,9 +57,9 @@ class ModuleFlight : Module("Flight", "Allows flight in non-creative modes", Mod
 
             var yMotion = 0.0
 
-            if (mc.options.jumpKey.pressed)
+            if (mc.options.jumpKey.forceIsPressed())
                 yMotion += flightSpeed.value
-            if (mc.options.sneakKey.pressed)
+            if (mc.options.sneakKey.forceIsPressed())
                 yMotion -= flightSpeed.value
 
             if (yMotion == 0.0)

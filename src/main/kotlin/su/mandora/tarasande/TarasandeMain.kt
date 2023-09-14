@@ -40,6 +40,7 @@ import java.util.logging.Logger
  *  - List of spammer messages
  *  - Re-Sprint when slowdowned
  *  - Anti AFK Format string
+ *  - Trigger bot
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
