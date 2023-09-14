@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos
 import org.joml.Matrix4f
 import su.mandora.tarasande.event.Event
 
-class EventResolutionUpdate(val prevWidth: Double, val prevHeight: Double, val width: Double, val height: Double) : Event(false)
+class EventResolutionUpdate(val width: Int, val height: Int) : Event(false)
 class EventRender2D(val context: DrawContext) : Event(false)
 
 class EventScreenRender(val context: DrawContext, val screen: Screen, val state: State) : Event(false) {

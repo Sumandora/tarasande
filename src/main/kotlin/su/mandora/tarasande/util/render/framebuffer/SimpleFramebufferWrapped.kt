@@ -11,8 +11,8 @@ class SimpleFramebufferWrapped : SimpleFramebuffer(mc.window.framebufferWidth, m
     init {
         setClearColor(0F, 0F, 0F, 0F)
 
-        EventDispatcher.add(EventResolutionUpdate::class.java) {
-            resize(mc.window.framebufferWidth, mc.window.framebufferHeight, MinecraftClient.IS_SYSTEM_MAC)
+        EventDispatcher.add(EventResolutionUpdate::class.java) { event ->
+            resize(event.width, event.height, MinecraftClient.IS_SYSTEM_MAC)
         }
     }
 

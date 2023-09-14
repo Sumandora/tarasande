@@ -55,12 +55,9 @@ public abstract class MixinMinecraftClient {
         EventDispatcher.INSTANCE.call(new EventTick(EventTick.State.POST));
     }
 
-    @Redirect(method = "onResolutionChanged", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/Window;setScaleFactor(D)V"))
-    public void hookEventResolutionUpdate(Window instance, double scaleFactor) {
-        double prevWidth = instance.getScaledWidth();
-        double prevHeight = instance.getScaledHeight();
-        instance.setScaleFactor(scaleFactor);
-        EventDispatcher.INSTANCE.call(new EventResolutionUpdate(prevWidth, prevHeight, this.window.getScaledWidth(), this.window.getScaledHeight()));
+    @Inject(method = "onResolutionChanged", at = @At("HEAD"))
+    public void hookEventResolutionUpdate(CallbackInfo ci) {
+        EventDispatcher.INSTANCE.call(new EventResolutionUpdate(this.window.getFramebufferWidth(), this.window.getFramebufferHeight()));
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;getMeasuringTimeMs()J"), slice = @Slice(to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;tick()V")))
