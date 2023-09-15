@@ -6,7 +6,6 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 // https://easings.net/
-@Suppress("unused")
 enum class EasingFunction(val functionName: String, val ease: (Double) -> Double) {
     LINEAR("Linear", { x -> x }),
     IN_SINE("In sine", { x -> (1.0 - cos(x * Math.PI / 2.0)) }),
