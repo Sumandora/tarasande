@@ -41,17 +41,17 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool when breaking 
                 val blockPos = (mc.crosshairTarget as BlockHitResult).blockPos
                 val pair = PlayerUtil.getBreakSpeed(blockPos)
 
-                if (pair.second == mc.player?.inventory?.selectedSlot)
+                if (pair.second == mc.player!!.inventory.selectedSlot)
                     return@registerEvent
 
-                val currentSpeed = PlayerUtil.getBreakSpeed(blockPos, mc.player?.inventory?.selectedSlot ?: return@registerEvent)
+                val currentSpeed = PlayerUtil.getBreakSpeed(blockPos, mc.player!!.inventory.selectedSlot)
                 if (currentSpeed == pair.first)
                     return@registerEvent
 
                 val bestTool = pair.second
                 if (bestTool == -1)
                     return@registerEvent
-                mc.player?.inventory?.selectedSlot = bestTool
+                mc.player!!.inventory.selectedSlot = bestTool
             }
         }
 
@@ -74,7 +74,7 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool when breaking 
 
                 hotbar = hotbar.filter { it.second.item is ToolItem }
 
-                val best = hotbar.maxByOrNull { ContainerUtil.wrapMaterialDamage(it.second) + ContainerUtil.getProperEnchantments(it.second).filter { it.key.target == EnchantmentTarget.WEAPON }.values.sum() }
+                val best = hotbar.maxByOrNull { (_, item) -> ContainerUtil.wrapMaterialDamage(item) + ContainerUtil.getProperEnchantments(item).filter { it.key.target == EnchantmentTarget.WEAPON }.values.sum() }
 
                 if (best != null)
                     mc.player?.inventory?.selectedSlot = best.first
