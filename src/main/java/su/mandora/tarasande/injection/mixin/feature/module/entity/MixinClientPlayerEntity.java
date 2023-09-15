@@ -18,6 +18,7 @@ import su.mandora.tarasande.system.feature.modulesystem.ManagerModule;
 import su.mandora.tarasande.system.feature.modulesystem.impl.misc.ModulePortalScreen;
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleFlight;
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleNoSlowdown;
+import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleSneak;
 import su.mandora.tarasande.system.feature.modulesystem.impl.movement.ModuleSprint;
 import su.mandora.tarasande.util.MinecraftConstantsKt;
 
@@ -126,5 +127,15 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
                 return MinecraftConstantsKt.MAX_FOOD_LEVEL;
         }
         return instance.getFoodLevel();
+    }
+
+    @ModifyArg(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;tick(ZF)V"), index = 1)
+    public float hookSneak(float slowDownFactor) {
+        if ((Object) this == MinecraftClient.getInstance().player) {
+            ModuleSneak moduleSneak = ManagerModule.INSTANCE.get(ModuleSneak.class);
+            if (moduleSneak.getEnabled().getValue())
+                return moduleSneak.getModifiedSpeed(slowDownFactor);
+        }
+        return slowDownFactor;
     }
 }

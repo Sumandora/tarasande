@@ -27,6 +27,7 @@ val timeBasedUseActions = arrayOf(UseAction.EAT, UseAction.DRINK, UseAction.BOW,
 const val DEFAULT_CONTAINER_WIDTH = 176 // Walk the inheritance tree from InventoryScreen
 const val DEFAULT_CONTAINER_HEIGHT = 166
 const val INFINITE_FPS_VALUE = 260 // Check call to RenderSystem.limitDisplayFPS in MinecraftClient#render
+const val DEFAULT_SNEAK_SLOWDOWN = 0.3 // ClientPlayerEntity check Input#tick second parameter (take the base of the clamp)
 
 // The following are rendering constants like paddings, widths, heights etc.
 // They don't have to be accurate but in order to have a uniform look with the base game, they should be close
