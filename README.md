@@ -68,8 +68,8 @@ To share your configuration, you need to send the Values file.
 
 ### Support
 
-Windows and Linux are supported. I do not own MacOS hardware, so there is no official support for it. Launching the
-cheat under MacOS shouldn't pose much of a challenge, however.
+Windows and Linux are supported. I do not own macOS hardware, so there is no official support for it. Launching the
+cheat under macOS shouldn't pose much of a challenge, however.
 
 ## Download
 
