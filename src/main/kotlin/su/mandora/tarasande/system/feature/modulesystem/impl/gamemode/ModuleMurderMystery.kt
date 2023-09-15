@@ -35,14 +35,14 @@ class ModuleMurderMystery : Module("Murder mystery", "Finds murderers based on h
         override fun filter(key: Item) = key != Items.AIR
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
         override fun onRemove(key: Item) {
-            suspects.entries.removeIf { it.value.all { it == key } }
+            suspects.entries.removeIf { suspect -> suspect.value.all { it == key } }
         }
     }
     private val disallowedItems = object : ValueRegistry<Item>(this, "Disallowed items", Registries.ITEM, true, Items.IRON_SWORD, isEnabled = { detectionMethod.isSelected(1) }) {
         override fun filter(key: Item) = key != Items.AIR
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
         override fun onAdd(key: Item) {
-            suspects.entries.removeIf { it.value.all { it == key } }
+            suspects.entries.removeIf { suspect -> suspect.value.all { it == key } }
         }
     }
     private val murdererColorOverride = ValueColor(this, "Murderer color override", 0.0, 1.0, 1.0, 1.0)
