@@ -14,7 +14,6 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
-import su.mandora.tarasande.util.extension.minecraft.forceIsPressed
 import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.extension.minecraft.math.toVec3d
@@ -103,9 +102,9 @@ class ModuleFreeCam : Module("Free cam", "Allows you to freely move the camera",
                     onEnable()
                 else {
                     var yMotion = 0.0
-                    if (mc.options.jumpKey.forceIsPressed())
+                    if (mc.options.jumpKey.isPressed)
                         yMotion += speed.value
-                    if (mc.options.sneakKey.forceIsPressed())
+                    if (mc.options.sneakKey.isPressed)
                         yMotion -= speed.value
                     var velocity = Entity.movementInputToVelocity(PlayerUtil.computeMovementInput().toVec3d(flipped = true), speed.value.toFloat(), rotation?.yaw!!)
                     velocity = Vec3d(velocity?.x!!, yMotion, velocity.z)

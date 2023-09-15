@@ -69,7 +69,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         return false
     }
 
-    private fun isPassingEvents(): Boolean {
+    fun isPassingEvents(): Boolean {
         if (screens.isSelected(0)) if (mc.currentScreen.let { it is ScreenPanel || it is ScreenBetterOwnerValues } && !isTextBoxFocused()) return true
         if (screens.isSelected(1)) if (mc.currentScreen is AbstractInventoryScreen<*>) return true
         if (screens.isSelected(2)) if (mc.currentScreen is HandledScreen<*> && mc.currentScreen !is AbstractInventoryScreen<*>) return true

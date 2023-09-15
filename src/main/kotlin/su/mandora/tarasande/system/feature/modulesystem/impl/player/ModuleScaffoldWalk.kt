@@ -18,7 +18,6 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
-import su.mandora.tarasande.util.extension.minecraft.forceIsPressed
 import su.mandora.tarasande.util.extension.minecraft.hitResultSide
 import su.mandora.tarasande.util.extension.minecraft.isSame
 import su.mandora.tarasande.util.extension.minecraft.math.*
@@ -153,7 +152,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         var dist = 0.0
         for (target in arrayList) {
             if (target.third.offsetY != 0) {
-                if (mc.options.jumpKey.forceIsPressed())
+                if (mc.options.jumpKey.isPressed)
                     return Pair(target.second, target.third)
                 else if (best == null)
                     continue
@@ -395,7 +394,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
                 return@registerEvent
             if (target == null)
                 return@registerEvent
-            if (!mc.options.jumpKey.forceIsPressed())
+            if (!mc.options.jumpKey.isPressed)
                 return@registerEvent
 
             when {
