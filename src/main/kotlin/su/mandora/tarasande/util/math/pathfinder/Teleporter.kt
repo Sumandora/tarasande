@@ -86,11 +86,12 @@ class Teleporter(owner: Any) {
         return when {
             ground.isSelected(0) -> true
             ground.isSelected(1) -> false
-            /*ground.isSelected(2)*/else -> {
+            ground.isSelected(2) -> {
                 val blockState = mc.world?.getBlockState(blockPos)
                 val collisionShape = blockState?.getCollisionShape(mc.world, blockPos)
                 collisionShape == null || collisionShape.isEmpty
             }
+            else -> error("Invalid state")
         }
     }
 
