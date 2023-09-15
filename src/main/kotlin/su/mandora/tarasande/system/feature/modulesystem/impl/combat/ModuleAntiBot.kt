@@ -6,6 +6,8 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.packet.s2c.play.*
 import net.minecraft.util.math.Vec3d
 import su.mandora.tarasande.event.impl.*
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.injection.accessor.IEntity
 import su.mandora.tarasande.injection.accessor.playerlistentry.IOtherClientPlayerEntity
 import su.mandora.tarasande.injection.accessor.playerlistentry.IPlayerListEntry
@@ -17,8 +19,6 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.kotlinruntime.WeakSet
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
-import su.mandora.tarasande.feature.rotation.api.Rotation
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import java.util.*
 
 class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with bots", ModuleCategory.COMBAT) {
@@ -222,7 +222,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                     if (playerListMode.isSelected(0) && (playerListEntry as IPlayerListEntry).tarasande_isRemoved()) return true
                     if (playerListMode.isSelected(1) && (playerListEntry as IPlayerListEntry).tarasande_getOwners().size > 1) return true
                     if (playerListMode.isSelected(2) && !(playerListEntry as IPlayerListEntry).tarasande_isListed()) return true
-                    if (playerListMode.isSelected(3) && (playerListEntry as IPlayerListEntry).tarasande_getDuplicates().any { (it as IPlayerListEntry).tarasande_isRemoved() }) return true
+                    if (playerListMode.isSelected(3) && (playerListEntry as IPlayerListEntry).tarasande_getDuplicates().any { !(it as IPlayerListEntry).tarasande_isRemoved() }) return true
                 }
             }
         }
