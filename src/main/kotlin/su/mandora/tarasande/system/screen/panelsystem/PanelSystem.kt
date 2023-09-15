@@ -129,7 +129,7 @@ open class Panel(
     }
 
     private fun align() {
-        // TODO Improve this code.. I'm curious how other people implement this
+        // TODO Improve this code. I'm curious how other people implement this
         val horizontalAlignments = ArrayList<Double>()
         val verticalAlignments = ArrayList<Double>()
         val tolerance = 5
