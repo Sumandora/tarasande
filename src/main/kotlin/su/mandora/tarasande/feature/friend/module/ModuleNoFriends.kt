@@ -10,6 +10,6 @@ class ModuleNoFriends : Module("No friends", "Makes you attack befriended player
 
     private val deathmatch = ValueBoolean(this, "Deathmatch", false)
 
-    fun isActive() = enabled.value && (!deathmatch.value || mc.networkHandler!!.listedPlayerListEntries.filter { it.profile != mc.player?.gameProfile }.let { it.size == Friends.amount() && it.all { Friends.isFriend(it.profile) } })
+    fun isActive() = enabled.value && (!deathmatch.value || mc.networkHandler!!.listedPlayerListEntries.filter { it.profile != mc.player?.gameProfile }.let { playerEntries -> playerEntries.size == Friends.amount() && playerEntries.all { playerEntry -> Friends.isFriend(playerEntry.profile) } })
 
 }
