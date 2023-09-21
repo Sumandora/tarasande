@@ -225,6 +225,8 @@ class ModuleBlockParty : Module("Block party", "Automatically plays block party"
                     is ScreenHandlerSlotUpdateS2CPacket ->
                         if (event.packet.syncId == INVENTORY_SYNC_ID) {
                             if (event.packet.slot == 36 + hotbarSlot.value.toInt() - 1) {
+                                if(mc.player == null)
+                                    return@registerEvent
                                 val item = event.packet.itemStack.item
                                 if (item is BlockItem && blocks.isSelected(item.block)) {
                                     preparing = false
