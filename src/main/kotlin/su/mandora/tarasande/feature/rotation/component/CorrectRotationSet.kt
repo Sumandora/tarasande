@@ -1,4 +1,4 @@
-package su.mandora.tarasande.feature.rotation.components
+package su.mandora.tarasande.feature.rotation.component
 
 import net.minecraft.network.packet.s2c.play.EntityPositionS2CPacket
 import net.minecraft.network.packet.s2c.play.EntityS2CPacket

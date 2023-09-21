@@ -1,4 +1,4 @@
-package su.mandora.tarasande.feature.rotation.components
+package su.mandora.tarasande.feature.rotation.component
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket
 import su.mandora.tarasande.event.EventDispatcher

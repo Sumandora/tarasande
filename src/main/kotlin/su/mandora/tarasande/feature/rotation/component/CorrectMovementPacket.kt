@@ -1,4 +1,4 @@
-package su.mandora.tarasande.feature.rotation.components
+package su.mandora.tarasande.feature.rotation.component
 
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventUpdate

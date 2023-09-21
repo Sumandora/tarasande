@@ -1,4 +1,4 @@
-package su.mandora.tarasande.feature.rotation.components.correctmovement.impl
+package su.mandora.tarasande.feature.rotation.component.correctmovement.impl
 
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventJump

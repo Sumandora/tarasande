@@ -1,9 +1,9 @@
-package su.mandora.tarasande.feature.rotation.components.correctmovement
+package su.mandora.tarasande.feature.rotation.component.correctmovement
 
 import su.mandora.tarasande.feature.rotation.Rotations
-import su.mandora.tarasande.feature.rotation.components.correctmovement.impl.Direct
-import su.mandora.tarasande.feature.rotation.components.correctmovement.impl.PreventBackwardsSprinting
-import su.mandora.tarasande.feature.rotation.components.correctmovement.impl.Silent
+import su.mandora.tarasande.feature.rotation.component.correctmovement.impl.Direct
+import su.mandora.tarasande.feature.rotation.component.correctmovement.impl.PreventBackwardsSprinting
+import su.mandora.tarasande.feature.rotation.component.correctmovement.impl.Silent
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 
 class CorrectMovement(rotations: Rotations) {

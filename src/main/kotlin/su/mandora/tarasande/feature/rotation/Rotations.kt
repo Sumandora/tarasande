@@ -4,8 +4,8 @@ import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventPollEvents
 import su.mandora.tarasande.event.impl.EventRotation
 import su.mandora.tarasande.feature.rotation.api.Rotation
-import su.mandora.tarasande.feature.rotation.components.*
-import su.mandora.tarasande.feature.rotation.components.correctmovement.CorrectMovement
+import su.mandora.tarasande.feature.rotation.component.*
+import su.mandora.tarasande.feature.rotation.component.correctmovement.CorrectMovement
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 

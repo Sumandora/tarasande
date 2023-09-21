@@ -1,4 +1,4 @@
-package su.mandora.tarasande.feature.rotation.components
+package su.mandora.tarasande.feature.rotation.component
 
 import su.mandora.tarasande.feature.rotation.Rotations
 import su.mandora.tarasande.feature.rotation.api.Rotation

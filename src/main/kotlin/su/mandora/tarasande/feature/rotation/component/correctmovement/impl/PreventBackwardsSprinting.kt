@@ -1,4 +1,4 @@
-package su.mandora.tarasande.feature.rotation.components.correctmovement.impl
+package su.mandora.tarasande.feature.rotation.component.correctmovement.impl
 
 import net.minecraft.util.math.MathHelper
 import su.mandora.tarasande.event.EventDispatcher
