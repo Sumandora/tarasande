@@ -60,9 +60,6 @@ Location:
 - `%userprofile%/tarasande` on Windows
 - `~/tarasande` on Linux
 
-The cheat does create backups and labels them `[filename]_Backup`. These files might come in handy whenever you or the
-cheat messed up.
-
 Values are the way the cheat saves your configuration.  
 To share your configuration, you need to send the Values file.
 
