@@ -8,9 +8,7 @@ import net.minecraft.util.math.MathHelper
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.Manager
 import su.mandora.tarasande.event.EventDispatcher
-import su.mandora.tarasande.event.impl.EventRender2D
 import su.mandora.tarasande.event.impl.EventSuccessfulLoad
-import su.mandora.tarasande.event.impl.EventTick
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.filesystem.ManagerFile
@@ -24,7 +22,6 @@ import su.mandora.tarasande.util.extension.javaruntime.withAlpha
 import su.mandora.tarasande.util.extension.minecraft.render.fill
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
-import su.mandora.tarasande.util.render.helper.Alignment
 import su.mandora.tarasande.util.render.helper.DragInfo
 import su.mandora.tarasande.util.render.helper.IElement
 import java.awt.Color
@@ -79,12 +76,16 @@ open class Panel(
     val maxHeight: Double? = null,
     private val background: Boolean = true,
     private val resizable: Boolean = true,
-    val fixed: Boolean = false,
     private val scissor: Boolean = false
 ) : IElement {
 
-    // Fixed panels
-    constructor(title: String, width: Double, height: Double, background: Boolean = false, resizable: Boolean = true) : this(title, width, height, null, null, background, resizable, true, background)
+    companion object {
+        const val ALIGN_TOLERANCE = 5.0
+        const val SCROLL_OVERHEAD = 5.0
+        const val SCROLL_DECAY = 0.01
+        const val MAX_SCROLL_SPEED = 100.0
+        const val SCROLL_AMPLIFIER = 3.0
+    }
 
     var x = 0.0
     var y = 0.0
@@ -97,47 +98,26 @@ open class Panel(
     protected var scrollOffset = 0.0
     private var scrollSpeed = 0.0
 
-    protected var alignment: Alignment = Alignment.LEFT
     var opened = false
     var modifiable = true
-    var usedInScreen = false
 
     val titleBarHeight = FontWrapper.fontHeight()
-
-    init {
-        if (fixed) {
-            EventDispatcher.apply {
-                add(EventRender2D::class.java) {
-                    if (isVisible() && opened)
-                        if (mc.currentScreen != ManagerPanel.screenPanel) {
-                            it.context.matrices.push()
-                            render(it.context, -1, -1, mc.tickDelta)
-                            it.context.matrices.pop()
-                        }
-                }
-
-                add(EventTick::class.java) {
-                    if (it.state == EventTick.State.PRE)
-                        if (mc.currentScreen != ManagerPanel.screenPanel)
-                            tick()
-                }
-            }
-        }
-    }
 
     override fun init() {
     }
 
     private fun align() {
+        if(mc.currentScreen !is ScreenPanel)
+            return // We don't really know the constraints of other screens
+
         // TODO Improve this code. I'm curious how other people implement this
         val horizontalAlignments = ArrayList<Double>()
         val verticalAlignments = ArrayList<Double>()
-        val tolerance = 5
 
         val panels = ManagerPanel.list.filter { it != this }
 
-        val horizontalAlignablePanels = panels.filter { abs((y + effectivePanelHeight() / 2.0) - (it.y + it.effectivePanelHeight() / 2.0)) < (it.effectivePanelHeight() + effectivePanelHeight()) / 2.0 + tolerance }
-        val verticalAlignablePanels = panels.filter { abs((x + panelWidth / 2.0) - (it.x + it.panelWidth / 2.0)) < (it.panelWidth + panelWidth) / 2.0 + tolerance }
+        val horizontalAlignablePanels = panels.filter { abs((y + effectivePanelHeight() / 2.0) - (it.y + it.effectivePanelHeight() / 2.0)) < (it.effectivePanelHeight() + effectivePanelHeight()) / 2.0 + ALIGN_TOLERANCE }
+        val verticalAlignablePanels = panels.filter { abs((x + panelWidth / 2.0) - (it.x + it.panelWidth / 2.0)) < (it.panelWidth + panelWidth) / 2.0 + ALIGN_TOLERANCE }
 
         run {
             val panel = horizontalAlignablePanels.minByOrNull { abs(it.x + it.panelWidth - x) } ?: return@run
@@ -165,38 +145,44 @@ open class Panel(
             verticalAlignments.add(alignment)
         }
 
-        horizontalAlignments.minByOrNull { abs(x - it) }?.also {
-            if (abs(x - it) < tolerance) x = it
-        }
+        horizontalAlignments
+            .associateWith { abs(x - it) }
+            .minByOrNull { it.value }
+            ?.also {
+                if (it.value < ALIGN_TOLERANCE) x = it.key
+            }
 
-        verticalAlignments.minByOrNull { abs(y - it) }?.also {
-            if (abs(y - it) < tolerance) y = it
-        }
+        verticalAlignments
+            .associateWith { abs(y - it) }
+            .minByOrNull { it.value }
+            ?.also {
+                if (it.value < ALIGN_TOLERANCE) y = it.key
+            }
+    }
+
+    fun blurBackground(context: DrawContext, insideScreen: Boolean) {
+        if(!opened || !background)
+            return
+        context.matrices.push()
+        val previousFramebuffer = GlStateManager.getBoundFramebuffer()
+        ManagerBlur.bind(setViewport = true, screens = insideScreen)
+        context.fill(x, y, x + panelWidth, y + panelHeight, -1)
+        GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, previousFramebuffer)
+        context.matrices.pop()
+    }
+
+    fun updateScrolling() {
+        scrollOffset = (scrollOffset + scrollSpeed).coerceIn(min(-(getMaxScrollOffset() - (panelHeight - titleBarHeight - SCROLL_OVERHEAD)), 0.0), 0.0)
+        scrollSpeed = (scrollSpeed - scrollSpeed * RenderUtil.deltaTime * SCROLL_DECAY).coerceIn(-MAX_SCROLL_SPEED, MAX_SCROLL_SPEED)
     }
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-        if (fixed) {
-            when {
-                x + panelWidth / 2 <= mc.window.scaledWidth * 0.33 -> alignment = Alignment.LEFT
-                x + panelWidth / 2 > mc.window.scaledWidth * 0.33 && x + panelWidth / 2 < mc.window.scaledWidth * 0.66 -> alignment = Alignment.MIDDLE
-                x + panelWidth / 2 > mc.window.scaledWidth * 0.66 -> alignment = Alignment.RIGHT
-            }
-        }
-
-        scrollOffset = MathHelper.clamp(scrollOffset + scrollSpeed, min(-(getMaxScrollOffset() - (panelHeight - titleBarHeight - 5)), 0.0), 0.0)
-        scrollSpeed = MathHelper.clamp(scrollSpeed - scrollSpeed * RenderUtil.deltaTime * 0.01, -100.0, 100.0)
+        updateScrolling()
 
         if (opened) {
             if (background) {
-                context.matrices.push()
-                val previousFramebuffer = GlStateManager.getBoundFramebuffer()
-                ManagerBlur.bind(true, usedInScreen)
-                context.fill(x, y, x + panelWidth, y + effectivePanelHeight(), -1)
-                GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, previousFramebuffer)
-
                 val accent = TarasandeValues.accentColor.getColor()
                 context.fill(x, y + titleBarHeight, x + panelWidth, y + panelHeight, RenderUtil.colorInterpolate(accent, Color(Int.MIN_VALUE).withAlpha(0), 0.3, 0.3, 0.3, 1.0 - ManagerPanel.screenPanel.panelBackgroundOpacity.value).rgb)
-                context.matrices.pop()
             }
 
             if (scissor) {
@@ -241,11 +227,7 @@ open class Panel(
 
     open fun renderTitleBar(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         context.fill(x, y, x + panelWidth, y + titleBarHeight, TarasandeValues.accentColor.getColor().rgb)
-        when (alignment) {
-            Alignment.LEFT -> FontWrapper.textShadow(context, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2F - FontWrapper.fontHeight() / 2F, -1)
-            Alignment.MIDDLE -> FontWrapper.textShadow(context, title, x.toFloat() + panelWidth.toFloat() / 2F - FontWrapper.getWidth(title).toFloat() / 2F, y.toFloat() + titleBarHeight / 2F - FontWrapper.fontHeight() / 2F, -1)
-            Alignment.RIGHT -> FontWrapper.textShadow(context, title, x.toFloat() + panelWidth.toFloat() - FontWrapper.getWidth(title).toFloat(), y.toFloat() + titleBarHeight / 2F - FontWrapper.fontHeight() / 2F, -1)
-        }
+        FontWrapper.textShadow(context, title, x.toFloat() + 1, y.toFloat() + titleBarHeight / 2F - FontWrapper.fontHeight() / 2F, -1)
     }
 
     open fun renderContent(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
@@ -283,7 +265,7 @@ open class Panel(
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
         if (opened && RenderUtil.isHovered(mouseX, mouseY, x, y + titleBarHeight, x + panelWidth, y + panelHeight)) {
-            scrollSpeed += amount * 3
+            scrollSpeed += amount * SCROLL_AMPLIFIER
             return true
         }
         return false

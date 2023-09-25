@@ -57,8 +57,6 @@ open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = 
     override fun renderButton(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val opened = panel.opened
         panel.opened = true
-        val usedInScreen = panel.usedInScreen
-        panel.usedInScreen = true
         if (update) {
             panel.x = this.x.toDouble()
             panel.y = this.y.toDouble()
@@ -66,10 +64,10 @@ open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = 
             panel.panelHeight = this.height.toDouble()
         }
         if (panel.isVisible()) {
+            panel.blurBackground(context, insideScreen = true)
             panel.render(context, mouseX, mouseY, delta)
         }
         panel.opened = opened
-        panel.usedInScreen = usedInScreen
     }
 
     override fun isHovered() = true

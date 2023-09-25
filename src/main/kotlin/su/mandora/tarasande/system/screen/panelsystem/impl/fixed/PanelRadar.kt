@@ -2,17 +2,17 @@ package su.mandora.tarasande.system.screen.panelsystem.impl.fixed
 
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.util.math.MathHelper
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.impl.render.ModuleESP
-import su.mandora.tarasande.system.screen.panelsystem.Panel
+import su.mandora.tarasande.system.screen.panelsystem.api.PanelFixed
 import su.mandora.tarasande.util.extension.kotlinruntime.ignoreAlpha
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.render.RenderUtil
 import kotlin.math.*
 
-class PanelRadar : Panel("Radar", 100.0, 100.0, true) {
+class PanelRadar : PanelFixed("Radar", 100.0, 100.0, true) {
 
     private val scale = ValueNumber(this, "Scale", 0.0, 1.0, 3.0, 0.1)
 

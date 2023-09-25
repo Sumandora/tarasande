@@ -11,6 +11,7 @@ import net.minecraft.util.Formatting
 import su.mandora.tarasande.injection.accessor.ILivingEntity
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.panelsystem.Panel
+import su.mandora.tarasande.system.screen.panelsystem.api.PanelFixed
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
 import su.mandora.tarasande.util.extension.minecraft.extractContent
 import su.mandora.tarasande.util.render.RenderUtil
@@ -19,7 +20,7 @@ import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
 import java.awt.Color
 
-class PanelEffects : Panel("Effects", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
+class PanelEffects : PanelFixed("Effects", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
 
     private val animations = HashMap<StatusEffect, Double>()
     private val prevInstances = HashMap<StatusEffect, StatusEffectInstance>()

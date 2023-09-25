@@ -6,14 +6,14 @@ import net.minecraft.util.math.MathHelper
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.system.feature.modulesystem.ManagerModule
 import su.mandora.tarasande.system.feature.modulesystem.Module
-import su.mandora.tarasande.system.screen.panelsystem.Panel
+import su.mandora.tarasande.system.screen.panelsystem.api.PanelFixed
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.animation.Animator
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
 
-class PanelArrayList(private val moduleSystem: ManagerModule) : Panel("Array list", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
+class PanelArrayList(private val moduleSystem: ManagerModule) : PanelFixed("Array list", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
 
     private val animations = HashMap<Module, Double>()
 

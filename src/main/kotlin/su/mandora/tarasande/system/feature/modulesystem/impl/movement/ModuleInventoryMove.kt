@@ -15,9 +15,11 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.feature.modulesystem.panel.element.PanelElementsCategory
 import su.mandora.tarasande.system.screen.panelsystem.ManagerPanel
-import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
+import su.mandora.tarasande.system.screen.panelsystem.api.PanelElements
+import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterPanel
 import su.mandora.tarasande.system.screen.panelsystem.screen.panelscreen.ScreenPanel
 import su.mandora.tarasande.util.player.PlayerUtil
+import su.mandora.tarasande.util.render.helper.element.ElementWidth
 
 class ModuleInventoryMove : Module("Inventory move", "Allows you to move while in inventory", ModuleCategory.MOVEMENT) {
 
@@ -51,11 +53,13 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
         }
     }
 
-    private fun isFocused(valueComponent: ElementWidthValueComponent<*>) = valueComponent is ElementWidthValueComponentFocusable<*> && valueComponent.isFocused()
+    private fun isFocused(valueComponent: ElementWidth) = valueComponent is ElementWidthValueComponentFocusable<*> && valueComponent.isFocused()
 
     private fun isTextBoxFocused(): Boolean {
-        if (mc.currentScreen is ScreenBetterOwnerValues) {
-            return (mc.currentScreen as ScreenBetterOwnerValues).panel.elementList.any { isFocused(it) }
+        if (mc.currentScreen is ScreenBetterPanel) {
+            val panel = (mc.currentScreen as ScreenBetterPanel).panel
+            if(panel is PanelElements<*>)
+                return panel.elementList.any { isFocused(it) }
         }
         if (mc.currentScreen is ScreenPanel) {
             return ManagerPanel.list.any {
@@ -70,7 +74,7 @@ class ModuleInventoryMove : Module("Inventory move", "Allows you to move while i
     }
 
     fun isPassingEvents(): Boolean {
-        if (screens.isSelected(0)) if (mc.currentScreen.let { it is ScreenPanel || it is ScreenBetterOwnerValues } && !isTextBoxFocused()) return true
+        if (screens.isSelected(0)) if (mc.currentScreen.let { it is ScreenPanel || it is ScreenBetterPanel } && !isTextBoxFocused()) return true
         if (screens.isSelected(1)) if (mc.currentScreen is AbstractInventoryScreen<*>) return true
         if (screens.isSelected(2)) if (mc.currentScreen is HandledScreen<*> && mc.currentScreen !is AbstractInventoryScreen<*>) return true
 

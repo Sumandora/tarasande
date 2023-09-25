@@ -7,12 +7,12 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.meta.abstracted.ValueButtonOwnerValues
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.system.screen.informationsystem.ManagerInformation
-import su.mandora.tarasande.system.screen.panelsystem.Panel
+import su.mandora.tarasande.system.screen.panelsystem.api.PanelFixed
 import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
 
-class PanelInformation(private val informationSystem: ManagerInformation) : Panel("Information", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
+class PanelInformation(private val informationSystem: ManagerInformation) : PanelFixed("Information", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
 
     val map = HashMap<Information, String>()
     val text = ArrayList<String>()

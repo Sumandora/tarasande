@@ -6,7 +6,7 @@ import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.helper.element.ElementWidth
 import java.util.concurrent.CopyOnWriteArrayList
 
-open class PanelElements<T : ElementWidth>(title: String, minWidth: Double, minHeight: Double, fixed: Boolean = false) : Panel(title, minWidth, minHeight, fixed = fixed) {
+open class PanelElements<T : ElementWidth>(title: String, minWidth: Double, minHeight: Double) : Panel(title, minWidth, minHeight) {
 
     val elementList = CopyOnWriteArrayList<T>()
 

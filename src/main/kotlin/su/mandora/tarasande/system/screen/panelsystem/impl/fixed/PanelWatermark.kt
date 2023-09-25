@@ -5,13 +5,13 @@ import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
-import su.mandora.tarasande.system.screen.panelsystem.Panel
+import su.mandora.tarasande.system.screen.panelsystem.api.PanelFixed
 import su.mandora.tarasande.util.render.font.FontWrapper
 import java.net.InetAddress
 
 private const val JAPANESE_NAME = "タラサンデ"
 
-class PanelWatermark : Panel("Watermark", 150.0, 50.0, true) {
+class PanelWatermark : PanelFixed("Watermark", 150.0, 50.0, true) {
 
     private val hidePersonalName = ValueBoolean(this, "Hide personal name", true)
     private val messageOfTheDay = ValueText(this, "Message of the day", TARASANDE_NAME)

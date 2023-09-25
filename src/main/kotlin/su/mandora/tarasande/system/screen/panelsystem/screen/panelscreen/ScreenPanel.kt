@@ -17,6 +17,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.screen.blursystem.ManagerBlur
 import su.mandora.tarasande.system.screen.panelsystem.ManagerPanel
+import su.mandora.tarasande.system.screen.panelsystem.api.PanelFixed
 import su.mandora.tarasande.system.screen.panelsystem.screen.panelscreen.particle.Particle
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
 import su.mandora.tarasande.util.render.animation.TimeAnimator
@@ -147,7 +148,7 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
         panelSystem.list.reversed().forEach {
             context.matrices.push()
             val panelHeight = it.effectivePanelHeight()
-            if (!it.fixed || !(it.isVisible() && it.opened)) {
+            if (it !is PanelFixed || !(it.isVisible() && it.opened)) {
                 context.matrices.translate(it.x + it.panelWidth / 2.0, it.y + panelHeight / 2.0, 0.0)
                 context.matrices.scale(progress.toFloat(), progress.toFloat(), 1F)
                 context.matrices.translate(-(it.x + it.panelWidth / 2.0), -(it.y + panelHeight / 2.0), 0.0)
@@ -156,8 +157,8 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
             val y = it.y + panelHeight - panelHeight * (1 - progress) / 2.0 - 1
             val width = it.panelWidth - it.panelWidth * (1 - progress)
             val height = (panelHeight - panelHeight * (1 - progress) - 1)
-            val scissor = it.opened && !it.fixed && progress > 0.0
-            if (it.fixed || progress > 0.0) {
+            val scissor = it.opened && it !is PanelFixed && progress > 0.0
+            if (it is PanelFixed || progress > 0.0) {
                 if (scissor)
                     context.enableScissor(
                         round(x).toInt(),

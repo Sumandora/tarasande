@@ -6,12 +6,12 @@ import net.minecraft.enchantment.EnchantmentHelper
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
-import su.mandora.tarasande.system.screen.panelsystem.Panel
+import su.mandora.tarasande.system.screen.panelsystem.api.PanelFixed
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import kotlin.math.roundToInt
 
-class PanelArmor : Panel("Armor", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
+class PanelArmor : PanelFixed("Armor", 75.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
 
     private val itemDimension = 20
 
