@@ -3,6 +3,8 @@ package su.mandora.tarasande.system.feature.modulesystem.impl.gamemode
 import net.minecraft.util.math.Direction
 import su.mandora.tarasande.event.impl.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.impl.EventRotation
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -12,8 +14,6 @@ import su.mandora.tarasande.util.extension.minecraft.math.minus
 import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
 import su.mandora.tarasande.util.extension.minecraft.prevPos
-import su.mandora.tarasande.feature.rotation.api.Rotation
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 
 class ModuleQuakeAura : Module("Quake aura", "Aimbot for Quake-like game modes", ModuleCategory.GAMEMODE) {

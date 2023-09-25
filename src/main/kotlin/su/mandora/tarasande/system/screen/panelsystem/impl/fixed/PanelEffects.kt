@@ -10,7 +10,6 @@ import net.minecraft.registry.Registries
 import net.minecraft.util.Formatting
 import su.mandora.tarasande.injection.accessor.ILivingEntity
 import su.mandora.tarasande.mc
-import su.mandora.tarasande.system.screen.panelsystem.Panel
 import su.mandora.tarasande.system.screen.panelsystem.api.PanelFixed
 import su.mandora.tarasande.util.extension.javaruntime.withAlpha
 import su.mandora.tarasande.util.extension.minecraft.extractContent

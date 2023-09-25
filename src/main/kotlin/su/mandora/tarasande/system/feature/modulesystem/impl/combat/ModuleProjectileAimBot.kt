@@ -10,6 +10,8 @@ import net.minecraft.util.math.Box
 import su.mandora.tarasande.event.impl.EventRender3D
 import su.mandora.tarasande.event.impl.EventRotation
 import su.mandora.tarasande.feature.rotation.Rotations
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueColor
@@ -21,8 +23,6 @@ import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.system.feature.modulesystem.impl.player.ModuleFastUse
 import su.mandora.tarasande.util.PROJECTILE_GRAVITY
 import su.mandora.tarasande.util.extension.minecraft.math.minus
-import su.mandora.tarasande.feature.rotation.api.Rotation
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.prediction.PredictionEngine
 import su.mandora.tarasande.util.player.prediction.projectile.ProjectileUtil

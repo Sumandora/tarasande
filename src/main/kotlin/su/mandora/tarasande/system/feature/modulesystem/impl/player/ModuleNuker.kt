@@ -9,6 +9,7 @@ import su.mandora.tarasande.event.impl.EventAttack
 import su.mandora.tarasande.event.impl.EventHandleBlockBreaking
 import su.mandora.tarasande.event.impl.EventRotation
 import su.mandora.tarasande.event.impl.EventSwing
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -20,7 +21,6 @@ import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
 import su.mandora.tarasande.util.extension.minecraft.isMissHitResult
 import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
 import su.mandora.tarasande.util.math.time.TimeUtil
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.ceil

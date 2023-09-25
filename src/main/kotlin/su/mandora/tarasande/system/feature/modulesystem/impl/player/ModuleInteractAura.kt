@@ -10,6 +10,7 @@ import net.minecraft.util.hit.EntityHitResult
 import su.mandora.tarasande.event.impl.EventAttack
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.event.impl.EventRotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -22,7 +23,6 @@ import su.mandora.tarasande.util.extension.kotlinruntime.WeakSet
 import su.mandora.tarasande.util.extension.minecraft.isEntityHitResult
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 import su.mandora.tarasande.util.math.time.TimeUtil
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.chat.CustomChat

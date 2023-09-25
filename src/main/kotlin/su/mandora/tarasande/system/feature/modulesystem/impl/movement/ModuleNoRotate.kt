@@ -4,11 +4,11 @@ import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.event.impl.EventRotation
 import su.mandora.tarasande.event.impl.EventRotationSet
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.packet.evaluateNewRotation
-import su.mandora.tarasande.feature.rotation.api.Rotation
 
 class ModuleNoRotate : Module("No rotate", "Prevents the server from rotating you", ModuleCategory.MOVEMENT) {
 

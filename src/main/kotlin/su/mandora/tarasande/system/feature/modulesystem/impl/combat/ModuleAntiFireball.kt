@@ -3,6 +3,7 @@ package su.mandora.tarasande.system.feature.modulesystem.impl.combat
 import net.minecraft.entity.projectile.FireballEntity
 import su.mandora.tarasande.event.impl.EventAttack
 import su.mandora.tarasande.event.impl.EventRotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
@@ -15,7 +16,6 @@ import su.mandora.tarasande.util.extension.minecraft.math.minus
 import su.mandora.tarasande.util.extension.minecraft.prevPos
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.time.TimeUtil
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 

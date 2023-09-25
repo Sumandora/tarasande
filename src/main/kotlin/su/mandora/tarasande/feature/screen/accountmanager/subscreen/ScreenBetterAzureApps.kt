@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.text.Text
+import su.mandora.tarasande.feature.screen.ScreenBetter
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.accountmanager.azureapp.AzureAppPreset
 import su.mandora.tarasande.system.screen.accountmanager.azureapp.ManagerAzureApp
@@ -12,7 +13,6 @@ import su.mandora.tarasande.util.DEFAULT_BUTTON_HEIGHT
 import su.mandora.tarasande.util.DEFAULT_BUTTON_WIDTH
 import su.mandora.tarasande.util.TEXTFIELD_WIDTH
 import su.mandora.tarasande.util.extension.minecraft.render.widget.ButtonWidget
-import su.mandora.tarasande.feature.screen.ScreenBetter
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholder
 import java.util.function.Consumer
 

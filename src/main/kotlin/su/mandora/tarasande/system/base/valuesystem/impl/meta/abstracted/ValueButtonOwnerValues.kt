@@ -3,7 +3,6 @@ package su.mandora.tarasande.system.base.valuesystem.impl.meta.abstracted
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.meta.ValueButton
 import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
-import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterPanel
 
 open class ValueButtonOwnerValues(
     owner: Any,

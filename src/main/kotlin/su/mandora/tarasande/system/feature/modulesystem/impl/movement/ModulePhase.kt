@@ -5,6 +5,7 @@ import net.minecraft.util.shape.VoxelShapes
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.impl.EventCollisionShape
 import su.mandora.tarasande.event.impl.EventUpdate
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -14,7 +15,6 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.math.plus
 import su.mandora.tarasande.util.extension.minecraft.math.times
-import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 import kotlin.math.ceil
 

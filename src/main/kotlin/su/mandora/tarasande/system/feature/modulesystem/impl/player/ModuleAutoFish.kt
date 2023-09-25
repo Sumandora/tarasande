@@ -9,6 +9,7 @@ import su.mandora.tarasande.event.impl.EventKeyBindingIsPressed
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.feature.rotation.Rotations
+import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
@@ -16,7 +17,6 @@ import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
 import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
 import su.mandora.tarasande.util.math.time.TimeUtil
-import su.mandora.tarasande.feature.rotation.api.Rotation
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.prediction.projectile.ProjectileUtil
 import kotlin.math.abs

@@ -7,6 +7,7 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.text.Text
 import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.feature.screen.ScreenBetter
 import su.mandora.tarasande.system.screen.accountmanager.account.Account
 import su.mandora.tarasande.system.screen.accountmanager.account.ManagerAccount
 import su.mandora.tarasande.system.screen.accountmanager.account.api.AccountInfo
@@ -18,7 +19,6 @@ import su.mandora.tarasande.util.DEFAULT_BUTTON_WIDTH
 import su.mandora.tarasande.util.TEXTFIELD_WIDTH
 import su.mandora.tarasande.util.extension.minecraft.render.widget.ButtonWidget
 import su.mandora.tarasande.util.render.font.FontWrapper
-import su.mandora.tarasande.feature.screen.ScreenBetter
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholder
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholderPassword
 import java.util.function.Consumer

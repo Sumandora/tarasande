@@ -1,6 +1,8 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.ghost
 
 import su.mandora.tarasande.event.impl.EventMouseDelta
+import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumberRange
@@ -10,8 +12,6 @@ import su.mandora.tarasande.util.DEFAULT_REACH
 import su.mandora.tarasande.util.extension.kotlinruntime.prefer
 import su.mandora.tarasande.util.extension.minecraft.isEntityHitResult
 import su.mandora.tarasande.util.math.MathUtil
-import su.mandora.tarasande.feature.rotation.api.Rotation
-import su.mandora.tarasande.feature.rotation.api.RotationUtil
 import su.mandora.tarasande.util.maxReach
 import su.mandora.tarasande.util.player.PlayerUtil
 

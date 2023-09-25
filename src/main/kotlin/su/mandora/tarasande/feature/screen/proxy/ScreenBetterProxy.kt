@@ -7,6 +7,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import org.lwjgl.glfw.GLFW
+import su.mandora.tarasande.feature.screen.ScreenBetter
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.util.BUTTON_PADDING
 import su.mandora.tarasande.util.DEFAULT_BUTTON_HEIGHT
@@ -18,7 +19,6 @@ import su.mandora.tarasande.util.connection.ProxyType
 import su.mandora.tarasande.util.extension.minecraft.render.widget.ButtonWidget
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
-import su.mandora.tarasande.feature.screen.ScreenBetter
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholder
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholderPassword
 import su.mandora.tarasande.util.threading.ThreadRunnableExposed

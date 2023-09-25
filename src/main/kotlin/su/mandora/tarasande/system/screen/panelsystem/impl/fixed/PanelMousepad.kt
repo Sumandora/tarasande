@@ -6,9 +6,8 @@ import net.minecraft.client.render.*
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.feature.rotation.Rotations
-import su.mandora.tarasande.mc
-import su.mandora.tarasande.system.screen.panelsystem.Panel
 import su.mandora.tarasande.feature.rotation.api.Rotation
+import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.panelsystem.api.PanelFixed
 import su.mandora.tarasande.util.render.RenderUtil
 import kotlin.math.abs
