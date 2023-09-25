@@ -12,10 +12,8 @@ import org.joml.Matrix4f
 import org.joml.Vector4f
 import org.lwjgl.glfw.GLFW
 import org.lwjgl.opengl.GL11.*
-import su.mandora.tarasande.injection.accessor.IDrawContext
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
-import su.mandora.tarasande.system.screen.panelsystem.screen.impl.ScreenBetterOwnerValues
 import su.mandora.tarasande.util.extension.minecraft.math.minus
 import java.awt.Color
 import kotlin.math.*
@@ -210,14 +208,9 @@ object RenderUtil {
     fun renderItemStack(context: DrawContext, x: Int, y: Int, tickDelta: Float, item: ItemStack) {
         RenderSystem.enableCull()
         DiffuseLighting.enableGuiDepthLighting()
-        if (mc.currentScreen is ScreenBetterOwnerValues) { // Hack for blur
-            val prev = (context as IDrawContext).tarasande_isGuiItemRendering()
-            (context as IDrawContext).tarasande_setGuiItemRendering(true)
-            mc.inGameHud.renderHotbarItem(context, x, y, tickDelta, mc.player, item, 0)
-            (context as IDrawContext).tarasande_setGuiItemRendering(prev)
-        } else {
-            mc.inGameHud.renderHotbarItem(context, x, y, tickDelta, mc.player, item, 0)
-        }
+        context.matrices.push()
+        mc.inGameHud.renderHotbarItem(context, x, y, tickDelta, mc.player, item, 0)
+        context.matrices.pop()
         DiffuseLighting.disableGuiDepthLighting()
     }
 
