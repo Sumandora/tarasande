@@ -9,10 +9,9 @@ open class ValueButton(
     name: String,
     visible: Boolean = true,
     isEnabled: () -> Boolean = { true },
-    manage: Boolean = true
+    manage: Boolean = true,
+    val onClick: () -> Unit, // Last argument for kotlin lambda syntax
 ) : Value(owner, name, visible, isEnabled, ElementWidthValueComponentButton::class.java, manage) {
-    open fun onClick() {}
-
     override fun save(): JsonElement? = null
     override fun load(jsonElement: JsonElement) {}
 }

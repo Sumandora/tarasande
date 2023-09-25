@@ -55,8 +55,8 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
     }
 
     init {
-        object : ValueButton(this, "Reset captured data") {
-            override fun onClick() = onDisable()
+        ValueButton(this, "Reset captured data") {
+            onDisable()
         }
     }
 
