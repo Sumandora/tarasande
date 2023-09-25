@@ -48,7 +48,7 @@ object TarasandeValues {
         while (true) {
             Thread.sleep(autoSaveDelay.value.toLong())
             if (autoSaveConfig.value) {
-                ManagerFile.save(false)
+                ManagerFile.saveAll()
             }
         }
     }

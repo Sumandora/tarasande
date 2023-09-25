@@ -18,7 +18,7 @@ object ManagerValue : Manager<Value>() {
                 if (list.filter { it != value }.any { it.name == value.name && it.owner.javaClass.name == value.owner.javaClass.name })
                     error("Name-and-owner-clash value registered (" + value.owner.javaClass.name + " -> " + value.name + ")")
             }
-            ManagerFile.add(FileValues())
+            ManagerFile.add(FileValues(ignoreExportRules = true))
             closed = true
         }
     }

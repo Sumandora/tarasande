@@ -9,6 +9,7 @@ import net.minecraft.text.MutableText
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.logger
+import su.mandora.tarasande.system.base.valuesystem.api.DontExport
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
 import su.mandora.tarasande.util.player.chat.CustomChat
@@ -18,7 +19,9 @@ import java.nio.charset.StandardCharsets
 object TeslaClientSpoofer {
     val enabled = ValueBoolean(this, "Enabled", false)
 
+    @DontExport
     private val username = ValueText(this, "Username", "")
+    @DontExport
     private val password = ValueText(this, "Password", "")
     private val teslaBuild = ValueText(this, "Tesla build", "7351A105")
     private val fakeWeCui = ValueBoolean(this, "Fake we-cui", true)
