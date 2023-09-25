@@ -1,4 +1,4 @@
-package su.mandora.tarasande.util.screen
+package su.mandora.tarasande.feature.screen
 
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen

@@ -18,7 +18,7 @@ import su.mandora.tarasande.util.connection.ProxyType
 import su.mandora.tarasande.util.extension.minecraft.render.widget.ButtonWidget
 import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
-import su.mandora.tarasande.util.screen.ScreenBetter
+import su.mandora.tarasande.feature.screen.ScreenBetter
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholder
 import su.mandora.tarasande.util.screen.widget.TextFieldWidgetPlaceholderPassword
 import su.mandora.tarasande.util.threading.ThreadRunnableExposed

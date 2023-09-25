@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.screen.narration.NarrationPart
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget
 import net.minecraft.text.Text
+import su.mandora.tarasande.feature.screen.ScreenBetter
 import su.mandora.tarasande.feature.tarasandevalue.impl.AccessibilityValues
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.util.SCROLLBAR_WIDTH
