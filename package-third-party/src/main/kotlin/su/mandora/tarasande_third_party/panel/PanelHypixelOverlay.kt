@@ -7,9 +7,10 @@ import net.minecraft.client.gui.DrawContext
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.gson
 import su.mandora.tarasande.mc
+import su.mandora.tarasande.system.base.valuesystem.api.DontExport
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueText
-import su.mandora.tarasande.system.screen.panelsystem.Panel
+import su.mandora.tarasande.system.screen.panelsystem.api.PanelFixed
 import su.mandora.tarasande.util.extension.javaruntime.Thread
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.render.helper.Alignment
@@ -21,8 +22,9 @@ import kotlin.math.roundToInt
 /*
  * This code is probably worse than it has to be, but I just couldn't think of anything better (sleep deprivation :c)
  */
-class PanelHypixelOverlay : Panel("Hypixel Overlay", 200.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
+class PanelHypixelOverlay : PanelFixed("Hypixel Overlay", 200.0, FontWrapper.fontHeight().toDouble(), resizable = false) {
 
+    @DontExport
     private val apiKey = ValueText(this, "API Key", "")
     private val fields = ValueMode(this, "Fields", true, "Name", "Playtime", "Age", "Level", "Final-Kill/Death Ratio", "Winstreak", "Achievements", "API response length")
 
