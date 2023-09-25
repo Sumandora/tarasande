@@ -23,6 +23,10 @@ class ModuleAutoTool : Module("Auto tool", "Selects the best tool when breaking 
 
     val mode = ValueMode(this, "Mode", true, "Blocks", "Entities")
 
+    init {
+        mode.select(0)
+    }
+
     val useAxeToCounterBlocking = ValueBoolean(this, "Use axe to counter blocking", false, isEnabled = { mode.isSelected(1) })
     private val simulateBlock = ValueBoolean(this, "Simulate block", false, isEnabled = { useAxeToCounterBlocking.value })
     private val preferSwords = ValueBoolean(this, "Prefer swords", false, isEnabled = { mode.isSelected(1) })
