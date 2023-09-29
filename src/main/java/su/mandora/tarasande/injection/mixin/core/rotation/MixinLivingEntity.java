@@ -54,6 +54,8 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     private float tarasande_headYaw;
     @Unique
     private float tarasande_prevHeadYaw;
+    @Unique
+    private boolean tarasande_inInventory = false;
 
     public MixinLivingEntity(EntityType<?> type, World world) {
         super(type, world);
@@ -172,5 +174,15 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     @Override
     public void tarasande_setPrevHeadYaw(float prevHeadYaw) {
         tarasande_prevHeadYaw = prevHeadYaw;
+    }
+
+    @Override
+    public boolean tarasande_isInInventory() {
+        return tarasande_inInventory;
+    }
+
+    @Override
+    public void tarasande_setInInventory(boolean inInventory) {
+        tarasande_inInventory = inInventory;
     }
 }

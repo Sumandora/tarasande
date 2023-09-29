@@ -37,7 +37,8 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
     public float modifyYaw(float delta, float start, float end) {
         if (Rotations.INSTANCE.getAdjustThirdPersonModel().getValue() && tarasande_entity == MinecraftClient.getInstance().player) {
             ILivingEntity accessor = (ILivingEntity) tarasande_entity;
-            return MathHelper.lerpAngleDegrees(delta, accessor.tarasande_getPrevHeadYaw(), accessor.tarasande_getHeadYaw());
+            if(!accessor.tarasande_isInInventory())
+                return MathHelper.lerpAngleDegrees(delta, accessor.tarasande_getPrevHeadYaw(), accessor.tarasande_getHeadYaw());
         }
         return MathHelper.lerpAngleDegrees(delta, start, end);
     }
@@ -46,7 +47,8 @@ public abstract class MixinLivingEntityRenderer<T extends LivingEntity, M extend
     public float modifyPitch(float delta, float start, float end) {
         if (Rotations.INSTANCE.getAdjustThirdPersonModel().getValue() && tarasande_entity == MinecraftClient.getInstance().player) {
             ILivingEntity accessor = (ILivingEntity) tarasande_entity;
-            return MathHelper.lerp(delta, accessor.tarasande_getPrevHeadPitch(), accessor.tarasande_getHeadPitch());
+            if(!accessor.tarasande_isInInventory())
+                return MathHelper.lerp(delta, accessor.tarasande_getPrevHeadPitch(), accessor.tarasande_getHeadPitch());
         }
         return MathHelper.lerp(delta, start, end);
     }

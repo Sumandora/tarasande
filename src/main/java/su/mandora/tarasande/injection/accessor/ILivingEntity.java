@@ -27,4 +27,8 @@ public interface ILivingEntity {
     float tarasande_getPrevHeadYaw();
 
     void tarasande_setPrevHeadYaw(float prevHeadYaw);
+
+    boolean tarasande_isInInventory();
+
+    void tarasande_setInInventory(boolean inInventory);
 }
