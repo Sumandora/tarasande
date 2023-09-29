@@ -1,6 +1,8 @@
 package su.mandora.tarasande.system.screen.informationsystem.impl
 
-import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
+import io.netty.buffer.Unpooled
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.packet.s2c.common.CustomPayloadS2CPacket
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventDisconnect
 import su.mandora.tarasande.event.impl.EventPacket
@@ -8,7 +10,7 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.screen.informationsystem.Information
 import su.mandora.tarasande.util.extension.javaruntime.clearAndGC
-import java.nio.charset.StandardCharsets
+import su.mandora.tarasande.util.extension.minecraft.asByteArray
 
 class InformationServerBrand : Information("Server", "Server Brand") {
 
@@ -16,14 +18,10 @@ class InformationServerBrand : Information("Server", "Server Brand") {
     private val regex = ValueBoolean(this, "Regex", true)
 
     override fun getMessage(): String? {
-        if (!mc.isInSingleplayer) {
-            var brand = mc.player?.serverBrand ?: return null
-
-            if (regex.value)
-                brand = brand.replace(compiledRegex, "")
-            return brand
-        }
-        return null
+        var brand = mc.networkHandler?.brand ?: return null
+        if (regex.value)
+            brand = brand.replace(compiledRegex, "")
+        return brand
     }
 }
 
@@ -35,13 +33,16 @@ class InformationOpenChannels : Information("Server", "Open Channels") {
         EventDispatcher.apply {
             add(EventPacket::class.java) {
                 if (it.type == EventPacket.Type.RECEIVE && it.packet is CustomPayloadS2CPacket) {
-                    if (it.packet.channel.toString() == "minecraft:register") {
-                        it.packet.data.toString(StandardCharsets.UTF_8).split("\u0000").forEach { data ->
+                    val payload = it.packet.payload
+                    val channel = payload.id()
+                    val content = PacketByteBuf(Unpooled.buffer()).also { payload.write(it) }.asByteArray().decodeToString()
+                    if (channel.toString() == "minecraft:register") {
+                        content.split("\u0000").forEach { data ->
                             if (!openChannels.contains(data))
                                 openChannels.add(data)
                         }
-                    } else if (it.packet.channel.toString() == "minecraft:unregister") {
-                        it.packet.data.toString(StandardCharsets.UTF_8).split("\u0000").forEach { data ->
+                    } else if (channel.toString() == "minecraft:unregister") {
+                        content.split("\u0000").forEach { data ->
                             if (openChannels.contains(data))
                                 openChannels.remove(data)
                         }
