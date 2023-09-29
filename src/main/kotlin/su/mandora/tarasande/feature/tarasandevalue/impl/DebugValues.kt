@@ -2,7 +2,7 @@ package su.mandora.tarasande.feature.tarasandevalue.impl
 
 import com.mojang.blaze3d.platform.GlConst
 import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.network.packet.s2c.play.ResourcePackSendS2CPacket
+import net.minecraft.network.packet.s2c.common.ResourcePackSendS2CPacket
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.event.impl.EventRender3D
