@@ -31,7 +31,7 @@ public abstract class MixinScreen {
     }
 
 
-    @Inject(method = "render", at = @At("HEAD"))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;renderBackground(Lnet/minecraft/client/gui/DrawContext;IIF)V", shift = At.Shift.AFTER))
     public void hookEventScreenRenderPre(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         final Screen thisScreen = (Screen) (Object) this;
         // Mojang manages to surprise me in so many ways
