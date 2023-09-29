@@ -142,9 +142,9 @@ class ElementWidthModule(private val module: Module, width: Double) : ElementWid
         }
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
         for (component in components) {
-            if (component.value.isEnabled() && component.mouseScrolled(mouseX, mouseY, amount)) {
+            if (component.value.isEnabled() && component.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)) {
                 return true
             }
         }

@@ -153,7 +153,7 @@ class ElementWidthValueComponentNumberRange(value: Value) : ElementWidthValueCom
         maxDragInfo.setDragInfo(false, 0.0, 0.0)
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double) = false
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double) = false
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (value.isEnabled() && lastMousePos != null && RenderUtil.isHovered(lastMousePos?.x?.toDouble()!!, lastMousePos?.y?.toDouble()!!, width - 50, getHeight() * 0.25, width, getHeight() * 0.75)) {

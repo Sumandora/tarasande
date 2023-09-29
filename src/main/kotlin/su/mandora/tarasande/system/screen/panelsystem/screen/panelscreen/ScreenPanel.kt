@@ -191,11 +191,11 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
         return super.mouseReleased(mouseX, mouseY, button)
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
         for (it in panelSystem.list) {
-            if (it.mouseScrolled(mouseX, mouseY, amount)) break
+            if (it.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)) break
         }
-        return super.mouseScrolled(mouseX, mouseY, amount)
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

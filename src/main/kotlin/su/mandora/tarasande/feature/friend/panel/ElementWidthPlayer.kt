@@ -81,8 +81,8 @@ class ElementWidthPlayer(val gameProfile: GameProfile, width: Double) : ElementW
         return textField.mouseReleased((mouseX - xOffset) / 2.0, (mouseY - yOffset) / 2.0, button)
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
-        return textField.mouseScrolled((mouseX - xOffset) / 2.0, (mouseY - yOffset) / 2.0, amount)
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
+        return textField.mouseScrolled((mouseX - xOffset) / 2.0, (mouseY - yOffset) / 2.0, horizontalAmount, verticalAmount)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

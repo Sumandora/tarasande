@@ -32,10 +32,10 @@ open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = 
         return true
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
         val opened = panel.opened
         panel.opened = true
-        val returnValue = panel.isVisible() && panel.mouseScrolled(mouseX, mouseY, amount)
+        val returnValue = panel.isVisible() && panel.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
         panel.opened = opened
         return returnValue
     }

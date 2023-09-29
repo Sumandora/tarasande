@@ -47,7 +47,7 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
         if (textFieldWidget.isFocused && value.isEnabled())
             textFieldAccessor.tarasande_setColor(TarasandeValues.accentColor.getColor())
         else
-            textFieldWidget.setCursorToEnd()
+            textFieldWidget.setCursorToEnd(false)
 
         if (!value.isEnabled()) {
             textFieldAccessor.tarasande_setColor(Color.white.darker().darker())
@@ -77,7 +77,7 @@ class ElementWidthValueComponentFocusableText(value: Value) : ElementWidthValueC
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double) = false
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double) = false
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         return if (textFieldWidget.isFocused && (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {

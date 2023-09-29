@@ -113,7 +113,7 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
             return true
         } else {
             textFieldWidget.mouseClicked(-1.0, -1.0, button)
-            textFieldWidget.setCursorToEnd()
+            textFieldWidget.setCursorToEnd(false)
             textFieldWidget.isFocused = false
         }
 
@@ -141,7 +141,7 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double) = false
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double) = false
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         return if (textFieldWidget.isFocused && (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
@@ -151,7 +151,7 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
                 updateSearchResults()
             }
             textFieldWidget.isFocused = false
-            textFieldWidget.setCursorToEnd()
+            textFieldWidget.setCursorToEnd(false)
             true
         } else {
             textFieldWidget.keyPressed(keyCode, scanCode, modifiers)
@@ -167,7 +167,7 @@ class ElementWidthValueComponentFocusableRegistry(value: Value) : ElementWidthVa
 
     override fun onClose() {
         textFieldWidget.isFocused = false
-        textFieldWidget.setCursorToEnd()
+        textFieldWidget.setCursorToEnd(false)
     }
 
     private fun updateSearchResults() {

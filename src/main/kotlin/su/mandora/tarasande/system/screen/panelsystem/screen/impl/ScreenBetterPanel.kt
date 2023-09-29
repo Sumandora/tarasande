@@ -23,9 +23,9 @@ open class ScreenBetterPanel(title: String, parent: Screen, val panel: Panel) : 
         return super.mouseReleased(mouseX, mouseY, button)
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
-        this.clickableWidgetPanel.mouseScrolled(mouseX, mouseY, amount)
-        return super.mouseScrolled(mouseX, mouseY, amount)
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
+        this.clickableWidgetPanel.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
     }
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {

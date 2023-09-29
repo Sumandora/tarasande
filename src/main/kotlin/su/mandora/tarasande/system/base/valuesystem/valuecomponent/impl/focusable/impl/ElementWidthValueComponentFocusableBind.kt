@@ -59,7 +59,7 @@ class ElementWidthValueComponentFocusableBind(value: Value) : ElementWidthValueC
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int) {
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double) = false
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double) = false
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (waitsForInput) {

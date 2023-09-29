@@ -55,14 +55,14 @@ open class PanelElements<T : ElementWidth>(title: String, minWidth: Double, minH
         super.mouseReleased(mouseX, mouseY, button)
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
         val x = x + 2
         var y = y + titleBarHeight + 2
         elementList.forEach {
-            if (it.mouseScrolled(mouseX - x, mouseY - y - scrollOffset, amount)) return true
+            if (it.mouseScrolled(mouseX - x, mouseY - y - scrollOffset, horizontalAmount, verticalAmount)) return true
             y += it.getHeight() + 2
         }
-        return super.mouseScrolled(mouseX, mouseY, amount)
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {

@@ -7,7 +7,7 @@ interface IElement {
     fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float)
     fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean
     fun mouseReleased(mouseX: Double, mouseY: Double, button: Int)
-    fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double): Boolean
+    fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean
     fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean
     fun charTyped(chr: Char, modifiers: Int)
     fun tick()
