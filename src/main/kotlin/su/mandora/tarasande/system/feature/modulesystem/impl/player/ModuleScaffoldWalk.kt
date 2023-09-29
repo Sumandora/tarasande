@@ -447,7 +447,7 @@ class ModuleScaffoldWalk : Module("Scaffold walk", "Places blocks underneath you
         return if (cubeShape.value) {
             val block = blockItem.block
             val shape = block.defaultState.getCollisionShape(mc.world, BlockPos.ORIGIN)
-            !shape.isEmpty && shape.boundingBox.xLength == 1.0 && shape.boundingBox.yLength == 1.0 && shape.boundingBox.zLength == 1.0 && block.defaultState.isSolidBlock(mc.world, BlockPos.ORIGIN)
+            !shape.isEmpty && shape.boundingBox.lengthX == 1.0 && shape.boundingBox.lengthY == 1.0 && shape.boundingBox.lengthZ == 1.0 && block.defaultState.isSolidBlock(mc.world, BlockPos.ORIGIN)
         } else true
     }
 

@@ -227,7 +227,7 @@ class ModuleBlockParty : Module("Block party", "Automatically plays block party"
                             if (event.packet.slot == 36 + hotbarSlot.value.toInt() - 1) {
                                 if(mc.player == null)
                                     return@registerEvent
-                                val item = event.packet.itemStack.item
+                                val item = event.packet.stack.item
                                 if (item is BlockItem && blocks.isSelected(item.block)) {
                                     preparing = false
                                     best = calculateBestBlock(item.block)

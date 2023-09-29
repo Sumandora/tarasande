@@ -504,7 +504,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
             // Humans can't move their mouse in a straight line
             val aimDelta = (Rotations.fakeRotation ?: Rotation(mc.player!!)).fov(RotationUtil.getRotations(mc.player?.eyePos!!, aimPoint)) / Rotation.MAXIMUM_DELTA
-            aimPoint = aimPoint.add(0.0, -aimDelta * box.yLength * RandomRotations.curving.value, 0.0)
+            aimPoint = aimPoint.add(0.0, -aimDelta * box.lengthY * RandomRotations.curving.value, 0.0)
 
             // Don't aim through walls
             while (visible && !PlayerUtil.canVectorBeSeen(mc.player?.eyePos!!, aimPoint) && rotations.isSelected(0)) {

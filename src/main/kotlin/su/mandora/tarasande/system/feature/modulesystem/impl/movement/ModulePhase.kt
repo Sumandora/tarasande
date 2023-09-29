@@ -39,7 +39,7 @@ class ModulePhase : Module("Phase", "Allows you to move through blocks", ModuleC
                 }
 
                 mode.isSelected(2) -> {
-                    val boundingBoxHeight = mc.player!!.boundingBox.yLength
+                    val boundingBoxHeight = mc.player!!.boundingBox.lengthY
                     fun isCollideable(blockPos: BlockPos): Boolean {
                         return !mc.world!!.getBlockState(blockPos).getCollisionShape(mc.world!!, blockPos).isEmpty
                     }

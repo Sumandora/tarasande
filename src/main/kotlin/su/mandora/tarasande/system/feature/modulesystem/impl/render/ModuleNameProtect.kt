@@ -49,7 +49,7 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
                 if (protectEveryone.value)
                     (mc.networkHandler?.playerList ?: return@registerEvent).map { it.profile.name }.sortedByDescending { it.length }
                 else
-                    listOf(mc.session.profile.name)
+                    listOf(mc.session.username)
 
             for (player in protectedNames)
                 event.string = replaceName(event.string, player, protectedName.value)
