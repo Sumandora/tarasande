@@ -7,7 +7,7 @@ import net.minecraft.resource.featuretoggle.FeatureSet
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.unsafe
 
-class ClientPlayNetworkHandlerDummy private constructor() : ClientPlayNetworkHandler(null, null, null, null, null, null) {
+class ClientPlayNetworkHandlerDummy private constructor() : ClientPlayNetworkHandler(null, null, null) {
 
     override fun sendPacket(packet: Packet<*>?) {
         // Don't send packets
