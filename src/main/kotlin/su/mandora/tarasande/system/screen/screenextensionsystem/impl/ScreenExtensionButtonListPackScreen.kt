@@ -14,7 +14,7 @@ class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen
         add(Button("Dump server pack", { mc.serverResourcePackProvider?.serverContainer != null }) {
             mc.serverResourcePackProvider?.serverContainer?.apply {
                 // The pack provider, will always make ZipResourcePacks
-                val base = (this.createResourcePack() as ZipResourcePack).backingZipFile
+                val base = (this.createResourcePack() as ZipResourcePack).zipFile.file
 
                 val name = mc.currentServerEntry?.address ?: base.name
 
