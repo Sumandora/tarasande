@@ -4,13 +4,14 @@ import net.minecraft.client.resource.language.LanguageDefinition
 import net.minecraft.client.resource.language.LanguageManager
 import net.minecraft.client.resource.language.TranslationStorage
 import su.mandora.tarasande.mc
+import su.mandora.tarasande.util.DEFAULT_LANGUAGE_CODE
 import java.util.regex.Pattern
 
 object StringUtil {
 
     private val languageCache = HashMap<LanguageDefinition, TranslationStorage>()
 
-    fun uncoverTranslation(key: String, languageDefinition: LanguageDefinition = LanguageManager.ENGLISH_US, languageCode: String = LanguageManager.DEFAULT_LANGUAGE_CODE): String {
+    fun uncoverTranslation(key: String, languageDefinition: LanguageDefinition = LanguageManager.ENGLISH_US, languageCode: String = DEFAULT_LANGUAGE_CODE): String {
         return languageCache.computeIfAbsent(languageDefinition) { TranslationStorage.load(mc.resourceManager, listOf(languageCode), languageDefinition.rightToLeft) }.get(key)
     }
 
