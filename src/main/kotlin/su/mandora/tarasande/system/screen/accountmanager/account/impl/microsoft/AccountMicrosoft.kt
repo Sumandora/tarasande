@@ -7,7 +7,7 @@ import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.screen.NoticeScreen
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.util.Session
+import net.minecraft.client.session.Session
 import net.minecraft.text.Text
 import net.minecraft.util.Util
 import su.mandora.tarasande.feature.screen.accountmanager.subscreen.ScreenBetterAzureApps
@@ -20,6 +20,7 @@ import su.mandora.tarasande.system.screen.accountmanager.account.api.TextFieldIn
 import su.mandora.tarasande.system.screen.accountmanager.azureapp.AzureAppPreset
 import su.mandora.tarasande.system.screen.accountmanager.azureapp.ManagerAzureApp
 import su.mandora.tarasande.util.extension.javaruntime.Thread
+import su.mandora.tarasande.util.extension.kotlinruntime.parseUUID
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.*
@@ -127,7 +128,7 @@ $errorDescription""".toByteArray())
             } else
                 error("No data was supplied")
         }
-        YggdrasilAuthenticationService(mc.networkProxy, "", environment).also {
+        YggdrasilAuthenticationService(mc.networkProxy, environment).also {
             yggdrasilAuthenticationService = it
             minecraftSessionService = it.createMinecraftSessionService()
         }
@@ -351,7 +352,7 @@ $errorDescription""".toByteArray())
 
         fun asSession() = Session(
             minecraftProfile.name,
-            minecraftProfile.id,
+            parseUUID(minecraftProfile.id),
             minecraftLogin.accessToken,
             Optional.of(xboxLiveAuth.token),
             Optional.of(azureApp.clientId), // I hate the jvm, I hate the bytecode, I hate the language, I hate me, I hate everything!

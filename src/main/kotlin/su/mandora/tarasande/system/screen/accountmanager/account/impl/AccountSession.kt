@@ -2,11 +2,12 @@ package su.mandora.tarasande.system.screen.accountmanager.account.impl
 
 import com.google.gson.JsonArray
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
-import net.minecraft.client.util.Session
+import net.minecraft.client.session.Session
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.accountmanager.account.Account
 import su.mandora.tarasande.system.screen.accountmanager.account.api.AccountInfo
 import su.mandora.tarasande.system.screen.accountmanager.account.api.TextFieldInfo
+import su.mandora.tarasande.util.extension.kotlinruntime.parseUUID
 import java.util.*
 
 
@@ -30,8 +31,15 @@ class AccountSession : Account() {
 
 
     override fun logIn() {
-        uuid = UUID.randomUUID().toString()
-        YggdrasilAuthenticationService(mc.networkProxy, "", environment).also {
+        val uuid = if(this.uuid.isEmpty())
+            UUID.randomUUID()
+        else
+            try {
+                parseUUID(this.uuid)
+            } catch (e: IllegalArgumentException) {
+                error("Invalid UUID")
+            }
+        YggdrasilAuthenticationService(mc.networkProxy, environment).also {
             yggdrasilAuthenticationService = it
             minecraftSessionService = it.createMinecraftSessionService()
         }

@@ -10,10 +10,10 @@ fun parseUUID(uuid: String): UUID {
 }
 
 fun parseUUIDWithoutDashes(uuid: String): UUID {
-    val buf = StringBuffer(uuid);
-    buf.insert(20, '-');
-    buf.insert(16, '-');
-    buf.insert(12, '-');
-    buf.insert(8, '-');
+    val buf = StringBuffer(uuid)
+    buf.insert(20, '-')
+    buf.insert(16, '-')
+    buf.insert(12, '-')
+    buf.insert(8, '-')
     return UUID.fromString(buf.toString())
 }
