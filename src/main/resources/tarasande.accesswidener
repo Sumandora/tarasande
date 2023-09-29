@@ -33,30 +33,28 @@ accessible field net/minecraft/entity/LivingEntity serverY D
 accessible field net/minecraft/entity/LivingEntity serverZ D
 accessible field net/minecraft/entity/LivingEntity serverYaw D
 accessible field net/minecraft/entity/LivingEntity jumpingCooldown I
-accessible field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/util/Session;
+accessible field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/session/Session;
 accessible field net/minecraft/client/MinecraftClient attackCooldown I
 accessible field net/minecraft/client/MinecraftClient renderTickCounter Lnet/minecraft/client/render/RenderTickCounter;
 accessible field net/minecraft/client/MinecraftClient authenticationService Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;
 accessible field net/minecraft/client/MinecraftClient sessionService Lcom/mojang/authlib/minecraft/MinecraftSessionService;
 accessible field net/minecraft/client/MinecraftClient userApiService Lcom/mojang/authlib/minecraft/UserApiService;
 accessible field net/minecraft/client/MinecraftClient socialInteractionsManager Lnet/minecraft/client/network/SocialInteractionsManager;
-accessible field net/minecraft/client/MinecraftClient profileKeys Lnet/minecraft/client/util/ProfileKeys;
+accessible field net/minecraft/client/MinecraftClient profileKeys Lnet/minecraft/client/session/ProfileKeys;
 accessible field net/minecraft/client/MinecraftClient itemUseCooldown I
 accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket yaw F
 accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket pitch F
 accessible field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket onGround Z
 accessible field net/minecraft/client/render/RenderTickCounter tickTime F
-accessible field net/minecraft/network/packet/s2c/play/ResourcePackSendS2CPacket hash Ljava/lang/String;
+accessible field net/minecraft/network/packet/s2c/common/ResourcePackSendS2CPacket hash Ljava/lang/String;
 accessible field net/minecraft/client/sound/SoundManager soundSystem Lnet/minecraft/client/sound/SoundSystem;
 accessible field net/minecraft/client/gui/widget/TextFieldWidget text Ljava/lang/String;
 accessible field net/minecraft/entity/TntEntity DEFAULT_FUSE I
 accessible field net/minecraft/client/render/WorldRenderer frustum Lnet/minecraft/client/render/Frustum;
 accessible field net/minecraft/network/packet/s2c/play/WorldTimeUpdateS2CPacket timeOfDay J
 accessible field net/minecraft/client/resource/ServerResourcePackProvider serverContainer Lnet/minecraft/resource/ResourcePackProfile;
-accessible field net/minecraft/resource/ZipResourcePack backingZipFile Ljava/io/File;
 accessible field net/minecraft/client/realms/RealmsClient sessionId Ljava/lang/String;
 accessible field net/minecraft/client/realms/RealmsClient username Ljava/lang/String;
-accessible field net/minecraft/network/packet/s2c/play/PlayerSpawnS2CPacket id I
 accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket id I
 accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket deltaX S
 accessible field net/minecraft/network/packet/s2c/play/EntityS2CPacket deltaY S
@@ -66,23 +64,25 @@ accessible field net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Seria
 accessible field net/minecraft/entity/player/PlayerEntity reducedDebugInfo Z
 accessible field net/minecraft/client/gui/screen/GameMenuScreen exitButton Lnet/minecraft/client/gui/widget/ButtonWidget;
 accessible field net/minecraft/client/gui/widget/EntryListWidget itemHeight I
-accessible field net/minecraft/client/MinecraftClient telemetryManager Lnet/minecraft/client/util/telemetry/TelemetryManager;
-accessible field net/minecraft/client/MinecraftClient abuseReportContext Lnet/minecraft/client/report/AbuseReportContext;
+accessible field net/minecraft/client/MinecraftClient telemetryManager Lnet/minecraft/client/session/telemetry/TelemetryManager;
+accessible field net/minecraft/client/MinecraftClient abuseReportContext Lnet/minecraft/client/session/report/AbuseReportContext;
 accessible field net/minecraft/client/MinecraftClient skinProvider Lnet/minecraft/client/texture/PlayerSkinProvider;
-accessible field net/minecraft/client/texture/PlayerSkinProvider skinCacheDir Ljava/io/File;
 accessible field net/minecraft/client/network/ClientPlayNetworkHandler playerListEntries Ljava/util/Map;
 accessible field net/minecraft/entity/TrackedPosition pos Lnet/minecraft/util/math/Vec3d;
 accessible field net/minecraft/client/gui/widget/TextFieldWidget VERTICAL_CURSOR_COLOR I
+accessible field net/minecraft/resource/ZipResourcePack zipFile Lnet/minecraft/resource/ZipResourcePack$ZipFileWrapper;
+accessible field net/minecraft/resource/ZipResourcePack$ZipFileWrapper file Ljava/io/File;
+accessible field net/minecraft/client/MinecraftClient gameProfileFuture Ljava/util/concurrent/CompletableFuture;
 
 mutable field net/minecraft/entity/Entity random Lnet/minecraft/util/math/random/Random;
-mutable field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/util/Session;
+mutable field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/session/Session;
 mutable field net/minecraft/client/MinecraftClient socialInteractionsManager Lnet/minecraft/client/network/SocialInteractionsManager;
-mutable field net/minecraft/client/MinecraftClient profileKeys Lnet/minecraft/client/util/ProfileKeys;
+mutable field net/minecraft/client/MinecraftClient profileKeys Lnet/minecraft/client/session/ProfileKeys;
 mutable field net/minecraft/client/MinecraftClient authenticationService Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;
 mutable field net/minecraft/client/MinecraftClient sessionService Lcom/mojang/authlib/minecraft/MinecraftSessionService;
 mutable field net/minecraft/client/MinecraftClient userApiService Lcom/mojang/authlib/minecraft/UserApiService;
 mutable field net/minecraft/client/render/RenderTickCounter tickTime F
-mutable field net/minecraft/network/packet/s2c/play/ResourcePackSendS2CPacket hash Ljava/lang/String;
+mutable field net/minecraft/network/packet/s2c/common/ResourcePackSendS2CPacket hash Ljava/lang/String;
 mutable field net/minecraft/network/packet/c2s/play/PlayerMoveC2SPacket onGround Z
 mutable field net/minecraft/util/math/Vec3d x D
 mutable field net/minecraft/util/math/Vec3d y D
@@ -95,9 +95,10 @@ mutable field net/minecraft/client/realms/RealmsClient sessionId Ljava/lang/Stri
 mutable field net/minecraft/client/realms/RealmsClient username Ljava/lang/String;
 mutable field net/minecraft/world/World random Lnet/minecraft/util/math/random/Random;
 mutable field net/minecraft/client/gui/widget/EntryListWidget itemHeight I
-mutable field net/minecraft/client/MinecraftClient telemetryManager Lnet/minecraft/client/util/telemetry/TelemetryManager;
-mutable field net/minecraft/client/MinecraftClient abuseReportContext Lnet/minecraft/client/report/AbuseReportContext;
+mutable field net/minecraft/client/MinecraftClient telemetryManager Lnet/minecraft/client/session/telemetry/TelemetryManager;
+mutable field net/minecraft/client/MinecraftClient abuseReportContext Lnet/minecraft/client/session/report/AbuseReportContext;
 mutable field net/minecraft/client/MinecraftClient skinProvider Lnet/minecraft/client/texture/PlayerSkinProvider;
+mutable field net/minecraft/client/MinecraftClient gameProfileFuture Ljava/util/concurrent/CompletableFuture;
 
 accessible class net/minecraft/network/packet/s2c/play/PlayerListS2CPacket$Serialized
 
@@ -118,3 +119,4 @@ accessible method net/minecraft/client/gui/widget/EntryListWidget clearEntries (
 accessible method net/minecraft/client/gui/widget/EntryListWidget addEntry (Lnet/minecraft/client/gui/widget/EntryListWidget$Entry;)I
 accessible method net/minecraft/client/gui/hud/InGameHud renderHotbarItem (Lnet/minecraft/client/gui/DrawContext;IIFLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;I)V
 accessible method net/minecraft/client/gui/DrawContext tryDraw ()V
+accessible method net/minecraft/client/MinecraftClient createUserApiService (Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;Lnet/minecraft/client/RunArgs;)Lcom/mojang/authlib/minecraft/UserApiService;
