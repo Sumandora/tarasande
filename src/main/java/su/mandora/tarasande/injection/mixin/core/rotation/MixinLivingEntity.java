@@ -125,7 +125,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntity 
     }
 
     @Inject(method = "updateTrackedPositionAndAngles", at = @At("HEAD"))
-    public void saveOldServerPos(double x, double y, double z, float yaw, float pitch, int interpolationSteps, boolean interpolate, CallbackInfo ci) {
+    public void saveOldServerPos(double x, double y, double z, float yaw, float pitch, int interpolationSteps, CallbackInfo ci) {
         tarasande_oldServerPos = new Vec3d(serverX, serverY, serverZ);
     }
 
