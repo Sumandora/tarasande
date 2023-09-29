@@ -1,19 +1,21 @@
 package su.mandora.tarasande.feature.screen.accountmanager
 
+import com.mojang.authlib.exceptions.AuthenticationException
 import com.mojang.authlib.minecraft.UserApiService
 import com.mojang.authlib.yggdrasil.ServicesKeyType
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.network.SocialInteractionsManager
-import net.minecraft.client.report.AbuseReportContext
-import net.minecraft.client.report.ReporterEnvironment
+import net.minecraft.client.session.ProfileKeys
+import net.minecraft.client.session.Session
+import net.minecraft.client.session.report.AbuseReportContext
+import net.minecraft.client.session.report.ReporterEnvironment
+import net.minecraft.client.session.telemetry.TelemetryManager
 import net.minecraft.client.texture.PlayerSkinProvider
-import net.minecraft.client.util.ProfileKeys
-import net.minecraft.client.util.Session
-import net.minecraft.client.util.telemetry.TelemetryManager
 import net.minecraft.network.encryption.SignatureVerifier
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import net.minecraft.util.Util
 import org.apache.commons.lang3.RandomStringUtils
 import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.event.EventDispatcher
@@ -22,6 +24,7 @@ import su.mandora.tarasande.feature.screen.Screens.screenBetterProxy
 import su.mandora.tarasande.feature.screen.accountmanager.file.FileAccounts
 import su.mandora.tarasande.feature.screen.accountmanager.screenextension.ScreenExtensionButtonListMultiplayerScreen
 import su.mandora.tarasande.feature.screen.accountmanager.subscreen.ScreenBetterAccount
+import su.mandora.tarasande.injection.accessor.IMinecraftClient
 import su.mandora.tarasande.injection.accessor.IRealmsPeriodicCheckers
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.filesystem.ManagerFile
@@ -41,6 +44,7 @@ import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande.util.screen.EntryScreenBetterSlotList
 import su.mandora.tarasande.util.screen.ScreenBetterSlotList
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import kotlin.math.max
 
 class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager", null /*set else where*/, 46, 10) {
@@ -216,36 +220,39 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
 
         // This can't be "client" because it is called from ClientMain means it's null at this point in time
         val success = with(mc) {
-            sessionProperties.clear()
-            session = account.session
+            return@with try {
+                val args = (this as IMinecraftClient).tarasande_getRunArgs()
 
-            try {
                 authenticationService = account.yggdrasilAuthenticationService
-                SignatureVerifier.create(authenticationService.servicesKeySet, ServicesKeyType.PROFILE_KEY)
                 sessionService = account.minecraftSessionService
-                skinProvider = PlayerSkinProvider(textureManager, mc.skinProvider.skinCacheDir, sessionService)
-                (realmsPeriodicCheckers as IRealmsPeriodicCheckers).tarasande_getClient().apply {
-                    username = account.session?.username
-                    sessionId = account.session?.sessionId
+                session = account.session
+                SignatureVerifier.create(authenticationService.servicesKeySet, ServicesKeyType.PROFILE_KEY)
+                gameProfileFuture = CompletableFuture.supplyAsync(
+                    { sessionService.fetchProfile(session.uuidOrNull, true) }, Util.getIoWorkerExecutor()
+                )
+                userApiService = try {
+                    authenticationService.createUserApiService(session.accessToken)
+                } catch (e: AuthenticationException) {
+                    UserApiService.OFFLINE
                 }
-                userApiService =
-                    try {
-                        authenticationService.createUserApiService(session.accessToken)
-                    } catch (t: Throwable) {
-                        UserApiService.OFFLINE
-                    }
+                skinProvider = PlayerSkinProvider(textureManager, args.directories.assetDir.toPath().resolve("skins"), sessionService, this)
                 socialInteractionsManager = SocialInteractionsManager(this, userApiService)
+                (realmsPeriodicCheckers as IRealmsPeriodicCheckers).tarasande_getClient().apply {
+                    username = session.username
+                    sessionId = session.sessionId
+                }
                 telemetryManager = TelemetryManager(this, userApiService, session)
-                profileKeys = ProfileKeys.create(userApiService, session, this.runDirectory.toPath())
+                profileKeys = ProfileKeys.create(userApiService, session, args.directories.runDir.toPath())
                 abuseReportContext = AbuseReportContext.create(ReporterEnvironment.ofIntegratedServer(), userApiService)
-                return@with true
+
+                true
             } catch (t: Throwable) {
                 t.printStackTrace()
-                return@with false
+                false
             }
         }
         currentAccount = account
-        if(success)
+        if(success || mc.userApiService == UserApiService.OFFLINE)
             account.status = Formatting.GREEN.toString() + "Updated session"
         else
             account.status = Formatting.RED.toString() + "Failed to update session"

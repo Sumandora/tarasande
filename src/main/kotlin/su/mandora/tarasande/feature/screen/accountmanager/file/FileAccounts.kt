@@ -5,13 +5,14 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mojang.authlib.Environment
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
-import net.minecraft.client.util.Session
+import net.minecraft.client.session.Session
 import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.feature.screen.accountmanager.ScreenBetterSlotListAccountManager
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.filesystem.File
 import su.mandora.tarasande.system.screen.accountmanager.account.ManagerAccount
 import su.mandora.tarasande.system.screen.accountmanager.account.api.AccountInfo
+import su.mandora.tarasande.util.extension.kotlinruntime.parseUUID
 import java.util.*
 
 class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManager) : File("Accounts") {
@@ -28,7 +29,7 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
             if (account.session != null) {
                 val sessionObject = JsonObject()
                 sessionObject.addProperty("Username", account.session?.username)
-                sessionObject.addProperty("UUID", account.session?.uuid)
+                sessionObject.addProperty("UUID", account.session?.uuidOrNull?.toString())
                 sessionObject.addProperty("Access-Token", account.session?.accessToken)
                 account.session?.xuid?.also {
                     if (it.isPresent)
@@ -42,7 +43,6 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
                 accountObject.add("Session", sessionObject)
             }
             val environment = JsonObject()
-            environment.addProperty("Auth-Host", account.environment.authHost)
             environment.addProperty("Accounts-Host", account.environment.accountsHost)
             environment.addProperty("Session-Host", account.environment.sessionHost)
             environment.addProperty("Services-Host", account.environment.servicesHost)
@@ -68,7 +68,7 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
                         val sessionObject = accountObject["Session"].asJsonObject
                         accountImplementation.session = Session(
                             sessionObject["Username"].asString,
-                            sessionObject["UUID"].asString,
+                            parseUUID(sessionObject["UUID"].asString),
                             sessionObject["Access-Token"].asString,
                             if (sessionObject.has("X-Uid")) Optional.of(sessionObject["X-Uid"].asString) else Optional.empty(),
                             if (sessionObject.has("Client-Uid")) Optional.of(sessionObject["Client-Uid"].asString) else Optional.empty(),
@@ -77,14 +77,13 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
                     }
 
                     val environment = accountObject.getAsJsonObject("Environment")
-                    accountImplementation.environment = Environment.create(
-                        environment["Auth-Host"].asString,
+                    accountImplementation.environment = Environment(
                         environment["Accounts-Host"].asString,
                         environment["Session-Host"].asString,
                         environment["Services-Host"].asString,
                         TARASANDE_NAME
                     )
-                    YggdrasilAuthenticationService(mc.networkProxy, "", accountImplementation.environment).also {
+                    YggdrasilAuthenticationService(mc.networkProxy, accountImplementation.environment).also {
                         accountImplementation.yggdrasilAuthenticationService = it
                         accountImplementation.minecraftSessionService = it.createMinecraftSessionService()
                     }
