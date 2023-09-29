@@ -3,9 +3,12 @@ package su.mandora.tarasande.injection.mixin.core.connection.playerlistentry;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerRemoveS2CPacket;
-import net.minecraft.network.packet.s2c.play.PlayerSpawnS2CPacket;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,14 +24,21 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Mixin(ClientPlayNetworkHandler.class)
-public class MixinClientPlayNetworkHandler {
+public abstract class MixinClientPlayNetworkHandler {
 
     @Shadow @Final public Map<UUID, PlayerListEntry> playerListEntries;
 
-    @Inject(method = "onPlayerSpawn", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    public void capturePlayerListEntry(PlayerSpawnS2CPacket packet, CallbackInfo ci, PlayerListEntry playerListEntry, double d, double e, double f, float g, float h, int i, OtherClientPlayerEntity otherClientPlayerEntity) {
-        ((IPlayerListEntry) playerListEntry).tarasande_addOwners(otherClientPlayerEntity);
-        ((IOtherClientPlayerEntity) otherClientPlayerEntity).tarasande_setPlayerListEntry(new WeakReference<>(playerListEntry));
+    @Shadow @Nullable public abstract PlayerListEntry getPlayerListEntry(UUID uuid);
+
+    @Inject(method = "onEntitySpawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;onSpawnPacket(Lnet/minecraft/network/packet/s2c/play/EntitySpawnS2CPacket;)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    public void capturePlayerListEntry(EntitySpawnS2CPacket packet, CallbackInfo ci, Entity entity) {
+        if(packet.getEntityType() == EntityType.PLAYER && entity instanceof OtherClientPlayerEntity otherClientPlayerEntity) {
+            PlayerListEntry playerListEntry = getPlayerListEntry(packet.getUuid());
+            if(playerListEntry != null) {
+                ((IPlayerListEntry) playerListEntry).tarasande_addOwners(otherClientPlayerEntity);
+                ((IOtherClientPlayerEntity) otherClientPlayerEntity).tarasande_setPlayerListEntry(new WeakReference<>(playerListEntry));
+            }
+        }
     }
 
     @Inject(method = "onPlayerList", at = @At(value = "INVOKE", target = "Ljava/util/Map;putIfAbsent(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
