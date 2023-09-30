@@ -32,7 +32,7 @@ class AccountSession : Account() {
 
     override fun logIn() {
         val uuid = if(this.uuid.isEmpty())
-            UUID.randomUUID()
+            null
         else
             try {
                 parseUUID(this.uuid)

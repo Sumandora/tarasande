@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 import su.mandora.codechecker.CodeChecker
+import java.net.URL
 
 plugins {
     id("fabric-loom")
@@ -30,6 +31,12 @@ configurations {
     api.get().extendsFrom(dependency)
 }
 
+allprojects {
+    repositories {
+        maven { url = URL("https://www.jitpack.io").toURI() }
+    }
+}
+
 dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
     mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
@@ -44,6 +51,8 @@ dependencies {
         exclude("io.netty", "netty-resolver")
         exclude("io.netty", "netty-handler")
     }
+
+    dependency("com.github.Sumandora:MCSkinLookup:d448ed3db9")
 }
 
 tasks {

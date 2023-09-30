@@ -6,7 +6,7 @@ import com.mojang.authlib.minecraft.MinecraftSessionService
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 import com.mojang.authlib.yggdrasil.YggdrasilEnvironment
 import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.util.Session
+import net.minecraft.client.session.Session
 import su.mandora.tarasande.Manager
 import su.mandora.tarasande.feature.screen.accountmanager.subscreen.ScreenBetterEnvironment
 import su.mandora.tarasande.mc
@@ -32,8 +32,11 @@ abstract class Account {
     var environment: Environment = YggdrasilEnvironment.PROD.environment
     var session: Session? = null
         set(value) {
-            if (value != null)
-                skin = SkinRenderer(value.uuidOrNull, value.username)
+            if (value != null) {
+                val newSkin = SkinRenderer(value.uuidOrNull, value.username)
+                skin?.close() // Close an already existing one
+                skin = newSkin // Overwrite it
+            }
             field = value
         }
     var yggdrasilAuthenticationService: YggdrasilAuthenticationService? = null
