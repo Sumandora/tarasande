@@ -16,7 +16,7 @@ import su.mandora.tarasande.util.string.StringUtil
 
 class ScreenExtensionGameMenuScreen : ScreenExtension<GameMenuScreen>(GameMenuScreen::class.java) {
 
-    private var serverEntry = ServerInfo("", "", false)
+    private var serverEntry = ServerInfo("", "", ServerInfo.ServerType.OTHER)
 
     override fun createElements(screen: GameMenuScreen) {
         (screen as IScreen).tarasande_addDrawableChild(PanelButton.createButtonWidget(screen.width / 2 - 48, 3, 98, 25, StringUtil.uncoverTranslation("selectServer.direct")) {

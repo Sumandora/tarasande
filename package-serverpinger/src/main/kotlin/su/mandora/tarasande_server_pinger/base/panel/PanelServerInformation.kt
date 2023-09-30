@@ -15,7 +15,7 @@ import su.mandora.tarasande.util.render.RenderUtil
 import su.mandora.tarasande.util.render.font.FontWrapper
 import su.mandora.tarasande_server_pinger.injection.accessor.IMultiplayerServerListWidgetSubServerEntry
 
-var emptyServer = ServerInfo("", "", false).apply {
+var emptyServer = ServerInfo("", "", ServerInfo.ServerType.OTHER).apply {
     ping = 0L
     label = ScreenTexts.EMPTY
     playerCountLabel = ScreenTexts.EMPTY
