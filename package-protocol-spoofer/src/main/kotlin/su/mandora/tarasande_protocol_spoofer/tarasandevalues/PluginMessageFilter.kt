@@ -1,6 +1,6 @@
 package su.mandora.tarasande_protocol_spoofer.tarasandevalues
 
-import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket
+import net.minecraft.network.packet.c2s.common.CustomPayloadC2SPacket
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -19,7 +19,7 @@ object PluginMessageFilter {
             if (!enabled.value) return@add
 
             if (it.type == EventPacket.Type.SEND && it.packet is CustomPayloadC2SPacket) {
-                val packetChannel = (it.packet as CustomPayloadC2SPacket).channel.toString()
+                val packetChannel = (it.packet as CustomPayloadC2SPacket).payload.id().toString()
 
                 for (channel in channels.entries()) {
                     if (when {

@@ -1,6 +1,9 @@
 package su.mandora.tarasande_protocol_spoofer.injection.accessor;
 
-public interface IServerResourcePackProvider {
+import net.minecraft.resource.ResourcePackProfile;
 
-    void tarasande_setSpoofLoading(boolean shouldLoad);
+import java.util.function.Consumer;
+
+public interface IServerResourcePackProvider {
+    void tarasande_setResourcePackConsumer(Consumer<ResourcePackProfile> resourcePackConsumer);
 }

@@ -14,7 +14,7 @@ pluginManagement {
 include("package-linux-platform")
 include("package-mod-fixes")
 include("package-third-party")
-//include("package-protocol-spoofer")
+include("package-protocol-spoofer")
 include("package-serverpinger")
 
 // Uncomment if you want to see the example package

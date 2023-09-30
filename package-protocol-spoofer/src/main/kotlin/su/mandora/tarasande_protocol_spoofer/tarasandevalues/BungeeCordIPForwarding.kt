@@ -24,7 +24,7 @@ object BungeeCordIPForwarding {
                     if (this.customUUID.value)
                         this.uuid.value
                     else
-                        mc.session.uuid
+                        mc.session.uuidOrNull?.toString() ?: ""
 
                 (event.packet as HandshakeC2SPacket).address += NULL_TERMINATOR + endIP.value + NULL_TERMINATOR + uuid.filterNot { it == '-' }
             }

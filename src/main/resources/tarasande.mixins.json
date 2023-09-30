@@ -60,7 +60,6 @@
     "event.screen.MixinChatScreen",
     "event.screen.MixinMultiplayerServerListWidget_ServerEntry",
     "event.screen.MixinScreen",
-    "feature.module.MixinConfirmScreen",
     "feature.module.MixinGameRenderer",
     "feature.module.MixinHeldItemRenderer",
     "feature.module.MixinInGameHud",

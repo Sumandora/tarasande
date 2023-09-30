@@ -1,6 +1,7 @@
 package su.mandora.tarasande.system.screen.screenextensionsystem.impl
 
 import net.minecraft.client.gui.screen.pack.PackScreen
+import net.minecraft.resource.ResourcePackProfile
 import net.minecraft.resource.ZipResourcePack
 import su.mandora.tarasande.logger
 import su.mandora.tarasande.mc
@@ -12,29 +13,33 @@ class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen
 
     init {
         add(Button("Dump server pack", { mc.serverResourcePackProvider?.serverContainer != null }) {
-            mc.serverResourcePackProvider?.serverContainer?.apply {
-                // The pack provider, will always make ZipResourcePacks
-                val base = (this.createResourcePack() as ZipResourcePack).zipFile.file
-
-                val name = mc.currentServerEntry?.address ?: base.name
-
-                var target = File(mc.resourcePackDir.toFile(), "$name.zip")
-                var counter = 1
-                while (target.exists()) {
-                    target = File(mc.resourcePackDir.toFile(), "$name ($counter).zip")
-                    counter++
-                }
-                try {
-                    base.copyTo(target)
-                } catch (t: Throwable) {
-                    t.printStackTrace()
-                    logger.log(Level.WARNING, "Wasn't able to copy $name to " + target.absolutePath)
-                }
+            mc.serverResourcePackProvider?.serverContainer?.also {
+                dumpServerPack(it)
             }
         })
 
         add(Button("Unload server pack", { mc.serverResourcePackProvider?.serverContainer != null }) {
             mc.serverResourcePackProvider.clear()
         })
+    }
+
+    fun dumpServerPack(resourcePackProfile: ResourcePackProfile) {
+        // The pack provider, will always make ZipResourcePacks
+        val base = (resourcePackProfile.createResourcePack() as ZipResourcePack).zipFile.file
+
+        val name = mc.currentServerEntry?.address ?: base.name
+
+        var target = File(mc.resourcePackDir.toFile(), "$name.zip")
+        var counter = 1
+        while (target.exists()) {
+            target = File(mc.resourcePackDir.toFile(), "$name ($counter).zip")
+            counter++
+        }
+        try {
+            base.copyTo(target)
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            logger.log(Level.WARNING, "Wasn't able to copy $name to " + target.absolutePath)
+        }
     }
 }

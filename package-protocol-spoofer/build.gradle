@@ -9,13 +9,6 @@ version tarasande_version
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
-    maven { url = "https://jitpack.io" }
-    maven { url = "https://repo.viaversion.com" }
-    maven { url = "https://maven.lenni0451.net/releases" }
-    maven { url = "https://maven.lenni0451.net/snapshots" }
-    maven { url = "https://maven.terraformersmc.com/releases" }
-    maven { url = "https://repo.opencollab.dev/maven-snapshots/" }
 }
 
 loom {
@@ -28,9 +21,6 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     implementation project(":")
-    compileOnly("com.github.ViaVersion:ViaFabricPlus:v2.8.2") {
-        exclude group: "com.terraformersmc"
-    }
 
     implementation 'io.netty:netty-codec-haproxy:4.1.86.Final'
 }
