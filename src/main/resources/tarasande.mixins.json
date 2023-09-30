@@ -24,7 +24,6 @@
     "core.screen.accountmanager.MixinProfileKeys",
     "core.screen.accountmanager.MixinRealmsPeriodicCheckers",
     "core.screen.accountmanager.MixinYggdrasilAuthenticationService",
-    "core.skin.MixinPlayerSkinProvider",
     "core.widget.MixinTextFieldWidget",
     "event.MixinCamera",
     "event.MixinChatInputSuggestor",
