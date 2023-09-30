@@ -200,8 +200,8 @@ class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager
             FontWrapper.textShadow(context, formatting.toString() + account.getDisplayName(), entryWidth / 2F, entryHeight / 2F - FontWrapper.fontHeight(), centered = true, scale = 2F)
             if (account.status != null)
                 FontWrapper.textShadow(context, account.status!!, entryWidth / 2F, entryHeight / 2F + FontWrapper.fontHeight(), centered = true)
-            if (account.skin != null)
-                account.skin!!.draw(context, 5, 5, 32)
+
+            account.skin?.drawHead(context, 5, 5, 32)
 
             val accountInfoName = account.javaClass.getAnnotation(AccountInfo::class.java).name
             FontWrapper.text(context, accountInfoName, entryWidth - FontWrapper.getWidth(accountInfoName).toFloat() - 7F, 5F)
