@@ -1,6 +1,8 @@
 package su.mandora.tarasande_third_party.information
 
-import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket
+import io.netty.buffer.Unpooled
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.network.packet.s2c.common.CustomPayloadS2CPacket
 import net.minecraft.network.packet.s2c.play.PlayerRespawnS2CPacket
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventDisconnect
@@ -8,6 +10,7 @@ import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.gson
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.informationsystem.Information
+import su.mandora.tarasande.util.extension.minecraft.asByteArray
 import su.mandora.tarasande.util.extension.minecraft.packet.isNewWorld
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
@@ -23,9 +26,10 @@ class InformationTimers : Information("Badlion", "Timers") {
                 if (it.type == EventPacket.Type.RECEIVE)
                     if (it.packet is CustomPayloadS2CPacket) {
                         val packet = it.packet as CustomPayloadS2CPacket
-                        if (packet.channel.toString() == "badlion:timers") {
+                        val channel = packet.payload.id()
+                        if (channel.toString() == "badlion:timers") {
                             try {
-                                var data = packet.data.writtenBytes.decodeToString()
+                                var data = PacketByteBuf(Unpooled.buffer()).also { packet.payload.write(it) }.asByteArray().decodeToString()
                                 val request = data.split("|")[0]
                                 data = data.substring(request.length + 1, data.length)
                                 when (request) {
@@ -107,6 +111,7 @@ class InformationTimers : Information("Badlion", "Timers") {
 
         override fun toString(): String {
             val expectedTime = calcInterpolatedTime()
+            // TODO StringBuilder
             var txt = ""
             if (name != null)
                 txt += "$name "
