@@ -1,5 +1,5 @@
 package su.mandora.tarasande.util.threading
 
-class ThreadRunnableExposed(target: Runnable) : Thread(target) {
+class ThreadRunnableExposed<T : Runnable>(target: T) : Thread(target) {
     val runnable = target
 }

@@ -37,6 +37,8 @@ class ModuleWorldTime : Module("World time", "Changes the time of day", ModuleCa
         return moonStates.indexOf(forceMoonPhase.getSelected())
     }
 
+    // TODO onDisable
+
     init {
         registerEvent(EventUpdate::class.java) { event ->
             if (event.state == EventUpdate.State.PRE) {

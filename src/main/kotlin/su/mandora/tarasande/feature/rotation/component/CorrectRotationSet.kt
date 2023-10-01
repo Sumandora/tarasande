@@ -22,7 +22,7 @@ class CorrectRotationSet(rotations: Rotations) {
         }
 
         EventDispatcher.apply {
-            add(EventPacket::class.java, 9999) { event ->
+            add(EventPacket::class.java, 10000) { event ->
                 if(event.type == EventPacket.Type.RECEIVE)
                     when (event.packet) {
                         is PlayerPositionLookS2CPacket ->

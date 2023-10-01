@@ -43,7 +43,7 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
     private var proxyTypeButtonWidget: ButtonWidget? = null
     private var proxyType: ProxyType? = null
 
-    private var pingThread: ThreadRunnableExposed? = null
+    private var pingThread: ThreadRunnableExposed<RunnablePing>? = null
 
     private var status: Text? = null
 
@@ -115,8 +115,10 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
                             )
                         else Proxy(inetSocketAddress, proxyType!!)
                     this.proxy = proxy
-                    if (pingThread != null && pingThread?.isAlive!!)
-                        (pingThread?.runnable as RunnablePing).cancelled = true
+                    pingThread?.also {
+                        if(it.isAlive)
+                            it.runnable.cancelled = true
+                    }
                     ThreadRunnableExposed(RunnablePing(proxy)).also { pingThread = it }.start()
                 } catch (numberFormatException: NumberFormatException) {
                     status = Text.literal("Port is not numeric").styled { it.withColor(Formatting.RED) }
@@ -143,8 +145,10 @@ class ScreenBetterProxy : ScreenBetter("Proxy", null) {
         super.close()
 
         RenderSystem.recordRenderCall {
-            if (pingThread != null && pingThread?.isAlive!!)
-                (pingThread?.runnable as RunnablePing).cancelled = true
+            pingThread?.also {
+                if(it.isAlive)
+                    it.runnable.cancelled = true
+            }
         }
     }
 

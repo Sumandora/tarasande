@@ -133,6 +133,7 @@ object ManagerModule : Manager<Module>() {
             ModulePortalScreen(),
             ModuleNoPitchLimit(),
             ModuleRegen(),
+            ModulePingSpoof(),
 
             // Ghost
             ModuleReach(),

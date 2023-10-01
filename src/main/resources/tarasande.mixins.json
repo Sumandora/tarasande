@@ -60,6 +60,7 @@
     "event.screen.MixinChatScreen",
     "event.screen.MixinMultiplayerServerListWidget_ServerEntry",
     "event.screen.MixinScreen",
+    "feature.graph.MixinClientPlayNetworkHandler",
     "feature.module.MixinGameRenderer",
     "feature.module.MixinHeldItemRenderer",
     "feature.module.MixinInGameHud",
@@ -119,8 +120,7 @@
     "feature.tarasandevalue.MixinTelemetryManager",
     "feature.tarasandevalue.MixinWindow",
     "feature.tarasandevalue.antirdi.MixinClientPlayNetworkHandler",
-    "feature.tarasandevalue.antirdi.MixinPlayerEntity",
-    "feature.graph.MixinClientPlayNetworkHandler"
+    "feature.tarasandevalue.antirdi.MixinPlayerEntity"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -5,17 +5,13 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.TrackedPosition
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.network.ClientConnection
 import net.minecraft.network.NetworkState
-import net.minecraft.network.listener.ClientPlayPacketListener
+import net.minecraft.network.listener.PacketListener
 import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket
-import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket
-import net.minecraft.network.packet.c2s.play.PlayPongC2SPacket
 import net.minecraft.network.packet.s2c.play.*
 import net.minecraft.util.math.Vec3d
 import org.lwjgl.glfw.GLFW
-import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventPacket
 import su.mandora.tarasande.event.impl.EventPollEvents
 import su.mandora.tarasande.event.impl.EventRender3D
@@ -27,8 +23,6 @@ import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.*
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
-import su.mandora.tarasande.system.screen.graphsystem.Graph
-import su.mandora.tarasande.system.screen.graphsystem.ManagerGraph
 import su.mandora.tarasande.util.DEFAULT_REACH
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.math.time.TimeUtil
@@ -41,6 +35,11 @@ import java.util.concurrent.CopyOnWriteArrayList
 class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MISC) {
 
     private val affectedPackets = ValueMode(this, "Affected packets", true, "Serverbound", "Clientbound")
+
+    init {
+        affectedPackets.select(0)
+    }
+
     private val mode = object : ValueMode(this, "Mode", false, "State-dependent", "Pulse blink", "Latency", "Automatic") {
         override fun onChange(index: Int, oldSelected: Boolean, newSelected: Boolean) = onDisable()
     }
@@ -56,7 +55,6 @@ class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MIS
     }
     private val reach = ValueNumber(this, "Reach", 0.1, DEFAULT_REACH, maxReach, 0.1, isEnabled = { mode.isSelected(3) })
     private val cancelKey = ValueBind(this, "Cancel key", ValueBind.Type.KEY, GLFW.GLFW_KEY_UNKNOWN, isEnabled = { mode.isSelected(0) && affectedPackets.isSelected(0) })
-    private val restrictPackets = ValueMode(this, "Restrict packets", true, "Keep alive", "Ping", isEnabled = { affectedPackets.anySelected() })
     private val hitBoxColor = ValueColor(this, "Hit box color", 0.0, 1.0, 1.0, 1.0, isEnabled = { affectedPackets.isSelected(1) })
     private val ignoreChunks = ValueBoolean(this, "Ignore chunks", true)
 
@@ -73,15 +71,6 @@ class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MIS
         // Enable both by default
         autoDisable.select(0)
         autoDisable.select(1)
-
-        ManagerGraph.add(object : Graph("Blink", "Last transaction", 50, true) {
-            init {
-                EventDispatcher.add(EventPacket::class.java) { event ->
-                    if (event.type == EventPacket.Type.RECEIVE && event.packet is PlayPingS2CPacket)
-                        add(event.packet.parameter)
-                }
-            }
-        })
     }
 
     override fun onEnable() {
@@ -119,10 +108,10 @@ class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MIS
     }
 
     init {
-        registerEvent(EventPacket::class.java, 9999) { event ->
+        registerEvent(EventPacket::class.java, 9998) { event ->
             if (event.cancelled) return@registerEvent
             if (event.packet != null) {
-                if (mc.networkHandler?.connection?.channel?.attr(ClientConnection.PROTOCOL_ATTRIBUTE_KEY)?.get() != NetworkState.PLAY) {
+                if (mc.networkHandler?.state != NetworkState.PLAY && mc.networkHandler?.state != NetworkState.CONFIGURATION) { // TODO something better
                     packets.clear() // Packets don't matter anymore
                     return@registerEvent
                 }
@@ -137,12 +126,6 @@ class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MIS
                 }
 
                 if (affectedPackets.isSelected(event.type.ordinal)) {
-                    if (restrictPackets.anySelected() &&
-                        restrictPackets.isSelected(0) && event.packet !is KeepAliveC2SPacket && event.packet !is KeepAliveS2CPacket &&
-                        restrictPackets.isSelected(1) && event.packet !is PlayPongC2SPacket && event.packet !is PlayPingS2CPacket) {
-                        return@registerEvent
-                    }
-
                     packets.add(Triple(event.packet, event.type,
                         if (mode.isSelected(2))
                             System.currentTimeMillis() + latency.value.toLong()
@@ -212,7 +195,7 @@ class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MIS
         registerEvent(EventRender3D::class.java) { event ->
             if(event.state != EventRender3D.State.POST) return@registerEvent
 
-            if (affectedPackets.isSelected(1) && !restrictPackets.anySelected()) {
+            if (affectedPackets.isSelected(1)) {
                 if (mode.isSelected(3) && !shouldPulsate())
                     return@registerEvent
                 newPositions.forEach { (entity, trackedPosition) ->
@@ -240,14 +223,13 @@ class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MIS
             for (triple in copy) {
                 if (all || System.currentTimeMillis() + timeOffset >= triple.third) {
                     when (triple.second) {
-                        EventPacket.Type.SEND -> (mc.networkHandler?.connection as IClientConnection).tarasande_forceSend(triple.first)
+                        EventPacket.Type.SEND -> (mc.networkHandler!!.connection as IClientConnection).tarasande_forceSend(triple.first)
                         EventPacket.Type.RECEIVE ->
-                            if (mc.networkHandler?.connection?.packetListener is ClientPlayPacketListener) {
-                                try {
-                                    @Suppress("UNCHECKED_CAST") // generics are so cool
-                                    (triple.first as Packet<ClientPlayPacketListener>).apply(mc.networkHandler?.connection?.packetListener as ClientPlayPacketListener)
-                                } catch (_: Exception) {
-                                }
+                            try {
+                                @Suppress("UNCHECKED_CAST")
+                                (triple.first as Packet<PacketListener>).apply(mc.networkHandler!!.connection.packetListener)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
                             }
                     }
                 }

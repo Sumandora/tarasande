@@ -40,6 +40,8 @@ import java.util.logging.Logger
  *  - List of spammer messages
  *  - Re-Sprint when slowdowned
  *  - Trigger bot
+ *  - fix fall flying when ground spoof no fall
+ *  - replace string concats with builders
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
