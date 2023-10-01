@@ -28,7 +28,7 @@ class InformationXYZ : Information("Player", "XYZ") {
         val player = mc.player ?: return null
 
         val dimension = player.world.dimension
-        val overworld = player.world.registryManager.get(RegistryKeys.DIMENSION_TYPE).get(DimensionTypes.OVERWORLD)
+        val overworld = player.world.registryManager.get(RegistryKeys.DIMENSION_TYPE).get(DimensionTypes.OVERWORLD) ?: return null
         val scaleFactor = DimensionType.getCoordinateScaleFactor(dimension, overworld)
         val pos = player.pos.multiply(scaleFactor, 1.0, scaleFactor)
 
@@ -47,7 +47,7 @@ class InformationNetherXYZ : Information("Player", "Nether XYZ") {
         val player = mc.player ?: return null
 
         val dimension = player.world.dimension
-        val nether = player.world.registryManager.get(RegistryKeys.DIMENSION_TYPE).get(DimensionTypes.THE_NETHER)
+        val nether = player.world.registryManager.get(RegistryKeys.DIMENSION_TYPE).get(DimensionTypes.THE_NETHER) ?: return null
         val scaleFactor = DimensionType.getCoordinateScaleFactor(dimension, nether)
         val pos = player.pos.multiply(scaleFactor, 1.0, scaleFactor)
 
