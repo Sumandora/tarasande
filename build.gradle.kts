@@ -52,7 +52,8 @@ dependencies {
         exclude("io.netty", "netty-handler")
     }
 
-    dependency("com.github.Sumandora:MCSkinLookup:d448ed3db9")
+    dependency("com.github.Sumandora:MCSkinLookup:90087e8499")
+    dependency("com.github.Sumandora:AuthLib:fe9b638ae4")
 }
 
 tasks {
