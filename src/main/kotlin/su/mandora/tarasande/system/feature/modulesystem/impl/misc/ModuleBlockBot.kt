@@ -26,15 +26,20 @@ class ModuleBlockBot : Module("Block bot", "Walks into the line of sight of othe
 
     init {
         registerEvent(EventRotation::class.java) { event ->
-            val target = mc.world?.players?.filter { PlayerUtil.isAttackable(it) }?.minByOrNull { mc.player?.squaredDistanceTo(it)!! } ?: return@registerEvent
+            val target = mc.world!!.players.filter { PlayerUtil.isAttackable(it) }.minByOrNull { mc.player?.squaredDistanceTo(it)!! }
+
+            if(target == null) {
+                move = false
+                return@registerEvent
+            }
 
             val targetEye = target.eyePos + Rotation(target).forwardVector() * extension.value
-            move = mc.player?.eyePos?.squaredDistanceTo(targetEye)!! > minDistance.value * minDistance.value
+            move = mc.player!!.eyePos.squaredDistanceTo(targetEye) > minDistance.value * minDistance.value
 
             val rotation = if (!move) // if he's not moving, just look at him... make him mad ^^
-                RotationUtil.getRotations(mc.player?.eyePos!!, target.eyePos)
+                RotationUtil.getRotations(mc.player!!.eyePos, target.eyePos)
             else
-                RotationUtil.getRotations(mc.player?.eyePos!!, targetEye)
+                RotationUtil.getRotations(mc.player!!.eyePos, targetEye)
             event.rotation = rotation.correctSensitivity()
         }
 
