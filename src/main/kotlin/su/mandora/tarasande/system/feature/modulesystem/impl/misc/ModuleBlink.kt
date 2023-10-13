@@ -228,8 +228,7 @@ class ModuleBlink : Module("Blink", "Delays network packets", ModuleCategory.MIS
                             try {
                                 @Suppress("UNCHECKED_CAST")
                                 (triple.first as Packet<PacketListener>).apply(mc.networkHandler!!.connection.packetListener)
-                            } catch (e: Exception) {
-                                e.printStackTrace()
+                            } catch (_: Exception) {
                             }
                     }
                 }
