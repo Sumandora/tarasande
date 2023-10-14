@@ -2,7 +2,7 @@ package su.mandora.tarasande.system.feature.modulesystem.impl.render
 
 import net.minecraft.block.BlockState
 import net.minecraft.util.math.BlockPos
-import su.mandora.tarasande.event.EventDispatcher
+import su.mandora.tarasande.event.impl.EventBlockChange
 import su.mandora.tarasande.event.impl.EventRender3D
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueColor
@@ -19,11 +19,16 @@ class ModuleBlockChangeTracker : Module("Block change tracker", "Highlights rece
     private val color = ValueColor(this, "Color", 0.0, 1.0, 1.0, 1.0)
     private val time = ValueNumber(this, "Time", 0.0, 1000.0, 10000.0, 500.0)
 
-    val changes = CopyOnWriteArrayList<Triple<BlockPos, BlockState, Long>>()
+    private val changes = CopyOnWriteArrayList<Triple<BlockPos, BlockState, Long>>()
 
     init {
-        EventDispatcher.add(EventRender3D::class.java) { event ->
-            if(event.state != EventRender3D.State.POST) return@add
+        registerEvent(EventBlockChange::class.java) { event ->
+            if (mc.world!!.getBlockState(event.pos).block != event.state.block)
+                changes.add(Triple(event.pos, event.state, System.currentTimeMillis()))
+        }
+
+        registerEvent(EventRender3D::class.java) { event ->
+            if(event.state != EventRender3D.State.POST) return@registerEvent
 
             for (change in changes) {
                 val timeDelta = System.currentTimeMillis() - change.third
