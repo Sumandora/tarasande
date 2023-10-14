@@ -23,20 +23,17 @@ class ModuleNameProtect : Module("Name protect", "Hides your in-game name", Modu
             return str.replace(substring, replacement)
         val regex = Regex(border + substring + border)
         return regex.replace(str) {
-            var newStr = ""
+            buildString {
+                val before = str[it.range.first]
+                if (substring.first() != before)
+                    append(before.toString())
 
-            val before = str[it.range.first]
-            if (substring.first() != before)
-                newStr = before.toString()
+                append(replacement)
 
-
-            newStr += replacement
-
-            val after = str[it.range.last]
-            if (substring.last() != after)
-                newStr += after.toString()
-
-            newStr
+                val after = str[it.range.last]
+                if (substring.last() != after)
+                    append(after.toString())
+            }
         }
     }
 
