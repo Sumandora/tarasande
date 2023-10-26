@@ -1,14 +1,11 @@
 package su.mandora.tarasande.system.feature.modulesystem.impl.player
 
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen
-import net.minecraft.entity.EquipmentSlot
-import net.minecraft.entity.LivingEntity
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.screen.PlayerScreenHandler
 import net.minecraft.screen.slot.SlotActionType
-import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.impl.EventScreenInput
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
@@ -28,7 +25,6 @@ class ModulePreferredOffHandItem : Module("Preferred off-hand item", "Equips an 
         override fun filter(key: Item) = key != Items.AIR
         override fun getTranslationKey(key: Any?) = (key as Item).translationKey
     }
-    private val useSwapKey = ValueBoolean(this, "Use swap key", true)
 
     init {
         ManagerInformation.add(object : Information(name, "Reserve") {
@@ -57,13 +53,7 @@ class ModulePreferredOffHandItem : Module("Preferred off-hand item", "Equips an 
 
             val screenHandler = mc.player!!.playerScreenHandler
 
-            if (screenHandler.cursorStack.isOf(items.getSelected()) && mc.player!!.offHandStack.nullOr { it.isEmpty }) {
-                mc.interactionManager!!.clickSlot(screenHandler.syncId, PlayerScreenHandler.OFFHAND_ID, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.PICKUP, mc.player)
-                event.doneInput = true
-                return@registerEvent
-            }
-
-            if (!screenHandler.cursorStack.nullOr { it.isEmpty } || mc.player?.offHandStack?.isEmpty == false) {
+            if (!screenHandler.cursorStack.nullOr { it.isEmpty } || !mc.player!!.offHandStack.isEmpty) {
                 return@registerEvent
             }
 
@@ -72,16 +62,10 @@ class ModulePreferredOffHandItem : Module("Preferred off-hand item", "Equips an 
                 return@registerEvent
 
             val item = items.prefer { ContainerUtil.isInHotbar(it.id) }
-            val offHandSlot = screenHandler.slots.firstOrNull { it.id == PlayerScreenHandler.OFFHAND_ID }
+            val offHandSlot = screenHandler.slots.firstOrNull { it.id == PlayerScreenHandler.OFFHAND_ID } ?: return@registerEvent
 
-            if (offHandSlot?.isEnabled == true) {
-                if (LivingEntity.getPreferredEquipmentSlot(item.stack) == EquipmentSlot.OFFHAND)
-                    mc.interactionManager!!.clickSlot(screenHandler.syncId, item.id, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.QUICK_MOVE, mc.player)
-                else if (ContainerUtil.isInHotbar(item.id) || useSwapKey.value) {
-                    mc.interactionManager!!.clickSlot(screenHandler.syncId, item.id, ContainerUtil.getOffHandSlot(screenHandler).id, SlotActionType.SWAP, mc.player)
-                } else {
-                    mc.interactionManager!!.clickSlot(screenHandler.syncId, item.id, GLFW.GLFW_MOUSE_BUTTON_LEFT, SlotActionType.PICKUP, mc.player)
-                }
+            if (offHandSlot.isEnabled) {
+                mc.interactionManager!!.clickSlot(screenHandler.syncId, item.id, offHandSlot.index /* don't ask */, SlotActionType.SWAP, mc.player)
                 event.doneInput = true
             }
         }
