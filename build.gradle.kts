@@ -1,10 +1,10 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 import su.mandora.codechecker.CodeChecker
 import java.net.URL
 
 plugins {
     id("fabric-loom")
     id("org.jetbrains.kotlin.jvm")
+    base
 }
 
 val tarasandeName = "tarasande"
@@ -19,7 +19,7 @@ loom {
     accessWidenerPath = file("src/main/resources/$tarasandeName.accesswidener")
 
     mods {
-        create(archivesName.get()) {
+        create(base.archivesName.get()) {
             sourceSet(sourceSets.main.get())
         }
     }
@@ -42,7 +42,7 @@ dependencies {
     mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
     modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
 
-    dependency("io.netty:netty-handler-proxy:4.1.82.Final") {
+    dependency("io.netty:netty-handler-proxy:4.1.82.Final") { // Match this version with Minecraft's Netty
         exclude("io.netty", "netty-common")
         exclude("io.netty", "netty-buffer")
         exclude("io.netty", "netty-transport")
@@ -52,8 +52,19 @@ dependencies {
         exclude("io.netty", "netty-handler")
     }
 
-    dependency("com.github.Sumandora:MCSkinLookup:90087e8499")
-    dependency("com.github.Sumandora:AuthLib:fe9b638ae4")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
+
+    fun ExternalModuleDependency.excludeKotlinSTD() {
+        exclude("org.jetbrains.kotlin")
+        exclude("org.jetbrains.kotlinx")
+    }
+
+    dependency("com.github.Sumandora:MCSkinLookup:${property("mcskinlookup_commit")}") {
+        excludeKotlinSTD()
+    }
+    dependency("com.github.Sumandora:AuthLib:${property("authlib_commit")}") {
+        excludeKotlinSTD()
+    }
 }
 
 tasks {
@@ -71,15 +82,12 @@ tasks {
             from(zipTree(it))
         }
         from("LICENSE") {
-            rename { "${it}_${tarasandeName}" }
+            rename { "${it}_$tarasandeName" }
         }
     }
 
     compileKotlin.get().kotlinOptions.jvmTarget = "17"
-
-    withType<JavaCompile> {
-        options.release.set(17)
-    }
+    compileJava.get().options.release.set(17)
 }
 
 java {
@@ -107,7 +115,10 @@ tasks.register("installPackages") {
 
         subprojects.filter { it.name.startsWith("package") }.forEach { p ->
             val packageName = p.name + "-" + p.version + ".jar"
-            val build = File(p.buildDir, "libs" + File.separator + packageName)
+            val build = p.layout.buildDirectory.asFile.orNull ?: run {
+                println("Failed to acquire buildDirectory for " + p.name)
+                return@forEach
+            }
             val modDest = File(modFolder, packageName)
             if (build.exists()) {
                 if (modDest.delete())
