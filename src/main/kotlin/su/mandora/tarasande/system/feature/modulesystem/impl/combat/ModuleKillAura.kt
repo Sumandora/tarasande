@@ -54,7 +54,7 @@ import kotlin.math.sqrt
 class ModuleKillAura : Module("Kill aura", "Automatically attacks near players", ModuleCategory.COMBAT) {
 
     private val mode = ValueMode(this, "Mode", false, "Single", "Multi")
-    private val priority = ValueMode(this, "Priority", false, "Distance", "Health", "Hurt time", "FOV", "Attack cooldown")
+    private val priority = ValueMode(this, "Priority", false, "Distance", "Health", "Hurt time", "FOV", "Attack cooldown", "Armor")
     private val fov = ValueNumber(this, "FOV", 0.0, Rotation.MAXIMUM_DELTA, Rotation.MAXIMUM_DELTA, 1.0)
     private val fakeRotationFov = ValueBoolean(this, "Fake rotation FOV", false)
     private val reach = ValueNumberRange(this, "Reach", 0.1, DEFAULT_REACH, 4.0, maxReach, 0.1)
@@ -158,7 +158,13 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             priority.isSelected(4) -> {
                 entityCooldowns.getOrDefault(it.first, 0)
             }
-
+            priority.isSelected(5) -> {
+                if (it.first is LivingEntity)
+                    (it.first as LivingEntity).armor
+                else
+                    1
+            }
+            
             else -> 0.0
         }.toDouble()
     }
