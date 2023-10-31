@@ -114,6 +114,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
 
     private val precision = ValueNumber(this, "Precision", 0.01, 0.1, 1.0, 0.01, isEnabled = { rotations.anySelected() })
     private val waitForCritical = ValueBoolean(this, "Wait for critical", false)
+    private val attackPercentage = ValueNumber(this, "Critical at cooldown percentage", 75.0, 90.0, 100.0, 1.0, isEnabled = { waitForCritical.value })
     private val dontWaitWhenEnemyHasShield = ValueBoolean(this, "Don't wait when enemy has shield", true, isEnabled = { waitForCritical.value })
     private val criticalSprint = ValueBoolean(this, "Critical sprint", false, isEnabled = { waitForCritical.value })
     private val forceCritical = ValueBoolean(this, "Force critical", true, isEnabled = { criticalSprint.isEnabled() && criticalSprint.value })
@@ -324,12 +325,16 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             var everAttacked = false
 
             if (validEntities.isNotEmpty() && !event.dirty) {
-                var clicks = clickSpeedUtil.getClicks()
+                var crit = 0
+                if(willPerformCritical(criticalSprint.value, true) && waitForCritical.value){
+                    crit = 1 //Force a hit if we can perform a critical hit
+                }
+                var clicks = clickSpeedUtil.getClicks() + crit
 
                 if(counterBlocking.isSelected(2))
                     if (clicks == 0)
                         if (isCancellingShields() && !validEntities.all { it.first !is LivingEntity || !(it.first as LivingEntity).isBlockingDamage(simulateShieldBlock.value) })
-                            clicks = 1 // Axes can cancel out shields whenever they want, so lets force a hit
+                            clicks = 2 // Axes can cancel out shields whenever they want, so lets force a hit
 
                 if (!autoBlock.isSelected(0) && mc.player?.isUsingItem!! && clicks > 0) {
                     if (unblock())
@@ -390,7 +395,8 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
         registerEvent(EventKeyBindingIsPressed::class.java) { event ->
             if (event.keyBinding == mc.options.useKey) {
                 if (targets.isNotEmpty()) {
-                    event.pressed = event.pressed || blocking && (!preventBlockCooldown.value || allAttackedLivingEntities { !it.disablesShield() })
+                    event.pressed =
+                        event.pressed || blocking && (!preventBlockCooldown.value || allAttackedLivingEntities { !it.disablesShield() })
                 }
             }
             if (PlayerUtil.movementKeys.contains(event.keyBinding) && targets.isNotEmpty()) {
@@ -623,7 +629,7 @@ class ModuleKillAura : Module("Kill aura", "Automatically attacks near players",
             mc.player?.hasVehicle() == false)
             if (!fallDistance || mc.player?.fallDistance!! > 0F)
                 if (!criticalSprint || !mc.player?.isSprinting!!)
-                    return true
+                    return !(mc.player!!.getAttackCooldownProgress(0.25F) < (attackPercentage.value / 100F))
         return false
     }
 
