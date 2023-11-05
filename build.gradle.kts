@@ -115,18 +115,22 @@ tasks.register("installPackages") {
 
         subprojects.filter { it.name.startsWith("package") }.forEach { p ->
             val packageName = p.name + "-" + p.version + ".jar"
-            val build = p.layout.buildDirectory.asFile.orNull ?: run {
+            val libs = p.layout.buildDirectory.file("libs").orNull?.asFile ?: run {
                 println("Failed to acquire buildDirectory for " + p.name)
                 return@forEach
             }
+
+            val build = File(libs, packageName)
             val modDest = File(modFolder, packageName)
             if (build.exists()) {
-                if (modDest.delete())
-                    println("Deleted old $packageName")
-                else
-                    println("Failed to delete old $packageName version")
-                if (build.renameTo(modDest))
-                    println("Copied $packageName")
+                if (modDest.exists())
+                    if (modDest.delete())
+                        println("Deleted old $packageName")
+                    else
+                        println("Failed to delete old $packageName version")
+
+                build.copyTo(modDest)
+                println("Copied $packageName")
             }
         }
     }
