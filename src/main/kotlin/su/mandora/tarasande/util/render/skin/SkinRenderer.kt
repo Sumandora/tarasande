@@ -29,7 +29,6 @@ class SkinRenderer(val uuid: UUID?, val name: String) : AutoCloseable {
 
             skinData.textures.skin
         } catch (e: IllegalStateException) {
-            e.printStackTrace()
             null
         }
         texture = if (skin == null) {
