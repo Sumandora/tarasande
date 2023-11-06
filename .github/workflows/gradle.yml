@@ -22,7 +22,7 @@ jobs:
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         name: "Create release"
-        if: github.event.pull_request != null
+        if: github.event.pull_request == null
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
