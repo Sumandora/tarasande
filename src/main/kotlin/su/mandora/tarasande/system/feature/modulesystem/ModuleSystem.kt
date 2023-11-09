@@ -85,7 +85,6 @@ object ManagerModule : Manager<Module>() {
             ModuleNoFall(),
             ModuleAntiFall(),
             ModuleFastUse(),
-            ModuleNoMiningTrace(),
             ModuleInventoryCleaner(),
             ModuleAutoFish(),
             ModuleAntiAFK(),
@@ -98,6 +97,7 @@ object ManagerModule : Manager<Module>() {
             ModuleClickPearl(),
             ModuleBlockAura(),
             ModuleInteractAura(),
+            ModuleGhostHand(),
 
             // Render
             ModuleESP(),

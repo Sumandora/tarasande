@@ -82,6 +82,8 @@
     "feature.module.entity.entitycontrol.MixinAbstractHorseEntity",
     "feature.module.entity.entitycontrol.MixinPigEntity",
     "feature.module.entity.entitycontrol.MixinStriderEntity",
+    "feature.module.ghosthand.MixinBlockView",
+    "feature.module.ghosthand.MixinGameRenderer",
     "feature.module.item.MixinTridentItem",
     "feature.module.norender.MixinArmorFeatureRenderer",
     "feature.module.norender.MixinBossBarHud",
