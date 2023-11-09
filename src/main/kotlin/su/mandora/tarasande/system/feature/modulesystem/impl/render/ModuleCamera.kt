@@ -8,6 +8,7 @@ import su.mandora.tarasande.system.base.valuesystem.impl.ValueMode
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.feature.modulesystem.Module
 import su.mandora.tarasande.system.feature.modulesystem.ModuleCategory
+import su.mandora.tarasande.util.DEFAULT_THIRD_PERSON_DISTANCE
 import su.mandora.tarasande.util.math.MathUtil
 import su.mandora.tarasande.util.string.StringUtil
 
@@ -37,7 +38,7 @@ class ModuleCamera : Module("Camera", "Changes the view settings", ModuleCategor
     val aspectRatio = ValueNumber(this, "Aspect ratio", 0.1, 1.0, 4.0, 0.1, isEnabled = { forceAspectRatio.value })
 
     val changeThirdPersonDistance = ValueBoolean(this, "Change third person distance", false)
-    val thirdPersonDistance = ValueNumber(this, "Third person distance", 0.1, 4.0, 10.0, 0.1, isEnabled = { changeThirdPersonDistance.value })
+    val thirdPersonDistance = ValueNumber(this, "Third person distance", 0.1, DEFAULT_THIRD_PERSON_DISTANCE, 10.0, 0.1, isEnabled = { changeThirdPersonDistance.value })
 
     val thirdPersonNoClip = ValueBoolean(this, "Third person no clip", false)
 

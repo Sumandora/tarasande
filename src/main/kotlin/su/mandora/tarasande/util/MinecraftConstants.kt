@@ -29,6 +29,7 @@ const val DEFAULT_CONTAINER_HEIGHT = 166
 const val INFINITE_FPS_VALUE = 260 // Check call to RenderSystem.limitDisplayFPS in MinecraftClient#render
 const val DEFAULT_SNEAK_SLOWDOWN = 0.3 // ClientPlayerEntity check Input#tick second parameter (take the base of the clamp)
 const val DEFAULT_LANGUAGE_CODE = "en_us" // GameOptions#language
+const val DEFAULT_THIRD_PERSON_DISTANCE = 4.0 // Camera#update: check call to clipToSpace
 
 // The following are rendering constants like paddings, widths, heights etc.
 // They don't have to be accurate but in order to have a uniform look with the base game, they should be close
