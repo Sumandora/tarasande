@@ -67,6 +67,8 @@ class ModuleBacktrace : Module("Backtrace", "Allows you to trace back enemy hit 
                             while ((it.size - 1) > ticks.value)
                                 it.removeAt(0)
                         }
+                    else
+                        boundingBoxes.remove(entity)
             }
         }
 
