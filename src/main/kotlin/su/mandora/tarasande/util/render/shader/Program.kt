@@ -6,6 +6,8 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gl.Framebuffer
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL20
+import su.mandora.tarasande.logger
+import java.util.logging.Level
 
 class Program(vararg shaders: Shader): AutoCloseable {
 
@@ -23,9 +25,13 @@ class Program(vararg shaders: Shader): AutoCloseable {
         GlStateManager.glLinkProgram(programId)
         if (GlStateManager.glGetProgrami(programId, GlConst.GL_LINK_STATUS) != GlConst.GL_TRUE)
             error(GlStateManager.glGetProgramInfoLog(programId, Int.MAX_VALUE))
+
+        // Don't error out if validation fails, the program might still be valid
+        // For more information check: https://github.com/Sumandora/tarasande/issues/14
         GL20.glValidateProgram(programId)
         if (GlStateManager.glGetProgrami(programId, GL20.GL_VALIDATE_STATUS) != GlConst.GL_TRUE)
-            error(GlStateManager.glGetProgramInfoLog(programId, Int.MAX_VALUE))
+            logger.log(Level.WARNING, "Shader validation unsuccessful", IllegalStateException(GlStateManager.glGetProgramInfoLog(programId, Int.MAX_VALUE)))
+
         for (shader in shaders)
             shader.close()
     }
