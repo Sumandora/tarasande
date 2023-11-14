@@ -11,12 +11,12 @@ import su.mandora.tarasande.system.screen.graphsystem.impl.GraphPing;
 @Mixin(ClientPlayNetworkHandler.class)
 public class MixinClientPlayNetworkHandler {
 
-    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;showShowPacketSizeAndPingCharts()Z"))
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;shouldShowPacketSizeAndPingCharts()Z"))
     public boolean spoofState(DebugHud instance) {
         GraphPing graphPing = ManagerGraph.INSTANCE.get(GraphPing.class);
         if(graphPing.shouldSpoof())
             return true;
-        return instance.showShowPacketSizeAndPingCharts();
+        return instance.shouldShowPacketSizeAndPingCharts();
     }
 
 }
