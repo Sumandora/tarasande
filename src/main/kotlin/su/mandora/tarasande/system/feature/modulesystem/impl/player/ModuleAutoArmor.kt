@@ -62,7 +62,7 @@ class ModuleAutoArmor : Module("Auto armor", "Equips armor if none is equipped",
             val nextSlot = ContainerUtil.getClosestSlot(screenHandler, mousePos) { slot, _ -> bestArmors.contains(slot) }
 
             if (!timeUtil.hasReached(
-                    if (wasClosed && !openInventory.value)
+                    if (wasClosed && openInventory.value)
                         openDelay.value.toLong()
                     else nextDelay
                 ))

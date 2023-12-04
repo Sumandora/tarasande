@@ -58,7 +58,7 @@ class ModuleInventoryCleaner : Module("Inventory cleaner", "Drops unwanted items
             val nextSlot = ContainerUtil.getClosestSlot(screenHandler, mousePos!!) { slot, list -> slot.hasStack() && cleaner.hasBetterEquivalent(slot.stack, list.filter { it != slot }.map { it.stack }) }
 
             if (!timeUtil.hasReached(
-                    if (wasClosed && !openInventory.value)
+                    if (wasClosed && openInventory.value)
                         openDelay.value.toLong()
                     else nextDelay
                 ))
