@@ -35,7 +35,6 @@ object ManagerInformation : Manager<Information>() {
 
             // Server
             InformationServerBrand(),
-            InformationOpenChannels(),
 
             // Game
             InformationTickDelta()
