@@ -1,8 +1,7 @@
 package su.mandora.tarasande.system.screen.screenextensionsystem.impl
 
 import net.minecraft.client.gui.screen.pack.PackScreen
-import net.minecraft.resource.ResourcePackProfile
-import net.minecraft.resource.ZipResourcePack
+import net.minecraft.client.resource.server.ServerResourcePackManager
 import su.mandora.tarasande.logger
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.screen.screenextensionsystem.ScreenExtensionButtonList
@@ -12,20 +11,20 @@ import java.util.logging.Level
 class ScreenExtensionButtonListPackScreen : ScreenExtensionButtonList<PackScreen>(PackScreen::class.java) {
 
     init {
-        add(Button("Dump server pack", { mc.serverResourcePackProvider?.serverContainer != null }) {
-            mc.serverResourcePackProvider?.serverContainer?.also {
+        add(Button("Dump server pack", { mc.serverResourcePackProvider.manager.packs.isNotEmpty() }) {
+            mc.serverResourcePackProvider.manager.packs.forEach {
                 dumpServerPack(it)
             }
         })
 
-        add(Button("Unload server pack", { mc.serverResourcePackProvider?.serverContainer != null }) {
+        add(Button("Unload server pack", { mc.serverResourcePackProvider.manager.packs.isNotEmpty() }) {
             mc.serverResourcePackProvider.clear()
         })
     }
 
-    fun dumpServerPack(resourcePackProfile: ResourcePackProfile) {
+    fun dumpServerPack(packEntry: ServerResourcePackManager.PackEntry) {
         // The pack provider, will always make ZipResourcePacks
-        val base = (resourcePackProfile.createResourcePack() as ZipResourcePack).zipFile.file
+        val base = (packEntry.path ?: return).toFile()
 
         val name = mc.currentServerEntry?.address ?: base.name
 

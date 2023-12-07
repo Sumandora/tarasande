@@ -3,6 +3,10 @@ accessWidener v1 named
 accessible field net/minecraft/network/packet/c2s/handshake/HandshakeC2SPacket address Ljava/lang/String;
 accessible field net/minecraft/client/gui/screen/ConfirmScreen callback Lit/unimi/dsi/fastutil/booleans/BooleanConsumer;
 accessible field net/minecraft/network/packet/c2s/common/CustomPayloadC2SPacket payload Lnet/minecraft/network/packet/CustomPayload;
+accessible field net/minecraft/client/resource/server/ServerResourcePackLoader manager Lnet/minecraft/client/resource/server/ServerResourcePackManager;
 
 mutable field net/minecraft/network/packet/c2s/handshake/HandshakeC2SPacket address Ljava/lang/String;
 mutable field net/minecraft/network/packet/c2s/common/CustomPayloadC2SPacket payload Lnet/minecraft/network/packet/CustomPayload;
+
+accessible class net/minecraft/client/resource/server/ServerResourcePackManager$PackEntry
+accessible class net/minecraft/client/network/ClientCommonNetworkHandler$ConfirmServerResourcePackScreen

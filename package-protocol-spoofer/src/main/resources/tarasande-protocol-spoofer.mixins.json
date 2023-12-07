@@ -5,9 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "haproxyhack.MixinClientConnection_1",
-    "resourcepackspoofer.MixinClientCommonNetworkHandler",
     "resourcepackspoofer.MixinConfirmScreen",
-    "resourcepackspoofer.MixinServerResourcePackProvider"
+    "resourcepackspoofer.MixinServerResourcePackManager"
   ],
   "injectors": {
     "defaultRequire": 1
