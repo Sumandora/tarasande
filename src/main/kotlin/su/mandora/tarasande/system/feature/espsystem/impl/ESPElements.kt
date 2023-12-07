@@ -47,7 +47,7 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
 
     override fun draw(context: DrawContext, entity: Entity, sideWidth: Double, orientation: Orientation) {
         val col = entity.teamColorValue.ignoreAlpha()
-        val tagName = entity.displayName.asOrderedText()
+        val tagName = entity.displayName!!.asOrderedText()
         context.matrices.push()
         val width = mc.textRenderer!!.getWidth(tagName)
         var factor =
@@ -71,7 +71,7 @@ class ESPElementRotatableName : ESPElementRotatable("Name", arrayOf(Orientation.
     }
 
     override fun getHeight(entity: Entity, sideWidth: Double): Double {
-        return FontWrapper.fontHeight().toDouble() * min(sideWidth / mc.textRenderer!!.getWidth(entity.displayName.asOrderedText()), 3.0) * scale.value
+        return FontWrapper.fontHeight().toDouble() * min(sideWidth / mc.textRenderer!!.getWidth(entity.displayName!!.asOrderedText()), 3.0) * scale.value
     }
 }
 
