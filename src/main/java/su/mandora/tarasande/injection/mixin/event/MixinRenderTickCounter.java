@@ -1,5 +1,6 @@
 package su.mandora.tarasande.injection.mixin.event;
 
+import it.unimi.dsi.fastutil.floats.FloatUnaryOperator;
 import net.minecraft.client.render.RenderTickCounter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,7 +20,7 @@ public class MixinRenderTickCounter {
     private float tarasande_baseTPS;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void recordTickRate(float tps, long timeMillis, CallbackInfo ci) {
+    public void recordTickRate(float tps, long timeMillis, FloatUnaryOperator targetMillisPerTick, CallbackInfo ci) {
         tarasande_baseTPS = tps;
     }
 
