@@ -10,7 +10,7 @@ import su.mandora.tarasande.event.impl.EventConnectServer;
 
 import java.net.InetSocketAddress;
 
-@Mixin(targets = "net.minecraft.client.gui.screen.ConnectScreen$1")
+@Mixin(targets = "net.minecraft.client.gui.screen.multiplayer.ConnectScreen$1")
 public class MixinConnectScreen_1 {
 
     @Redirect(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;connect(Ljava/net/InetSocketAddress;ZLnet/minecraft/network/ClientConnection;)Lio/netty/channel/ChannelFuture;"))
