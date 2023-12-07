@@ -29,9 +29,9 @@ jobs:
           prerelease: false
           title: "Development Build"
           files: |
-            package-mod-fixes/build/libs/package-mod-fixes-20.2.jar
-            package-serverpinger/build/libs/package-serverpinger-20.2.jar
-            package-protocol-spoofer/build/libs/package-protocol-spoofer-20.2.jar
-            package-linux-platform/build/libs/package-linux-platform-20.2.jar
-            package-third-party/build/libs/package-third-party-20.2.jar
-            build/libs/tarasande-20.2.jar
+            package-mod-fixes/build/libs/package-mod-fixes-20.3.jar
+            package-serverpinger/build/libs/package-serverpinger-20.3.jar
+            package-protocol-spoofer/build/libs/package-protocol-spoofer-20.3.jar
+            package-linux-platform/build/libs/package-linux-platform-20.3.jar
+            package-third-party/build/libs/package-third-party-20.3.jar
+            build/libs/tarasande-20.3.jar
