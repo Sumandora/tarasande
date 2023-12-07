@@ -54,7 +54,7 @@ open class ClickableWidgetPanel(val panel: Panel, private val update: Boolean = 
 
     override fun isFocused() = true
 
-    override fun renderButton(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderWidget(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val opened = panel.opened
         panel.opened = true
         if (update) {

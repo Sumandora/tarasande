@@ -13,7 +13,7 @@ open class TextFieldWidgetPlaceholder(textRenderer: TextRenderer?, x: Int, y: In
         private set
     // We can't use the text replacer, because the text replacement is only invoked when the text isn't empty
 
-    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderWidget(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val prevText = text
         val accessor = this as ITextFieldWidget
         if (text.isEmpty() && !isFocused) {

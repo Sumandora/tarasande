@@ -21,12 +21,12 @@ public class MixinTextFieldWidget implements ITextFieldWidget {
     @Unique
     private boolean tarasande_selectionHighlight = true;
 
-    @Redirect(method = "renderButton", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I"))
+    @Redirect(method = "renderWidget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I"))
     public int injectPreColor(DrawContext instance, TextRenderer textRenderer, OrderedText text, int x, int y, int color) {
         return instance.drawTextWithShadow(textRenderer, text, x, y, this.tarasande_color != null ? this.tarasande_color.getRGB() : color);
     }
 
-    @ModifyConstant(method = "renderButton", constant = @Constant(intValue = TextFieldWidget.VERTICAL_CURSOR_COLOR))
+    @ModifyConstant(method = "renderWidget", constant = @Constant(intValue = TextFieldWidget.VERTICAL_CURSOR_COLOR))
     public int injectColor(int original) {
         return this.tarasande_color != null ? this.tarasande_color.getRGB() : original;
     }
