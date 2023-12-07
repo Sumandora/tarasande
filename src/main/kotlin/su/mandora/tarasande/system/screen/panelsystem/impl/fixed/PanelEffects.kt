@@ -40,7 +40,7 @@ class PanelEffects : PanelFixed("Effects", 75.0, FontWrapper.fontHeight().toDoub
                         if (statusEffectInstance.amplifier in 1..9) {
                             string += " " + I18n.translate("enchantment.level." + (statusEffectInstance.amplifier + 1))
                         }
-                        string += ": " + Formatting.GRAY.toString() + StatusEffectUtil.getDurationText(statusEffectInstance, 1F).extractContent()
+                        string += ": " + Formatting.GRAY.toString() + StatusEffectUtil.getDurationText(statusEffectInstance, 1F, mc.world!!.tickManager.tickRate).extractContent()
                         activeStatusEffects.add(Triple(statusEffect, string, statusEffect.color))
                     }
                 }
