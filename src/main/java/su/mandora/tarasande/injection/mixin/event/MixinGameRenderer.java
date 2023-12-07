@@ -20,8 +20,8 @@ import su.mandora.tarasande.event.impl.EventUpdateTargetedEntity;
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
 
-    @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;world:Lnet/minecraft/client/world/ClientWorld;", ordinal = 1, shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    public void hookEventRender2D(float tickDelta, long startTime, boolean tick, CallbackInfo ci, boolean bl, int i, int j, Window window, Matrix4f matrix4f, MatrixStack matrixStack, DrawContext drawContext) {
+    @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;world:Lnet/minecraft/client/world/ClientWorld;", ordinal = 3, shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    public void hookEventRender2D(float tickDelta, long startTime, boolean tick, CallbackInfo ci, float f, boolean bl, int i, int j, Window window, Matrix4f matrix4f, MatrixStack matrixStack, DrawContext drawContext) {
         if (MinecraftClient.getInstance().player != null && !(MinecraftClient.getInstance().currentScreen instanceof DownloadingTerrainScreen)) {
             RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
             EventDispatcher.INSTANCE.call(new EventRender2D(drawContext));
