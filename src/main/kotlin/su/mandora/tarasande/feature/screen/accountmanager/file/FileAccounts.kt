@@ -43,7 +43,6 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
                 accountObject.add("Session", sessionObject)
             }
             val environment = JsonObject()
-            environment.addProperty("Accounts-Host", account.environment.accountsHost)
             environment.addProperty("Session-Host", account.environment.sessionHost)
             environment.addProperty("Services-Host", account.environment.servicesHost)
             accountObject.add("Environment", environment)
@@ -78,7 +77,6 @@ class FileAccounts(private val accountManager: ScreenBetterSlotListAccountManage
 
                     val environment = accountObject.getAsJsonObject("Environment")
                     accountImplementation.environment = Environment(
-                        environment["Accounts-Host"].asString,
                         environment["Session-Host"].asString,
                         environment["Services-Host"].asString,
                         TARASANDE_NAME
