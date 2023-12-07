@@ -56,7 +56,7 @@ open class PanelServerInformation(private val owner: Any, private val finish: (s
             createEntry()
         }
 
-    private val emulatedWidget = MultiplayerServerListWidget(null, null, 0, 0, 0, 0, 0)
+    private val emulatedWidget = MultiplayerServerListWidget(null, null, 0, 0, 0, 0)
     private var serverEntry: ServerEntry? = null
 
     override fun getValueOwner() = owner

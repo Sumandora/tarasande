@@ -1,6 +1,6 @@
 package su.mandora.tarasande_server_pinger.screenextension.directconnect
 
-import net.minecraft.client.gui.screen.DirectConnectScreen
+import net.minecraft.client.gui.screen.multiplayer.DirectConnectScreen
 import org.lwjgl.glfw.GLFW
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventKey

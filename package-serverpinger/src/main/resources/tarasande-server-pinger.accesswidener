@@ -1,6 +1,6 @@
 accessWidener v1 named
 
-accessible field net/minecraft/client/gui/screen/DirectConnectScreen addressField Lnet/minecraft/client/gui/widget/TextFieldWidget;
+accessible field net/minecraft/client/gui/screen/multiplayer/DirectConnectScreen addressField Lnet/minecraft/client/gui/widget/TextFieldWidget;
 accessible field net/minecraft/client/network/MultiplayerServerListPinger clientConnections Ljava/util/List;
 
 accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry <init> (Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget;Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;Lnet/minecraft/client/network/ServerInfo;)V

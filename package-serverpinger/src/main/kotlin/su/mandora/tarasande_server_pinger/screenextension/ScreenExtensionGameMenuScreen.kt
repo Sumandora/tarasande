@@ -1,9 +1,9 @@
 package su.mandora.tarasande_server_pinger.screenextension
 
-import net.minecraft.client.gui.screen.ConnectScreen
-import net.minecraft.client.gui.screen.DirectConnectScreen
 import net.minecraft.client.gui.screen.GameMenuScreen
 import net.minecraft.client.gui.screen.TitleScreen
+import net.minecraft.client.gui.screen.multiplayer.ConnectScreen
+import net.minecraft.client.gui.screen.multiplayer.DirectConnectScreen
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen
 import net.minecraft.client.network.ServerAddress
 import net.minecraft.client.network.ServerInfo
