@@ -53,7 +53,7 @@ public class MixinClientPlayNetworkHandler {
         return eventShowsDeathScreen.getShowsDeathScreen();
     }
 
-    @Inject(method = "onPlayerList", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V", remap = false), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    @Inject(method = "onPlayerList", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", remap = false), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     public void hookEventInvalidPlayerInfo(PlayerListS2CPacket packet, CallbackInfo ci, Iterator<?> var2, PlayerListS2CPacket.Entry entry, PlayerListEntry playerListEntry) {
         EventInvalidPlayerInfo eventInvalidPlayerInfo = new EventInvalidPlayerInfo(entry.profileId());
         EventDispatcher.INSTANCE.call(eventInvalidPlayerInfo);
