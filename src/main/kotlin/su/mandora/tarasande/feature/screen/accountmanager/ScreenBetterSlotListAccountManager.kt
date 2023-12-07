@@ -47,7 +47,7 @@ import java.util.*
 import java.util.concurrent.CompletableFuture
 import kotlin.math.max
 
-class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager", null /*set else where*/, 46, 10) {
+class ScreenBetterSlotListAccountManager : ScreenBetterSlotList("Account Manager", null /*set else where*/, 32, 36) {
 
     val accounts = ArrayList<Account>()
     var currentAccount: Account? = null

@@ -34,8 +34,7 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
             entries.add(entry)
         }
         val entryWidth = entries.maxOfOrNull { it.width } ?: 1
-        val entryHeight = entries.maxOfOrNull { it.height } ?: 1
-        this.addDrawableChild(SlotListWidget(this, width, height, top, height - bottom - top, entryWidth, entryHeight).also {
+        this.addDrawableChild(SlotListWidget(this, width, height - 64 - 32 /*TODO where are these coming from*/, top, bottom, entryWidth).also {
             slotList = it
         })
 
@@ -85,15 +84,15 @@ open class ScreenBetterSlotList(val title: String, prevScreen: Screen?, private 
     }
 }
 
-class AlwaysSelectedEntryListWidgetScreenBetterSlotList(val parent: ScreenBetterSlotList, width: Int, height: Int, top: Int, bottom: Int, var entryWidth: Int, entryHeight: Int)
-    : AlwaysSelectedEntryListWidget<SlotListEntry>(mc, width, height, top, bottom, entryHeight) {
+class AlwaysSelectedEntryListWidgetScreenBetterSlotList(val parent: ScreenBetterSlotList, width: Int, height: Int, top: Int, bottom: Int, var entryWidth: Int)
+    : AlwaysSelectedEntryListWidget<SlotListEntry>(mc, width, height, top, bottom) {
 
     override fun getRowWidth() = entryWidth
 
     override fun getScrollbarPositionX() = this.width / 2 + (this.entryWidth / 2) + SCROLLBAR_WIDTH
 
-    override fun appendNarrations(builder: NarrationMessageBuilder?) {
-        builder?.put(NarrationPart.TITLE, parent.title + " List")
+    override fun appendClickableNarrations(builder: NarrationMessageBuilder) {
+        builder.put(NarrationPart.TITLE, parent.title + " List")
     }
 }
 
