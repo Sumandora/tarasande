@@ -111,11 +111,11 @@ class InformationTimers : Information("Badlion", "Timers") {
 
         override fun toString(): String {
             val expectedTime = calcInterpolatedTime()
-            // TODO StringBuilder
-            var txt = ""
-            if (name != null)
-                txt += "$name "
-            return txt + String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(expectedTime), TimeUnit.MILLISECONDS.toSeconds(expectedTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(expectedTime)))
+            return buildString {
+                append(name)
+                append(' ')
+                append(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(expectedTime), TimeUnit.MILLISECONDS.toSeconds(expectedTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(expectedTime))))
+            }
         }
     }
 
