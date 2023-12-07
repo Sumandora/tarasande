@@ -77,7 +77,7 @@ object ProjectileUtil {
         var collided = false
 
         @Suppress("UNCHECKED_CAST")
-        val persistentProjectileEntity = object : PersistentProjectileEntity(projectileItem.entityType as EntityType<PersistentProjectileEntity> /* This just shows how bad minecrafts code base is */, mc.player, mc.world) {
+        val persistentProjectileEntity = object : PersistentProjectileEntity(projectileItem.entityType as EntityType<PersistentProjectileEntity> /* This just shows how bad minecrafts code base is */, mc.world, itemStack) {
             override fun asItemStack(): ItemStack? = null
             override fun onEntityHit(entityHitResult: EntityHitResult?) {
                 collided = true
