@@ -40,7 +40,7 @@ class ModulePropHunt : Module("Prop hunt", "Shows moving entities", ModuleCatego
 
     private fun getEntity(p: Packet<*>): Entity? {
         return when (p) {
-            is EntityS2CPacket -> p.getEntity(mc.world)
+            is EntityS2CPacket -> p.getEntity(mc.world ?: return null)
             is EntityPositionS2CPacket -> mc.world?.getEntityById(p.id)
             else -> null
         }

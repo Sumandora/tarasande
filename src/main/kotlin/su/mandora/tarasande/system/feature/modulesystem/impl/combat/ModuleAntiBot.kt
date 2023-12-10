@@ -107,7 +107,7 @@ class ModuleAntiBot : Module("Anti bot", "Prevents modules from interacting with
                     }
 
                     is EntityPositionS2CPacket -> {
-                        val entity = mc.world!!.getEntityById(event.packet.id)
+                        val entity = mc.world?.getEntityById(event.packet.id)
                         if (entity is PlayerEntity)
                             if (checks.isSelected(5) && movementMode.isSelected(1))
                                 if (!passedMovement.contains(entity))
