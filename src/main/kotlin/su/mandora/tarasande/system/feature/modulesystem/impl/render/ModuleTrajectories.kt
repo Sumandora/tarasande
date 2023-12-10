@@ -13,7 +13,7 @@ import su.mandora.tarasande.util.render.RenderUtil
 
 class ModuleTrajectories : Module("Trajectories", "Renders paths of trajectories", ModuleCategory.RENDER) {
 
-    private val predictVelocity = ValueBoolean(this, "Predict velocity", false)
+    private val predictVelocity = ValueBoolean(this, "Predict velocity", true)
 
     init {
         registerEvent(EventRender3D::class.java) { event ->
