@@ -22,7 +22,7 @@ open class TextFieldWidgetPlaceholder(textRenderer: TextRenderer?, x: Int, y: In
                 accessor.tarasande_setColor(Color.lightGray)
             placeholderActive = true
         }
-        super.render(context, mouseX, mouseY, delta)
+        super.renderWidget(context, mouseX, mouseY, delta)
         placeholderActive = false
         this.text = prevText
         accessor.tarasande_setColor(null)
