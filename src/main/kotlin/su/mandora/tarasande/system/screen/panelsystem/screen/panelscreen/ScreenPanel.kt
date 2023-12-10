@@ -4,16 +4,13 @@ import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 import org.lwjgl.glfw.GLFW
-import su.mandora.tarasande.TARASANDE_NAME
 import su.mandora.tarasande.event.EventDispatcher
 import su.mandora.tarasande.event.impl.EventChangeScreen
 import su.mandora.tarasande.event.impl.EventUpdate
 import su.mandora.tarasande.feature.tarasandevalue.TarasandeValues
 import su.mandora.tarasande.mc
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueBind
-import su.mandora.tarasande.system.base.valuesystem.impl.ValueBoolean
 import su.mandora.tarasande.system.base.valuesystem.impl.ValueNumber
 import su.mandora.tarasande.system.screen.blursystem.ManagerBlur
 import su.mandora.tarasande.system.screen.panelsystem.ManagerPanel
@@ -38,11 +35,9 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
             }
         }
     }
-    private val ichHabEinfachDenBESTEN = ValueBoolean(this, "Ich hab einfach den BESTEN!", false)
     private val screenBackgroundOpacity = ValueNumber(this, "Screen background opacity", 0.0, 0.66, 1.0, 0.01)
     val panelBackgroundOpacity = ValueNumber(this, "Panel background opacity", 0.0, 0.3, 1.0, 0.01)
 
-    private val imageIdentifier = Identifier(TARASANDE_NAME, "textures/jannick.png")
     private val particles = ArrayList<Particle>()
 
     private var wasClosed = true
@@ -108,28 +103,6 @@ class ScreenPanel(private val panelSystem: ManagerPanel) : Screen(Text.of("Panel
         }
 
         context.matrices.push()
-
-        if (ichHabEinfachDenBESTEN.value) {
-            context.matrices.push()
-            val aspect = 581.0 / 418.0
-
-            val height = client?.window?.scaledHeight!! * 0.85
-            val width = height * aspect
-
-            context.drawTexture(
-                imageIdentifier,
-                (client?.window?.scaledWidth!! - progress * width).toInt(),
-                (client?.window?.scaledHeight!! - height).toInt(),
-                0,
-                0F,
-                0F,
-                width.toInt(),
-                height.toInt(),
-                width.toInt(),
-                height.toInt()
-            )
-            context.matrices.pop()
-        }
 
         context.matrices.push()
         val numPoints = 100
