@@ -4,7 +4,7 @@ import net.minecraft.enchantment.Enchantment
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.item.ArmorItem
+import net.minecraft.item.Equipment
 import net.minecraft.item.ItemStack
 import net.minecraft.item.SwordItem
 import net.minecraft.item.ToolItem
@@ -31,7 +31,7 @@ object ContainerUtil {
     fun getEquipmentSlot(screenHandler: ScreenHandler, equipmentSlot: EquipmentSlot): Slot? {
         return getValidSlots(screenHandler)
             .filter { it.id in 5..8 }
-            .firstOrNull { it.stack.item is ArmorItem && (it.stack.item as ArmorItem).slotType == equipmentSlot }
+            .firstOrNull { it.stack.item is Equipment && (it.stack.item as Equipment).slotType == equipmentSlot }
     }
 
     fun getClosestSlot(screenHandler: ScreenHandler, lastMouseClick: Vec2f, block: (Slot, List<Slot>) -> Boolean): Slot? {
