@@ -119,9 +119,9 @@ class ModuleStep : Module("Step", "Allows you to step up blocks", ModuleCategory
             }
         }
 
-        registerEvent(EventTickRate::class.java) { event ->
+        registerEvent(EventTickTime::class.java) { event ->
             if ((mc.player ?: return@registerEvent).age - stepTick <= timerTicks.value)
-                event.tickRate = timer.value.toFloat()
+                event.tickTime = 1000F / timer.value.toFloat()
         }
     }
 

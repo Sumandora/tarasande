@@ -48,4 +48,16 @@ class EventInputSuggestions(val reader: StringReader) : Event(false) {
 }
 
 class EventDoAttack : Event(true)
-class EventTickRate(var tickRate: Float) : Event(false)
+class EventTickTime : Event {
+    var dirty = false
+    var tickTime: Float = 0F
+        set(value) {
+            field = value
+            dirty = true
+        }
+
+    constructor(tickTime: Float) : super(true) {
+        this.tickTime = tickTime
+        dirty = false
+    }
+}

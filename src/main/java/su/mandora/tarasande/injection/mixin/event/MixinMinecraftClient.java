@@ -115,4 +115,11 @@ public abstract class MixinMinecraftClient {
         if (TarasandeValues.INSTANCE.getExecuteScreenInputsInTicks().getValue()) // Counterpart in MixinRenderSystem
             EventDispatcher.INSTANCE.call(new EventScreenInput(false));
     }
+
+    @Inject(method = "getTargetMillisPerTick", at = @At("RETURN"), cancellable = true)
+    public void hookEventTickRate(float millis, CallbackInfoReturnable<Float> cir) {
+        EventTickTime eventTickTime = new EventTickTime(cir.getReturnValue());
+        EventDispatcher.INSTANCE.call(eventTickTime);
+        cir.setReturnValue(eventTickTime.getTickTime());
+    }
 }
