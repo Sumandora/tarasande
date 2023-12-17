@@ -23,6 +23,7 @@ import su.mandora.tarasande.util.DEFAULT_TPS
 import su.mandora.tarasande.util.extension.minecraft.math.BlockPos
 import su.mandora.tarasande.util.extension.minecraft.math.minus
 import su.mandora.tarasande.util.extension.minecraft.setMovementForward
+import su.mandora.tarasande.util.extension.minecraft.setMovementSideways
 import su.mandora.tarasande.util.player.PlayerUtil
 import su.mandora.tarasande.util.player.prediction.Input
 import su.mandora.tarasande.util.player.prediction.PredictionEngine
@@ -125,7 +126,7 @@ class ModuleDropper : Module("Dropper", "Tries to predict perfect Dropper plays"
 
                     val bestInput = best.first
                     event.input.setMovementForward(bestInput.x)
-                    event.input.setMovementForward(bestInput.y)
+                    event.input.setMovementSideways(bestInput.y)
                     lastMovement = bestInput
                 }
             }
