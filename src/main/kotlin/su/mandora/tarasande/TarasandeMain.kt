@@ -42,6 +42,14 @@ import java.util.logging.Logger
  *  - Trigger bot
  *  - fix fall flying when ground spoof no fall
  *  - replace string concats with builders
+ *  - AntiBot: Save duplicated fail
+ *  - More fake rotation spoofing
+ *  - Modularization
+ *  - Increase custom payload max size
+ *  - ChunkTracker -> Block Party dynamically updating on chunk packets
+ *  - FastBreak: Better values
+ *  - FastUse: Set use ticks and max use ticks
+ *  - Use more MixinExtras
  */
 
 const val TARASANDE_NAME = "tarasande" // "lowercase gang" ~kennytv
@@ -78,5 +86,7 @@ object TarasandeMain {
         Screens
 
         EventDispatcher.call(EventSuccessfulLoad())
+
+
     }
 }

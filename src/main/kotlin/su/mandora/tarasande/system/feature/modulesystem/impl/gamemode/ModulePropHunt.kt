@@ -48,7 +48,7 @@ class ModulePropHunt : Module("Prop hunt", "Shows moving entities", ModuleCatego
 
     private fun isMoved(p: Packet<*>, entity: Entity): Boolean {
         return when (p) {
-            is EntityS2CPacket -> p.deltaX != 0.toShort() || p.deltaY != 0.toShort() || p.deltaZ != 0.toShort()
+            is EntityS2CPacket -> p.positionChanged && (p.deltaX != 0.toShort() || p.deltaY != 0.toShort() || p.deltaZ != 0.toShort())
             is EntityPositionS2CPacket -> p.x != entity.trackedPosition.pos.x || p.y != entity.trackedPosition.pos.y || p.z != entity.trackedPosition.pos.z
             else -> false
         }

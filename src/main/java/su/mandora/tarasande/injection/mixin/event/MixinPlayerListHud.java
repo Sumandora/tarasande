@@ -5,18 +5,19 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import su.mandora.tarasande.event.EventDispatcher;
 import su.mandora.tarasande.event.impl.EventPlayerListName;
 
 @Mixin(PlayerListHud.class)
 public class MixinPlayerListHud {
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;getPlayerName(Lnet/minecraft/client/network/PlayerListEntry;)Lnet/minecraft/text/Text;"))
-    public Text hookEventPlayerListName(PlayerListHud instance, PlayerListEntry entry) {
-        EventPlayerListName eventPlayerListName = new EventPlayerListName(entry, instance.getPlayerName(entry));
+    @Inject(method = "getPlayerName", at = @At(value = "RETURN"), cancellable = true)
+    public void hookEventPlayerListName(PlayerListEntry entry, CallbackInfoReturnable<Text> cir) {
+        EventPlayerListName eventPlayerListName = new EventPlayerListName(entry, cir.getReturnValue());
         EventDispatcher.INSTANCE.call(eventPlayerListName);
-        return eventPlayerListName.getDisplayName();
+        cir.setReturnValue(eventPlayerListName.getDisplayName());
     }
 
 }

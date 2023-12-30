@@ -7,5 +7,5 @@ object Chat {
 
     val allowAllCharacters = ValueBoolean(this, "Allow all characters", true)
     val dontResetHistoryOnDisconnect = ValueBoolean(this, "Don't reset history on disconnect", true)
-    val removeMaximum = ValueMode(this, "Remove maximum", true, "History", "Message field")
+    val removeMaximum = ValueMode(this, "Remove maximum", true, "History", "Message field" /*todo packet*/)
 }
