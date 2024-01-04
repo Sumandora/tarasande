@@ -9,7 +9,7 @@ class MyCommand : Command("mycommand") {
     override fun builder(builder: LiteralArgumentBuilder<CommandSource>) {
         builder.executes {
             CustomChat.printChatMessage("Hello, world!")
-            return@executes Command.SUCCESS
+            return@executes SUCCESS
         }
     }
 }

@@ -18,5 +18,5 @@ include("package-protocol-spoofer")
 include("package-serverpinger")
 
 // Uncomment if you want to see the example package
-//include "package-example"
+//include("package-example")
 
