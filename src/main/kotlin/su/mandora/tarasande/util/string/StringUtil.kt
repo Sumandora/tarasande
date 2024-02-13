@@ -30,7 +30,7 @@ object StringUtil {
             round(value / 1024.0 / 1024.0 / 1024.0 / 1024.0, count) + " Tb"
     }
 
-    val colorCodePattern: Pattern = Pattern.compile("(?i)\u00a7[0-9A-F]")
+    val colorCodePattern: Pattern = Pattern.compile("§([0-9a-fA-F])")
 
     fun stripColors(string: String): String {
         return colorCodePattern.matcher(string).replaceAll("")
