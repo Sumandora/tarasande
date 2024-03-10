@@ -60,7 +60,7 @@ enum class EasingFunction(val functionName: String, val ease: (Double) -> Double
             else -> 2.0.pow(-10.0 * x) * sin((x * 10.0 - 0.75) * c4) + 1.0
         }
     }),
-    INT_OUT_ELASTIC("In out elastic", { x ->
+    IN_OUT_ELASTIC("In out elastic", { x ->
         val c5 = 2.0 * Math.PI / 4.5
         if (x == 0.0) 0.0
         else if (x == 1.0) 1.0
